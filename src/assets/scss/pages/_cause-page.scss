@@ -1,0 +1,35 @@
+.cause-page {
+  &__content {
+    margin-top: -3.5rem;
+  }
+
+  &__section {
+    margin-top: 1rem;
+  }
+
+  &__section-header {
+    color: #555;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-size: 1.3rem;
+  }
+
+  &__header {
+    color: $white;
+  }
+
+  &__description {
+    margin: 1rem 0 2rem;
+  }
+
+  &__add-event {
+    color: $brand-color;
+    font-size: 1.0rem !important;
+    vertical-align: middle;
+    line-height: 1.2;
+
+    &:hover {
+      color: darken($brand-color, 5%);
+    }
+  }
+}

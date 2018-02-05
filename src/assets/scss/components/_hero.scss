@@ -1,0 +1,53 @@
+.hero {
+  padding: 2rem 0;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  
+  &--expanded {
+    padding: 2rem 0 10rem;
+  }
+
+  &__logo {
+    max-height: 2.5rem;
+  }
+
+  &__logo-container {
+    background: $white;
+    height: 3.5rem;
+    width: 3.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 1rem;
+    border-radius: 50%;
+  }
+
+  &__header {
+    color: $link-color;
+
+    &:hover {
+      color: $link-hover-color;
+      text-decoration: none;
+    }
+
+    &--expanded {
+      color: $white;
+
+      &:hover {
+        color: darken($white, 5%);
+      }
+    }
+  }
+
+  &__login {
+    &--inverse {
+      color: $white;
+    }
+
+    &--transparent {
+      background-color: transparent;
+      color: $white;
+    }
+  }
+}

@@ -1,0 +1,15 @@
+.featurette {
+  background: linear-gradient(45deg, adjust-hue($brand-color, 5deg) 0%,
+    adjust-hue($brand-color, -5deg) 100%);
+  min-height: 25rem;
+  margin-bottom: 2rem;
+  color: $white;
+
+  &__frog {
+    padding: 3rem;
+    margin-bottom: 1rem;
+    width: 60%;    
+    background-color: white;
+    border-radius: 40%;
+  }
+}

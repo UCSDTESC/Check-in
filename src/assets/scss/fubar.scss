@@ -1,0 +1,85 @@
+@import 'base';
+@import 'components/all';
+@import 'pages/all';
+
+html, body{
+  margin: 0;
+  padding: 0;
+  font-family: 'Lato', sans-serif;
+}
+
+#root {
+  margin-bottom: 3.5rem;
+}
+
+a {
+  color: $link-color;
+
+  &:hover {
+    color: $link-hover-color;
+    text-decoration: none;
+  }
+}
+
+.btn-primary {
+  background-color: $brand-color;
+  border-color: $brand-color;
+
+  &:hover, &:focus, &:not([disabled]):not(.disabled):active {
+    background-color: darken($brand-color, 5%);
+    border-color: darken($brand-color, 6%);
+  }
+  
+  &:not([disabled]):not(.disabled):active {
+    box-shadow: 0 0 0 0.2rem transparentize($brand-color, 0.5);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem transparentize($brand-color, 0.5);
+  }
+}
+
+.btn-outline-primary {
+  border-color: $brand-color;
+  color: $brand-color;
+
+  &:hover, &:focus, &:not([disabled]):not(.disabled):active  {
+    background-color: $brand-color;
+    border-color: $brand-color;
+  }
+
+  &:not([disabled]):not(.disabled):active {
+    box-shadow: 0 0 0 0.2rem transparentize($brand-color, 0.5);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.2rem transparentize($brand-color, 0.5);
+  }
+}
+
+.settings-button {
+  background-color: $brand-color;
+  color: $white;
+  display: inline-block;
+
+  &:focus {
+    outline: 0;
+    box-shadow: none;
+  }
+
+  &:hover {
+    background-color: darken($brand-color, 5%);
+    color: $white;
+  }
+
+  &--transparent {
+    background-color: transparent;
+    color: $white;
+  }
+}
+
+.hline {
+  width: 100%;
+  border-bottom: 1px solid $brand-color;
+  margin-bottom: 1rem;
+}

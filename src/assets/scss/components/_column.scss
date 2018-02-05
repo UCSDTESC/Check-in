@@ -1,0 +1,13 @@
+.column {
+  &:not(:first-child) {
+    border-left: 1px solid darken($white, 10%);
+  }
+
+  &__cta {
+    margin-bottom: 2rem;
+  }
+
+  &--secondary {
+    background: darken($white, 4%);
+  }
+}
