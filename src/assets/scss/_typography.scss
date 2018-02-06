@@ -1,0 +1,58 @@
+//Include fonts
+@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Reem+Kufi:300,400,600';
+
+$body-font-family: 'Source Sans Pro', Helvetica, Roboto, Arial, sans-serif !default;
+$header-font-family: 'Reem Kufi', Helvetica, Roboto, Arial, sans-serif !default;
+$input-font-family: $header-font-family;
+
+body {
+  color: $global-text-color;
+  font-family: $body-font-family;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: $dark-blue;
+  font-family: $header-font-family;
+  letter-spacing: 0.1rem;
+}
+
+h2 {
+  text-align: center;
+}
+
+p {
+  font-size: 1.1em;
+}
+
+a {
+  color: $dark-blue;
+  text-decoration: none;
+  
+  &.sd-link__underline {
+    border-bottom: 2px solid;
+
+    &:focus {
+      text-decoration: none;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  &:hover {
+    color: $default-blue;
+    text-decoration: none;
+  }
+  &.sd-link__hover-purple:hover {
+    color: $default-purple;
+  }
+  &.sd-link__icon,
+  &.sd-link__img {
+    border: none;
+  }
+}

@@ -1,0 +1,368 @@
+$form-border-radius: $global-radius;
+
+.sd-form {
+  max-width: 800px;
+  margin: auto;
+  color: $dark-blue;
+  font-family: $header-font-family;
+  letter-spacing: 0.05rem;
+
+  &__logo {
+    max-height: 10rem;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      margin-bottom: 1.5rem;
+    }
+  }
+
+  &__wrapper {
+    background-color: $beach-blue;
+    position: relative;
+    min-height: 100%;
+  }
+
+  &__suggestions-container {
+    z-index: 100;
+    position: absolute;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-top: 2px;
+    max-height: 10rem;
+    width: calc(100% - 1.75em);
+    border-radius: $form-border-radius;
+
+    &::-webkit-scrollbar {
+      float: left;
+      width: 0.75em;
+      border-radius: $form-border-radius;
+
+      &-track {
+        border-radius: 0 $form-border-radius $form-border-radius 0;
+        background-color: $white;
+      }
+
+      &-thumb {
+        border-radius: $form-border-radius;
+        background-color: $dark-gray;
+      }
+    }
+  }
+
+  &__suggestions-list {
+    list-style: none;
+    background-color: $white;
+    padding: 0 1rem;
+    margin: 0;
+  }
+
+  &__suggestions-suggestion {
+    padding: 0.25rem 1rem 0.25rem 0;
+    background-color: transparent;
+  }
+
+  &__suggestions-link {
+    cursor: pointer;
+    width: 100%;
+  }
+
+  &__row {
+    margin: 0;
+
+    >* {
+      margin-bottom: 1.2rem;
+    }
+    .no-margin-bottom {
+      margin-bottom: 0;
+    }
+    .margin-top {
+      margin-top: 1.2rem;
+    }
+  }
+
+  &__dropzone {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    padding-top: 2rem;
+
+    &--icon {
+      flex: 1;
+      font-size: 3.5rem;
+    }
+
+    &--text {
+      flex: 1;
+    }
+  }
+
+  &__info {
+    margin-left: 0.3rem;
+    border-bottom: none;
+  }
+
+  // Resets
+  select,
+  input[type="radio"],
+  input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+  }
+
+  &__input {
+    // Default styles for inputs
+    &-text,
+    &-radio,
+    &-checkbox,
+    &-number,
+    &-email,
+    &-select,
+    &-textarea {
+      font-family: $header-font-family;
+      box-shadow: $extended-shadow;
+      background-color: $white;
+      border: none;
+      outline: none;
+      border-radius: $form-border-radius;
+      letter-spacing: 0.05rem;
+      margin: 0;
+      color: $dark-blue;
+
+      &:focus {
+        border: 2px solid $dark-blue;
+        margin: -2px;
+      }
+    }
+
+    &-radio,
+    &-checkbox {
+      width: 1.2rem;
+      height: 1.2rem;
+      background-color: $dark-blue;
+      box-sizing: border-box;
+      cursor: pointer;
+      border: 0.6rem solid $white;
+      -webkit-transition: all 0.2s ease;
+      transition: all 0.2s ease;
+
+      // Account for line-height difference
+      position: relative;
+      top: 0.2rem;
+      display: inline-block;
+      margin-right: 0.25rem;
+
+      &:focus {
+        margin: 0;
+        margin-right: 0.25rem;
+        border: 0.6rem solid $white;
+      }
+      &:checked {
+        border: 0.32rem solid $white;
+        background-color: $dark-blue;
+      }
+    }
+
+    &--error {
+      border: 2px solid $alert-color;
+      margin: -2px;
+    }
+  }
+
+  // Special radio buttons
+  &__institution-radio {
+    display: block;
+    width: 100%;
+    height: 250px;
+    position: absolute;
+    top: 0;
+    border: none;
+    opacity: 0.5;
+    -webkit-transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+      opacity: 0.7;
+    }
+    &:checked {
+      background-color: $white;
+      border: 2px solid $dark-blue;
+      opacity: 1;
+    }
+    &#institution-radio-ucsd {
+      background: url('../img/site/featurette-ucsd.png') no-repeat center center;
+      background-size: 60%;
+    }
+    &#institution-radio-uni {
+      background: url('../img/site/featurette-university.svg') no-repeat center center;
+      background-size: 70%;
+    }
+    &#institution-radio-hs {
+      background: url('../img/site/featurette-high-school.png') no-repeat center center;
+      background-size: 55%;
+    }
+
+    @include media-breakpoint-down(md) {
+      height: 4rem;
+
+      &#institution-radio-ucsd {
+        background: url('../img/site/featurette-ucsd.png') no-repeat 1rem center;
+        background-size: 15%;
+      }
+      &#institution-radio-uni {
+        background: url('../img/site/featurette-university.svg') no-repeat 1rem center;
+        background-size: 15%;
+      }
+      &#institution-radio-hs {
+        background: url('../img/site/featurette-high-school.png') no-repeat 1rem center;
+        background-size: 15%;
+      }
+    }
+  }
+
+  &__institution-card {
+    box-shadow: $extended-shadow;
+    height: 250px;
+    position: relative;
+    border-radius: $form-border-radius;
+    background-color: $white;
+
+    label {
+      position: absolute;
+      bottom: 10px;
+      width: 100%;
+      text-align: center;
+      display: block;
+      pointer-events: none;
+    }
+    @include media-breakpoint-down(md) {
+      height: 4rem;
+      // Offset row bottom margin
+      margin-bottom: -0.6rem;
+
+      label {
+        text-align: left;
+        padding-left: 5.6rem;
+        bottom: 1rem;
+      }
+    }
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="number"],
+  input[type="email"],
+  select,
+  textarea {
+    padding: 0.6rem 1.1rem;
+    display: block;
+    width: 100%;
+
+    @include placeholder {
+      color: $beach-lightblue !important;
+    }
+  }
+
+  label {
+    font-size: 1.1rem;
+    margin-bottom: 0.2rem;
+  }
+
+  textarea {
+    min-height: 8rem;
+  }
+
+  &__header {
+    padding: 4.5rem 15px 1rem;
+
+    &--text {
+      font-size: 1.5rem;
+      text-align: center;
+
+      @include media-breakpoint-up(md) {
+        font-size: 2.4rem;
+      } 
+    }
+
+    &--close {
+      color: $dark-gray;
+      cursor: pointer;
+      float: right;
+      outline: none;
+      line-height: 1.4em;
+
+      &:hover {
+        color: darken($dark-gray, 20%);
+      }
+    }
+
+    &--close-text {
+      font-size: 0.2em;
+      line-height: 0;
+      display: block;
+      margin-top: -10px;
+
+      @include media-breakpoint-up(md) {
+        height: 10px;
+      }
+    }
+  }
+
+  &__slide {
+    outline: 0;
+  }
+
+  &__required {
+    &::after {
+      content: "*";
+      color: $alert-color;
+      font-weight: bold;
+      font-size: 1.4rem;
+      line-height: 0;
+    }
+  }
+
+  &__bullet {
+    cursor: pointer;
+  }
+
+  &__container {
+    outline: 0;
+
+    input:not([type="submit"]):not([type="file"]):not([type="button"]), textarea, select {
+      &:not(:disabled) {
+        background-color: #fdfdfd;
+
+        &:focus {
+          background-color: darken(#fdfdfd, 2);
+          outline: none;
+        }
+      }
+
+      &[type=file] {
+        background-color: transparent !important;
+      }
+      &#submitApp {
+        margin-right: 10px;
+      }
+    }
+
+    label {
+      margin-left: 2px;
+    }
+  }
+
+  &__error {
+    padding: 0.35rem 0.75rem 0 0;
+    color: $alert-color;
+  }
+
+  &__loading {
+    max-height: 3rem;
+  }
+
+  &__home {
+    margin: 0 auto;
+    display: block;
+  }
+}

@@ -1,7 +1,55 @@
-$white: #fff;
-$brand-color: #00AD7C;
-$alert-color: #DC3545;
-$success-color: #28A745;
+$accent-blue: #7BC6DC;
+$accent-purple: #A88FC7;
+$accent-yellow: #FBD27A;
+$accent-red: #F87373;
+$accent-green: #6ACDBD;
 
-$link-color: $brand-color;
-$link-hover-color: darken($link-color, 15%);
+$primary-color: #19A3C5; //SDHacks Blue
+$secondary-color: #00B4CC;
+$success-color: #3adb76;
+$warning-color: #F7B733;
+$alert-color: #d34a32;
+
+$sdhacks-alternate-blue: #106F87;
+
+$light-gray: #e6e6e6;
+$medium-gray: #cacaca;
+$dark-gray: #8a8a8a;
+$black: #0a0a0a;
+$white: #fff;
+
+$body-background: #fff;
+$body-font-color: #4B4B4B;
+
+$global-radius: 0.6rem;
+$global-text-color: #656565;
+
+// Beach background theme colors
+$beach-blue: #91D3E3;
+$beach-lightblue: #A3DAE8;
+$beach-lighttan: #F7EEDF;
+$beach-tan: #F7E5C6;
+
+// Administrator Colours
+$admin-blue: #2B6177;
+$admin-dark-blue: #103B4D;
+$admin-background-blue: #EDF4F7;
+
+// Used in header text
+$dark-blue: #0D5166;
+
+$default-green: #3FC0B0;
+$default-yellow: #FFD07E;
+$default-blue: #75C8DC;
+$default-red: #F87373;
+$default-purple: #AA8DC5;
+
+$light-green: #92E3D6;
+$light-purple: #C6AAE1;
+
+$default-shadow-color: rgba(12, 42, 51, 0.3);
+$default-shadow: 0 2px 16px $default-shadow-color;
+$extended-shadow: 0 2px 22px $default-shadow-color;
+
+$default-card-radius: 10px;
+$default-card-border: 2px solid $default-purple;
