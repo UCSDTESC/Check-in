@@ -11,6 +11,7 @@ import PersonalSection from './components/PersonalSection';
 import ResponseSection from './components/ResponseSection';
 import SubmittedSection from './components/SubmittedSection';
 import UserSection from './components/UserSection';
+import NavHeader from '~/components/NavHeader.js'
 
 class ApplyPage extends React.Component {
   static propTypes = {
@@ -136,6 +137,8 @@ class ApplyPage extends React.Component {
     const {page} = this.state;
 
     return (
+      <div className="home-page">
+        < NavHeader />
       <div className="sd-form__wrapper">
         <Progress percent={(page * 100) / 4} />
         <div className="sd-form">
@@ -148,6 +151,7 @@ class ApplyPage extends React.Component {
             isSubmitting={this.state.isSubmitting} />}
           {page === 4 && <SubmittedSection />}
         </div>
+      </div>
       </div>
     );
   }
