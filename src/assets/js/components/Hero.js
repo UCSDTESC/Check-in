@@ -22,16 +22,14 @@ export default class Hero extends React.Component {
       loginClass += " hero__login--trasparent";
     }
 
+    /*<img src="/img/tesc-logo.png" className="hero__logo" />*/
     return (<div className={heroClass} style={heroStyle}>
       <div className="container">
         <div className="row">
           <div className="col-md-3 text-center text-md-left d-flex justify-content-start align-items-center">
-            <div className="hero__logo-container">
-              <img src="/img/tesc-logo.png" className="hero__logo" />
-            </div>
             <h2 className="d-inline">
               <Link to="/" className={headerClass}>
-                Check-In
+                Huh
               </Link>
             </h2>
           </div>

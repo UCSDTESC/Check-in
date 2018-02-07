@@ -9,8 +9,7 @@ $form-border-radius: $global-radius;
 
   &__logo {
     max-height: 10rem;
-    width: 100%;
-
+    
     @include media-breakpoint-up(md) {
       margin-bottom: 1.5rem;
     }

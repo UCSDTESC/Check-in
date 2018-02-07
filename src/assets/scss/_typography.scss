@@ -30,7 +30,7 @@ p {
 }
 
 a {
-  color: $dark-blue;
+  color: $tesc-blue;
   text-decoration: none;
   
   &.sd-link__underline {
@@ -45,7 +45,7 @@ a {
     }
   }
   &:hover {
-    color: $default-blue;
+    color: $dark-blue;
     text-decoration: none;
   }
   &.sd-link__hover-purple:hover {

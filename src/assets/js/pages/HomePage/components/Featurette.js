@@ -5,15 +5,12 @@ import Hero from '~/components/Hero';
 export default class Featurette extends React.Component {
   render() {
     return (<div className="featurette">
-      <Hero white />
       <div className="container">
         <div className="row">
-          <div className="col-md-6 d-flex flex-column justify-content-center">
-            <h2 className="d-block text-center">Check-In</h2>
-            <p className="d-block text-center">For TESC</p>
-          </div>
-          <div className="col-md-6 text-center">
-            testing
+          <div className="col-md-6 col-md-offset-4">
+            <h2>
+              idk what goes here 
+            </h2>
           </div>
         </div>
       </div>

@@ -104,21 +104,20 @@ class PersonalSection extends React.Component {
 
     return <span></span>;
   }
-
+ /* {fields.createRow(
+    fields.createColumn('col-12 text-center',
+      <p>
+        Applications are now closed for non-UCSD students.
+      </p>,
+      <p>
+        Already applied?&nbsp;
+        <Link className="sd-link__underline" to="/login">Login here</Link>!
+      </p>
+    )
+  )}*/
   render() {
     const {handleSubmit, pristine, submitting} = this.props;
     return (<form onSubmit={handleSubmit}>
-      {fields.createRow(
-        fields.createColumn('col-12 text-center',
-          <p>
-            Applications are now closed for non-UCSD students.
-          </p>,
-          <p>
-            Already applied?&nbsp;
-            <Link className="sd-link__underline" to="/login">Login here</Link>!
-          </p>
-        )
-      )}
       {fields.createRow(
         fields.createColumn('col-md-6',
           fields.createLabel('First Name'),
@@ -129,7 +128,6 @@ class PersonalSection extends React.Component {
           fields.createInput('lastName', 'Last Name')
         )
       )}
-
       {fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel('Email'),

@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import * as Api from '~/data/Api';
 
 import Featurette from './components/Featurette';
+import NavHeader from '~/components/NavHeader'
 
 export default class HomePage extends React.Component {
   constructor(props) {
@@ -12,7 +13,8 @@ export default class HomePage extends React.Component {
 
   render() {
     return (<div className="home-page">
-      <Featurette />
+    	< NavHeader />
+    	<Featurette />
     </div>);
   }
 }

@@ -7,6 +7,6 @@ import ApplyPage from './pages/ApplyPage';
 export default (
 	<Switch>
 		<Route exact path="/" component={HomePage} />
-		<Route path="/apply" component={ApplyPage} />
+		<Route path="/register" component={ApplyPage} />
 	</Switch>
 );

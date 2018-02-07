@@ -3,6 +3,7 @@
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
+  background-color : black;
   
   &--expanded {
     padding: 2rem 0 10rem;
@@ -25,7 +26,6 @@
 
   &__header {
     color: $link-color;
-
     &:hover {
       color: $link-hover-color;
       text-decoration: none;
