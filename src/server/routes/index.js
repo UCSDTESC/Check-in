@@ -4,6 +4,7 @@ module.exports = function(app) {
   const routes = express.Router();
 
   app.use('/', routes);
+  require('./api')(routes);
 
   // Development Hot-Middleware
   if (process.env.NODE_ENV === 'development') {

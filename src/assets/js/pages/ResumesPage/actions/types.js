@@ -1,0 +1,3 @@
+// Resumes
+export const REPLACE_APPLICANTS = 'REPLACE_APPLICANTS';
+export const REPLACE_FILTERED = 'REPLACE_FILTERED';

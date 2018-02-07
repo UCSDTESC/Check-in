@@ -8,8 +8,8 @@ import {render} from 'react-dom';
 import LoadingBar from 'react-redux-loading-bar';
 import ReactGA from 'react-ga';
 
+import Routes from './routes';
 import reducer from './reducers';
-import routes from './routes';
 
 import 'jquery';
 import 'bootstrap/dist/js/bootstrap';
@@ -32,7 +32,7 @@ render(
       <content>
         <LoadingBar updateTime={100} className="loading-bar" />
         <Router>
-          {routes}
+          <Routes />
         </Router>
       </content>
     </Provider>
