@@ -16,3 +16,9 @@ export const Admin = {
   username: PropTypes.string.isRequired,
   role: PropTypes.string.isRequired
 };
+
+export const Event = {
+  _id: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  organisers: PropTypes.arrayOf(PropTypes.shape(Admin))
+};

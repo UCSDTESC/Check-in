@@ -7,7 +7,6 @@ var bcrypt = require('bcrypt-nodejs');
 var roles = require('../helper').roles;
 
 var Schema = mongoose.Schema;
-var db = mongoose.createConnection(process.env.MONGODB_URI);
 
 var AdminSchema = new Schema({
   username: {
@@ -92,4 +91,4 @@ AdminSchema.plugin(require('mongoose-sanitizer'));
 AdminSchema.plugin(timestamps);
 AdminSchema.plugin(mongooseDelete);
 
-module.exports = db.model('Admin', AdminSchema);
+mongoose.model('Admin', AdminSchema);

@@ -6,7 +6,7 @@ import 'react-table/react-table.css';
 
 import {Column as ColumnPropTypes, User as UserPropTypes} from '~/proptypes';
 
-import User from '~/components/apps/Admin/User';
+import User from '~/components/User';
 
 class UserList extends React.Component {
   static propTypes = {

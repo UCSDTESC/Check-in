@@ -15,6 +15,12 @@ import UserList from './components/UserList';
 
 class UsersPage extends React.Component {
   static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        eventId: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired,
+
     users: PropTypes.arrayOf(PropTypes.shape(
       UserPropTypes
     ).isRequired).isRequired,
@@ -66,9 +72,15 @@ class UsersPage extends React.Component {
     this.props.removeColumn(columnName)
 
   render() {
+    let {match} = this.props;
+    let eventId = match.params.eventId;
+
     return (
       <div className="d-flex flex-column h-100 p-3">
         <div className="row">
+          <div className="col-12">
+            <h1>Event {eventId} (change to name)</h1>
+          </div>
           <div className="col-md-6">
             <ColumnEditor columns={this.props.columns}
               onAddColumn={this.onAddColumn}

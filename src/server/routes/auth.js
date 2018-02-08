@@ -1,9 +1,10 @@
 const express = require('express');
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 
 const {setUserInfo, roleAuth, roles} = require('../helper');
-const Admin = require('../models/admin');
+const Admin = mongoose.model('Admin');
 
 module.exports = function(app) {
   const auth = express.Router();

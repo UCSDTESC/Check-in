@@ -44,7 +44,7 @@ class AdminSidebar extends React.Component {
 
   administratorTools = () =>
     <Section name='Administrator Tools'>
-      <Link dest='/users'>Users</Link>
+      <Link dest='/events'>Your Events</Link>
     </Section>;
 
   sponsorTools = () =>
@@ -125,7 +125,7 @@ class AdminSidebar extends React.Component {
         <span className="admin-sidebar__header-text">
           Admin Dashboard
         </span>
-        <NavbarToggler right
+        <NavbarToggler right="true"
           className="admin-sidebar__toggler navbar-dark"
           onClick={this.toggleHidden.bind(this)} />
       </div>

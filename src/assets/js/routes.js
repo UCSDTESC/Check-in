@@ -15,6 +15,9 @@ import SponsorLayout from './layouts/sponsor';
 import HomePage from './pages/HomePage';
 import ApplyPage from './pages/ApplyPage';
 import Dashboard from './pages/DashboardPage';
+import AdminsPage from './pages/AdminsPage';
+import UsersPage from './pages/UsersPage';
+import EventsPage from './pages/EventsPage';
 
 import Logout from './auth/Logout';
 
@@ -46,10 +49,9 @@ class Routes extends React.Component {
 	 * @returns {Component}
 	 */
 	renderAdmin = (Component) => {
-		let component = <Component />;
-		return () =>
+		return (props) =>
 			(<AdminLayout>
-				{component}
+				<Component match={props.match} />
 			</AdminLayout>);
 	}
 	
@@ -60,10 +62,9 @@ class Routes extends React.Component {
 	 * @returns {Component}
 	 */
 	renderSponsor = (Component) => {
-		let component = <Component />;
-		return () =>
+		return (props) =>
 			(<SponsorLayout>
-				{component}
+				<Component match={props.match} />
 			</SponsorLayout>);
 	}
 
@@ -77,6 +78,14 @@ class Routes extends React.Component {
           component={this.renderAdmin(Dashboard)} />
 				<PrivateRoute path="/admin/logout"
           component={this.renderAdmin(Logout)} />
+				<PrivateRoute path="/admin/admins"
+          component={this.renderAdmin(AdminsPage)} />
+				<PrivateRoute exact path="/admin/events"
+          component={this.renderAdmin(EventsPage)} />
+
+				{/* Event Specific Routes */}
+				<PrivateRoute path="/admin/events/:eventId"
+          component={this.renderAdmin(UsersPage)} />
 			</Switch>
 		);
 	}

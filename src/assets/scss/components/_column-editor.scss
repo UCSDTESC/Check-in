@@ -1,0 +1,29 @@
+.column-editor {
+  background-color: darken($accent-blue, 20%);
+  color: $white;
+  margin-bottom: 1rem;
+
+  &__container {
+    margin: 0 !important;
+  }
+
+  &__badge {
+    background-color: $accent-blue;
+
+    &:hover {
+      background-color: $accent-red !important;
+    }
+  }
+
+  &__input {
+    margin: 1rem 0 !important;
+
+    &:focus {
+      margin: calc(1rem - 2px) 0 !important;
+    }
+  }
+
+  &:not(:last-child) {
+    margin-right: 1rem;
+  }
+}

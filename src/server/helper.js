@@ -46,9 +46,8 @@ function getRole(checkRole) {
  * @returns {Function} The middleware function to apply to a route.
  */
 function roleAuth(role) {
-  const Admin = require('./models/admin');
-
   return function(req, res, next) {
+    const Admin = require('mongoose').model('Admin');
     const user = req.user;
 
     Admin.findById(user._id, function(err, foundAdmin) {

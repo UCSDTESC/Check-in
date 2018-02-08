@@ -2,8 +2,9 @@ const passport = require('passport');
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const LocalStrategy = require('passport-local');
+const mongoose = require('mongoose');
 
-const Admin = require('../models/admin');
+const Admin = mongoose.model('Admin');
 
 require('dotenv').config();
 
