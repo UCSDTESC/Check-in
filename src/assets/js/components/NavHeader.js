@@ -45,38 +45,44 @@ export default class NavHeader extends React.Component {
 
     return (<nav className={`sd-nav ${navOpen}`}>
       <div className={`sd-nav__background ${activeBackground}`}></div>
-      <div className="container sd-container">
-        <div className="sd-nav__right hidden-sm-down">
+      <div className="container sd-container sd-nav__margin">
+        <div className="sd-nav__left sd-nav__side">
+          <a href="/" className={`sd-nav__logo`}>
+            <img className="sd-nav__logo" src="/img/tesc-logo.png" />
+          </a>
+        </div>
+          <div className="sd-nav__right ">
           <ul className="sd-inline-list sd-nav__links">
             {/* <Link to="/apply"><li>Apply</li></Link> */}
-            <Link to ="/"> <img src="/img/tesc-logo.png" /> </Link>
-            <Link to="/register"><li>Register</li></Link>
-            <Link to="/"><li>Link 1</li></Link>
-            <Link to="/"><li>Link 2</li></Link>
-            <Link to="/"><li>Link 3</li></Link>
-            <Link to="/"><li>Link 4</li></Link>
-            <Link to="/"><li>Contact</li></Link>
+            <div className="sticky">
+              <Link to="/register"><li>Register</li></Link>
+              <Link to="/"><li>Link 1</li></Link>
+              <Link to="/"><li>Link 2</li></Link>
+              <Link to="/"><li>Link 3</li></Link>
+              <Link to="/"><li>Link 4</li></Link>
+              <Link to="/"><li>Contact</li></Link>
+            </div>
           </ul>
         </div>
-        <a className="mobile-link hidden-sm-up sd-nav__mobile-link"
+        <a className="mobile-link  sd-nav__mobile-link"
           onClick={this.onMobileClick}>
-          <span className="mobile-hamburger"></span>
+            <span className="mobile-hamburger"></span>
         </a>
         <div className="navigation nav-right sd-nav__mobile">
           <ul>
-            <li><a className="sd-nav__mobile-link" href="/register">Register</a></li>
+            <li><Link className="sd-nav__mobile-link" to="/register">Register</Link></li>
             {/* <li><Link className="sd-nav__mobile-link"
               to="/apply">Apply</Link></li> */}
             <li><Link className="sd-nav__mobile-link"
               to="/">Link 1</Link></li>
             <li><Link className="sd-nav__mobile-link"
               to="/ ">Link 2</Link></li>
-            <li><a className="sd-nav__mobile-link"
-              href="/">Link 3</a></li>
-            <li><a className="sd-nav__mobile-link"
-              href="/">Link 4</a></li>
-            <li><a className="sd-nav__mobile-link"
-              href="/">Contact</a></li>
+            <li><Link className="sd-nav__mobile-link"
+              to="/">Link 3</Link></li>
+            <li><Link className="sd-nav__mobile-link"
+              to="/">Link 4</Link></li>
+            <li><Link className="sd-nav__mobile-link"
+              to="/">Contact</Link></li>
           </ul>
         </div>
       </div>

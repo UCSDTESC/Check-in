@@ -10,6 +10,10 @@
   transition: opacity .25s ease-in-out;
   height : 2rem;
 
+  &__margin {
+    margin-left : 2rem;
+  }
+
   // Default hidden navigation bar
   &__background {
     background-color: $white;
@@ -51,7 +55,7 @@
       transform: translateY(0);
     }
 
-    @include media-breakpoint-down(lg) {
+    @include media-breakpoint-down(md) {
       height: 60px;
       margin-top: 15px;
       margin-bottom: 12px;
@@ -64,25 +68,32 @@
   }
   &__left {
     float: left;
+    margin-left: 0rem;
 
-    margin-left: 5rem;
-
+    //blah
     @include media-breakpoint-up(lg) {
-      margin-left: 7rem;
+      margin-left: 0rem;
     }
   }
   &__side {
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       float: none;
       text-align: center;
+    }
+    img {
+      max-height : 1.6rem;
+      left : 2rem;
+      //padding-right : 16rem;
+      margin-top : 32px;
     }
   }
   &__right {
     float: none;
     /*margin-right: 5rem;
 
+    //blah
     @include media-breakpoint-up(lg) {
-      margin-right: 7rem;
+      margin-right: 2rem;
     }*/
   }
   &__mobile {
@@ -93,7 +104,7 @@
   &__links {
     a {
       display: inline-block;
-      padding: 32px 30px 0px 30px;
+      padding: 32px 2rem 0px 2rem;
       margin-bottom: 28px;
       cursor: pointer;
 
@@ -115,13 +126,6 @@
         width: 100%;
         background: $main-page-red;
       }
-
-      img {
-        max-height : 1.6rem;
-        left : 2rem;
-        padding-right : 12rem;
-        
-      }
     }
     li {
       font-size: 18px;
@@ -130,7 +134,7 @@
       padding-bottom: 3px;
       text-transform: uppercase;
     }
-    @include media-breakpoint-down(sm) {
+    @include media-breakpoint-down(md) {
       display: none;
     }
   }
@@ -138,6 +142,7 @@
     padding-top: 15px;
     padding-bottom: 15px;
 
+    //blah
     @include media-breakpoint-up(lg) {
       display: none;
     }
@@ -269,6 +274,11 @@
   .dropdown > a {
     display: none;
   }
+}
+
+.sticky {
+  position : absolute;
+  right : 1.3rem;
 }
 
 .featurette {
