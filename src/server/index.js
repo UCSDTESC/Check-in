@@ -23,7 +23,9 @@ app.use(express.static(path.join(__dirname, '../assets/public')));
 require('./routes')(app);
 
 app.use(passport.initialize());
-require('./config/passport');
+
+// this is throwing an error at buildtime "JwtStrategy requires a secret or key", commenting out for now.
+//require('./config/passport');
 
 require('./models/admin');
 
