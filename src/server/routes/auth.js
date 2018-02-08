@@ -38,7 +38,8 @@ module.exports = function(app) {
     });
   });
 
-  auth.post('/register', /*requireLogin, roleAuth(roles.ROLE_ADMIN),*/
+  //TODO: Replace permissions
+  auth.post('/register', /*requireLogin, roleAuth(roles.ROLE_DEVELOPER),*/
   function(req, res, next) {
     if (!req.body.username || !req.body.password) {
       return next('Bad Registration: Could not find username and password');
