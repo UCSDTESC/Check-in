@@ -1,0 +1,81 @@
+.rounded-button {
+  font-family: $input-font-family;
+  width: 100%;
+  max-width: 15rem;
+  border-radius: $global-radius;
+  background-color: $primary-color;
+  letter-spacing: 0.1rem;
+  font-size: 1.4rem;
+  color: $white;
+  padding: 0.6rem 0rem;
+  box-shadow: $default-shadow;
+  cursor: pointer;
+  border: none;
+
+  @include media-breakpoint-down(sm) {
+    max-width: none;
+  }
+
+  small {
+    font-size: 0.8rem;
+  }
+
+  &:hover, &:focus {
+    color: $white;
+    background-color: darken($primary-color, 3%);
+    border: none;
+  }
+
+  &--small {
+    font-size: 1.0rem;
+  }
+
+  &--short {
+    width: inherit;
+    padding: 0.6rem 1rem;
+  }
+
+  &--full {
+    max-width: none;
+  }
+
+  &--secondary {
+    background-color: $accent-purple;
+
+    &:hover, &:focus {
+      background-color: darken($accent-purple, 3%);
+    }
+  }
+
+  &--alternate {
+    background-color: $accent-green;
+
+    &:hover, &:focus {
+      background-color: darken($accent-green, 5%);
+    }
+  }
+
+  &--warn {
+    background-color: $accent-yellow;
+
+    &:hover, &:focus {
+      background-color: darken($accent-yellow, 5%);
+    }
+  }
+
+  &--success {
+    background-color: $default-green;
+
+    &:hover, &:focus {
+      background-color: darken($default-green, 3%);
+    }
+  }
+
+  &--alert {
+    background-color: $default-red;
+
+    &:hover, &:focus {
+      background-color: darken($default-red, 3%);
+    }
+  }
+}

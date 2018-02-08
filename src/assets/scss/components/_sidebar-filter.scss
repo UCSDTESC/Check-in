@@ -1,0 +1,77 @@
+.sidebar-filter {
+  padding: 1rem $left-padding;
+  transition: background-color linear 0.2s;
+  background-color: $admin-dark-blue;
+
+  &--disabled {
+    background-color: inherit;
+  }
+
+  &:not(:first-child) {
+    margin-top: 0.25rem;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  &__name {
+    margin-left: 0.5rem;
+    flex: 1;
+  }
+
+  &__show {
+    cursor: pointer;
+
+    &--disabled {
+      display: none;
+    }
+  }
+
+  &__toggles {
+    margin: 1rem 0;
+    display: flex;
+  }
+
+  &__toggle {
+    flex: 1;
+
+    &:first-child {
+      margin-right: 1rem;
+    }
+  }
+
+  &__search {
+    padding: 0.5rem 1rem;
+    width: 100%;
+    border: 2px solid $admin-dark-blue;
+
+    &:focus {
+      margin: 0;
+    }
+
+    &::placeholder {
+      color: $admin-dark-blue;
+    }
+  }
+
+  &__autosuggest {
+    margin: 1rem 0;
+    position: relative;
+
+    a {
+      color: $admin-blue;
+    }
+
+    .sd-form__suggestions-container {
+      width: 100%;
+    }
+  }
+
+  &__filter {
+    color: $white;
+  }
+}

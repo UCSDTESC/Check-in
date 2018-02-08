@@ -4,6 +4,7 @@ module.exports = function(app) {
   const api = express.Router();
 
   app.use('/api', api);
+  require('./auth')(api);
 
   // Use API for any API endpoints
   api.get('/', (req, res) => {

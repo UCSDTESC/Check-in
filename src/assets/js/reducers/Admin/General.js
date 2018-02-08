@@ -1,4 +1,4 @@
-import * as Types from '../actions/types';
+import * as Types from '~/actions/types';
 
 const INITIAL_STATE = {
   editing: false

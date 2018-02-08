@@ -1,0 +1,57 @@
+.toggle-switch {
+  position: absolute;
+  margin-left: -9999px;
+  visibility: hidden;
+
+  & + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+  }
+}
+input.toggle-switch-round-flat{
+  & + label {
+    padding: 2px;
+    margin-bottom: 0;
+    width: 2.5rem;
+    height: 1.5rem;
+    background-color: #dddddd;
+    border-radius: 60px;
+    transition: background 0.4s;
+
+    &:before {
+      top: 2px;
+      left: 2px;
+      bottom: 2px;
+      right: 2px;
+      background-color: #fff;
+      border-radius: 60px;
+      transition: background 0.4s;
+    }
+
+    &:after {
+      top: 4px;
+      left: 4px;
+      bottom: 4px;
+      width: 1rem;
+      background-color: #dddddd;
+      border-radius: 50%;
+      transition: margin 0.4s, background 0.4s;
+    } 
+    
+    &:before, &:after {
+      display: block;
+      position: absolute;
+      content: "";
+    }
+  }
+
+
+  &:checked + label {
+    background-color: $primary-color;
+    &:after {
+      margin-left: 1rem;
+      background-color: $primary-color;
+    }
+  }
+}

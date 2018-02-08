@@ -2,7 +2,10 @@
 var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
+var passport = require('passport');
 var app = express();
+
+require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 
@@ -18,6 +21,11 @@ app.set('view engine', 'pug');
 
 app.use(express.static(path.join(__dirname, '../assets/public')));
 require('./routes')(app);
+
+app.use(passport.initialize());
+require('./config/passport');
+
+require('./models/admin');
 
 app.listen(port);
 console.log('Server started. Listening on port', port);

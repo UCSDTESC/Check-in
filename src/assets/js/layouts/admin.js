@@ -3,11 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
-import {toggleEditing} from '~/components/apps/Admin/actions';
-
-import {loginUser} from '~/components/apps/Admin/auth/actions';
-
-import Login from '~/components/apps/Admin/auth/Login';
+import {toggleEditing} from '~/actions';
+import {loginUser} from '~/auth/actions';
+import Login from '~/auth/Login';
 
 import Sidebar from './components/AdminSidebar';
 

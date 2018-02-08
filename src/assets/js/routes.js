@@ -1,10 +1,31 @@
+import {Switch, Route} from 'react-router-dom';
+import {Cookies, withCookies} from 'react-cookie';
+import PropTypes, {instanceOf} from 'prop-types';
 import React from 'react';
-import {Route, Switch} from 'react-router-dom';
+import {connect} from 'react-redux';
+import {withRouter} from 'react-router-dom';
+
+import PrivateRoute from './PrivateRoute';
+
+import {AUTH_USER} from './auth/actions/types';
+
+import AdminLayout from './layouts/admin';
+import SponsorLayout from './layouts/sponsor';
 
 import HomePage from './pages/HomePage';
 import ApplyPage from './pages/ApplyPage';
+import Dashboard from './pages/DashboardPage';
+
+import Logout from './auth/Logout';
+
+import CookieTypes from '~/static/Cookies';
 
 class Routes extends React.Component {
+	static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    cookies: instanceOf(Cookies).isRequired
+	};
+	
 	constructor(props) {
 		super(props);
 	
@@ -51,6 +72,11 @@ class Routes extends React.Component {
 			<Switch>
 				<Route exact path="/" component={HomePage} />
 				<Route path="/register" component={ApplyPage} />
+
+				<Route exact path="/admin/"
+          component={this.renderAdmin(Dashboard)} />
+				<PrivateRoute path="/admin/logout"
+          component={this.renderAdmin(Logout)} />
 			</Switch>
 		);
 	}

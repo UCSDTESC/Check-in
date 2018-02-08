@@ -1,0 +1,35 @@
+.rounded-input {
+  font-family: $input-font-family;
+  width: 100%;
+  max-width: 18em;
+  border-radius: $global-radius;
+  background-color: $white;
+  border: 2px solid $primary-color;
+  font-size: 1.4rem;
+  color: $black;
+  padding: 0.4rem 0.2rem;
+
+  @include media-breakpoint-down(sm) {
+    max-width: none;
+  }
+
+  &::placeholder {
+    color: $medium-gray;
+  }
+
+  &--secondary {
+    border-color: $accent-purple;
+  }
+
+  &--small {
+    font-size: 1.0rem;
+  }
+
+  &--full {
+    max-width: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

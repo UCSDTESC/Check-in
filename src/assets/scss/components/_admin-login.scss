@@ -1,0 +1,109 @@
+.admin-login {
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: $white !important;
+  // Prevent background overflow
+  height: 100vh;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  max-width: none !important;
+  background-color: $admin-dark-blue !important;
+
+  &__container, &__above, &__below {
+    z-index: 3;
+  }
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      max-width: 20rem;
+    }
+  }
+
+  &__above {
+    flex: 1;
+    display: flex;
+    align-items: flex-end;
+  }
+
+  &__below {
+    flex: 1;
+  }
+
+  &__button {
+    background-color: $admin-dark-blue;
+    border-color: $admin-dark-blue;
+    width: 100%;
+
+    &:hover {
+      background-color: $admin-dark-blue;
+      border-color: $admin-dark-blue;
+      cursor: pointer;
+    }
+  }
+
+  &__background {
+    height: 36rem;
+    width: 63rem;
+    background-color: lighten($primary-color, 5%);
+    position: absolute;
+    bottom: -37rem;
+    right: 0;
+    z-index: 2;
+    overflow: hidden;
+    transform: skewY(-30deg);
+    transform-origin: 0 0;
+
+    &:before {
+      background-color: $admin-blue;
+      content: '';
+      display: block;
+      height: 12rem;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 2;
+    }
+
+    &:after {
+      background-color: darken($primary-color, 5%);
+      content: '';
+      display: block;
+      height: 12rem;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 12rem;
+      z-index: 0;
+    }
+  }
+
+  &__title {
+    margin: 1rem 0;
+
+    h1 {
+      color: $white;
+    }
+  }
+
+  &__username, &__password {
+    margin-bottom: 1rem;
+  }
+
+  &__input {
+    border: none;
+    font-family: $header-font-family;
+
+  }
+}

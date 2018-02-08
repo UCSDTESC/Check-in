@@ -121,7 +121,7 @@ class AdminSidebar extends React.Component {
       <div className={`admin-sidebar__header navbar-expand-md
         navbar-inverse`}>
         <img className="admin-sidebar__logo"
-          src="/assets/img/vectors/logo.svg"/>
+          src="/img/vectors/tesc-logo.svg"/>
         <span className="admin-sidebar__header-text">
           Admin Dashboard
         </span>
