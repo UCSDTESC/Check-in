@@ -33,4 +33,4 @@ require('./models/index')()
   app.listen(port);
   logger.log('info', 'Server started. Listening on port %s', port);
 })
-.catch(logger.error);
+.catch(console.error);

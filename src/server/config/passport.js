@@ -28,10 +28,10 @@ const adminLogin = new LocalStrategy(localOptions,
 function(username, password, done) {
   Admin.findOne({username: {$regex : new RegExp(`^${username}$`, 'i')}},
   function(err, admin) {
-    if (err || admin.deleted) {
+    if (err) {
       return done(err);
     }
-    if (!admin) {
+    if (!admin || admin.deleted) {
       return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
     }
 

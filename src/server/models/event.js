@@ -15,7 +15,12 @@ var EventSchema = new Schema({
   organisers: [{
     type: Schema.Types.ObjectId,
     ref: 'Admin'
-  }]
+  }],
+  logo: {
+    type: String,
+    trim: true,
+    required: [true, 'Your event must have a logo']
+  }
 });
 
 EventSchema.plugin(timestamps);

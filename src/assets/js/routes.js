@@ -17,7 +17,6 @@ import ApplyPage from './pages/ApplyPage';
 import Dashboard from './pages/DashboardPage';
 import AdminsPage from './pages/AdminsPage';
 import UsersPage from './pages/UsersPage';
-import EventsPage from './pages/EventsPage';
 
 import Logout from './auth/Logout';
 
@@ -80,8 +79,6 @@ class Routes extends React.Component {
           component={this.renderAdmin(Logout)} />
 				<PrivateRoute path="/admin/admins"
           component={this.renderAdmin(AdminsPage)} />
-				<PrivateRoute exact path="/admin/events"
-          component={this.renderAdmin(EventsPage)} />
 
 				{/* Event Specific Routes */}
 				<PrivateRoute path="/admin/events/:eventId"
