@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import {Collapse} from 'reactstrap';
 
 export default class NavHeader extends React.Component {
   constructor(props) {
@@ -38,54 +39,51 @@ export default class NavHeader extends React.Component {
 
   render() {
     const {isHidden, isBackgroundActive, isLogoUp} = this.state;
-    const navOpen = (isHidden ? '' : 'nav-open');
     const activeBackground = (isBackgroundActive ?
       'sd-nav__background-active' : '');
     const logoUp = ((isHidden && isLogoUp) ? 'sd-nav__logo-up' : '');
 
-    return (<nav className={`sd-nav ${navOpen}`}>
+    return (<nav className={`sd-nav`}>
       <div className={`sd-nav__background ${activeBackground}`}></div>
-      <div className="container sd-container sd-nav__margin">
-        <div className="sd-nav__left sd-nav__side">
-          <a href="/" className={`sd-nav__logo`}>
-            <img className="sd-nav__logo" src="/img/tesc-logo.png" />
-          </a>
-        </div>
-          <div className="sd-nav__right ">
-          <ul className="sd-inline-list sd-nav__links">
-            {/* <Link to="/apply"><li>Apply</li></Link> */}
-            <div className="sticky">
-              <Link to="/register"><li>Apply</li></Link>
-              <Link to="/admin"><li>Admin Login</li></Link>
-              <Link to="/"><li>Link 2</li></Link>
-              <Link to="/"><li>Link 3</li></Link>
-              <Link to="/"><li>Link 4</li></Link>
-              <Link to="/"><li>Contact</li></Link>
-            </div>
+      <div className="container sd-container">
+        <nav className="nav flex-row align-items-md-center align-items-start pb-3">
+          <div className="flex-row">
+            <img className="sd-nav__logo" src="/img/vectors/tesc-logo.svg" />
+          </div>
+
+          <ul className="sd-nav__links flex-row ml-md-auto d-none d-md-flex align-items-center">
+            <li className="sd-nav__link-item">
+              <Link className="sd-nav__link" to="/register">HackXX Registration</Link>
+            </li>
+            <li className="sd-nav__link-item">
+              <Link className="sd-nav__link" to="/admin">Admin Panel</Link>
+            </li>
+            <li className="sd-nav__link-item">
+              <Link className="sd-nav__link" to="#">Other</Link>
+            </li>
           </ul>
-        </div>
-        <a className="mobile-link  sd-nav__mobile-link"
-          onClick={this.onMobileClick}>
-            <span className="mobile-hamburger"></span>
-        </a>
-        <div className="navigation nav-right sd-nav__mobile">
-          <ul>
-            <li><Link className="sd-nav__mobile-link" to="/register">Register</Link></li>
-            {/* <li><Link className="sd-nav__mobile-link"
-              to="/apply">Apply</Link></li> */}
-            <li><Link className="sd-nav__mobile-link"
-              to="/">Link 1</Link></li>
-            <li><Link className="sd-nav__mobile-link"
-              to="/ ">Link 2</Link></li>
-            <li><Link className="sd-nav__mobile-link"
-              to="/">Link 3</Link></li>
-            <li><Link className="sd-nav__mobile-link"
-              to="/">Link 4</Link></li>
-            <li><Link className="sd-nav__mobile-link"
-              to="/">Contact</Link></li>
-          </ul>
-        </div>
+
+          <div className="flex-column ml-auto d-flex d-md-none">
+            <button className="navbar-toggler hamburger__toggler" type="button" onClick={this.onMobileClick}>
+              <span className="navbar-toggler-icon hamburger__toggle-icon"></span>
+            </button>
+          </div>
+        </nav>
       </div>
+
+      <Collapse className="hamburger flex-column" isOpen={!isHidden}>
+        <ul className="hamburger__links">
+          <li className="hamburger__link-item">
+            <Link className="hamburger__link" to="/register">HackXX Regstration</Link>
+          </li>
+          <li className="hamburger__link-item">
+            <Link className="hamburger__link" to="/admin">Admin Panel</Link>
+          </li>
+          <li className="hamburger__link-item hamburger__link-item--cta">
+            <Link className="hamburger__link hamburger__link--white" to="#">Special CTA</Link>
+          </li>
+        </ul>
+      </Collapse>
     </nav>);
   }
 };

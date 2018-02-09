@@ -1,6 +1,8 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
+import NavHeader from '~/components/NavHeader';
+
 export default class Hero extends React.Component {
   render() {
     let {background, white} = this.props;
@@ -22,16 +24,12 @@ export default class Hero extends React.Component {
       loginClass += " hero__login--trasparent";
     }
 
-    /*<img src="/img/tesc-logo.png" className="hero__logo" />*/
     return (<div className={heroClass} style={heroStyle}>
+      <NavHeader />
       <div className="container">
         <div className="row">
-          <div className="col-md-3 text-center text-md-left d-flex justify-content-start align-items-center">
-            <h2 className="d-inline">
-              <Link to="/" className={headerClass}>
-                Huh
-              </Link>
-            </h2>
+          <div className="col-md-12 text-center">
+            <h1>Welcome to the TESC Check-In System</h1>
           </div>
         </div>
       </div>

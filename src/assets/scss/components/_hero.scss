@@ -1,9 +1,7 @@
 .hero {
-  padding: 2rem 0;
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: cover;
-  background-color : black;
+  padding: 1rem 0;
+  background: $tesc-yellow;
+  margin-bottom: 2rem;
   
   &--expanded {
     padding: 2rem 0 10rem;
