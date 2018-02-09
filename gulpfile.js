@@ -36,6 +36,7 @@ gulp.task('css', function () {
 
 gulp.task('nodemon', ['css'], function(cb) {
   return nodemon({
+    exec: 'node --inspect=9229',
     script: 'src/server/index.js',
     ext: 'js html',
     watch: paths.src,

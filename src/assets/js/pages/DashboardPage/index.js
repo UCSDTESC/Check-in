@@ -1,31 +1,50 @@
-import PropTypes, {instanceOf} from 'prop-types';
+import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
+import {bindActionCreators} from 'redux';
+import {showLoading, hideLoading} from 'react-redux-loading-bar';
+import {Button} from 'reactstrap';
 
-import {getRole, Roles} from '~/static/Roles';
+import {replaceEvents} from './actions';
+import EventList from './components/EventList';
+
+import {loadAllEvents} from '~/data/Api';
+
+import {Event as EventPropType} from '~/proptypes';
 
 class DashboardPage extends React.Component {
   static propTypes = {
-    auth: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    dispatch: PropTypes.func.isRequired,
-    stats: PropTypes.object.isRequired
+    events: PropTypes.arrayOf(PropTypes.shape(
+      EventPropType
+    ).isRequired).isRequired,
+    showLoading: PropTypes.func.isRequired,
+    hideLoading: PropTypes.func.isRequired,
+    replaceEvents: PropTypes.func.isRequired,
+    editing: PropTypes.bool.isRequired
   };
 
+  loadEvents = () =>
+    loadAllEvents()
+    .then(res => {
+      this.props.hideLoading();
+      return this.props.replaceEvents(res);
+    })
+    .catch(console.error);
+
+  componentWillMount() {
+    this.props.showLoading();
+
+    this.loadEvents();
+  }
+
   render() {
-    let {user} = this.props;
+    let {events} = this.props;
 
     return (
-      <div className="container-fluid p-3">
-        <div className="row">
-          <div className="col-sm-12">
-            <h1>Dashboard</h1>
-            <h2 className="text-left">
-              {user.username}
-              <small> ({user.role})</small>
-            </h2>
-          </div>
+      <div>
+        <div className="container-fluid">
+          <h1>Dashboard</h1>
+          <EventList events={events} />
         </div>
       </div>
     );
@@ -34,9 +53,17 @@ class DashboardPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    auth: state.admin.auth,
-    user: state.admin.auth.user
+    events: state.admin.events,
+    editing: state.admin.general.editing
   };
-}
+};
 
-export default connect(mapStateToProps)(DashboardPage);
+function mapDispatchToProps(dispatch) {
+  return {
+    replaceEvents: bindActionCreators(replaceEvents, dispatch),
+    showLoading: bindActionCreators(showLoading, dispatch),
+    hideLoading: bindActionCreators(hideLoading, dispatch),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);

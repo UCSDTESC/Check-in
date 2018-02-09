@@ -44,7 +44,6 @@ class AdminSidebar extends React.Component {
 
   administratorTools = () =>
     <Section name='Administrator Tools'>
-      <Link dest='/events'>Your Events</Link>
     </Section>;
 
   sponsorTools = () =>
@@ -70,7 +69,7 @@ class AdminSidebar extends React.Component {
     return (<div>
       {auth && role >= getRole(Roles.ROLE_DEVELOPER) && this.developerTools()}
 
-      {auth && role >= getRole(Roles.ROLE_ADMIN) && this.administratorTools()}
+      {/* {auth && role >= getRole(Roles.ROLE_ADMIN) && this.administratorTools()} */}
 
       {auth && role >= getRole(Roles.ROLE_SPONSOR) && this.sponsorTools()}
 

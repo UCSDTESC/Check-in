@@ -4,6 +4,18 @@ import * as Types from './types';
 
 import * as Api from '~/data/Api';
 
+// Events
+export const addEvents = (events) => ({
+  type: Types.ADD_EVENTS,
+  events
+});
+
+export const replaceEvents = (events) => ({
+  type: Types.REPLACE_EVENTS,
+  events
+});
+
+// Stats
 export const changeUserStats = (newStats) => ({
   type: Types.CHANGE_USER_STATS,
   newStats
