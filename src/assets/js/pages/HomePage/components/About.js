@@ -5,10 +5,13 @@ import Hero from '~/components/Hero';
 export default class About extends React.Component {
   render() {
     return (<div className="about">
+<<<<<<< HEAD
 <<<<<<< Updated upstream
       <img className="about__logo" src="https://www.sdhacks.io/assets/img/vectors/logo.svg"/>
       This is the about section.
 =======
+=======
+>>>>>>> 50169b8578a9faacd7daaaf7d6ffd264d72b6baa
       <div className="container">
         <div className="row">
           <div className="col-md-4">
@@ -45,7 +48,10 @@ export default class About extends React.Component {
           </div>
         </div>
       </div>
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> 50169b8578a9faacd7daaaf7d6ffd264d72b6baa
     </div>);
   }
 };
