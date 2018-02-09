@@ -55,8 +55,8 @@ export default class NavHeader extends React.Component {
           <ul className="sd-inline-list sd-nav__links">
             {/* <Link to="/apply"><li>Apply</li></Link> */}
             <div className="sticky">
-              <Link to="/register"><li>Register</li></Link>
-              <Link to="/"><li>Link 1</li></Link>
+              <Link to="/register"><li>Apply</li></Link>
+              <Link to="/admin"><li>Admin Login</li></Link>
               <Link to="/"><li>Link 2</li></Link>
               <Link to="/"><li>Link 3</li></Link>
               <Link to="/"><li>Link 4</li></Link>

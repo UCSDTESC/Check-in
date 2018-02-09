@@ -28,7 +28,7 @@ module.exports = function(app) {
     .exec((err, events) => {
       if(err) {
         logging.error(err);
-        res.json({error: true});
+        return res.json({error: true});
       }
       return res.json(events);
     });

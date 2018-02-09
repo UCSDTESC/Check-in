@@ -175,14 +175,14 @@ class PersonalSection extends React.Component {
           this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
             'UCSD')
         ),
-        /* fields.createColumn('col-md-4',
+        fields.createColumn('col-md-4',
           this.createInstitutionCard('uni', 'institution-radio-uni',
             'Other University')
         ),
         fields.createColumn('col-md-4',
           this.createInstitutionCard('hs', 'institution-radio-hs',
             'High School')
-        ), */
+        ),
         fields.createColumn('col-sm-12',
           <Fields names={['institution']}
             component={this.showInstitutionError} />

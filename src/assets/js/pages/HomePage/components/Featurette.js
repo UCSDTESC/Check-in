@@ -9,7 +9,7 @@ export default class Featurette extends React.Component {
         <div className="row">
           <div className="col-md-6 col-md-offset-4">
             <h2>
-              idk what goes here 
+              Welcome to the SDHacks Check-In Page.
             </h2>
           </div>
         </div>
