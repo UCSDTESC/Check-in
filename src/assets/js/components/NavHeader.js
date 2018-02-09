@@ -45,10 +45,10 @@ export default class NavHeader extends React.Component {
 
     return (<nav className={`sd-nav`}>
       <div className={`sd-nav__background ${activeBackground}`}></div>
-      <div className="container sd-container">
+      <div className="container">
         <nav className="nav flex-row align-items-md-center align-items-start pb-3">
           <div className="flex-row">
-            <img className="sd-nav__logo" src="/img/vectors/tesc-logo.svg" />
+            <Link to="/"><img className="sd-nav__logo" src="/img/tesc-logo.png" /></Link>
           </div>
 
           <ul className="sd-nav__links flex-row ml-md-auto d-none d-md-flex align-items-center">
@@ -79,8 +79,8 @@ export default class NavHeader extends React.Component {
           <li className="hamburger__link-item">
             <Link className="hamburger__link" to="/admin">Admin Panel</Link>
           </li>
-          <li className="hamburger__link-item hamburger__link-item--cta">
-            <Link className="hamburger__link hamburger__link--white" to="#">Special CTA</Link>
+          <li className="hamburger__link-item hamburger__link-item">
+            <Link className="hamburger__link hamburger__link" to="#">Other</Link>
           </li>
         </ul>
       </Collapse>

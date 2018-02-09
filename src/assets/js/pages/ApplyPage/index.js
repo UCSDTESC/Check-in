@@ -139,19 +139,19 @@ class ApplyPage extends React.Component {
     return (
       <div className="home-page">
         < NavHeader />
-      <div className="sd-form__wrapper">
-        <Progress percent={(page * 100) / 4} />
-        <div className="sd-form">
-          <Header />
-          {page === 1 && <PersonalSection onSubmit={this.nextPage} />}
-          {page === 2 && <ResponseSection onSubmit={this.nextPage}
-            previousPage={this.previousPage} />}
-          {page === 3 && <UserSection onSubmit={this.onFinalSubmit}
-            previousPage={this.previousPage} submitError={this.state.error}
-            isSubmitting={this.state.isSubmitting} />}
-          {page === 4 && <SubmittedSection />}
+        <div className="sd-form__wrapper">
+          <Progress percent={(page * 100) / 4} />
+          <div className="sd-form">
+            <Header />
+            {page === 1 && <PersonalSection onSubmit={this.nextPage} />}
+            {page === 2 && <ResponseSection onSubmit={this.nextPage}
+              previousPage={this.previousPage} />}
+            {page === 3 && <UserSection onSubmit={this.onFinalSubmit}
+              previousPage={this.previousPage} submitError={this.state.error}
+              isSubmitting={this.state.isSubmitting} />}
+            {page === 4 && <SubmittedSection />}
+          </div>
         </div>
-      </div>
       </div>
     );
   }
