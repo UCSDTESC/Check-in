@@ -152,7 +152,7 @@ var UserSchema = new Schema({
 
 UserSchema.pre('save', function(next) {
   const user = this;
-  const SALT_FACTOR = 5;
+  const SALT_FACTOR = process.env.SALT_ROUNDS;
 
   if (!user.isModified('password')) {
     return next();

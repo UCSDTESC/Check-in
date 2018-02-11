@@ -40,7 +40,7 @@ var AdminSchema = new Schema({
 
 AdminSchema.pre('save', function(next) {
   const user = this;
-  const SALT_FACTOR = 5;
+  const SALT_FACTOR = process.env.SALT_ROUNDS;
 
   if (!user.isModified('password')) {
     return next();
@@ -91,4 +91,4 @@ AdminSchema.plugin(require('mongoose-sanitizer'));
 AdminSchema.plugin(timestamps);
 AdminSchema.plugin(mongooseDelete);
 
-mongoose.model('Admin', AdminSchema);
+module.exports = mongoose.model('Admin', AdminSchema);
