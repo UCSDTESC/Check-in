@@ -158,7 +158,6 @@ class CheckinPage extends React.Component {
 
     this.checkinById(this.state.lastUser)
     .then((user) => {
-      console.log('Checked In!');
       this.setState({
         wasSuccessful: true,
         lastName: user.firstName + ' ' + user.lastName

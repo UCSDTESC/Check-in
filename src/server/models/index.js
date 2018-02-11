@@ -6,6 +6,7 @@ module.exports = () => new Promise((fulfill, reject) => {
   .then(() => {
     logger.info('Connected to Database');
 
+    require('./user');
     require('./admin');
     require('./event');
 

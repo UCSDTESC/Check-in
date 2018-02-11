@@ -1,3 +1,9 @@
 @import url('https://fonts.googleapis.com/css?family=Lato:300,400,400i,700,900');
 
 @import 'variables';
+
+body, html, #root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}

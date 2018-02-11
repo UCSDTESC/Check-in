@@ -39,6 +39,8 @@
     "mime": "^2.2.0",
     "moment": "^2.19.2",
     "mongoose": "^5.0.3",
+    "mongoose-crate": "^1.1.0",
+    "mongoose-crate-s3": "^1.2.0",
     "mongoose-delete": "^0.4.0",
     "mongoose-sanitizer": "^1.0.0",
     "mongoose-timestamp": "^0.6.0",

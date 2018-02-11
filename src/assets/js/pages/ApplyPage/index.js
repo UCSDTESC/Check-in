@@ -4,18 +4,25 @@ import {withRouter} from 'react-router-dom';
 import Progress from 'react-progress';
 import ReactGA from 'react-ga';
 
-import {registerUser} from '~/data/Api';
+import {registerUser, loadEventByAlias} from '~/data/Api';
 
 import Header from './components/Header';
 import PersonalSection from './components/PersonalSection';
 import ResponseSection from './components/ResponseSection';
 import SubmittedSection from './components/SubmittedSection';
 import UserSection from './components/UserSection';
-import NavHeader from '~/components/NavHeader.js'
+import NavHeader from '~/components/NavHeader.js';
+
+import createValidator from './validate';
 
 class ApplyPage extends React.Component {
   static propTypes = {
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        eventAlias: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired,
   }
 
   constructor(props) {
@@ -26,9 +33,25 @@ class ApplyPage extends React.Component {
     this.state = {
       page: 1,
       error: null,
-      isSubmitting: false
+      isSubmitting: false,
+      event: null
     };
   }
+
+  /**
+   * Loads information about the event given its event alias.
+   */
+  loadEventInformation() {
+    let {eventAlias} = this.props.match.params;
+    loadEventByAlias(eventAlias)
+    .then((res) => {
+      this.setState({event: res});
+    })
+    .catch((err) => {
+      console.error(err);
+      this.setState({error: err});
+    });
+  };
 
   /**
    * Check for a URL hash and change pages.
@@ -50,6 +73,7 @@ class ApplyPage extends React.Component {
   }
 
   componentWillMount() {
+    this.loadEventInformation();
     this.loadPageFromHash();
   }
 
@@ -134,21 +158,49 @@ class ApplyPage extends React.Component {
   }
 
   render() {
-    const {page} = this.state;
+    const {page, event} = this.state;
+
+    let options = {
+      allowHighSchool: false,
+      mlhProvisions: false,
+      allowOutOfState: false,
+      foodOption: false,
+      requireResume: true,
+      allowTeammates: true
+    };
+
+    let validator = createValidator(options);
+
+    if (!event) {
+      return (<div className="page apply-page apply-page--loading">
+        <NavHeader />
+        <div className="container">
+          <div className="row">
+            <div className="col-12 text-center">
+              <h1>Loading Registration...</h1>
+              <img className="sd-form__loading" src="/img/site/loading.svg" />
+            </div>
+          </div>
+        </div>
+      </div>);
+    }
 
     return (
-      <div className="home-page">
-        < NavHeader />
+      <div className="page apply-page">
+        <NavHeader />
         <div className="sd-form__wrapper">
           <Progress percent={(page * 100) / 4} />
           <div className="sd-form">
-            <Header />
-            {page === 1 && <PersonalSection onSubmit={this.nextPage} />}
+            {event && <Header name={event.name} logo={event.logo} />}
+            {page === 1 && <PersonalSection onSubmit={this.nextPage}
+              validate={validator} event={event} options={options} />}
             {page === 2 && <ResponseSection onSubmit={this.nextPage}
-              previousPage={this.previousPage} />}
+              previousPage={this.previousPage}
+              validate={validator} options={options} />}
             {page === 3 && <UserSection onSubmit={this.onFinalSubmit}
               previousPage={this.previousPage} submitError={this.state.error}
-              isSubmitting={this.state.isSubmitting} />}
+              isSubmitting={this.state.isSubmitting}
+              validate={validator} options={options} />}
             {page === 4 && <SubmittedSection />}
           </div>
         </div>

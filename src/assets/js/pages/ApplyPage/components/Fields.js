@@ -175,9 +175,10 @@ creates.errorMajorPicker =
       </div>);
   };
 
-creates.createLabel = function createLabel(text, required=true, className='') {
+creates.createLabel = function createLabel(text, required=true, className='',
+  forTag='') {
   return (<label className={required ? 'sd-form__required ' +
-    className : className}>{text}</label>);
+    className : className} htmlFor={forTag}>{text}</label>);
 };
 
 creates.createInput = function createInput(name, placeholder, type='text',

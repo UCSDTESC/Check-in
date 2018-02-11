@@ -12,6 +12,13 @@ var EventSchema = new Schema({
     unique: true,
     required: [true, 'Your event must have an name']
   },
+  alias: {
+    type: String,
+    trim: true,
+    unique: true,
+    lowercase: true,
+    required: [true, 'Your event must have an alias']
+  },
   organisers: [{
     type: Schema.Types.ObjectId,
     ref: 'Admin'

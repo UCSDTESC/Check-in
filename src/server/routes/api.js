@@ -5,6 +5,7 @@ const ObjectId = require('mongodb').ObjectId;
 const logging = require('../config/logging');
 
 const {setUserInfo, roleAuth, roles, getRole} = require('../helper');
+const Errors = require('./errors')(logging);
 const Admin = mongoose.model('Admin');
 const Event = mongoose.model('Event');
 
@@ -20,19 +21,32 @@ module.exports = function(app) {
   (req, res) => {
     if(getRole(req.user.role) >= getRole(roles.ROLE_DEVELOPER)) {
       return Event.find().populate('organisers').exec((err, events) => {
+        if(err) return Errors.respondError(res, err, Errors.DATABASE_ERROR);
         return res.json(events);
       });
     }
     return Event.find({"organisers": req.user})
     .populate('organisers')
     .exec((err, events) => {
-      if(err) {
-        logging.error(err);
-        return res.json({error: true});
-      }
+      if(err) return Errors.respondError(res, err, Errors.DATABASE_ERROR);
       return res.json(events);
     });
-  })
+  });
+
+  api.get('/events/:eventAlias',
+  (req, res) => {
+    return Event.findOne({"alias": req.params.eventAlias})
+    .exec((err, event) => {
+      if(err) return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+      if(!event) return Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
+      return res.json({
+        _id: event._id,
+        name: event.name,
+        logo: event.logo,
+        alias: event.alias
+      });
+    });
+  });
 
   api.get('/admins', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
   (req, res) =>

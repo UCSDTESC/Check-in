@@ -183,19 +183,23 @@ $form-border-radius: $global-radius;
     &:hover {
       opacity: 0.7;
     }
+
     &:checked {
       background-color: $white;
       border: 2px solid $dark-blue;
       opacity: 1;
     }
+
     &#institution-radio-ucsd {
       background: url('../img/site/featurette-ucsd.png') no-repeat center center;
       background-size: 60%;
     }
+
     &#institution-radio-uni {
       background: url('../img/site/featurette-university.svg') no-repeat center center;
       background-size: 70%;
     }
+
     &#institution-radio-hs {
       background: url('../img/site/featurette-high-school.png') no-repeat center center;
       background-size: 55%;
@@ -208,10 +212,12 @@ $form-border-radius: $global-radius;
         background: url('../img/site/featurette-ucsd.png') no-repeat 1rem center;
         background-size: 15%;
       }
+
       &#institution-radio-uni {
         background: url('../img/site/featurette-university.svg') no-repeat 1rem center;
         background-size: 15%;
       }
+      
       &#institution-radio-hs {
         background: url('../img/site/featurette-high-school.png') no-repeat 1rem center;
         background-size: 15%;
@@ -272,15 +278,14 @@ $form-border-radius: $global-radius;
   }
 
   &__header {
-    padding: 4.5rem 15px 1rem;
+    padding: 0 0 1rem;
 
-    &--text {
-      font-size: 1.5rem;
-      text-align: center;
+    &-text {
+      font-size: 2.5rem;
+    }
 
-      @include media-breakpoint-up(md) {
-        font-size: 2.4rem;
-      } 
+    &-logo {
+      max-height: 5rem;
     }
 
     &--close {

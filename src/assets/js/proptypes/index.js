@@ -20,6 +20,7 @@ export const Admin = {
 export const Event = {
   _id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
+  alias: PropTypes.string.isRequired,
   organisers: PropTypes.arrayOf(PropTypes.shape(Admin)),
   logo: PropTypes.string.isRequired
 };

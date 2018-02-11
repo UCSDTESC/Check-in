@@ -71,7 +71,7 @@ class Routes extends React.Component {
 		return (
 			<Switch>
 				<Route exact path="/" component={HomePage} />
-				<Route path="/register" component={ApplyPage} />
+				<Route path="/register/:eventAlias" component={ApplyPage} />
 
 				<Route exact path="/admin/"
           component={this.renderAdmin(Dashboard)} />

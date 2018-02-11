@@ -4,14 +4,25 @@
  * @returns {(Object|undefined)} An error object where the key represents the
  * name of the form property, and the value its error.
  */
-const validate = values => {
+const createValidator = (options) => (values) => {
   const errors = {};
 
-  const required = ['firstName', 'lastName', 'email', 'birthdateDay',
+  let required = ['firstName', 'lastName', 'email', 'birthdateDay',
     'birthdateMonth', 'birthdateYear', 'gender', 'phone', 'institution',
-    'major', 'year', 'resume', 'outOfState', 'shirtFit', 'shirtSize',
-    'firstHackathon', 'outcomeStmt', 'accept', 'provision'
+    'major', 'year', 'shirtFit', 'shirtSize', 'firstHackathon', 'outcomeStmt'
   ];
+
+  if (options.allowOutOfState) {
+    required.push('outOfState');
+  }
+
+  if (options.mlhProvisions) {
+    required.push('accept', 'provision');
+  }
+
+  if (options.requireResume) {
+    required.push('resume');
+  }
 
   const notValid = required.filter(name => !(name in values));
   notValid.forEach(name => errors[name] = 'Required');
@@ -40,15 +51,21 @@ const validate = values => {
     errors.university = 'Required';
   }
 
-  if (values.institution === 'hs' && !values.highSchool) {
+  if (options.allowHighSchool && 
+    values.institution === 'hs' && !values.highSchool) {
     errors.highSchool = 'Required';
   }
 
-  if (values.outOfState && values.outOfState === 'true' && !values.city) {
+  if (options.allowOutOfState && 
+    values.outOfState && values.outOfState === 'true' && !values.city) {
     errors.city = 'Required';
+  }
+
+  if (values.confirmPassword !== values.password) {
+    errors.confirmPassword = 'Your passwords do not match';
   }
 
   return errors;
 };
 
-export default validate;
+export default createValidator;

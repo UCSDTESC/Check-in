@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import fields from './Fields';
-import validate from './validate';
 
 class UserSection extends React.Component {
   static propTypes = {
@@ -33,25 +32,12 @@ class UserSection extends React.Component {
       className='sd-form__input-checkbox' name='provision' />);
   }
 
-  render() {
-    const {previousPage, handleSubmit, pristine, isSubmitting, submitError} =
-      this.props;
-    return (<form onSubmit={handleSubmit}>
-      {fields.createRow(
-        fields.createColumn('col-sm-12',
-          <h4 key="0">You're Almost Done!</h4>,
-          <h5 key="1">To complete your application, please create an account</h5>
-        ),
-        fields.createColumn('col-md-6',
-          fields.createLabel('Username'),
-          fields.createInput('username', 'Username')
-        ),
-        fields.createColumn('col-md-6',
-          fields.createLabel('Password'),
-          fields.createInput('password', 'Password', 'password')
-        )
-      )}
-
+  /**
+   * Renders the MLH provisions boxes and agreement forms.
+   * @returns {Component}
+   */
+  createMLHProvisions() {
+    return (<span>
       {fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel(`We participate in Major League Hacking (MLH) as
@@ -85,6 +71,27 @@ class UserSection extends React.Component {
           </span>
         )
       )}
+    </span>);
+  }
+
+  render() {
+    const {previousPage, handleSubmit, pristine, isSubmitting, submitError} =
+      this.props;
+    return (<form onSubmit={handleSubmit}>
+      {fields.createRow(
+        fields.createColumn('col-sm-12',
+          <h4 key="0">You're Almost Done!</h4>,
+          <h5 key="1">To complete your application, please create an account</h5>
+        ),
+        fields.createColumn('col-md-6',
+          fields.createLabel('Password'),
+          fields.createInput('password', 'Password', 'password')
+        ),
+        fields.createColumn('col-md-6',
+          fields.createLabel('Confirm Password'),
+          fields.createInput('confirmPassword', 'Confirm Password', 'password')
+        )
+      )}
 
       {fields.createRow(
         fields.createColumn('col-sm-12 col-md-4 text-center',
@@ -99,7 +106,7 @@ class UserSection extends React.Component {
         ),
         fields.createColumn('col-sm-12 col-md-4 text-center',
           <span>
-            {isSubmitting && <img className="sd-form__loading" src="/assets/img/site/loading.svg" />}
+            {isSubmitting && <img className="sd-form__loading" src="/img/site/loading.svg" />}
           </span>
         )
       )}
@@ -115,6 +122,5 @@ class UserSection extends React.Component {
 
 export default reduxForm({
   form: 'apply',
-  destroyOnUnmount: false,
-  validate
+  destroyOnUnmount: false
 })(UserSection);

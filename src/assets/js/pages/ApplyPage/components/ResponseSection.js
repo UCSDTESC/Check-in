@@ -4,7 +4,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import fields from './Fields';
-import validate from './validate';
 
 class ResponseSection extends React.Component {
   static propTypes = {
@@ -12,7 +11,8 @@ class ResponseSection extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
     reset: PropTypes.func.isRequired,
-    submitting: PropTypes.bool.isRequired
+    submitting: PropTypes.bool.isRequired,
+    options: PropTypes.object.isRequired
   }
 
   /**
@@ -36,9 +36,11 @@ class ResponseSection extends React.Component {
   }
 
   render() {
-    const {previousPage, handleSubmit, pristine, submitting} = this.props;
+    const {previousPage, handleSubmit, pristine, submitting, options}
+      = this.props;
+
     return (<form onSubmit={handleSubmit}>
-      {fields.createRow(
+      {options.foodOption && fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel('What kind of food would you like to see ' +
             'at the hackathon?', false),
@@ -53,22 +55,26 @@ class ResponseSection extends React.Component {
         )
       )}
 
-      {fields.createRow(
+      {options.allowOutOfState && fields.createRow(
         fields.createColumn('col-lg-6',
           fields.createLabel('I will be travelling from outside the '+
               'San Diego county'),
           fields.createRadio('outOfState', true, 'Yes'),
           fields.createRadio('outOfState', false, 'No')
-        ),
-        fields.createColumn('col-lg-6',
+        )
+      )}
+      
+      {fields.createRow(
+        fields.createColumn('col-12',
           fields.createLabel('T-Shirt Size (Unisex)'),
           fields.createTShirtSizePicker()
         )
       )}
 
-      <Fields names={['outOfState']} component={this.showCity} />
+      {options.allowOutOfState &&
+        <Fields names={['outOfState']} component={this.showCity} />}
 
-      {fields.createRow(
+      {options.allowTeammates && fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel('Please enter the email addresses of your '+
             'desired teammates. We will do our best to accept whole teams if '+
@@ -104,6 +110,5 @@ class ResponseSection extends React.Component {
 
 export default reduxForm({
   form: 'apply',
-  destroyOnUnmount: false,
-  validate
+  destroyOnUnmount: false
 })(ResponseSection);

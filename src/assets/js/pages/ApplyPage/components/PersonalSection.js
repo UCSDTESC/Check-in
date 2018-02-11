@@ -5,7 +5,6 @@ import {Link} from 'react-router-dom';
 
 import UniversityField from './UniversityField';
 import fields from './Fields';
-import validate from './validate';
 
 import FileField from '~/components/FileField';
 
@@ -14,7 +13,9 @@ class PersonalSection extends React.Component {
     handleSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
     reset: PropTypes.func.isRequired,
-    submitting: PropTypes.bool.isRequired
+    submitting: PropTypes.bool.isRequired,
+    event: PropTypes.object.isRequired,
+    options: PropTypes.object.isRequired
   }
 
   /**
@@ -31,11 +32,13 @@ class PersonalSection extends React.Component {
    * @returns {Component}
    */
   createShareCheckbox() {
+    let {event} = this.props;
+
     return (
       <label>
         <Field component="input" type="checkbox" name="shareResume"
           className="sd-form__input-checkbox" />
-        I would like SDHacks to share my resume and personal information so that
+        I would like {event && event.name} to share my resume and personal information so that
         companies may contact me about job opportunities
       </label>);
   }
@@ -52,7 +55,7 @@ class PersonalSection extends React.Component {
       <div className="sd-form__institution-card">
         <Field component="input" type="radio" value={value} name='institution'
           id={id} className="sd-form__input-radio sd-form__institution-radio" />
-        {fields.createLabel(label, false, 'sd-form__institution-label')}
+        {fields.createLabel(label, false, 'sd-form__institution-label', id)}
       </div>
     );
   }
@@ -75,7 +78,7 @@ class PersonalSection extends React.Component {
 
   /**
    * Create the input field for university and high school institutions.
-   * @param {Object} info Information returned by the {@link Fileds} component.
+   * @param {Object} info Information returned by the {@link Fields} component.
    * @returns {Component}
    */
   showInstitutionBox(info) {
@@ -104,19 +107,43 @@ class PersonalSection extends React.Component {
 
     return <span></span>;
   }
- /* {fields.createRow(
-    fields.createColumn('col-12 text-center',
-      <p>
-        Applications are now closed for non-UCSD students.
-      </p>,
-      <p>
-        Already applied?&nbsp;
-        <Link className="sd-link__underline" to="/login">Login here</Link>!
-      </p>
-    )
-  )}*/
+
+  /**
+   * Renders the components necessary for students to choose which institution
+   * they're coming from.
+   * @returns {Component} The institution selection components.
+   */
+  renderInstitutionOptions() {
+    return (<span>
+      {fields.createRow(
+        fields.createColumn('col-sm-12 no-margin-bottom',
+          fields.createLabel('Institution')
+        ),
+        fields.createColumn('col-md-4',
+          this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
+            'UCSD')
+        ),
+        fields.createColumn('col-md-4',
+          this.createInstitutionCard('uni', 'institution-radio-uni',
+            'Other University')
+        ),
+        fields.createColumn('col-md-4',
+          this.createInstitutionCard('hs', 'institution-radio-hs',
+            'High School')
+        ),
+        fields.createColumn('col-sm-12',
+          <Fields names={['institution']}
+            component={this.showInstitutionError} />
+        )
+      )}
+
+      <Fields names={['institution']} component={this.showInstitutionBox} />
+    </span>);
+  }
+
   render() {
-    const {handleSubmit, pristine, submitting} = this.props;
+    const {handleSubmit, pristine, submitting, options} = this.props;
+
     return (<form onSubmit={handleSubmit}>
       {fields.createRow(
         fields.createColumn('col-md-6',
@@ -167,29 +194,16 @@ class PersonalSection extends React.Component {
         )
       )}
 
-      {fields.createRow(
-        fields.createColumn('col-sm-12 no-margin-bottom',
-          fields.createLabel('Institution')
-        ),
-        fields.createColumn('col-md-4',
-          this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
-            'UCSD')
-        ),
-        fields.createColumn('col-md-4',
-          this.createInstitutionCard('uni', 'institution-radio-uni',
-            'Other University')
-        ),
-        fields.createColumn('col-md-4',
-          this.createInstitutionCard('hs', 'institution-radio-hs',
-            'High School')
-        ),
+      {options.allowHighSchool && this.renderInstitutionOptions()}
+      
+      {!options.allowHighSchool && fields.createRow(
         fields.createColumn('col-sm-12',
-          <Fields names={['institution']}
-            component={this.showInstitutionError} />
+          fields.createLabel('University'),
+          <Field component={UniversityField} name='university'
+            className="sd-form__input-text"
+            placeholder="University" />
         )
       )}
-
-      <Fields names={['institution']} component={this.showInstitutionBox} />
 
       {fields.createRow(
         fields.createColumn('col-lg-6',
@@ -267,7 +281,6 @@ class PersonalSection extends React.Component {
 
 export default reduxForm({
   form: 'apply',
-  destroyOnUnmount: false,
-  validate
+  destroyOnUnmount: false
 })(PersonalSection);
 

@@ -8,9 +8,9 @@ import {promisify} from './helpers';
 
 import CookieTypes from '~/static/Cookies';
 
-const ADMIN_URL_PREFIX = '/api';
+const API_URL_PREFIX = '/api';
 
-const adminPrefix = pref(ADMIN_URL_PREFIX);
+const apiPrefix = pref(API_URL_PREFIX);
 const cookies = new Cookies();
 
 /**
@@ -21,7 +21,7 @@ export const loadAllUsers = () =>
   promisify(request
       .get('/users')
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Request a list of all admins.
@@ -31,7 +31,7 @@ export const loadAllAdmins = () =>
   promisify(request
       .get('/admins')
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix)
+      .use(apiPrefix)
       .use(nocache));
 
 /**
@@ -42,7 +42,17 @@ export const loadAllEvents = () =>
 promisify(request
     .get('/events')
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .use(adminPrefix)
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
+ * Requests event information based on a given event alias.
+ * @param {String} alias The event alias.
+ */
+export const loadEventByAlias = (alias) =>
+promisify(request
+    .get('/events/' + alias)
+    .use(apiPrefix)
     .use(nocache));
 
 /**
@@ -53,7 +63,7 @@ export const loadAllApplicants = () =>
   promisify(request
       .get('/sponsors/applicants')
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix)
+      .use(apiPrefix)
       .use(nocache));
 
 /**
@@ -64,7 +74,7 @@ export const loadUserStats = () =>
   promisify(request
       .get('/stats/users')
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Request the statistics for universities.
@@ -74,7 +84,7 @@ export const loadUniversityStats = () =>
   promisify(request
       .get('/stats/university')
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Request information about a given user.
@@ -85,7 +95,7 @@ export const loadUser = (id) =>
   promisify(request
       .get('/users/' + id)
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Request an update for a given user.
@@ -98,7 +108,7 @@ export const updateUser = (id, user) =>
       .post('/users/' + id)
       .send(user)
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Request a user marked as checked in.
@@ -110,7 +120,7 @@ promisify(request
     .post('/users/checkin')
     .send({email})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .use(adminPrefix));
+    .use(apiPrefix));
 
 /**
  * Request to register a new user.
@@ -133,7 +143,7 @@ export const registerAdmin = (admin) =>
       .post('/admins/register')
       .send(admin)
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Request to delete a new admin.
@@ -145,7 +155,7 @@ export const deleteAdmin = (adminId) =>
       .post('/admins/delete')
       .send({id: adminId})
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Request to download a given set of resumes.
@@ -157,7 +167,7 @@ export const downloadResumes = (applicants) =>
       .post('/sponsors/applicants/download')
       .send({applicants})
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
 
 /**
  * Requests the status of an ongoing download.
@@ -168,4 +178,4 @@ export const pollDownload = (downloadId) =>
     promisify(request
       .get('/sponsors/applicants/download/' + downloadId)
       .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(adminPrefix));
+      .use(apiPrefix));
