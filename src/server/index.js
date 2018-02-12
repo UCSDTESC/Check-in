@@ -1,18 +1,35 @@
 'use strict';
 var path = require('path');
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
-var app = express();
 
-require('dotenv').config();
-
-const port = process.env.PORT || 3000;
+require('dotenv').config({silent: process.env.NODE_ENV !== 'development'});
 
 var logger = require('./config/logging');
 
+var WORKERS = process.env.WEB_CONCURRENCY || 1;
+
 require('./models/index')()
 .then(() => {
+  //Create workers on all the threads
+  if (process.env.NODE_ENV === 'development') {
+    // Don't multithread for debugging ease
+    startInstance();
+  } else {
+    throng({
+      workers: WORKERS,
+      lifetime: Infinity
+    }, startInstance);
+  }
+})
+.catch(logger.error);
+
+function startInstance() {
+  var app = express();
+  var port = process.env.PORT || 3000;
+
   app.use(bodyParser.json({type: 'application/json', limit: '50mb'}));
   app.use(bodyParser.urlencoded({
     extended: true,
@@ -32,5 +49,4 @@ require('./models/index')()
 
   app.listen(port);
   logger.log('info', 'Server started. Listening on port %s', port);
-})
-.catch(console.error);
+};
