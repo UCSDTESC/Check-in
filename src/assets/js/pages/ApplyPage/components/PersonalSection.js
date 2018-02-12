@@ -1,7 +1,6 @@
 import {Field, Fields, reduxForm} from 'redux-form';
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
 
 import UniversityField from './UniversityField';
 import fields from './Fields';
@@ -38,8 +37,8 @@ class PersonalSection extends React.Component {
       <label>
         <Field component="input" type="checkbox" name="shareResume"
           className="sd-form__input-checkbox" />
-        I would like {event && event.name} to share my resume and personal information so that
-        companies may contact me about job opportunities
+        I would like {event && event.name} to share my resume and personal&nbsp;
+        information so that companies may contact me about job opportunities
       </label>);
   }
 
@@ -195,7 +194,7 @@ class PersonalSection extends React.Component {
       )}
 
       {options.allowHighSchool && this.renderInstitutionOptions()}
-      
+
       {!options.allowHighSchool && fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel('University'),

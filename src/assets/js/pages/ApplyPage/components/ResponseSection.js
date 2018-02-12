@@ -1,5 +1,4 @@
 import {Fields, reduxForm} from 'redux-form';
-import {UncontrolledTooltip as Tooltip} from 'reactstrap';
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -63,7 +62,7 @@ class ResponseSection extends React.Component {
           fields.createRadio('outOfState', false, 'No')
         )
       )}
-      
+
       {fields.createRow(
         fields.createColumn('col-12',
           fields.createLabel('T-Shirt Size (Unisex)'),

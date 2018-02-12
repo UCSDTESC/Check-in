@@ -24,9 +24,9 @@ class Login extends React.Component {
    */
   handleFormSubmit(formProps) {
     return this.props.loginUser(formProps)
-    .catch((e) => {
-      console.error('Could not log in', e);
-    });
+      .catch((e) => {
+        console.error('Could not log in', e);
+      });
   }
 
   /**

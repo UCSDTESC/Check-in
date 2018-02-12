@@ -2,7 +2,6 @@ import Cookies from 'universal-cookie';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import request from 'superagent';
-import Q from 'q';
 
 import {promisify} from './helpers';
 
@@ -19,9 +18,9 @@ const cookies = new Cookies();
  */
 export const loadAllUsers = () =>
   promisify(request
-      .get('/users')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .get('/users')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Request a list of all admins.
@@ -29,17 +28,17 @@ export const loadAllUsers = () =>
  */
 export const loadAllAdmins = () =>
   promisify(request
-      .get('/admins')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix)
-      .use(nocache));
+    .get('/admins')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix)
+    .use(nocache));
 
 /**
  * Request a list of all events the user has access to.
  * @returns {Promise} A promise of the request.
  */
 export const loadAllEvents = () =>
-promisify(request
+  promisify(request
     .get('/events')
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
@@ -50,7 +49,7 @@ promisify(request
  * @param {String} alias The event alias.
  */
 export const loadEventByAlias = (alias) =>
-promisify(request
+  promisify(request
     .get('/events/' + alias)
     .use(apiPrefix)
     .use(nocache));
@@ -61,10 +60,10 @@ promisify(request
  */
 export const loadAllApplicants = () =>
   promisify(request
-      .get('/sponsors/applicants')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix)
-      .use(nocache));
+    .get('/sponsors/applicants')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix)
+    .use(nocache));
 
 /**
  * Request the statistics for users.
@@ -72,9 +71,9 @@ export const loadAllApplicants = () =>
  */
 export const loadUserStats = () =>
   promisify(request
-      .get('/stats/users')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .get('/stats/users')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Request the statistics for universities.
@@ -82,9 +81,9 @@ export const loadUserStats = () =>
  */
 export const loadUniversityStats = () =>
   promisify(request
-      .get('/stats/university')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .get('/stats/university')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Request information about a given user.
@@ -93,9 +92,9 @@ export const loadUniversityStats = () =>
  */
 export const loadUser = (id) =>
   promisify(request
-      .get('/users/' + id)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .get('/users/' + id)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Request an update for a given user.
@@ -105,10 +104,10 @@ export const loadUser = (id) =>
  */
 export const updateUser = (id, user) =>
   promisify(request
-      .post('/users/' + id)
-      .send(user)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .post('/users/' + id)
+    .send(user)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Request a user marked as checked in.
@@ -116,7 +115,7 @@ export const updateUser = (id, user) =>
  * @returns {Promise} A promise of the request.
  */
 export const checkinUser = (email) =>
-promisify(request
+  promisify(request
     .post('/users/checkin')
     .send({email})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
@@ -129,9 +128,9 @@ promisify(request
  */
 export const registerUser = (user) =>
   promisify(request
-      .post('/apply/api/register')
-      .field(user)
-      .attach('resume', user.resume[0]));
+    .post('/apply/api/register')
+    .field(user)
+    .attach('resume', user.resume[0]));
 
 /**
  * Request to register a new admin.
@@ -140,10 +139,10 @@ export const registerUser = (user) =>
  */
 export const registerAdmin = (admin) =>
   promisify(request
-      .post('/admins/register')
-      .send(admin)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .post('/admins/register')
+    .send(admin)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Request to delete a new admin.
@@ -152,10 +151,10 @@ export const registerAdmin = (admin) =>
  */
 export const deleteAdmin = (adminId) =>
   promisify(request
-      .post('/admins/delete')
-      .send({id: adminId})
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .post('/admins/delete')
+    .send({id: adminId})
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Request to download a given set of resumes.
@@ -164,10 +163,10 @@ export const deleteAdmin = (adminId) =>
  */
 export const downloadResumes = (applicants) =>
   promisify(request
-      .post('/sponsors/applicants/download')
-      .send({applicants})
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+    .post('/sponsors/applicants/download')
+    .send({applicants})
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
 
 /**
  * Requests the status of an ongoing download.
@@ -175,7 +174,7 @@ export const downloadResumes = (applicants) =>
  * @returns {Promise} A promise of the request.
  */
 export const pollDownload = (downloadId) =>
-    promisify(request
-      .get('/sponsors/applicants/download/' + downloadId)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-      .use(apiPrefix));
+  promisify(request
+    .get('/sponsors/applicants/download/' + downloadId)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));

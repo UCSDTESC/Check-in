@@ -3,12 +3,10 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
-import {Button} from 'reactstrap';
 
 import {loadAllEvents} from '~/actions';
-import EventList from './components/EventList';
 
-import {Event as EventPropType} from '~/proptypes';
+import EventList from './components/EventList';
 
 class DashboardPage extends React.Component {
   static propTypes = {
@@ -23,8 +21,8 @@ class DashboardPage extends React.Component {
     this.props.showLoading();
 
     this.props.loadAllEvents()
-    .catch(console.error)
-    .finally(this.props.hideLoading);
+      .catch(console.error)
+      .finally(this.props.hideLoading);
   }
 
   render() {

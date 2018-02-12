@@ -8,13 +8,13 @@ import {registerUser, loadEventByAlias} from '~/data/Api';
 
 import Loading from '~/components/Loading';
 
+import NavHeader from '~/components/NavHeader.js';
+
 import Header from './components/Header';
 import PersonalSection from './components/PersonalSection';
 import ResponseSection from './components/ResponseSection';
 import SubmittedSection from './components/SubmittedSection';
 import UserSection from './components/UserSection';
-import NavHeader from '~/components/NavHeader.js';
-
 import createValidator from './validate';
 
 class ApplyPage extends React.Component {
@@ -46,13 +46,13 @@ class ApplyPage extends React.Component {
   loadEventInformation() {
     let {eventAlias} = this.props.match.params;
     loadEventByAlias(eventAlias)
-    .then((res) => {
-      this.setState({event: res});
-    })
-    .catch((err) => {
-      console.error(err);
-      this.setState({error: err});
-    });
+      .then((res) => {
+        this.setState({event: res});
+      })
+      .catch((err) => {
+        console.error(err);
+        this.setState({error: err});
+      });
   };
 
   /**
@@ -108,24 +108,24 @@ class ApplyPage extends React.Component {
     }
 
     registerUser(values)
-    .then(() => {
-      // Log successful application with Google Analytics
-      ReactGA.event({
-        category: 'Application',
-        action: 'Successful',
-      });
+      .then(() => {
+        // Log successful application with Google Analytics
+        ReactGA.event({
+          category: 'Application',
+          action: 'Successful',
+        });
 
-      this.nextPage();
-    })
-    .catch((err) => {
-      console.error(err);
-      this.setState({error: err});
-    })
-    .finally(() => {
-      this.setState({
-        isSubmitting: false
+        this.nextPage();
+      })
+      .catch((err) => {
+        console.error(err);
+        this.setState({error: err});
+      })
+      .finally(() => {
+        this.setState({
+          isSubmitting: false
+        });
       });
-    });
   }
 
   /**

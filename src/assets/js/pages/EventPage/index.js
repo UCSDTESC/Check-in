@@ -32,8 +32,8 @@ class EventPage extends React.Component {
       showLoading();
 
       this.props.loadAllEvents()
-      .catch(console.error)
-      .finally(hideLoading);
+        .catch(console.error)
+        .finally(hideLoading);
     }
   };
 

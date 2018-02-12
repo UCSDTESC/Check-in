@@ -62,10 +62,8 @@ class UserSection extends React.Component {
         fields.createColumn('col-sm-12',
           this.createAcceptBox(),
           <span>I accept the&nbsp;
-            <a
-              className="sd-link__underline sd-link__hover-purple"
-              href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
-            >
+            <a className="sd-link__underline sd-link__hover-purple"
+              href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">
               MLH Code of Conduct
             </a>
           </span>
@@ -80,8 +78,10 @@ class UserSection extends React.Component {
     return (<form onSubmit={handleSubmit}>
       {fields.createRow(
         fields.createColumn('col-sm-12',
-          <h4 key="0">You're Almost Done!</h4>,
-          <h5 key="1">To complete your application, please create an account</h5>
+          <h4 key="0">You&#39;re Almost Done!</h4>,
+          <h5 key="1">
+            To complete your application, please create an account
+          </h5>
         ),
         fields.createColumn('col-md-6',
           fields.createLabel('Password'),
@@ -106,7 +106,8 @@ class UserSection extends React.Component {
         ),
         fields.createColumn('col-sm-12 col-md-4 text-center',
           <span>
-            {isSubmitting && <img className="sd-form__loading" src="/img/site/loading.svg" />}
+            {isSubmitting && <img className="sd-form__loading"
+              src="/img/site/loading.svg" />}
           </span>
         )
       )}

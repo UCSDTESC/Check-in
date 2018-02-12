@@ -28,11 +28,11 @@ class UserList extends React.Component {
     </div>
     );
 
-  expandComponent = (row) =>
+  expandComponent = (row) => (
     <div className="user-list__child">
       <User user={row} initialValues={row}
         onSubmit={this.props.onUserUpdate.bind(this)} />
-    </div>
+    </div>);
 
   render() {
     return (

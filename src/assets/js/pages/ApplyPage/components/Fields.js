@@ -86,10 +86,11 @@ creates.errorMonthPicker =
         <select {...input} className={errorClass}
           type={type}>
           <option key={-1}>Month</option>
-          {months.map((month, i) =>
+          {months.map((month, i) => (
             <option key={i} value={(i+1) < 10 ? '0' + (i+1) : (i+1)}>
               {month}
-            </option>)}
+            </option>)
+          )}
         </select>
         {touched && error && creates.createError(error)}
       </div>);

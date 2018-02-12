@@ -41,11 +41,11 @@ class ResumesPage extends React.Component {
     showLoading();
 
     loadAllApplicants()
-    .then(res => {
-      hideLoading();
-      return replaceApplicants(res);
-    })
-    .catch(console.error);
+      .then(res => {
+        hideLoading();
+        return replaceApplicants(res);
+      })
+      .catch(console.error);
   }
 
   componentDidUpdate(prevProps) {

@@ -34,10 +34,10 @@ export default class AdminList extends React.Component {
     </th>);
   }
 
-  renderAdmin = (admin, columns) =>
+  renderAdmin = (admin, columns) => (
     <tr key={admin._id}>
       {columns.map(col => <td key={col.key}>{admin[col.key]}</td>)}
-    </tr>;
+    </tr>);
 
   render() {
     let {columns} = this.state;
@@ -56,19 +56,19 @@ export default class AdminList extends React.Component {
 
         <tbody>
           {admins && admins.map(admin =>
-            <tr key={admin.username} className="admin-list__row">
+            (<tr key={admin.username} className="admin-list__row">
               <td className="admin-list__value admin-list__value--small">
                 {editing && <Button color="danger" outline
                   onClick={() => onDeleteAdmin(admin._id) }>
                   <i className="fa fa-ban"></i>
                 </Button>}
               </td>
-              {Object.keys(columns).map(column =>
+              {Object.keys(columns).map(column => (
                 <td key={column} className="admin-list__value">
                   {admin[column]}
-                </td>
+                </td>)
               )}
-            </tr>
+            </tr>)
           )}
         </tbody>
       </table>

@@ -107,11 +107,11 @@ export const loadAllEvents = () => (dispatch) => {
   var deferred = Q.defer();
 
   Api.loadAllEvents()
-  .then(res => {
-    dispatch(replaceEvents(res));
-    return deferred.resolve();
-  })
-  .catch(deferred.reject);
+    .then(res => {
+      dispatch(replaceEvents(res));
+      return deferred.resolve();
+    })
+    .catch(deferred.reject);
 
   return deferred.promise;
 };

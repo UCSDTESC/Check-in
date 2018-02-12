@@ -53,23 +53,23 @@ export function registerUser({username, password}) {
     var deferred = Q.defer();
 
     Auth.register(username, password)
-    .end((err, res) => {
-      if (err) {
-        let error = {
-          message: res.body.error,
-          status: res.error.status
-        };
-        deferred.reject(res.body.error);
-        return errorHandler(dispatch, error, Types.AUTH_ERROR);
-      }
+      .end((err, res) => {
+        if (err) {
+          let error = {
+            message: res.body.error,
+            status: res.error.status
+          };
+          deferred.reject(res.body.error);
+          return errorHandler(dispatch, error, Types.AUTH_ERROR);
+        }
 
-      storeLogin(res);
-      dispatch({
-        type: Types.AUTH_USER,
-        payload: res.body.user
+        storeLogin(res);
+        dispatch({
+          type: Types.AUTH_USER,
+          payload: res.body.user
+        });
+        deferred.resolve();
       });
-      deferred.resolve();
-    });
 
     return deferred.promise;
   };
@@ -87,19 +87,19 @@ export function loginUser({username, password}) {
     var deferred = Q.defer();
 
     Auth.login(username, password)
-    .end((err, res) => {
-      if (err) {
-        deferred.reject(res.error.message);
-        return errorHandler(dispatch, res.error, Types.AUTH_ERROR);
-      }
+      .end((err, res) => {
+        if (err) {
+          deferred.reject(res.error.message);
+          return errorHandler(dispatch, res.error, Types.AUTH_ERROR);
+        }
 
-      storeLogin(res);
-      dispatch({
-        type: Types.AUTH_USER,
-        payload: res.body.user
+        storeLogin(res);
+        dispatch({
+          type: Types.AUTH_USER,
+          payload: res.body.user
+        });
+        deferred.resolve();
       });
-      deferred.resolve();
-    });
 
     return deferred.promise;
   };

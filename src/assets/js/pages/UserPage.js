@@ -26,10 +26,10 @@ class UserPage extends React.Component {
     };
 
     loadUser(this.props.match.params.id)
-    .then(res => {
-      this.setState({user: res.user});
-    })
-    .catch(console.error);
+      .then(res => {
+        this.setState({user: res.user});
+      })
+      .catch(console.error);
   }
 
   /**

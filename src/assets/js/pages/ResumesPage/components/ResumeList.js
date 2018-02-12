@@ -71,7 +71,7 @@ class ResumeList extends React.Component {
                 Compact View:&nbsp;
                 <span className={`admin-list__compacted text-uppercase
                 ${isCompacted ? 'admin-list__compacted--active' :
-                'admin-list__compacted--inactive'}`}>
+        'admin-list__compacted--inactive'}`}>
                   {isCompacted ? 'ON' : 'OFF'}
                 </span>
               </div>
@@ -81,13 +81,13 @@ class ResumeList extends React.Component {
 
         <tbody>
           {applicants && applicants.map(applicant =>
-            <tr className="admin-list__row">
+            (<tr className="admin-list__row" key={applicant._id}>
               <td className="admin-list__value admin-list__value--spacer">
               </td>
               {Object.keys(columns).map(column =>
-                <td className="admin-list__value">
+                (<td className="admin-list__value" key={column}>
                   {applicant[column]}
-                </td>
+                </td>)
               )}
               <td className="admin-list__value">
                 <a
@@ -97,7 +97,7 @@ class ResumeList extends React.Component {
                   Download Resume
                 </a>
               </td>
-            </tr>
+            </tr>)
           )}
         </tbody>
       </table>

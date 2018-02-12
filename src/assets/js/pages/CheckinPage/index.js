@@ -56,10 +56,10 @@ class CheckinPage extends React.Component {
     showLoading();
 
     loadAllUsers()
-    .then(res => {
-      hideLoading();
-      return addUsers(res);
-    });
+      .then(res => {
+        hideLoading();
+        return addUsers(res);
+      });
   }
 
   validateUser = (user) =>
@@ -98,8 +98,8 @@ class CheckinPage extends React.Component {
       const user = eligibleUsers[0];
 
       checkinUser(user.email)
-      .then(() => resolve(user))
-      .catch(reject);
+        .then(() => resolve(user))
+        .catch(reject);
     });
 
   onScan = (data) => {
@@ -157,21 +157,21 @@ class CheckinPage extends React.Component {
     });
 
     this.checkinById(this.state.lastUser)
-    .then((user) => {
-      this.setState({
-        wasSuccessful: true,
-        lastName: user.firstName + ' ' + user.lastName
-      });
-    })
-    .catch((err) => {
-      this.setState({
-        wasSuccessful: false,
-        errorMessage: err
-      });
-    })
-    .finally(() => this.setState({
-      isProcessing: false
-    }));
+      .then((user) => {
+        this.setState({
+          wasSuccessful: true,
+          lastName: user.firstName + ' ' + user.lastName
+        });
+      })
+      .catch((err) => {
+        this.setState({
+          wasSuccessful: false,
+          errorMessage: err
+        });
+      })
+      .finally(() => this.setState({
+        isProcessing: false
+      }));
   }
 
   render() {
@@ -232,7 +232,7 @@ class CheckinPage extends React.Component {
                 onError={console.error}
                 onScan={this.onScan}
                 playsinline="true"
-                />
+              />
             </div>
           </div>
           <div className="row">
@@ -241,7 +241,7 @@ class CheckinPage extends React.Component {
               <input type="text" placeholder="Name" className="rounded-input"
                 onChange={this.nameApplicants} />
               <ul className="checkin__list">
-                {nameApplicants.map((app) =>
+                {nameApplicants.map((app) => (
                   <li className="checkin__list-user" key={app._id}>
                     <button className="rounded-button rounded-button--small"
                       onClick={() => this.selectApplicant(app._id)}>
@@ -249,7 +249,7 @@ class CheckinPage extends React.Component {
                       <small>{app.email}</small>
                     </button>
                   </li>)
-                }
+                )}
               </ul>
             </div>
           </div>

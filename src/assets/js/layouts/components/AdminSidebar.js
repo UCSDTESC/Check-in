@@ -37,24 +37,24 @@ class AdminSidebar extends React.Component {
   }
 
   developerTools = () =>
-    <Section name='Developer Tools'>
+    (<Section name='Developer Tools'>
       <Link dest='/admins'>Admins</Link>
       <Link dest='/checkin'>Checkin</Link>
-    </Section>;
+    </Section>);
 
   administratorTools = () =>
-    <Section name='Administrator Tools'>
-    </Section>;
+    (<Section name='Administrator Tools'>
+    </Section>);
 
   sponsorTools = () =>
-    <Section name='Sponsor Tools'>
+    (<Section name='Sponsor Tools'>
       <Link dest='/resumes'>Resumes</Link>
-    </Section>;
+    </Section>);
 
   memberTools = () =>
-    <Section name='Member Tools'>
+    (<Section name='Member Tools'>
       <Link dest='/checkin'>Checkin</Link>
-    </Section>;
+    </Section>);
 
   /**
    * Creates the menu based off user role and authentication
@@ -69,11 +69,12 @@ class AdminSidebar extends React.Component {
     return (<div>
       {auth && role >= getRole(Roles.ROLE_DEVELOPER) && this.developerTools()}
 
-      {/* {auth && role >= getRole(Roles.ROLE_ADMIN) && this.administratorTools()} */}
+      {/* {auth && role >= getRole(Roles.ROLE_ADMIN) &&
+        this.administratorTools()} */}
 
       {auth && role >= getRole(Roles.ROLE_SPONSOR) && this.sponsorTools()}
 
-      {auth && role == getRole(Roles.ROLE_MEMBER) && this.memberTools()}
+      {auth && role === getRole(Roles.ROLE_MEMBER) && this.memberTools()}
 
       {auth && <Section name='General'>
         <Link dest='/' exact>Dashboard</Link>

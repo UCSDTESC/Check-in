@@ -1,7 +1,7 @@
 import {
-         AUTH_ERROR,
-         AUTH_USER,
-         UNAUTH_USER,
+  AUTH_ERROR,
+  AUTH_USER,
+  UNAUTH_USER,
 } from '../actions/types';
 
 const INITIAL_STATE = {

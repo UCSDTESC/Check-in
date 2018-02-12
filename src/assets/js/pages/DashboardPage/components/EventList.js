@@ -18,7 +18,7 @@ export default class EventList extends React.Component {
       <div className="event-list">
         <h2>Your Events</h2>
         <div className="row">
-          {events.map((event) =>
+          {events.map((event) => (
             <div className="col-lg-2 col-md-6" key={event._id}>
               <div className="card">
                 <img className="card__image card-img-top event-list__image"
@@ -35,7 +35,7 @@ export default class EventList extends React.Component {
                 </div>
               </div>
             </div>)
-          }
+          )}
         </div>
       </div>
     );

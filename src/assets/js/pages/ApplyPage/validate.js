@@ -51,12 +51,12 @@ const createValidator = (options) => (values) => {
     errors.university = 'Required';
   }
 
-  if (options.allowHighSchool && 
+  if (options.allowHighSchool &&
     values.institution === 'hs' && !values.highSchool) {
     errors.highSchool = 'Required';
   }
 
-  if (options.allowOutOfState && 
+  if (options.allowOutOfState &&
     values.outOfState && values.outOfState === 'true' && !values.city) {
     errors.city = 'Required';
   }

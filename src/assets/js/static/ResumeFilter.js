@@ -13,25 +13,25 @@ export function applyResumeFilter(filters, applicants) {
 
   return applicants.filter(applicant => (
     Object.values(filters)
-    .every((filter, filterIndex) => {
-      let filterName = filterNames[filterIndex];
-      let optionNames = Object.keys(filter.options);
+      .every((filter, filterIndex) => {
+        let filterName = filterNames[filterIndex];
+        let optionNames = Object.keys(filter.options);
 
-      // Only use enabled filters
-      if (!filter.enabled || Object.keys(filter.options).length === 0) {
-        return true;
-      }
-
-      return Object.values(filter.options)
-      .some((option, optionIndex) => {
-        // Ignore the filter if it's disabled
-        if (!option) {
-          return false;
+        // Only use enabled filters
+        if (!filter.enabled || Object.keys(filter.options).length === 0) {
+          return true;
         }
 
-        return applicant[filterName].toLowerCase() ===
-          optionNames[optionIndex].toLowerCase();
-      });
-    })
+        return Object.values(filter.options)
+          .some((option, optionIndex) => {
+            // Ignore the filter if it's disabled
+            if (!option) {
+              return false;
+            }
+
+            return applicant[filterName].toLowerCase() ===
+              optionNames[optionIndex].toLowerCase();
+          });
+      })
   ));
 }

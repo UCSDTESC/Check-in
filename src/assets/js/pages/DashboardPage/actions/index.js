@@ -20,14 +20,14 @@ export const loadAllStats = () => {
     dispatch(showLoading());
 
     Api.loadUserStats()
-    .then((res) => {
-      dispatch(changeUserStats(res));
-      dispatch(hideLoading());
-    });
+      .then((res) => {
+        dispatch(changeUserStats(res));
+        dispatch(hideLoading());
+      });
 
     Api.loadUniversityStats()
-    .then((res) => {
-      dispatch(changeUniversityStats(res));
-    });
+      .then((res) => {
+        dispatch(changeUniversityStats(res));
+      });
   };
 };

@@ -1,6 +1,5 @@
 import {Field, reduxForm} from 'redux-form';
 import React from 'react';
-import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
@@ -174,10 +173,10 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 export default compose(
-    connect(mapStateToProps),
-    reduxForm({
-      form: UUID.v4(),
-      destroyOnUnmount: true,
-      enableReinitialize: true
-    })
+  connect(mapStateToProps),
+  reduxForm({
+    form: UUID.v4(),
+    destroyOnUnmount: true,
+    enableReinitialize: true
+  })
 )(User);

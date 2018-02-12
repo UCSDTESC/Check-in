@@ -52,10 +52,10 @@ class UsersPage extends React.Component {
     showLoading();
 
     loadAllUsers()
-    .then(res => {
-      hideLoading();
-      return addUsers(res);
-    });
+      .then(res => {
+        hideLoading();
+        return addUsers(res);
+      });
   }
 
   /**

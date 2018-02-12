@@ -4,7 +4,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 import {toggleEditing} from '~/actions';
+
 import {loginUser} from '~/auth/actions';
+
 import Login from '~/auth/Login';
 
 import Sidebar from './components/AdminSidebar';

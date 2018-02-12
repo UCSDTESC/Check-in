@@ -13,11 +13,11 @@ const prefix = pref(URL_PREFIX);
  */
 export const login = (username, password) => {
   return request
-      .post('/login')
-      .set('Content-Type', 'application/json')
-      .send({username, password})
-      .use(prefix)
-      .use(nocache);
+    .post('/login')
+    .set('Content-Type', 'application/json')
+    .send({username, password})
+    .use(prefix)
+    .use(nocache);
 };
 
 /**
@@ -28,9 +28,9 @@ export const login = (username, password) => {
  */
 export const register = (username, password) => {
   return request
-      .post('/register')
-      .set('Content-Type', 'application/json')
-      .send({username, password})
-      .use(prefix)
-      .use(nocache);
+    .post('/register')
+    .set('Content-Type', 'application/json')
+    .send({username, password})
+    .use(prefix)
+    .use(nocache);
 };

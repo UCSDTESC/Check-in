@@ -63,13 +63,13 @@ class RegisterPage extends React.Component {
    */
   handleFormSubmit(formProps) {
     this.props.registerUser(formProps)
-    .then(() => {
-      console.log('Registered!');
-      this.context.router.push('/admin/dashboard');
-    })
-    .catch(() => {
-      throw new SubmissionError({_error: 'Registration failed'});
-    });
+      .then(() => {
+        console.log('Registered!');
+        this.context.router.push('/admin/dashboard');
+      })
+      .catch(() => {
+        throw new SubmissionError({_error: 'Registration failed'});
+      });
   }
 
   /**

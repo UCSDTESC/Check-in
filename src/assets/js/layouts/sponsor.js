@@ -29,7 +29,8 @@ class SponsorLayout extends React.Component {
     toggleFilter: PropTypes.func.isRequired,
     toggleFilterOption: PropTypes.func.isRequired,
     selectAllOptions: PropTypes.func.isRequired,
-    selectNoneOptions: PropTypes.func.isRequired
+    selectNoneOptions: PropTypes.func.isRequired,
+    addFilterOption: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -54,11 +55,11 @@ class SponsorLayout extends React.Component {
 
     let modelApplicant = applicants[0];
     return Object.keys(modelApplicant)
-    .reduce((total, curr) => {
-      total[curr] = [...new Set(applicants.map(item => item[curr]))];
-      return total;
-    }
-    , {});
+      .reduce((total, curr) => {
+        total[curr] = [...new Set(applicants.map(item => item[curr]))];
+        return total;
+      }
+        , {});
   }
 
   /**
@@ -72,13 +73,13 @@ class SponsorLayout extends React.Component {
       .map(user => user._id);
 
     downloadResumes(filtered)
-    .then((res) => {
-      this.setState({
-        isDownloading: true
-      });
-      this.startPolling(res.downloadId);
-    })
-    .catch(console.error);
+      .then((res) => {
+        this.setState({
+          isDownloading: true
+        });
+        this.startPolling(res.downloadId);
+      })
+      .catch(console.error);
   };
 
   /**
@@ -90,21 +91,21 @@ class SponsorLayout extends React.Component {
     let {hideLoading} = this.props;
 
     pollDownload(downloadId)
-    .then((res) => {
-      if (res.url) {
-        hideLoading();
-        this.setState({
-          isDownloading: false
-        });
-        return window.open(res.url);
-      }
+      .then((res) => {
+        if (res.url) {
+          hideLoading();
+          this.setState({
+            isDownloading: false
+          });
+          return window.open(res.url);
+        }
 
-      setTimeout(() => this.startPolling(downloadId), pollingInterval);
-    })
-    .catch((err) => {
-      console.error(err);
-      hideLoading();
-    });
+        setTimeout(() => this.startPolling(downloadId), pollingInterval);
+      })
+      .catch((err) => {
+        console.error(err);
+        hideLoading();
+      });
   };
 
   render() {

@@ -10,7 +10,7 @@ export default class Header extends React.Component {
   render() {
     let {name, logo} = this.props;
 
-    if(!name || !logo) {
+    if (!name || !logo) {
       return (<div></div>);
     }
 

@@ -21,12 +21,12 @@ export default class EventList extends React.Component {
       <div className="organiser-list">
         <h2>Organisers</h2>
         <ul className="list-group">
-          {organisers.map(organiser =>
+          {organisers.map(organiser => (
             <li className="list-group-item organiser-list__username"
               key={organiser.username}>
               {organiser.username}
             </li>
-          )}
+          ))}
         </ul>
       </div>
     );

@@ -34,11 +34,11 @@ class AdminsPage extends React.Component {
 
   loadAdmins = () =>
     loadAllAdmins()
-    .then(res => {
-      this.props.hideLoading();
-      return this.props.replaceAdmins(res);
-    })
-    .catch(console.error);
+      .then(res => {
+        this.props.hideLoading();
+        return this.props.replaceAdmins(res);
+      })
+      .catch(console.error);
 
   componentWillMount() {
     this.props.showLoading();
@@ -52,13 +52,13 @@ class AdminsPage extends React.Component {
 
   registerNewAdmin = (newAdmin) =>
     registerAdmin(newAdmin)
-    .then(this.loadAdmins)
-    .catch(console.error);
+      .then(this.loadAdmins)
+      .catch(console.error);
 
   onDeleteAdmin = (adminId) =>
     deleteAdmin(adminId)
-    .then(this.loadAdmins)
-    .catch(console.error);
+      .then(this.loadAdmins)
+      .catch(console.error);
 
   render() {
     let {editing, admins} = this.props;
