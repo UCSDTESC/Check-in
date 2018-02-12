@@ -4,6 +4,8 @@ jobs:
     docker:
       - image: circleci/node:8.9
       - image: circleci/mongo:3.4.4
+    environment:
+      - MONGODB_URI: "mongodb://localhost:27017/checkin"
     steps:
       - checkout
       - restore_cache:
@@ -23,6 +25,8 @@ jobs:
     docker:
       - image: circleci/node:8.9
       - image: circleci/mongo:3.4.4
+    environment:
+      - MONGODB_URI: "mongodb://localhost:27017/checkin"
     steps:
       - checkout
       - run:
