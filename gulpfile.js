@@ -1,15 +1,13 @@
 var gulp = require('gulp'),
-    gutil = require('gulp-util'),
-    sass = require('gulp-sass'),
-    browserSync = require('browser-sync'),
-    autoprefixer = require('gulp-autoprefixer'),
-    uglify = require('gulp-uglify'),
-    rename = require('gulp-rename'),
-    cssnano = require('gulp-cssnano'),
-    sourcemaps = require('gulp-sourcemaps'),
-    nodemon = require('gulp-nodemon'),
-    webpackStream = require('webpack-stream'),
-    webpack = require('webpack');
+  sass = require('gulp-sass'),
+  browserSync = require('browser-sync'),
+  autoprefixer = require('gulp-autoprefixer'),
+  rename = require('gulp-rename'),
+  cssnano = require('gulp-cssnano'),
+  sourcemaps = require('gulp-sourcemaps'),
+  nodemon = require('gulp-nodemon'),
+  webpackStream = require('webpack-stream'),
+  webpack = require('webpack');
 
 const paths = {
   src: [
@@ -26,7 +24,7 @@ gulp.task('css', function () {
   .pipe(autoprefixer('last 4 version'))
   .pipe(gulp.dest('src/assets/public/css'))
   .pipe(cssnano())
-  .pipe(rename({ suffix: '.min' }))
+  .pipe(rename({suffix: '.min'}))
   .pipe(sourcemaps.write())
   .pipe(gulp.dest('src/assets/public/css'))
   .on('end', function() {
@@ -67,10 +65,15 @@ gulp.task('browser-sync', ['nodemon'], function() {
     }
   });
 });
+
 gulp.task('bs-reload', function () {
   browserSync.reload();
 });
 
+gulp.task('test', function() {
+  console.log('Running Testing Script');
+});
+
 gulp.task('default', ['css', 'browser-sync'], function () {
-  gulp.watch("src/assets/scss/**/*.scss", ['css']);
+  gulp.watch('src/assets/scss/**/*.scss', ['css']);
 });
