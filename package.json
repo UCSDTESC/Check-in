@@ -14,9 +14,9 @@
   },
   "scripts": {
     "start": "./node_modules/.bin/gulp",
-    "install": "npm run migrate",
     "migrate": "./node_modules/.bin/mm migrate",
-    "rollback": "./node_modules/.bin/mm down"
+    "rollback": "./node_modules/.bin/mm down",
+    "heroku-postbuild": "npm run migrate"
   },
   "homepage": "https://github.com/UCSDTESC/Check-in#readme",
   "dependencies": {
