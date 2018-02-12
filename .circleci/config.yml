@@ -7,17 +7,17 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-        key: dependency-cache-{{checksum "package.json"}}
+          key: dependency-cache-{{checksum "package.json"}}
       - run: 
-        name: Install NPM
-        command: npm install
+          name: Install NPM
+          command: npm install
       - save_cache:
-        key: dependency-cache-{{checksum "package.json"}}
-        paths:
-          - node_modules
+          key: dependency-cache-{{checksum "package.json"}}
+          paths:
+            - node_modules
       - run:
-        name: Migrate DB
-        command: npm run migrate
+          name: Migrate DB
+          command: npm run migrate
 
   test:
     docker:
@@ -26,8 +26,8 @@ jobs:
     steps:
       - checkout
       - run:
-        name: Test
-        command: gulp test
+          name: Test
+          command: gulp test
 
   deploy:
     machine:
@@ -36,16 +36,16 @@ jobs:
       HEROKU_APP_NAME: tesc-checkin
     steps:
       - run:
-        name: Run Setup Script
-        command: bash .circleci/setup-heroku.sh
+          name: Run Setup Script
+          command: bash .circleci/setup-heroku.sh
       - add_ssh_keys:
-        fingerprints:
-          - "d9:05:a8:9c:0c:23:0d:96:54:c7:8e:80:80:8d:cc:57"
+          fingerprints:
+            - "d9:05:a8:9c:0c:23:0d:96:54:c7:8e:80:80:8d:cc:57"
       - run:
-        name: Deploy Master to Heroku
-        command: |
-          git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
-          heroku restart
+          name: Deploy Master to Heroku
+          command: |
+            git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
+            heroku restart
     
 workflows:
   version: 2
