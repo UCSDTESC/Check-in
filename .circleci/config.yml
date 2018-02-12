@@ -31,7 +31,7 @@ jobs:
       - checkout
       - run:
           name: Test
-          command: gulp test
+          command: ./node_modules/.bin/gulp test
 
   deploy:
     machine:
