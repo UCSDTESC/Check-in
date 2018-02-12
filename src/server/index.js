@@ -4,6 +4,7 @@ var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var passport = require('passport');
+var throng = require('throng');
 
 require('dotenv').config({silent: process.env.NODE_ENV !== 'development'});
 
@@ -29,6 +30,7 @@ require('./models/index')()
 function startInstance() {
   var app = express();
   var port = process.env.PORT || 3000;
+  app.listen(port);
 
   app.use(bodyParser.json({type: 'application/json', limit: '50mb'}));
   app.use(bodyParser.urlencoded({
@@ -47,6 +49,8 @@ function startInstance() {
 
   require('./config/passport');
 
-  app.listen(port);
-  logger.log('info', 'Server started. Listening on port %s', port);
+  http.createServer(app).listen(app.get(port), function(){
+    logger.log('info', 'Server started. Listening on port %s with %s worker(s)',
+      port, WORKERS);
+  });
 };

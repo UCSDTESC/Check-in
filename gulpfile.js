@@ -7,13 +7,33 @@ var gulp = require('gulp'),
   sourcemaps = require('gulp-sourcemaps'),
   nodemon = require('gulp-nodemon'),
   webpackStream = require('webpack-stream'),
-  webpack = require('webpack');
+  webpack = require('webpack'),
+  eslint = require('gulp-eslint'),
+  plumber = require('gulp-plumber'),
+  gutil = require('gulp-util');
 
 const paths = {
   src: [
     'src/server/**/*.js',
     'src/assets/scss/**/*.scss'
+  ],
+  js: [
+    'src/server/**/*.js',
+    'src/assets/js/**/*.js'
   ]
+};
+
+// Handle Errors
+function handleError(err) {
+  gutil.log(err);
+  this.emit('end');
+  if (gutil.env.production) {
+    process.exit(1);
+  }
+}
+
+var plumberOptions = {
+  errorHandler: handleError
 };
 
 gulp.task('css', function () {
@@ -30,6 +50,13 @@ gulp.task('css', function () {
   .on('end', function() {
     browserSync.reload();
   });
+});
+
+gulp.task('eslint', function() {
+  gulp.src(paths.js)
+    .pipe(plumber(plumberOptions))
+    .pipe(eslint())
+    .pipe(eslint.format());
 });
 
 gulp.task('nodemon', ['css'], function(cb) {
@@ -53,7 +80,7 @@ gulp.task('nodemon', ['css'], function(cb) {
 
 gulp.task('webpack', function() {
   gulp.src('src/assets/js/main.js')
-    .pipe(webpackStream(require('./webpack.config.js'), webpack))
+    .pipe(webpackStream(require('./webpack.config.prod.js'), webpack))
     .pipe(gulp.dest('src/assets/public/js'));
 });
 
@@ -77,3 +104,5 @@ gulp.task('test', function() {
 gulp.task('default', ['css', 'browser-sync'], function () {
   gulp.watch('src/assets/scss/**/*.scss', ['css']);
 });
+
+gulp.task('prod', ['webpack', 'css', 'eslint']);
