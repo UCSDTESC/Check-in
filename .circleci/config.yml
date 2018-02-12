@@ -6,6 +6,7 @@ jobs:
       - image: circleci/mongo:3.4.4
     environment:
       - MONGODB_URI: "mongodb://localhost:27017/checkin"
+      - NODE_ENV: "test"
     steps:
       - checkout
       - restore_cache:
