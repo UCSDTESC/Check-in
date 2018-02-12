@@ -10,12 +10,12 @@ jobs:
     steps:
       - checkout
       - restore_cache:
-          key: dependency-cache-{{checksum "package.json"}}
+          key: package-cache-{{checksum "package.json"}}
       - run: 
           name: Install NPM
           command: npm install
       - save_cache:
-          key: dependency-cache-{{checksum "package.json"}}
+          key: package-cache-{{checksum "package.json"}}
           paths:
             - node_modules
       - run:
