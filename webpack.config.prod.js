@@ -31,11 +31,11 @@ module.exports = {
     }),
     new webpack.optimize.UglifyJsPlugin({
       mangle: {
-        screw_ie8: true,
-        keep_fnames: true
+        'screw_ie8': true,
+        'keep_fnames': true
       },
       compress: {
-        screw_ie8: true,
+        'screw_ie8': true,
         warnings: false
       },
       comments: false,

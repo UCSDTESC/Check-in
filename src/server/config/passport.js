@@ -14,39 +14,40 @@ const localOptions = {
 
 const jwtOptions = {
   // Telling Passport to check authorization headers for JWT
-  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme("jwt"),
+  jwtFromRequest: ExtractJwt.fromAuthHeaderWithScheme('jwt'),
   // Telling Passport where to find the secret
   secretOrKey: process.env.SESSION_SECRET
 };
 
 const returnMessages = {
-  INCORRECT_LOGIN: 'Your login details could not be verified. Please try again.',
+  INCORRECT_LOGIN:
+    'Your login details could not be verified. Please try again.',
   NOT_CONFIRMED: 'You have not yet confirmed this account'
 };
 
 const adminLogin = new LocalStrategy(localOptions,
-function(username, password, done) {
-  Admin.findOne({username: {$regex : new RegExp(`^${username}$`, 'i')}},
-  function(err, admin) {
-    if (err) {
-      return done(err);
-    }
-    if (!admin || admin.deleted) {
-      return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
-    }
+  function(username, password, done) {
+    Admin.findOne({username: {$regex : new RegExp(`^${username}$`, 'i')}},
+      function(err, admin) {
+        if (err) {
+          return done(err);
+        }
+        if (!admin || admin.deleted) {
+          return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
+        }
 
-    admin.comparePassword(password, function(err, isMatch) {
-      if (err) {
-        return done(err);
-      }
-      if (!isMatch) {
-        return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
-      }
+        admin.comparePassword(password, function(err, isMatch) {
+          if (err) {
+            return done(err);
+          }
+          if (!isMatch) {
+            return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
+          }
 
-      return done(null, admin);
-    });
+          return done(null, admin);
+        });
+      });
   });
-});
 
 const jwtAdminLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   Admin.findById(payload._id, function(err, user) {

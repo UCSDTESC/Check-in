@@ -39,23 +39,23 @@ var plumberOptions = {
 gulp.task('css', function () {
   console.log('Generating css');
   return gulp.src('src/assets/scss/checkin.scss')
-  .pipe(sourcemaps.init())
-  .pipe(sass().on('error', sass.logError))
-  .pipe(autoprefixer('last 4 version'))
-  .pipe(gulp.dest('src/assets/public/css'))
-  .pipe(cssnano())
-  .pipe(rename({suffix: '.min'}))
-  .pipe(sourcemaps.write())
-  .pipe(gulp.dest('src/assets/public/css'))
-  .on('end', function() {
-    if (browserSync) {
-      browserSync.reload();
-    }
-  });
+    .pipe(sourcemaps.init())
+    .pipe(sass().on('error', sass.logError))
+    .pipe(autoprefixer('last 4 version'))
+    .pipe(gulp.dest('src/assets/public/css'))
+    .pipe(cssnano())
+    .pipe(rename({suffix: '.min'}))
+    .pipe(sourcemaps.write())
+    .pipe(gulp.dest('src/assets/public/css'))
+    .on('end', function() {
+      if (browserSync) {
+        browserSync.reload();
+      }
+    });
 });
 
 gulp.task('eslint', function() {
-  gulp.src(paths.js)
+  return gulp.src(paths.js)
     .pipe(plumber(plumberOptions))
     .pipe(eslint())
     .pipe(eslint.format());
@@ -72,12 +72,12 @@ gulp.task('nodemon', ['css'], function(cb) {
       'PORT': 3000
     }
   })
-  .once('start', function() {
-    cb();
-  })
-  .on('restart', function() {
-    gulp.start('css');
-  });
+    .once('start', function() {
+      cb();
+    })
+    .on('restart', function() {
+      gulp.start('css');
+    });
 });
 
 gulp.task('webpack', function() {
@@ -99,9 +99,7 @@ gulp.task('bs-reload', function () {
   browserSync.reload();
 });
 
-gulp.task('test', function() {
-  console.log('Running Testing Script');
-});
+gulp.task('test', ['eslint']);
 
 gulp.task('default', ['css', 'browser-sync'], function () {
   gulp.watch('src/assets/scss/**/*.scss', ['css']);

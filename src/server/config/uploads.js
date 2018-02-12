@@ -3,7 +3,7 @@ var crypto = require('crypto');
 var multer = require('multer');
 var mime = require('mime');
 
-module.exports = function(config) {
+module.exports = function() {
   var storage = multer.diskStorage({
     dest: 'public/uploads/',
     filename(req, file, cb) {

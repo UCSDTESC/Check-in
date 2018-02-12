@@ -14,19 +14,19 @@ var logger = require('./config/logging');
 var WORKERS = process.env.WEB_CONCURRENCY || 1;
 
 require('./models/index')()
-.then(() => {
+  .then(() => {
   //Create workers on all the threads
-  if (process.env.NODE_ENV === 'development') {
+    if (process.env.NODE_ENV === 'development') {
     // Don't multithread for debugging ease
-    startInstance();
-  } else {
-    throng({
-      workers: WORKERS,
-      lifetime: Infinity
-    }, startInstance);
-  }
-})
-.catch(console.error);
+      startInstance();
+    } else {
+      throng({
+        workers: WORKERS,
+        lifetime: Infinity
+      }, startInstance);
+    }
+  })
+  .catch(console.error);
 
 function startInstance() {
   var app = express();
