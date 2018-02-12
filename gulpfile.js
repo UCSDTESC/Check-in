@@ -37,7 +37,7 @@ var plumberOptions = {
 };
 
 gulp.task('css', function () {
-  console.log('Generating css');
+  gutil.log('Generating css');
   return gulp.src('src/assets/scss/checkin.scss')
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
