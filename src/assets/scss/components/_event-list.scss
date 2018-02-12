@@ -1,64 +1,12 @@
-$left-padding: 2rem;
-
 .event-list {
-  width: 100%;
-  table-layout: fixed;
+  &__image {
+    max-height: 10rem;
+    max-width: 10rem;
+    margin: 1rem auto 0;
 
-  &__header {
-    vertical-align: middle !important;
-    height: 5rem;
-    background-color: $white;
-    font-size: 1.2rem;
-    color: $admin-blue;
-
-    &--spacer {
-      width: $left-padding;
-      background-color: $white;
-    }
-
-    @include media-breakpoint-up(lg) {
-      &--small {
-        width: 6rem;
-      }
-
-      &--medium {
-        width: 10rem;
-      }
-    }
-  }
-  
-  &__toggle {
-    display: flex;
-    align-items: center;
-    border-bottom-width: 1px;
-    .switch {
-      display: inline-block;
-      margin-right: 1rem;
-    }
-  }
-
-  &__compacted {
-    &--active {
-      color: $accent-green;
-    }
-
-    &--inactive {
-      color: $accent-red;
-    }
-  }
-
-  &__value {
-    vertical-align: middle !important;
-    font-size: 1.1rem;
-
-    &--spacer {
-      width: $left-padding;
-    }
-  }
-
-  &__btn {
-    &--compacted {
-      padding: 0.1rem !important;
+    @include media-breakpoint-up(md) {
+      max-height: 5rem;
+      max-width: 5rem;
     }
   }
 }

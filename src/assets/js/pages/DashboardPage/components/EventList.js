@@ -13,9 +13,6 @@ export default class EventList extends React.Component {
     ).isRequired).isRequired
   };
 
-  constructor(props) {
-    super(props);
-  }
   render() {
     let {events} = this.props;
 
@@ -24,12 +21,13 @@ export default class EventList extends React.Component {
         <h2>Your Events</h2>
         <div className="row">
           {events.map((event) =>
-          <div className="col-md-2">
+          <div className="col-lg-2 col-md-6" key={event._id}>
             <div className="card">
-              <img className="card__image card-img-top" src={event.logo} alt={event.name} />
+              <img className="card__image card-img-top event-list__image"
+                src={event.logo} alt={event.name} />
               <div className="card-body">
                 <h5 className="card-title">
-                  <Link to={"/admin/events/" + event._id}>{event.name}</Link>
+                  <Link to={"/admin/events/" + event.alias}>{event.name}</Link>
                 </h5>
                 <p className="card-text">
                   A useful statistic

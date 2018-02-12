@@ -1,0 +1,17 @@
+.event-page {
+  &__header {
+    background: $admin-background-blue;
+    padding: 1rem;
+  }
+
+  &__logo {
+    max-height: 5rem;
+    margin-right: 2rem;
+  }
+
+  &__title {
+    display: inline-block;
+    margin: 0;
+    flex: 1;
+  }
+}

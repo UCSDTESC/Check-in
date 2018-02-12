@@ -1,7 +1,3 @@
 // Stats
 export const CHANGE_USER_STATS = 'CHANGE_USER_STATS';
 export const CHANGE_UNIVERSITY_STATS = 'CHANGE_UNIVERSITY_STATS';
-
-// Events
-export const ADD_EVENTS = 'ADD_EVENTS';
-export const REPLACE_EVENTS = 'REPLACE_EVENTS';

@@ -1,4 +1,9 @@
 import * as Types from './types';
+import * as Api from '~/data/Api';
+
+import Q from 'q';
+
+// General
 
 export const enableEditing = () => ({
   type: Types.ENABLE_EDITING
@@ -11,6 +16,8 @@ export const disableEditing = () => ({
 export const toggleEditing = () => ({
   type: Types.TOGGLE_EDITING
 });
+
+// Filters
 
 export const addFilter = (name, displayName) => ({
   type: Types.ADD_FILTER,
@@ -77,3 +84,32 @@ export const selectNoneOptions = (name) => ({
   type: Types.SELECT_NONE_FILTER_OPTIONS,
   name
 });
+
+// Events
+export const addEvent = (event) => ({
+  type: Types.ADD_EVENT,
+  event
+});
+
+export const addEvents = (events) => ({
+  type: Types.ADD_EVENTS,
+  events
+});
+
+export const replaceEvents = (events) => ({
+  type: Types.REPLACE_EVENTS,
+  events
+});
+
+export const loadAllEvents = () => (dispatch) => {
+  var deferred = Q.defer();
+
+  Api.loadAllEvents()
+  .then(res => {
+    dispatch(replaceEvents(res));
+    return deferred.resolve();
+  })
+  .catch(deferred.reject);
+
+  return deferred.promise;
+};

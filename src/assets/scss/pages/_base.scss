@@ -1,4 +1,8 @@
 .page {
   background: $tesc-yellow;
   height: 100%;
+
+  &--admin {
+    background: $white;
+  }
 }

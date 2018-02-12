@@ -75,7 +75,7 @@ class ResumesPage extends React.Component {
 
 const mapStateToProps = (state) => ({
   applicants: applyResumeFilter(state.admin.filters,
-      state.admin.resumes.applicants),
+    state.admin.resumes.applicants),
   totalApplicants: state.admin.resumes.applicants.length
 });
 

@@ -6,6 +6,8 @@ import ReactGA from 'react-ga';
 
 import {registerUser, loadEventByAlias} from '~/data/Api';
 
+import Loading from '~/components/Loading';
+
 import Header from './components/Header';
 import PersonalSection from './components/PersonalSection';
 import ResponseSection from './components/ResponseSection';
@@ -174,14 +176,7 @@ class ApplyPage extends React.Component {
     if (!event) {
       return (<div className="page apply-page apply-page--loading">
         <NavHeader />
-        <div className="container">
-          <div className="row">
-            <div className="col-12 text-center">
-              <h1>Loading Registration...</h1>
-              <img className="sd-form__loading" src="/img/site/loading.svg" />
-            </div>
-          </div>
-        </div>
+        <Loading title="Registration" />
       </div>);
     }
 
