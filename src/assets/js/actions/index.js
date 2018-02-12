@@ -1,7 +1,9 @@
+import Q from 'q';
+
 import * as Types from './types';
+
 import * as Api from '~/data/Api';
 
-import Q from 'q';
 
 // General
 

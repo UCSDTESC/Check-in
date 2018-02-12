@@ -6,91 +6,86 @@ import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
 import PrivateRoute from './PrivateRoute';
-
 import {AUTH_USER} from './auth/actions/types';
-
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
-
 import HomePage from './pages/HomePage';
 import ApplyPage from './pages/ApplyPage';
 import Dashboard from './pages/DashboardPage';
 import AdminsPage from './pages/AdminsPage';
-import UsersPage from './pages/UsersPage';
 import EventPage from './pages/EventPage';
-
 import Logout from './auth/Logout';
 
 import CookieTypes from '~/static/Cookies';
 
 class Routes extends React.Component {
-	static propTypes = {
+  static propTypes = {
     dispatch: PropTypes.func.isRequired,
     cookies: instanceOf(Cookies).isRequired
-	};
-	
-	constructor(props) {
-		super(props);
-	
-		// Check initial authentication
-		const {cookies} = this.props;
-		if (cookies.get(CookieTypes.admin.token)) {
-			props.dispatch({
-				type: AUTH_USER,
-				payload: cookies.get(CookieTypes.admin.user)
-			});
-		}
-	}
-	
-	/**
-	 * Render a route with the Administrator layout.
-	 * @param {Component} Component The child component to render within the
-	 * layout.
-	 * @returns {Component}
-	 */
-	renderAdmin = (Component) => {
-		return (props) =>
-			(<AdminLayout>
-				<Component match={props.match} />
-			</AdminLayout>);
-	}
-	
-	/**
-	 * Render a route with the Sponsor layout.
-	 * @param {Component} Component The child component to render within the
-	 * layout.
-	 * @returns {Component}
-	 */
-	renderSponsor = (Component) => {
-		return (props) =>
-			(<SponsorLayout>
-				<Component match={props.match} />
-			</SponsorLayout>);
-	}
+  };
 
-	routes() {
-		return (
-			<Switch>
-				<Route exact path="/" component={HomePage} />
-				<Route path="/register/:eventAlias" component={ApplyPage} />
+  constructor(props) {
+    super(props);
 
-				<Route exact path="/admin/"
+    // Check initial authentication
+    const {cookies} = this.props;
+    if (cookies.get(CookieTypes.admin.token)) {
+      props.dispatch({
+        type: AUTH_USER,
+        payload: cookies.get(CookieTypes.admin.user)
+      });
+    }
+  }
+
+  /**
+   * Render a route with the Administrator layout.
+   * @param {Component} Component The child component to render within the
+   * layout.
+   * @returns {Component}
+   */
+  renderAdmin = (Component) => {
+    return (props) =>
+      (<AdminLayout>
+        <Component match={props.match} />
+      </AdminLayout>);
+  }
+
+  /**
+   * Render a route with the Sponsor layout.
+   * @param {Component} Component The child component to render within the
+   * layout.
+   * @returns {Component}
+   */
+  renderSponsor = (Component) => {
+    return (props) =>
+      (<SponsorLayout>
+        <Component match={props.match} />
+      </SponsorLayout>);
+  }
+
+  routes() {
+    return (
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/register/:eventAlias" component={ApplyPage} />
+
+        <Route exact path="/admin/"
           component={this.renderAdmin(Dashboard)} />
-				<PrivateRoute path="/admin/logout"
+        <PrivateRoute path="/admin/logout"
           component={this.renderAdmin(Logout)} />
-				<PrivateRoute path="/admin/admins"
+        <PrivateRoute path="/admin/admins"
           component={this.renderAdmin(AdminsPage)} />
 
-				{/* Event Specific Routes */}
-				<PrivateRoute path="/admin/events/:eventAlias"
+        {/* Event Specific Routes */}
+        <PrivateRoute path="/admin/events/:eventAlias"
           component={this.renderAdmin(EventPage)} />
-			</Switch>
-		);
-	}
+      </Switch>
+    );
+  }
 
-	render() {
-		return this.routes();
-	}
+  render() {
+    return this.routes();
+  }
 }
 
 export default withRouter(connect()(withCookies(Routes)));

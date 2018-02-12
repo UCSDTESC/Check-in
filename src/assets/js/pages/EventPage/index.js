@@ -8,6 +8,7 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import {loadAllEvents} from '~/actions';
 
 import Loading from '~/components/Loading';
+
 import OrganiserList from './components/OrganiserList';
 
 import {Event as EventPropType} from '~/proptypes';
@@ -39,7 +40,7 @@ class EventPage extends React.Component {
   render() {
     let {event} = this.props;
 
-    if(!event) {
+    if (!event) {
       return (
         <Loading />
       );
@@ -49,10 +50,11 @@ class EventPage extends React.Component {
       <div className="page page--admin event-page d-flex flex-column h-100">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-12 d-flex align-items-center event-page__header">
+            <div className={'col-12 d-flex align-items-center' +
+              ' event-page__header'}>
               <img className="event-page__logo" src={event.logo} />
               <h1 className="event-page__title">{event.name}</h1>
-              <Link to={"/register/" + event.alias}>Go To Form</Link>
+              <Link to={'/register/' + event.alias}>Go To Form</Link>
             </div>
           </div>
           <div className="row">
