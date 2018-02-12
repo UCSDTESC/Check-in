@@ -1,4 +1,5 @@
 'use strict';
+var http = require('http');
 var path = require('path');
 
 var express = require('express');
@@ -25,7 +26,7 @@ require('./models/index')()
     }, startInstance);
   }
 })
-.catch(logger.error);
+.catch(console.error);
 
 function startInstance() {
   var app = express();

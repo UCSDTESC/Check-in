@@ -1,6 +1,5 @@
 var gulp = require('gulp'),
   sass = require('gulp-sass'),
-  browserSync = require('browser-sync'),
   autoprefixer = require('gulp-autoprefixer'),
   rename = require('gulp-rename'),
   cssnano = require('gulp-cssnano'),
@@ -11,6 +10,7 @@ var gulp = require('gulp'),
   eslint = require('gulp-eslint'),
   plumber = require('gulp-plumber'),
   gutil = require('gulp-util');
+let browserSync = gutil.env.production ? undefined : require('browser-sync');
 
 const paths = {
   src: [
@@ -48,7 +48,9 @@ gulp.task('css', function () {
   .pipe(sourcemaps.write())
   .pipe(gulp.dest('src/assets/public/css'))
   .on('end', function() {
-    browserSync.reload();
+    if (browserSync) {
+      browserSync.reload();
+    }
   });
 });
 
