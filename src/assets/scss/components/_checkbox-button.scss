@@ -1,0 +1,5 @@
+.checkbox-button {
+  @include media-breakpoint-up(md) {
+    max-width: 5rem;
+  }
+}

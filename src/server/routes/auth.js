@@ -3,7 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
-const {setUserInfo} = require('../helper');
+const {setUserInfo} = require('./helper');
 
 const Admin = mongoose.model('Admin');
 

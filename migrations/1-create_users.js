@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.id = "create_users";
+module.exports.id = 'create_users';
 
 module.exports.up = function (done) {
   this.db.createCollection('users', done);

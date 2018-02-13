@@ -8,6 +8,10 @@ var bcrypt = require('bcrypt-nodejs');
 var Schema = mongoose.Schema;
 
 var UserSchema = new Schema({
+  event: {
+    type: Schema.Types.ObjectId,
+    ref: 'Event'
+  },
   // Declares the user's email address
   email: {
     type: String,
@@ -48,7 +52,7 @@ var UserSchema = new Schema({
   },
   // Declares the user's phone number
   phone: {
-    type: Number,
+    type: String,
     required: [true, 'You must have a phone number']
   },
   // Declares which university the user attends
@@ -65,7 +69,6 @@ var UserSchema = new Schema({
   // Declares which year the student is currently attending
   year: {
     type: String,
-    required: [true, 'You must give a year in school']
   },
   // Declares the user's Github account name
   github: {
@@ -98,7 +101,6 @@ var UserSchema = new Schema({
   // Declares the size of the shirt that the user has requested
   shirtSize: {
     type: String,
-    required: [true, 'You must have a shirt size']
   },
   travel: {
     // Declares whether the user will be travelling from outside of the state

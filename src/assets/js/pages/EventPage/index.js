@@ -3,6 +3,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
+import FA from 'react-fontawesome';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllEvents} from '~/actions';
@@ -54,7 +55,9 @@ class EventPage extends React.Component {
               ' event-page__header'}>
               <img className="event-page__logo" src={event.logo} />
               <h1 className="event-page__title">{event.name}</h1>
-              <Link to={'/register/' + event.alias}>Go To Form</Link>
+              <Link to={`/register/${event.alias}`}>Go To Form&nbsp;
+                <FA name='arrow-right' />
+              </Link>
             </div>
           </div>
           <div className="row">
@@ -63,7 +66,8 @@ class EventPage extends React.Component {
             </div>
             <div className="col-lg-4 col-md-6">
               <h2>Total Users</h2>
-              <div>Information Currently Unavailable</div>
+              <div>Statistics Currently Unavailable</div>
+              <Link to={`/admin/users/${event.alias}`}>View All Users</Link>
             </div>
           </div>
         </div>

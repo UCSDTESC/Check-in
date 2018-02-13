@@ -1,5 +1,12 @@
 const mongoose = require('mongoose');
 
+const cachingOptions = {
+  cache: true,
+  ttl: 30 // seconds of caching
+};
+
+require('mongoose-cachebox')(mongoose, cachingOptions);
+
 const logger = require('../config/logging');
 
 module.exports = () => new Promise((fulfill, reject) => {
