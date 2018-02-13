@@ -62,6 +62,7 @@
     "moment": "^2.19.2",
     "mongodb-migrations": "github:emirotin/mongodb-migrations#run-custom-sets",
     "mongoose": "^5.0.3",
+    "mongoose-cachebox": "^1.2.0",
     "mongoose-crate": "^1.1.0",
     "mongoose-crate-s3": "^1.2.0",
     "mongoose-delete": "^0.4.0",

@@ -3,12 +3,13 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 
 const logging = require('../config/logging');
-const {roleAuth, roles, getRole} = require('../helper');
 
+const {roleAuth, roles, getRole, isOrganiser} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
 const Event = mongoose.model('Event');
+const User = mongoose.model('User');
 
 const requireAuth = passport.authenticate('adminJwt', {session: false});
 
@@ -55,6 +56,18 @@ module.exports = function(app) {
             alias: event.alias
           });
         });
+    });
+
+  api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    isOrganiser,
+    (req, res) => {
+      return User.find({event: req.event}).exec(function(err, users) {
+        if (err) {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        }
+
+        return res.json(users);
+      });
     });
 
   api.get('/admins', requireAuth, roleAuth(roles.ROLE_DEVELOPER),

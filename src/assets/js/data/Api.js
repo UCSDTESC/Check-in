@@ -14,11 +14,12 @@ const cookies = new Cookies();
 
 /**
  * Request a list of all users.
+ * @param {String} alias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadAllUsers = () =>
+export const loadAllUsers = (alias) =>
   promisify(request
-    .get('/users')
+    .get('/users/' + alias)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 

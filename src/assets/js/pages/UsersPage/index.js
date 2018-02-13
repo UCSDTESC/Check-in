@@ -2,13 +2,18 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {Link} from 'react-router-dom';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {addUsers, addColumn, updateUser, removeColumn} from './actions';
+import {loadAllEvents} from '~/actions';
+
+import {addColumn, updateUser, removeColumn} from './actions';
 
 import {loadAllUsers} from '~/data/Api';
 
-import {Column as ColumnPropTypes, User as UserPropTypes} from '~/proptypes';
+import {Column as ColumnPropTypes, Event as EventPropType} from '~/proptypes';
+
+import Loading from '~/components/Loading';
 
 import ColumnEditor from './components/ColumnEditor';
 import UserList from './components/UserList';
@@ -17,28 +22,43 @@ class UsersPage extends React.Component {
   static propTypes = {
     match: PropTypes.shape({
       params: PropTypes.shape({
-        eventId: PropTypes.string.isRequired
+        eventAlias: PropTypes.string.isRequired
       }).isRequired
     }).isRequired,
 
-    users: PropTypes.arrayOf(PropTypes.shape(
-      UserPropTypes
-    ).isRequired).isRequired,
     columns: PropTypes.arrayOf(PropTypes.shape(
       ColumnPropTypes
     ).isRequired).isRequired,
+    event: PropTypes.shape(EventPropType),
 
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
-    addUsers: PropTypes.func.isRequired,
     addColumn: PropTypes.func.isRequired,
     removeColumn: PropTypes.func.isRequired,
+    loadAllEvents: PropTypes.func.isRequired,
     updateUser: PropTypes.func.isRequired
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      users: []
+    };
+  }
+
   componentWillMount() {
-    let {users} = this.props;
-    if (!users.length) {
+    let {event} = this.props;
+
+    if (!event) {
+      showLoading();
+
+      this.props.loadAllEvents()
+        .catch(console.error)
+        .finally(hideLoading);
+    }
+
+    if (!this.state.users.length) {
       this.loadUsers();
     }
   }
@@ -47,14 +67,15 @@ class UsersPage extends React.Component {
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    let {showLoading, hideLoading, addUsers} = this.props;
+    let {showLoading, hideLoading} = this.props;
+    let eventAlias = this.props.match.params.eventAlias;
 
     showLoading();
 
-    loadAllUsers()
+    loadAllUsers(eventAlias)
       .then(res => {
         hideLoading();
-        return addUsers(res);
+        return this.setState({users: res});
       });
   }
 
@@ -72,17 +93,26 @@ class UsersPage extends React.Component {
     this.props.removeColumn(columnName)
 
   render() {
-    let {match} = this.props;
-    let eventId = match.params.eventId;
+    let {event, columns} = this.props;
+    let {users} = this.state;
+
+    if (!event) {
+      return (
+        <Loading />
+      );
+    }
 
     return (
       <div className="d-flex flex-column h-100 p-3">
         <div className="row">
           <div className="col-12">
-            <h1>Event {eventId} (change to name)</h1>
+            <h1>
+              <Link to={`/admin/events/${event.alias}`}>
+                {event.name}
+              </Link> Users</h1>
           </div>
           <div className="col-md-6">
-            <ColumnEditor columns={this.props.columns}
+            <ColumnEditor columns={columns}
               onAddColumn={this.onAddColumn}
               onDeleteColumn={this.onRemoveColumn} />
           </div>
@@ -94,26 +124,26 @@ class UsersPage extends React.Component {
             </button>
           </div>
         </div>
-        <UserList users={this.props.users} columns={this.props.columns}
+        <UserList users={users} columns={columns}
           onUserUpdate={this.onUserUpdate} />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state) => ({
-  users: state.admin.users,
-  columns: state.admin.userColumns
+const mapStateToProps = (state, ownProps) => ({
+  columns: state.admin.userColumns,
+  event: state.admin.events[ownProps.match.params.eventAlias]
 });
 
 function mapDispatchToProps(dispatch) {
   return {
     updateUser: bindActionCreators(updateUser, dispatch),
-    addUsers: bindActionCreators(addUsers, dispatch),
     addColumn: bindActionCreators(addColumn, dispatch),
     removeColumn: bindActionCreators(removeColumn,dispatch),
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
+    loadAllEvents: bindActionCreators(loadAllEvents, dispatch)
   };
 };
 

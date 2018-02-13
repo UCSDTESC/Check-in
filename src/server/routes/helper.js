@@ -1,3 +1,7 @@
+const logging = require('../config/logging');
+
+const Errors = require('./errors')(logging);
+
 const roles = {
   ROLE_DEVELOPER: 'Developer',
   ROLE_ADMIN: 'Admin',
@@ -70,9 +74,41 @@ function roleAuth(role) {
   };
 };
 
+/**
+ * Creates a middleware that ensures the authenticated user has permissions to
+ * access information about an event.
+ */
+function isOrganiser(req, res, next) {
+  const Event = require('mongoose').model('Event');
+
+  Event.findOne({'alias': req.params.eventAlias}, (err, event) => {
+    if (err) {
+      Errors.respondError(res, err, Errors.DATABASE_ERROR);
+      return next('Database Error');
+    }
+
+    if (!event) {
+      Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
+      return next('User Error');
+    }
+
+    if (getRole(req.user.role) < getRole(roles.ROLE_DEVELOPER) &&
+      event.organisers.indexOf(req.user._id) === -1) {
+      Errors.respondUserError(res, Errors.NOT_ORGANISER);
+      return next('User Error');
+    }
+
+    // Put it into the request object
+    req.event = event;
+
+    return next();
+  });
+}
+
 module.exports = {
   roles,
   setUserInfo,
   getRole,
-  roleAuth
+  roleAuth,
+  isOrganiser
 };

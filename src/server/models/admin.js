@@ -4,7 +4,7 @@ var timestamps = require('mongoose-timestamp');
 var mongooseDelete = require('mongoose-delete');
 var bcrypt = require('bcrypt-nodejs');
 
-var roles = require('../helper').roles;
+var roles = require('../routes/helper').roles;
 
 var Schema = mongoose.Schema;
 

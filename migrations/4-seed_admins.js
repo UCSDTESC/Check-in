@@ -3,7 +3,7 @@
 require('dotenv').config();
 var bcrypt = require('bcrypt-nodejs');
 
-module.exports.id = "seed_admins";
+module.exports.id = 'seed_admins';
 
 const username = 'redbackthomson', password = 'password';
 
@@ -15,13 +15,13 @@ module.exports.up = function (done) {
     }
 
     bcrypt.hash(password, salt, null,
-    function(err, hash) {
-      admins.insert({
-        username,
-        password: hash,
-        role: 'Developer'
-      }, done);
-    });
+      function(err, hash) {
+        admins.insert({
+          username,
+          password: hash,
+          role: 'Developer'
+        }, done);
+      });
   });
 };
 

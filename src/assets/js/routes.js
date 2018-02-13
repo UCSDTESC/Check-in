@@ -14,6 +14,7 @@ import ApplyPage from './pages/ApplyPage';
 import Dashboard from './pages/DashboardPage';
 import AdminsPage from './pages/AdminsPage';
 import EventPage from './pages/EventPage';
+import UsersPage from './pages/UsersPage';
 import Logout from './auth/Logout';
 
 import CookieTypes from '~/static/Cookies';
@@ -79,6 +80,8 @@ class Routes extends React.Component {
         {/* Event Specific Routes */}
         <PrivateRoute path="/admin/events/:eventAlias"
           component={this.renderAdmin(EventPage)} />
+        <PrivateRoute path="/admin/users/:eventAlias"
+          component={this.renderAdmin(UsersPage)} />
       </Switch>
     );
   }
