@@ -1,7 +1,13 @@
+<img src="https://github.com/UCSDTESC/Check-in/blob/master/src/assets/public/img/tesc-logo.png" height="40px" />
+
 # TESC Check-In
+[![CircleCI](https://circleci.com/gh/UCSDTESC/Check-in.svg?style=svg)](https://circleci.com/gh/UCSDTESC/Check-in)
+### TESC Check-In is a purpose-built registration and event management system for hackathons, recruiting events or any number of other student-centred initiatives. 
+The system allows organisers of events to create, update and manage their events registration system. Students are able to register for the events, manage their registration information and check in to the events all through the platform.
 
 ## Requirements
 0. Node.js Version >= 8.2.1
+1. MongoDB
 
 ## Installation
 0. Clone Repository
@@ -9,7 +15,13 @@
 2. Run ```npm install```
 3. Copy ```.env.example``` to a new file ```.env```
 4. Enter all of the information into the ```.env``` file
+5. Run ```npm run migrate``` to migrate and seed the database
 
 ## Development
-1. Run ```npm start```
-2. Navigate to ```http://localhost:8000/```
+#### All pushes should be made to a feature branch
+0. Run ```npm start```
+1. Navigate to ```http://localhost:8000/```
+
+## Acknowledgements
+* [UCSD Triton Engineering Student Council](http://tesc.ucsd.edu)
+* [SD Hacks](https://github.com/SDHacks)
