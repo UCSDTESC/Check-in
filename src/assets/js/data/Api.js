@@ -24,6 +24,17 @@ export const loadAllUsers = (alias) =>
     .use(apiPrefix));
 
 /**
+ * Request user statistics for a given event.
+ * @param {String} alias The event alias.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadEventStatistics = (alias) =>
+  promisify(request
+    .get('/statistics/' + alias)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
+
+/**
  * Request a list of all admins.
  * @returns {Promise} A promise of the request.
  */

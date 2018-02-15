@@ -19,36 +19,52 @@ module.exports = function(app) {
   app.use('/api', api);
   require('./auth')(api);
 
+  addEventStatistics = (events) => {
+    return new Promise((resolve) => {
+      newEvents = [];
+      updated = 0;
+
+      events.forEach((event) => {
+        User.count({event})
+          .catch(logging.error)
+          .then(count => {
+            let newEvent = event.toJSON();
+            newEvent.users = count;
+            newEvents.push(newEvent);
+
+            updated++;
+            if (updated === events.length) {
+              resolve(newEvents);
+            }
+          });
+      });
+    });
+  };
+
   api.get('/events', requireAuth, roleAuth(roles.ROLE_ADMIN),
     (req, res) => {
+      var query = Event.find({'organisers': req.user});
       if (getRole(req.user.role) >= getRole(roles.ROLE_DEVELOPER)) {
-        return Event.find().populate('organisers').exec((err, events) => {
-          if (err) {
-            return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-          }
-          return res.json(events);
-        });
+        query = Event.find();
       }
-      return Event.find({'organisers': req.user})
+      return query
         .populate('organisers')
-        .exec((err, events) => {
-          if (err) {
-            return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-          }
-          return res.json(events);
-        });
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(addEventStatistics)
+        .then(events => res.json(events));
     });
 
   api.get('/events/:eventAlias',
     (req, res) => {
       return Event.findOne({'alias': req.params.eventAlias})
-        .exec((err, event) => {
-          if (err) {
-            return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-          }
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(event => {
           if (!event) {
             return Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
           }
+
           return res.json({
             _id: event._id,
             name: event.name,
@@ -61,21 +77,48 @@ module.exports = function(app) {
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
-      return User.find({event: req.event}).exec(function(err, users) {
-        if (err) {
-          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-        }
+      return User.find({event: req.event})
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(res.json);
+    });
 
-        return res.json(users);
-      });
+  api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    isOrganiser,
+    (req, res) => {
+      return Promise.all(
+        [User.count({event: req.event}),
+          User.distinct('university').exec(),
+          User.aggregate([
+            {
+              $match: {event: req.event._id}
+            },
+            {
+              $group: {_id: '$gender', count: {$sum: 1}}
+            }
+          ]).exec()
+        ])
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(values => {
+          let genders = values[2].reduce((ret, gender) => {
+            ret[gender._id] = gender.count;
+            return ret;
+          }, {});
+
+          return res.json({
+            count: values[0],
+            universities: values[1].length,
+            genders
+          });
+        });
     });
 
   api.get('/admins', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
     (req, res) =>
       Admin.find({deleted: {$ne: true}}).sort({createdAt: -1})
-        .exec(function(err, admins) {
-          return res.json(admins);
-        })
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(res.json)
   );
 
   // Use API for any API endpoints
