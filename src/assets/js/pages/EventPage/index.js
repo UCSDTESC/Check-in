@@ -6,11 +6,14 @@ import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
+import {loadEventStatistics} from '~/data/Api';
+
 import {loadAllEvents} from '~/actions';
 
 import Loading from '~/components/Loading';
 
 import OrganiserList from './components/OrganiserList';
+import EventStatistics from './components/EventStatistics';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -28,7 +31,23 @@ class EventPage extends React.Component {
     event: PropTypes.shape(EventPropType)
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      statistics: {}
+    };
+  }
+
   componentDidMount() {
+    loadEventStatistics(this.props.match.params.eventAlias)
+      .catch(console.error)
+      .then(res => {
+        this.setState({
+          statistics: res
+        });
+      });
+
     if (!this.props.event) {
       showLoading();
 
@@ -40,6 +59,7 @@ class EventPage extends React.Component {
 
   render() {
     let {event} = this.props;
+    let {statistics} = this.state;
 
     if (!event) {
       return (
@@ -65,9 +85,7 @@ class EventPage extends React.Component {
               <OrganiserList organisers={event.organisers} />
             </div>
             <div className="col-lg-4 col-md-6">
-              <h2>Total Users</h2>
-              <div>Statistics Currently Unavailable</div>
-              <Link to={`/admin/users/${event.alias}`}>View All Users</Link>
+              <EventStatistics event={event} statistics={statistics} />
             </div>
           </div>
         </div>
