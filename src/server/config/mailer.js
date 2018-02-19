@@ -1,47 +1,38 @@
-var mailer = require('nodemailer');
-var EmailTemplate = require('email-templates').EmailTemplate;
+const path = require('path');
 
-module.exports = function(config) {
+const mailer = require('nodemailer');
+const Email = require('email-templates');
+
+module.exports = function() {
+  const EMAIL_PATH = path.join(__dirname, '../../views/emails/');
+
   // Node mailer
   const transporter = mailer.createTransport({
-    host: config.MAIL_HOST,
-    port: config.MAIL_PORT,
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
     secure: true,
     auth: {
-      user: config.MAIL_USER,
-      pass: config.MAIL_PASS
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS
     }
   });
 
-  const sender = {
-    name: 'SD Hacks Team',
-    address: config.MAIL_USER
-  };
+  var createEventSender = (event) => ({
+    name: event.name + ' Team',
+    address: process.env.MAIL_USER
+  });
 
-  var confirmSender = transporter.templateSender(
-    new EmailTemplate('./views/emails/confirmation'),
-    {
-      from: sender
-    }
-  );
-
-  var referSender = transporter.templateSender(
-    new EmailTemplate('./views/emails/refer'),
-    {
-      from: sender
-    }
-  );
-
-  var forgotSender = transporter.templateSender(
-    new EmailTemplate('./views/emails/forgot'),
-    {
-      from: sender
-    }
-  );
+  var createEventEmail = (event) => new Email({
+    message: {
+      from: createEventSender(event)
+    },
+    views: {
+      root: EMAIL_PATH,
+    },
+    transport: transporter
+  });
 
   return {
-    confirmSender,
-    referSender,
-    forgotSender
+    createEventEmail
   };
 };

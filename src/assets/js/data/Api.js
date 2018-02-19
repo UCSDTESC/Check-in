@@ -135,14 +135,20 @@ export const checkinUser = (email) =>
 
 /**
  * Request to register a new user.
+ * @param {String} eventAlias The alias for the event to register for.
  * @param  {Object} user The user fields to register.
  * @returns {Promise} A promise of the request.
  */
-export const registerUser = (user) =>
-  promisify(request
-    .post('/apply/api/register')
-    .field(user)
-    .attach('resume', user.resume[0]));
+export const registerUser = (eventAlias, user) => {
+  let baseReq = request
+    .post('/register/' + eventAlias)
+    .use(apiPrefix)
+    .field(user);
+  if (user.resume && user.resume.length > 0) {
+    baseReq = baseReq.attach('resume', user.resume[0]);
+  }
+  return promisify(baseReq);
+};
 
 /**
  * Request to register a new admin.

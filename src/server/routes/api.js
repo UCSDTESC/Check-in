@@ -18,6 +18,7 @@ module.exports = function(app) {
 
   app.use('/api', api);
   require('./auth')(api);
+  require('./registration')(api);
 
   addEventStatistics = (events) => {
     return new Promise((resolve) => {
