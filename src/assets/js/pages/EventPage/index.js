@@ -39,7 +39,7 @@ class EventPage extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     loadEventStatistics(this.props.match.params.eventAlias)
       .catch(console.error)
       .then(res => {

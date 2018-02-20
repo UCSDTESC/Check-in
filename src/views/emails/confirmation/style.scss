@@ -1,0 +1,45 @@
+@import url('https://fonts.googleapis.com/css?family=Reem+Kufi');
+
+$primary-color: #2B6177;
+$gray: #666666;
+
+h1 {
+  font-family: 'Reem Kufi', sans-serif;
+  letter-spacing: 1.6px;
+  color: $primary-color;
+  line-height: 1em;
+}
+
+.content {
+  background: url('https://s3-us-west-1.amazonaws.com/sdhacks2017-production/assets/email-background.png');
+  background-size: cover;
+  max-width: 600px !important;
+  border-spacing: 0;
+  border-collapse: collapse;
+  font-family: 'Reem Kufi', 'Source Sans Pro','helvetica neue',helvetica,'Segoe UI',Roboto,geneva,sans-serif;
+  height: 100% !important;
+  width: 100% !important;
+  color: #646464;
+  font-size: 18px;
+  line-height: 150%;
+  margin: 0;
+  padding: 2rem;
+
+  p {
+    color: $gray;
+  }
+}
+
+.refer-text {
+  margin-bottom: 5px;
+}
+
+.logo {
+  max-width: 128px;
+  max-height: 128px;
+  margin-bottom: 2rem;
+}
+
+a {
+  display: block;
+}
