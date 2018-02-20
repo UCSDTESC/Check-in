@@ -103,10 +103,39 @@ export const replaceEvents = (events) => ({
   events
 });
 
-export const loadAllEvents = () => (dispatch) => {
+// Admin Events
+export const addAdminEvent = (event) => ({
+  type: Types.ADD_ADMIN_EVENT,
+  event
+});
+
+export const addAdminEvents = (events) => ({
+  type: Types.ADD_ADMIN_EVENTS,
+  events
+});
+
+export const replaceAdminEvents = (events) => ({
+  type: Types.REPLACE_ADMIN_EVENTS,
+  events
+});
+
+export const loadAllAdminEvents = () => (dispatch) => {
   var deferred = Q.defer();
 
   Api.loadAllEvents()
+    .then(res => {
+      dispatch(replaceAdminEvents(res));
+      return deferred.resolve();
+    })
+    .catch(deferred.reject);
+
+  return deferred.promise;
+};
+
+export const loadAllPublicEvents = () => (dispatch) => {
+  var deferred = Q.defer();
+
+  Api.loadAllPublicEvents()
     .then(res => {
       dispatch(replaceEvents(res));
       return deferred.resolve();

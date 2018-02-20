@@ -42,7 +42,16 @@ module.exports = function(app) {
     });
   };
 
-  api.get('/events', requireAuth, roleAuth(roles.ROLE_ADMIN),
+  api.get('/events', (req, res) => {
+    return Event.find()
+      .select('name alias logo closeTime')
+      .exec()
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(addEventStatistics)
+      .then(events => res.json(events));
+  });
+
+  api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_ADMIN),
     (req, res) => {
       var query = Event.find({'organisers': req.user});
       if (getRole(req.user.role) >= getRole(roles.ROLE_DEVELOPER)) {
@@ -56,7 +65,7 @@ module.exports = function(app) {
         .then(events => res.json(events));
     });
 
-  api.get('/events/:eventAlias',
+  api.get('/admin/events/:eventAlias',
     (req, res) => {
       return Event.findOne({'alias': req.params.eventAlias})
         .exec()

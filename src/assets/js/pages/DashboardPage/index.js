@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadAllEvents} from '~/actions';
+import {loadAllAdminEvents} from '~/actions';
 
 import EventList from './components/EventList';
 
@@ -13,14 +13,14 @@ class DashboardPage extends React.Component {
     events: PropTypes.object.isRequired,
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
-    loadAllEvents: PropTypes.func.isRequired,
+    loadAllAdminEvents: PropTypes.func.isRequired,
     editing: PropTypes.bool.isRequired
   };
 
   componentWillMount() {
     this.props.showLoading();
 
-    this.props.loadAllEvents()
+    this.props.loadAllAdminEvents()
       .catch(console.error)
       .finally(this.props.hideLoading);
   }
@@ -50,7 +50,7 @@ function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllEvents: bindActionCreators(loadAllEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
   };
 };
 

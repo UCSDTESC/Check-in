@@ -46,12 +46,22 @@ export const loadAllAdmins = () =>
     .use(nocache));
 
 /**
+ * Request a list of all events that is available to the public.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadAllPublicEvents = () =>
+  promisify(request
+    .get('/events')
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
  * Request a list of all events the user has access to.
  * @returns {Promise} A promise of the request.
  */
 export const loadAllEvents = () =>
   promisify(request
-    .get('/events')
+    .get('/admin/events')
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
@@ -62,7 +72,7 @@ export const loadAllEvents = () =>
  */
 export const loadEventByAlias = (alias) =>
   promisify(request
-    .get('/events/' + alias)
+    .get('/admin/events/' + alias)
     .use(apiPrefix)
     .use(nocache));
 
