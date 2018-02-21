@@ -41,7 +41,14 @@ class HomePage extends React.Component {
         <Hero />
         <div className="home-page__contents">
           {currentEvents.length > 0 && <CurrentEvents events={currentEvents} />}
-          {currentEvents.length === 0 && <p>No Current Events</p>}
+          {currentEvents.length === 0 && (
+            <div className="container">
+              <div className="row">
+                <div className="col">
+                  <h2>No Upcoming Events</h2>
+                </div>
+              </div>
+            </div>)}
         </div>
       </div>);
   }

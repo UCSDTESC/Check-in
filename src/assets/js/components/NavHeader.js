@@ -55,7 +55,7 @@ export default class NavHeader extends React.Component {
 
           <ul className={`sd-nav__links flex-row ml-md-auto d-none d-md-flex
           align-items-center`}>
-            <li className="sd-nav__link-item">
+            {/* <li className="sd-nav__link-item">
               <Link className="sd-nav__link" to="/register/hackxx">
                 HackXX Registration
               </Link>
@@ -65,22 +65,22 @@ export default class NavHeader extends React.Component {
             </li>
             <li className="sd-nav__link-item">
               <Link className="sd-nav__link" to="#">Other</Link>
-            </li>
+            </li> */}
           </ul>
 
-          <div className="flex-column ml-auto d-flex d-md-none">
+          {/* <div className="flex-column ml-auto d-flex d-md-none">
             <button className="navbar-toggler hamburger__toggler" type="button"
               onClick={this.onMobileClick}>
               <span className="navbar-toggler-icon hamburger__toggle-icon">
               </span>
             </button>
-          </div>
+          </div> */}
         </nav>
       </div>
 
       <Collapse className="hamburger flex-column" isOpen={!isHidden}>
         <ul className="hamburger__links">
-          <li className="hamburger__link-item">
+          {/* <li className="hamburger__link-item">
             <Link className="hamburger__link" to="/register/hackxx">
               HackXX Regstration
             </Link>
@@ -92,7 +92,7 @@ export default class NavHeader extends React.Component {
             <Link className="hamburger__link hamburger__link" to="#">
               Other
             </Link>
-          </li>
+          </li> */}
         </ul>
       </Collapse>
     </nav>);
