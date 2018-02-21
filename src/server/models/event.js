@@ -27,6 +27,10 @@ var EventSchema = new Schema({
     type: String,
     trim: true,
     required: [true, 'Your event must have a logo']
+  },
+  closeTime: {
+    type: Date,
+    required: [true, 'Your event must close registrations by a given date']
   }
 });
 

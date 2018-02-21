@@ -8,7 +8,7 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadEventStatistics} from '~/data/Api';
 
-import {loadAllEvents} from '~/actions';
+import {loadAllAdminEvents} from '~/actions';
 
 import Loading from '~/components/Loading';
 
@@ -27,7 +27,7 @@ class EventPage extends React.Component {
 
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
-    loadAllEvents: PropTypes.func.isRequired,
+    loadAllAdminEvents: PropTypes.func.isRequired,
     event: PropTypes.shape(EventPropType)
   };
 
@@ -51,7 +51,7 @@ class EventPage extends React.Component {
     if (!this.props.event) {
       showLoading();
 
-      this.props.loadAllEvents()
+      this.props.loadAllAdminEvents()
         .catch(console.error)
         .finally(hideLoading);
     }
@@ -102,7 +102,7 @@ function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllEvents: bindActionCreators(loadAllEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
   };
 };
 
