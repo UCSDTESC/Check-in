@@ -64,6 +64,9 @@ export default class NavHeader extends React.Component {
               <Link className="sd-nav__link" to="/admin">Admin Panel</Link>
             </li>
             <li className="sd-nav__link-item">
+              <Link className="sd-nav__link" to="/login">Login</Link>
+            </li>
+            <li className="sd-nav__link-item">
               <Link className="sd-nav__link" to="#">Other</Link>
             </li>
           </ul>
@@ -82,13 +85,18 @@ export default class NavHeader extends React.Component {
         <ul className="hamburger__links">
           <li className="hamburger__link-item">
             <Link className="hamburger__link" to="/register/hackxx">
-              HackXX Regstration
+              HackXX Registration
             </Link>
           </li>
           <li className="hamburger__link-item">
             <Link className="hamburger__link" to="/admin">Admin Panel</Link>
           </li>
-          <li className="hamburger__link-item hamburger__link-item">
+          <li className="hamburger__link-item">
+            <Link className="hamburger__link" to="/login">
+              Login
+            </Link>
+          </li>
+          <li className="hamburger__link-item">
             <Link className="hamburger__link hamburger__link" to="#">
               Other
             </Link>

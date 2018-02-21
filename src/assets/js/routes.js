@@ -15,6 +15,7 @@ import Dashboard from './pages/DashboardPage';
 import AdminsPage from './pages/AdminsPage';
 import EventPage from './pages/EventPage';
 import UsersPage from './pages/UsersPage';
+import UserDashboard from './pages/UserDashboardPage';
 import Logout from './auth/Logout';
 
 import CookieTypes from '~/static/Cookies';
@@ -69,7 +70,7 @@ class Routes extends React.Component {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/register/:eventAlias" component={ApplyPage} />
-
+        <Route path="/login" component={UserDashboard} />
         <Route exact path="/admin/"
           component={this.renderAdmin(Dashboard)} />
         <PrivateRoute path="/admin/logout"
