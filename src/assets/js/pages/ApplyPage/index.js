@@ -83,16 +83,7 @@ class ApplyPage extends React.Component {
     this.loadPageFromHash();
   }
 
-  /**
-   * Modifies then submits the validated data to register the user.
-   * @param {Object} values The validated form data.
-   */
-  onFinalSubmit(values) {
-    this.setState({
-      isSubmitting: true
-    });
-
-    // Clean up values
+  sanitiseValues(values) {
     values.birthdateDay = ('00' + values.birthdateDay)
       .substring(values.birthdateDay.length);
     values.birthdateYear = ('0000' + values.birthdateYear)
@@ -107,7 +98,22 @@ class ApplyPage extends React.Component {
       values.university = values.highSchool;
     }
 
-    registerUser(values)
+    return values;
+  }
+
+  /**
+   * Modifies then submits the validated data to register the user.
+   * @param {Object} values The validated form data.
+   */
+  onFinalSubmit(values) {
+    this.setState({
+      isSubmitting: true
+    });
+
+    // Clean up values
+    // values = this.sanitiseValues(values);
+
+    registerUser(this.props.match.params.eventAlias, values)
       .then(() => {
         // Log successful application with Google Analytics
         ReactGA.event({

@@ -6,11 +6,14 @@ import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadAllEvents} from '~/actions';
+import {loadEventStatistics} from '~/data/Api';
+
+import {loadAllAdminEvents} from '~/actions';
 
 import Loading from '~/components/Loading';
 
 import OrganiserList from './components/OrganiserList';
+import EventStatistics from './components/EventStatistics';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -24,15 +27,31 @@ class EventPage extends React.Component {
 
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
-    loadAllEvents: PropTypes.func.isRequired,
+    loadAllAdminEvents: PropTypes.func.isRequired,
     event: PropTypes.shape(EventPropType)
   };
 
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      statistics: {}
+    };
+  }
+
+  componentWillMount() {
+    loadEventStatistics(this.props.match.params.eventAlias)
+      .catch(console.error)
+      .then(res => {
+        this.setState({
+          statistics: res
+        });
+      });
+
     if (!this.props.event) {
       showLoading();
 
-      this.props.loadAllEvents()
+      this.props.loadAllAdminEvents()
         .catch(console.error)
         .finally(hideLoading);
     }
@@ -40,6 +59,7 @@ class EventPage extends React.Component {
 
   render() {
     let {event} = this.props;
+    let {statistics} = this.state;
 
     if (!event) {
       return (
@@ -65,9 +85,7 @@ class EventPage extends React.Component {
               <OrganiserList organisers={event.organisers} />
             </div>
             <div className="col-lg-4 col-md-6">
-              <h2>Total Users</h2>
-              <div>Statistics Currently Unavailable</div>
-              <Link to={`/admin/users/${event.alias}`}>View All Users</Link>
+              <EventStatistics event={event} statistics={statistics} />
             </div>
           </div>
         </div>
@@ -84,7 +102,7 @@ function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllEvents: bindActionCreators(loadAllEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
   };
 };
 

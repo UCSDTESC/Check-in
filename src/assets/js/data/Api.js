@@ -24,6 +24,17 @@ export const loadAllUsers = (alias) =>
     .use(apiPrefix));
 
 /**
+ * Request user statistics for a given event.
+ * @param {String} alias The event alias.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadEventStatistics = (alias) =>
+  promisify(request
+    .get('/statistics/' + alias)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
+
+/**
  * Request a list of all admins.
  * @returns {Promise} A promise of the request.
  */
@@ -35,12 +46,22 @@ export const loadAllAdmins = () =>
     .use(nocache));
 
 /**
+ * Request a list of all events that is available to the public.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadAllPublicEvents = () =>
+  promisify(request
+    .get('/events')
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
  * Request a list of all events the user has access to.
  * @returns {Promise} A promise of the request.
  */
 export const loadAllEvents = () =>
   promisify(request
-    .get('/events')
+    .get('/admin/events')
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
@@ -51,7 +72,7 @@ export const loadAllEvents = () =>
  */
 export const loadEventByAlias = (alias) =>
   promisify(request
-    .get('/events/' + alias)
+    .get('/admin/events/' + alias)
     .use(apiPrefix)
     .use(nocache));
 
@@ -124,14 +145,20 @@ export const checkinUser = (email) =>
 
 /**
  * Request to register a new user.
+ * @param {String} eventAlias The alias for the event to register for.
  * @param  {Object} user The user fields to register.
  * @returns {Promise} A promise of the request.
  */
-export const registerUser = (user) =>
-  promisify(request
-    .post('/apply/api/register')
-    .field(user)
-    .attach('resume', user.resume[0]));
+export const registerUser = (eventAlias, user) => {
+  let baseReq = request
+    .post('/register/' + eventAlias)
+    .use(apiPrefix)
+    .field(user);
+  if (user.resume && user.resume.length > 0) {
+    baseReq = baseReq.attach('resume', user.resume[0]);
+  }
+  return promisify(baseReq);
+};
 
 /**
  * Request to register a new admin.

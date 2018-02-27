@@ -22,5 +22,7 @@ export const Event = {
   name: PropTypes.string.isRequired,
   alias: PropTypes.string.isRequired,
   organisers: PropTypes.arrayOf(PropTypes.shape(Admin)),
-  logo: PropTypes.string.isRequired
+  logo: PropTypes.string.isRequired,
+  users: PropTypes.number.isRequired,
+  closeTime: PropTypes.instanceOf(Date)
 };

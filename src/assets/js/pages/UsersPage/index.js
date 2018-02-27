@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadAllEvents} from '~/actions';
+import {loadAllAdminEvents} from '~/actions';
 
 import {addColumn, updateUser, removeColumn} from './actions';
 
@@ -35,7 +35,7 @@ class UsersPage extends React.Component {
     hideLoading: PropTypes.func.isRequired,
     addColumn: PropTypes.func.isRequired,
     removeColumn: PropTypes.func.isRequired,
-    loadAllEvents: PropTypes.func.isRequired,
+    loadAllAdminEvents: PropTypes.func.isRequired,
     updateUser: PropTypes.func.isRequired
   };
 
@@ -53,7 +53,7 @@ class UsersPage extends React.Component {
     if (!event) {
       showLoading();
 
-      this.props.loadAllEvents()
+      this.props.loadAllAdminEvents()
         .catch(console.error)
         .finally(hideLoading);
     }
@@ -143,7 +143,7 @@ function mapDispatchToProps(dispatch) {
     removeColumn: bindActionCreators(removeColumn,dispatch),
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllEvents: bindActionCreators(loadAllEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
   };
 };
 

@@ -30,7 +30,8 @@ export default class EventList extends React.Component {
                     </Link>
                   </h5>
                   <p className="card-text">
-                    A useful statistic
+                    {event.users}{' '}
+                    Registered {event.users === 1 ? 'User' : 'Users'}
                   </p>
                 </div>
               </div>
