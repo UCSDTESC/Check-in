@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-class PrivateRoute extends React.Component {
+class PrivateUserRoute extends React.Component {
   static propTypes = {
     authenticated: PropTypes.bool.isRequired,
     component: PropTypes.func.isRequired,
@@ -32,4 +32,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(PrivateRoute);
+export default connect(mapStateToProps)(PrivateUserRoute);

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Reset from './auth/Reset';
+import Reset from '~/auth/user/Reset';
 
 import {resetPassword} from '~/data/User';
 

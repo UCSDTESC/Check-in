@@ -14,15 +14,15 @@ const cookies = new Cookies();
 
 /**
  * Log in as a user.
- * @param  {String} username The username of the login.
+ * @param  {String} email The email of the login.
  * @param  {String} password The password of the login.
  * @returns {Promise} A promise of the request.
  */
-export const login = (username, password) => {
+export const login = (email, password) => {
   return promisify(request
     .post('/login')
     .set('Content-Type', 'application/json')
-    .send({username, password})
+    .send({email, password})
     .use(prefix)
     .use(nocache));
 };

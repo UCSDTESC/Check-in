@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 
-import {loginUser} from './auth/actions';
-import Login from './auth/Login';
+import {loginUser} from '~/auth/user/actions';
+
+import Login from '~/auth/user/Login';
 
 class LoginPage extends React.Component {
   static propTypes = {

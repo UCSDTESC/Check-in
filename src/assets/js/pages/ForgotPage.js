@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Forgot from './auth/Forgot';
+import Forgot from '~/auth/user/Forgot';
 
 import {forgotPassword} from '~/data/User';
 

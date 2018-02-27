@@ -2,7 +2,7 @@ import userColumns from '~/pages/UsersPage/reducers/Columns';
 
 import users from '~/pages/UsersPage/reducers/Users';
 
-import auth from '~/auth/reducers/Auth';
+import auth from '~/auth/admin/reducers/Auth';
 
 import dashboardStats from '~/pages/DashboardPage/reducers/Stats';
 

@@ -77,25 +77,6 @@ class Forgot extends React.Component {
     return (
       <form className="user-login"
         onSubmit={this.props.handleSubmit}>
-        <div className="hexagon-hero__background user-login__background">
-          <div className="hexagon-hero__water"></div>
-          <div className="hexagon-hero__beach"></div>
-        </div>
-        <div className="user-login__above">
-          <div className="user-login__alerts">
-            {this.renderErrorAlert()}
-            {this.renderSuccessAlert()}
-          </div>
-          <div className="user-login__header">
-            <a href="/">
-              <img className="user-login__logo"
-                src="/assets/img/vectors/logo.svg"/>
-            </a>
-            <span className="user-login__header-text">
-              Applicants
-            </span>
-          </div>
-        </div>
         <div className="user-login__container sd-form">
           <div className="user-login__username row sd-form__row">
             <div className="col-12">
@@ -118,7 +99,7 @@ class Forgot extends React.Component {
         <div className="user-login__below">
           <div className="row sd-form__row">
             <div className="col-12">
-              <Link to="/user/login"
+              <Link to="/login"
                 className="sd-link__underline user-login__forgot">
                 Back to Login
               </Link>

@@ -4,26 +4,35 @@ import PropTypes, {instanceOf} from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
+import ReactGA from 'react-ga';
 
 import PrivateRoute from './PrivateRoute';
-import {AUTH_USER} from './auth/actions/types';
+import PrivateUserRoute from './PrivateUserRoute';
+import {AUTH_USER as AUTH_ADMIN} from './auth/admin/actions/types';
+import {AUTH_USER} from './auth/user/actions/types';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
+import UserLayout from './layouts/User';
 import HomePage from './pages/HomePage';
 import ApplyPage from './pages/ApplyPage';
 import Dashboard from './pages/DashboardPage';
 import AdminsPage from './pages/AdminsPage';
 import EventPage from './pages/EventPage';
 import UsersPage from './pages/UsersPage';
-import UserDashboard from './pages/UserDashboardPage';
-import Logout from './auth/Logout';
+import LoginPage from './pages/LoginPage';
+import ResetPage from './pages/ResetPage';
+import ForgotPage from './pages/ForgotPage';
+import UserPage from './pages/UserPage';
+import AdminLogout from './auth/admin/Logout';
+import UserLogout from './auth/user/Logout';
 
 import CookieTypes from '~/static/Cookies';
 
 class Routes extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    cookies: instanceOf(Cookies).isRequired
+    cookies: instanceOf(Cookies).isRequired,
+    location: PropTypes.object.isRequired
   };
 
   constructor(props) {
@@ -33,10 +42,32 @@ class Routes extends React.Component {
     const {cookies} = this.props;
     if (cookies.get(CookieTypes.admin.token)) {
       props.dispatch({
-        type: AUTH_USER,
+        type: AUTH_ADMIN,
         payload: cookies.get(CookieTypes.admin.user)
       });
     }
+
+    if (cookies.get(CookieTypes.user.token)) {
+      props.dispatch({
+        type: AUTH_USER,
+        payload: cookies.get(CookieTypes.user.user)
+      });
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.location !== prevProps.location) {
+      this.onRouteChanged();
+    }
+  }
+
+  /**
+   * Update the Google analytics to set the current page.
+   */
+  onRouteChanged() {
+    let {location} = this.props;
+    ReactGA.set({page: location.pathname + location.search});
+    ReactGA.pageview(location.pathname + location.search);
   }
 
   /**
@@ -65,16 +96,23 @@ class Routes extends React.Component {
       </SponsorLayout>);
   }
 
+  renderUser = (Component) => {
+    return (props) =>
+      (<UserLayout>
+        <Component match={props.match} />
+      </UserLayout>
+      );
+  }
+
   routes() {
     return (
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route path="/register/:eventAlias" component={ApplyPage} />
-        <Route path="/login" component={UserDashboard} />
         <Route exact path="/admin/"
           component={this.renderAdmin(Dashboard)} />
         <PrivateRoute path="/admin/logout"
-          component={this.renderAdmin(Logout)} />
+          component={this.renderAdmin(AdminLogout)} />
         <PrivateRoute path="/admin/admins"
           component={this.renderAdmin(AdminsPage)} />
 
@@ -83,6 +121,17 @@ class Routes extends React.Component {
           component={this.renderAdmin(EventPage)} />
         <PrivateRoute path="/admin/users/:eventAlias"
           component={this.renderAdmin(UsersPage)} />
+
+        {/* User Routes */}
+        <Route exact path="/login" component={this.renderUser(LoginPage)} />
+        <Route exact path="/user/forgot"
+          component={this.renderUser(ForgotPage)} />
+        <Route path="/user/reset/:id" component={this.renderUser(ResetPage)} />
+
+        <PrivateUserRoute exact path="/user"
+          component={this.renderUser(UserPage)} />
+        <PrivateUserRoute exact path="/user/logout"
+          component={this.renderUser(UserLogout)} />
       </Switch>
     );
   }

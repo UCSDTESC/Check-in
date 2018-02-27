@@ -100,10 +100,10 @@ class Login extends React.Component {
         <div className="user-login__container sd-form">
           <div className="user-login__username row sd-form__row">
             <div className="col-12">
-              <label>Username</label>
-              <Field name="username" component="input" type="text"
+              <label>Email</label>
+              <Field name="email" component="input" type="text"
                 className="form-control sd-form__input-text"
-                placeholder="Username" />
+                placeholder="Email" />
             </div>
           </div>
           <div className="user-login__password row sd-form__row">
