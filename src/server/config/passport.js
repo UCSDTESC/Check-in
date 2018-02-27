@@ -5,11 +5,16 @@ const LocalStrategy = require('passport-local');
 const mongoose = require('mongoose');
 
 const Admin = mongoose.model('Admin');
+const User = mongoose.model('User');
 
 require('dotenv').config();
 
-const localOptions = {
+const localAdminOptions = {
   usernameField: 'username'
+};
+
+const localUserOptions = {
+  usernameField: 'email'
 };
 
 const jwtOptions = {
@@ -25,7 +30,7 @@ const returnMessages = {
   NOT_CONFIRMED: 'You have not yet confirmed this account'
 };
 
-const adminLogin = new LocalStrategy(localOptions,
+const adminLogin = new LocalStrategy(localAdminOptions,
   function(username, password, done) {
     Admin.findOne({username: {$regex : new RegExp(`^${username}$`, 'i')}},
       function(err, admin) {
@@ -62,5 +67,45 @@ const jwtAdminLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   });
 });
 
+const userLogin = new LocalStrategy(localUserOptions,
+  function(email, password, done) {
+    User.findOne({email: {$regex : new RegExp(`^${email}$`, 'i')}},
+      function(err, user) {
+        if (err) {
+          return done(err);
+        }
+        if (!user || user.deleted) {
+          return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
+        }
+
+        user.comparePassword(password, function(err, isMatch) {
+          if (err) {
+            return done(err);
+          }
+          if (!isMatch) {
+            return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
+          }
+
+          return done(null, user);
+        });
+      });
+  });
+
+const jwtUserLogin = new JwtStrategy(jwtOptions, function(payload, done) {
+  User.findById(payload._id, function(err, user) {
+    if (err || user.deleted) {
+      return done(err, false);
+    }
+
+    if (user) {
+      return done(null, user);
+    }
+    return done(null, false);
+  });
+});
+
 passport.use('adminJwt', jwtAdminLogin);
 passport.use('admin', adminLogin);
+
+passport.use('userJwt', jwtUserLogin);
+passport.use('user', userLogin);

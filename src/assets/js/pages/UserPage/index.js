@@ -173,7 +173,8 @@ class UserPage extends React.Component {
     updateUserField(delta)
       .then((newUser) => {
         updateCurrentUser(newUser);
-        this.createAlert('You have successfully updated your profile', 'success');
+        this.createAlert('You have successfully updated your profile',
+          'success');
       })
       .catch((err) => {
         this.createAlert(err.message, 'danger', 'Something went wrong!');
@@ -213,12 +214,8 @@ class UserPage extends React.Component {
 
     return (
       <div className="user-page">
-        {showRSVP && <RSVPConfirm availableBus={user.availableBus}
+        {/* {showRSVP && <RSVPConfirm availableBus={user.availableBus}
           onUpdate={this.userRSVP} onClose={this.toggleRSVP} />}
-        <div className="hexagon-hero__background user-page__background">
-          <div className="hexagon-hero__water"></div>
-          <div className="hexagon-hero__beach"></div>
-        </div>
         <div className="user-page__above">
           <div className="user-page__alerts">
             {alerts.map(({message, type, title}, i) =>
@@ -239,11 +236,11 @@ class UserPage extends React.Component {
                 className="sd-link__underline user-page__logout">Logout</Link>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="user-page__container container">
-          <UserProfile user={user} initialValues={user}
-            onSubmit={this.updateUser} />
+          {/* <UserProfile user={user} initialValues={user}
+            onSubmit={this.updateUser} /> */}
         </div>
       </div>
     );

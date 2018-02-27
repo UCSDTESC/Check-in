@@ -37,13 +37,13 @@ export function removeError(dispatch) {
   });
 }
 
-export function loginUser({username, password}) {
+export function loginUser({email, password}) {
   return function(dispatch) {
     // Make the event return a promise
     var deferred = Q.defer();
     removeError(dispatch);
 
-    Auth.login(username, password)
+    Auth.login(email, password)
       .then((res) => {
         storeLogin(res);
         dispatch({

@@ -7,7 +7,7 @@ import {promisify} from './helpers';
 
 import CookieTypes from '~/static/Cookies';
 
-const URL_PREFIX = '/user';
+const URL_PREFIX = '/api/user';
 
 const prefix = pref(URL_PREFIX);
 const cookies = new Cookies();

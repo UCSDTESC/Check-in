@@ -100,8 +100,7 @@ class Routes extends React.Component {
     return (props) =>
       (<UserLayout>
         <Component match={props.match} />
-      </UserLayout>
-      );
+      </UserLayout>);
   }
 
   routes() {
