@@ -1,7 +1,6 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
 import PropTypes from 'prop-types';
 import {UncontrolledAlert} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
@@ -11,12 +10,22 @@ import UserProfile from './components/UserProfile';
 import RSVPConfirm from './components/RSVPConfirm';
 import {getCurrentUser, updateCurrentUser} from './actions';
 
+import NavHeader from '~/components/NavHeader';
+
 import {updateUserField, rsvpUser} from '~/data/User';
+
+import {Event as EventPropType} from '~/proptypes';
 
 class UserPage extends React.Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        eventAlias: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired,
 
+    event: PropTypes.shape(EventPropType),
     getCurrentUser: PropTypes.func.isRequired,
     updateCurrentUser: PropTypes.func.isRequired,
     showLoading: PropTypes.func.isRequired,
@@ -36,14 +45,15 @@ class UserPage extends React.Component {
     document.body.classList.add('user-page__body');
 
     let {showLoading, hideLoading, getCurrentUser} = this.props;
+    let {eventAlias} = this.props.match.params;
 
     showLoading();
 
-    getCurrentUser()
-      .then(() => {
+    getCurrentUser(eventAlias)
+      .catch(console.error)
+      .finally(() => {
         hideLoading();
-      })
-      .catch(console.error);
+      });
   }
 
   componentWillUnmount () {
@@ -214,33 +224,25 @@ class UserPage extends React.Component {
 
     return (
       <div className="user-page">
-        {/* {showRSVP && <RSVPConfirm availableBus={user.availableBus}
+        {showRSVP && <RSVPConfirm availableBus={user.availableBus}
           onUpdate={this.userRSVP} onClose={this.toggleRSVP} />}
         <div className="user-page__above">
           <div className="user-page__alerts">
             {alerts.map(({message, type, title}, i) =>
               this.renderAlert(message, type, title, i))}
           </div>
-          <div className="user-page__header">
-            <a href="/">
-              <img className="user-page__logo"
-                src="/assets/img/vectors/logo.svg"/>
-            </a>
-            <span className="user-page__header-text">
-              Your Application
-            </span>
-            <div className="user-page__nav container">
-              {this.renderUserBussing(user)}
-              {this.renderUserStatus(user.status)}
-              <Link to="/logout"
-                className="sd-link__underline user-page__logout">Logout</Link>
-            </div>
+
+          <NavHeader title="Your Profile" />
+
+          <div className="user-page__status-box container">
+            {this.renderUserBussing(user)}
+            {this.renderUserStatus(user.status)}
           </div>
-        </div> */}
+        </div>
 
         <div className="user-page__container container">
-          {/* <UserProfile user={user} initialValues={user}
-            onSubmit={this.updateUser} /> */}
+          <UserProfile user={user} initialValues={user}
+            onSubmit={this.updateUser} />
         </div>
       </div>
     );

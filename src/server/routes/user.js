@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 
 const {setUserInfo} = require('./helper');
 
-const User = mongoose.model('Admin');
+const User = mongoose.model('User');
 
 module.exports = function(app) {
   const userRoute = express.Router();
@@ -14,6 +14,7 @@ module.exports = function(app) {
 
   // Middleware to require login/auth
   const requireLogin = passport.authenticate('user', {session: false});
+  const requireAuth = passport.authenticate('userJwt', {session: false});
 
   /**
    * Signs a user with the JWT secret.
@@ -34,5 +35,9 @@ module.exports = function(app) {
       token: `JWT ${generateToken(userInfo)}`,
       user: userInfo
     });
+  });
+
+  userRoute.get('/current/:eventAlias', requireAuth, function(req, res) {
+    return res.json(req.user);
   });
 };

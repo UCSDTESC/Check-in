@@ -4,6 +4,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {Alert, UncontrolledAlert} from 'reactstrap';
 
+import NavHeader from '~/components/NavHeader';
+
 const form = reduxForm({
   form: 'userForgot'
 });
@@ -77,6 +79,8 @@ class Forgot extends React.Component {
     return (
       <form className="user-login"
         onSubmit={this.props.handleSubmit}>
+        <NavHeader title="Forgot Password" />
+
         <div className="user-login__container sd-form">
           <div className="user-login__username row sd-form__row">
             <div className="col-12">

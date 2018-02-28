@@ -4,6 +4,8 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 import {Alert, UncontrolledAlert} from 'reactstrap';
 
+import NavHeader from '~/components/NavHeader';
+
 const form = reduxForm({
   form: 'userForgot'
 });
@@ -86,15 +88,7 @@ class Reset extends React.Component {
             {this.renderErrorAlert()}
             {this.renderSuccessAlert()}
           </div>
-          <div className="user-login__header">
-            <a href="/">
-              <img className="user-login__logo"
-                src="/assets/img/vectors/logo.svg"/>
-            </a>
-            <span className="user-login__header-text">
-              Applicants
-            </span>
-          </div>
+          <NavHeader />
         </div>
         <div className="user-login__container sd-form">
           <div className="user-login__username row sd-form__row">

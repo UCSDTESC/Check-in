@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Alert, UncontrolledAlert} from 'reactstrap';
 
+import NavHeader from '~/components/NavHeader';
+
 const form = reduxForm({
   form: 'userLogin'
 });
@@ -96,6 +98,7 @@ class Login extends React.Component {
             {this.renderErrorAlert()}
             {alerts.map(({type, text}) => this.renderAlert(type, text))}
           </div>
+          <NavHeader title="Login" />
         </div>
         <div className="user-login__container sd-form">
           <div className="user-login__username row sd-form__row">
@@ -126,7 +129,7 @@ class Login extends React.Component {
         <div className="user-login__below">
           <div className="row sd-form__row">
             <div className="col-12">
-              <Link to="/apply" className={`btn rounded-button
+              <Link to="/register/hackxx" className={`btn rounded-button
                 rounded-button--secondary rounded-button--small
                 user-login__apply`}>
                 I don‘t have an account, I still need to apply

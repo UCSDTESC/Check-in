@@ -127,10 +127,10 @@ class Routes extends React.Component {
           component={this.renderUser(ForgotPage)} />
         <Route path="/user/reset/:id" component={this.renderUser(ResetPage)} />
 
-        <PrivateUserRoute exact path="/user"
-          component={this.renderUser(UserPage)} />
-        <PrivateUserRoute exact path="/user/logout"
+        <PrivateUserRoute exact path="/logout"
           component={this.renderUser(UserLogout)} />
+        <PrivateUserRoute exact path="/user/:eventAlias"
+          component={this.renderUser(UserPage)} />
       </Switch>
     );
   }

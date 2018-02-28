@@ -34,7 +34,7 @@ export const login = (email, password) => {
  */
 export const forgotPassword = (email) => {
   return promisify(request
-    .post('/api/forgot')
+    .post('/forgot')
     .set('Content-Type', 'application/json')
     .send({email})
     .use(prefix)
@@ -49,7 +49,7 @@ export const forgotPassword = (email) => {
  */
 export const resetPassword = (id, newPassword) => {
   return promisify(request
-    .post('/api/reset')
+    .post('/reset')
     .set('Content-Type', 'application/json')
     .send({id, newPassword})
     .use(prefix)
@@ -58,11 +58,12 @@ export const resetPassword = (id, newPassword) => {
 
 /**
  * Get the information about the current user.
+ * @param {String} eventAlias The alias of the event for which to fetch data.
  * @returns {Promise} A promise of the request.
  */
-export const getCurrentUser = () => {
+export const getCurrentUser = (eventAlias) => {
   return promisify(request
-    .get('/api/current')
+    .get('/current/' + eventAlias)
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .use(prefix)
@@ -75,7 +76,7 @@ export const getCurrentUser = () => {
  */
 export const updateUserField = (user) => {
   return promisify(request
-    .post('/api/update')
+    .post('/update')
     .field(user)
     .attach('resume', user.resume ? user.resume[0] : null)
     .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
@@ -92,7 +93,7 @@ export const updateUserField = (user) => {
  */
 export const rsvpUser = (status, bussing) => {
   return promisify(request
-    .post('/api/rsvp')
+    .post('/rsvp')
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .send({status, bussing})

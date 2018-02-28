@@ -36,7 +36,7 @@ class LoginPage extends React.Component {
   loginUser = (formProps) => {
     let {loginUser, history} = this.props;
     return loginUser(formProps)
-      .then(() => history.push('/user'))
+      .then(() => history.push('/user/hackxx'))
       .catch((e) => {
         console.error('Could not log in', e);
       });
@@ -52,11 +52,8 @@ class LoginPage extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-    user: null /*state.user.auth.user*/,
-    loginError: null/*state.user.auth.error*/
-  };
+function mapStateToProps() {
+  return { };
 };
 
 export default connect(mapStateToProps, {loginUser})(withRouter(LoginPage));

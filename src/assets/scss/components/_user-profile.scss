@@ -1,0 +1,126 @@
+.user-profile {
+  margin-top: 1rem;
+  font-family: $header-font-family;
+  color: $dark-blue;
+
+  h4 {
+    margin-bottom: 1rem;
+  }
+
+  h5 {
+    font-size: 1rem;
+  }
+
+  p {
+    font-size: 0.9rem;
+  }
+
+  &__header {
+    display: flex;
+
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+    }
+  }
+
+  &__hello {
+    margin-bottom: 3rem;
+    flex: 1;
+
+    @include media-breakpoint-down(sm) {
+      font-size: 1.75rem;
+      line-height: 2.75rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  &__apply {
+    flex-grow: 0.5;
+    text-align: right;
+    opacity: 1;
+    display: block;
+    transition: display 0.2s linear 0s, opacity 0.2s linear;
+
+    &--hidden {
+      transition: display 0s linear 0.2s, opacity 0.2s linear;
+      opacity: 0;
+      display: none;
+    }
+  }
+
+  &__name {
+    font-weight: bold;
+  }
+
+  &__form {
+    display: flex;
+
+    @include media-breakpoint-down(sm) {
+      flex-direction: column;
+    }
+  }
+
+  &__column {
+    flex: 1;
+
+    @include media-breakpoint-up(md) {
+      &--left {   
+        padding-right: 2rem; 
+      }
+
+      &--right {
+        padding-left: 2rem;
+      }
+    }
+  }
+
+  &__section {
+    margin-bottom: 2rem;
+  }
+
+  &__school {
+    margin: 2rem 0;
+  }
+
+  &__school-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &__school-image {
+    width: 100%;
+    border: 2px solid $dark-blue;
+    border-radius: $global-radius;
+    background-color: $white;
+    padding: 0.5rem 1rem;
+    box-shadow: $extended-shadow;
+    max-height: 3rem;
+
+    @include media-breakpoint-up(md) {
+      max-height: none;
+    }
+  }
+
+  &__input {
+    width: 100%;
+    &:not(:last-child) {
+      margin-bottom: 1rem;
+    }
+
+    &:focus {
+      &:not(:last-child) {
+        margin-bottom: calc(1rem - 2px);
+      }
+    }
+
+    @include media-breakpoint-up(md) {
+      max-width: 25rem;
+    }
+  }
+
+  &__transportation {
+    display: flex;
+    align-items: center;
+  }
+}

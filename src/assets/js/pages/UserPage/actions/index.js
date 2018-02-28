@@ -11,9 +11,9 @@ export const updateCurrentUser = (user) => ({
 });
 
 // Get the current user information
-export const getCurrentUser = () => (dispatch) => {
+export const getCurrentUser = (eventAlias) => (dispatch) => {
   var deferred = Q.defer();
-  Api.getCurrentUser()
+  Api.getCurrentUser(eventAlias)
     .then((user) => {
       dispatch(updateCurrentUser(user));
       deferred.resolve();

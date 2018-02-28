@@ -186,6 +186,13 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
   });
 };
 
+UserSchema.set('toJSON', {
+  transform: function(doc, ret) {
+    delete ret.password;
+    return ret;
+  }
+});
+
 UserSchema.plugin(require('mongoose-sanitizer'));
 
 UserSchema.plugin(timestamps);
