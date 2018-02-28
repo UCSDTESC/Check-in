@@ -8,9 +8,10 @@ const Errors = require('./errors')(logging);
 
 const Event = mongoose.model('Event');
 const User = mongoose.model('User');
+const Account = mongoose.model('Account');
 
 const autoPopulateFields = [
-  'password', 'firstName', 'lastName', 'gender', 'email', 'phone',
+  'firstName', 'lastName', 'gender', 'phone',
   'university', 'major', 'year', 'github', 'website', 'shareResume', 'food',
   'diet', 'shirtSize'
 ];
@@ -34,8 +35,9 @@ module.exports = function(app) {
     return values;
   };
 
-  applyManualField = (user, values, event) => {
+  applyManualField = (user, values, event, account) => {
     user.event = event;
+    user.account = account;
 
     user.birthdate = values.birthdateYear + '-' +
       values.birthdateMonth + '-' + values.birthdateDay
@@ -67,6 +69,7 @@ module.exports = function(app) {
     var user = new User;
     let event = undefined;
     let values = undefined;
+    let account = undefined;
 
     // Load event
     Event.findOne({alias: req.params.eventAlias}).exec()
@@ -79,15 +82,26 @@ module.exports = function(app) {
 
         return req.body;
       }, err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-      .then((values) => User.count({email: values.email}))
-      .then((count) => {
-        if (count > 0) {
-          throw Errors.EMAIL_IN_USE;
+      .then((values) => Account.findOne({email: values.email}))
+      .then((foundAccount) => {
+        if (foundAccount) {
+          account = foundAccount;
+          return false;
         }
+        return new Account({
+          email: values.email,
+          password: values.password
+        }).save();
+      })
+      .then((newAccount) => {
+        if (!newAccount) {
+          return;
+        }
+        account = newAccount;
         return true;
       })
       .then(() => applyAutoPopulate(user, values))
-      .then((values) => applyManualField(user, values, event))
+      .then((values) => applyManualField(user, values, event, account))
       .then(() => {
         if (req.file) {
           return user.attach('resume', {path: req.file.path});
@@ -111,12 +125,12 @@ module.exports = function(app) {
         .send({
           template: 'confirmation',
           message: {
-            to: user.email
+            to: account.email
           },
           locals: {
             'user': user,
             'confirmUrl': req.protocol + '://' + req.get('host') +
-              '/api/confirm/' + user._id,
+              '/api/confirm/' + account._id,
             'event': event
           }
         })
@@ -125,7 +139,7 @@ module.exports = function(app) {
         })
       )
       .then(() => {
-        res.status(200).json({'email': user.email});
+        res.status(200).json({'email': account.email});
 
         //TODO: Refer teammates;
       })
@@ -136,7 +150,7 @@ module.exports = function(app) {
   });
 
   app.get('/confirm/:userId', (req, res) => {
-    User.findByIdAndUpdate(req.params.userId, {confirmed: true})
+    Account.findByIdAndUpdate(req.params.userId, {confirmed: true})
       .populate('event')
       .exec()
       .then((user) => {
@@ -144,7 +158,7 @@ module.exports = function(app) {
           return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
         }
 
-        return res.redirect(`/login/${user.event.alias}#confirmed`);
+        return res.redirect('/login#confirmed');
       })
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
   });
