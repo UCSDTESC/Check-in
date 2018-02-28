@@ -5,7 +5,7 @@ const LocalStrategy = require('passport-local');
 const mongoose = require('mongoose');
 
 const Admin = mongoose.model('Admin');
-const User = mongoose.model('User');
+const Account = mongoose.model('Account');
 
 require('dotenv').config();
 
@@ -69,16 +69,16 @@ const jwtAdminLogin = new JwtStrategy(jwtOptions, function(payload, done) {
 
 const userLogin = new LocalStrategy(localUserOptions,
   function(email, password, done) {
-    User.findOne({email: {$regex : new RegExp(`^${email}$`, 'i')}},
-      function(err, user) {
+    Account.findOne({email: {$regex : new RegExp(`^${email}$`, 'i')}},
+      function(err, account) {
         if (err) {
           return done(err);
         }
-        if (!user || user.deleted) {
+        if (!account || account.deleted) {
           return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
         }
 
-        user.comparePassword(password, function(err, isMatch) {
+        account.comparePassword(password, function(err, isMatch) {
           if (err) {
             return done(err);
           }
@@ -86,19 +86,19 @@ const userLogin = new LocalStrategy(localUserOptions,
             return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
           }
 
-          return done(null, user);
+          return done(null, account);
         });
       });
   });
 
 const jwtUserLogin = new JwtStrategy(jwtOptions, function(payload, done) {
-  User.findById(payload._id, function(err, user) {
-    if (err || user.deleted) {
+  Account.findById(payload._id, function(err, account) {
+    if (err || account.deleted) {
       return done(err, false);
     }
 
-    if (user) {
-      return done(null, user);
+    if (account) {
+      return done(null, account);
     }
     return done(null, false);
   });

@@ -3,9 +3,13 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
+const logging = require('../config/logging');
+
 const {setUserInfo} = require('./helper');
+const Errors = require('./errors')(logging);
 
 const User = mongoose.model('User');
+const Event = mongoose.model('Event');
 
 module.exports = function(app) {
   const userRoute = express.Router();
@@ -38,6 +42,15 @@ module.exports = function(app) {
   });
 
   userRoute.get('/current/:eventAlias', requireAuth, function(req, res) {
-    return res.json(req.user);
+    Event.findOne({alias: req.params.eventAlias})
+      .then((event) => {
+        return User.findOne({account: req.user, event});
+      })
+      .then((user) => {
+        return res.json(user);
+      })
+      .catch(() => {
+        return Errors.respondUserError(res, Errors.USER_NOT_REGISTERED);
+      });
   });
 };
