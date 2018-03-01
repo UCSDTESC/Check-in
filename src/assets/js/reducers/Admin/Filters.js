@@ -39,6 +39,7 @@ const INITIAL_STATE = {
       'Male': false,
       'Female': false,
       'Non-Binary': false,
+      'Transgender' : false,
       'I prefer not to say': false,
       'Other': false
     }
