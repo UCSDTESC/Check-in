@@ -1,0 +1,131 @@
+$bg-blur: 10px;
+$border-radius: 3px;
+
+.user-checkin {
+  &__background {
+    position: fixed;
+    top: -$bg-blur;
+    right: -$bg-blur;
+    bottom: 0;
+    background-image: url("/assets/img/city-skyline.jpg");
+    width: 110%;
+    min-height: 110%;
+    -webkit-filter: blur($bg-blur);
+    -o-filter: blur($bg-blur);
+    filter: blur($bg-blur);
+    z-index: -100;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+  }
+
+  &__container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__logo {
+    position: absolute;
+    width: 200px;
+    height: 220px;
+    top: 30%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-image: url(/assets/img/logo.png);
+    background-size: cover;
+  }
+
+  &__form {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 100%;
+    height: 45%;
+    padding: 0 10px;
+    max-width: 500px;
+    transform: translate(-50%, -44px);
+  }
+
+  &__header {
+    color: $white;
+    font-size: 1.5em;
+    margin: 0 4px;
+  }
+
+  &__suggestion {
+    padding: 0;
+    border-radius: $border-radius;
+    background: rgba(255, 255, 255, 0.3);
+    width: 100%;
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
+  &__input {
+    opacity: 1.0;
+    padding: 0;
+    border-radius: $border-radius;
+  }
+
+  &__email {
+    border-radius: $border-radius;
+  }
+
+  &__emails {
+    list-style: none;
+    margin-left: 0;
+    margin-bottom: 0;
+    padding-left: 0;
+    width: 100%;
+
+    &--suggestion {
+      width: 100%;
+      color: $white;
+      line-height: 35px;
+      font-size: 1.2em;
+    }
+
+    &--bordered {
+      border-bottom: 1px solid rgba($white, 0.5);
+    }
+
+    &--info {
+      padding-bottom: 5px;
+    }
+
+    &--name {
+      font-size: 0.9em;
+      line-height: 1.0em;
+      margin-top: 10px;
+      color: lighten(#000, 30%);
+    }
+
+    &--email {
+      line-height: 1.5em;
+    }
+
+    &--birthday {
+      line-height: 1.1em;
+      font-size: 0.8em;
+    }
+
+    &--university {
+      line-height: 1.3em;
+      font-size: 0.8em;
+    }
+
+    &--checked-in {
+      line-height: 5.0em;
+    }
+
+    &--button {
+      @include media-breakpoint-up(md) {
+        margin: 15px 0;
+      }
+      width: 100%;
+    }
+  }
+}

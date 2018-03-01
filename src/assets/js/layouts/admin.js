@@ -5,9 +5,9 @@ import {bindActionCreators} from 'redux';
 
 import {toggleEditing} from '~/actions';
 
-import {loginUser} from '~/auth/actions';
+import {loginUser} from '~/auth/admin/actions';
 
-import Login from '~/auth/Login';
+import Login from '~/auth/admin/Login';
 
 import Sidebar from './components/AdminSidebar';
 

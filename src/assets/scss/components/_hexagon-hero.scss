@@ -1,0 +1,171 @@
+.hexagon-hero {
+  max-height: 800px;
+  min-height: 667px;
+  width: 100%;
+  text-align: center;
+
+  @include media-breakpoint-up(md) {
+    text-align: left;
+    height: 85vh;
+  }
+
+  &__background {
+    height: 140vh;
+    max-height: 800px;
+    width: 100%;
+    background-color: $beach-tan;
+    position: absolute;
+    z-index: -1;
+
+    @include media-breakpoint-up(lg) {
+      height: 1100px;
+    }
+  }
+
+  &__water {
+    height: 60vh;
+    background-color: $beach-blue;
+    position: relative;
+    z-index: 1;
+    transform: skewY(-30deg);
+    transform-origin: 0 0;
+
+    @include media-breakpoint-up(lg) {
+      min-height: 700px;
+      height: 80vh;
+    }
+    &:after {
+      background-color: $beach-lightblue;
+      content: '';
+      display: block;
+      height: 160px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+    }
+  }
+
+  &__beach {
+    height: 85vh;
+    min-height: 350px;
+    background-color: $beach-tan;
+    transform: skewY(-30deg);
+    transform-origin: 0 0;
+
+    &:before {
+      background-color: $beach-lighttan;
+      content: '';
+      display: block;
+      height: 160px;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      z-index: 2;
+    }
+  }
+
+  &__container {
+    z-index: 3;
+    padding: 3rem 0rem;
+
+    @include media-breakpoint-up(md) {
+      height: auto;
+      padding: inherit;
+      margin-bottom: 0;
+    }
+  }
+
+  &__logo {
+    height: 10rem;
+
+    @include media-breakpoint-up(md) {
+      height: 8rem;
+    }
+    @include media-breakpoint-up(lg) {
+      display: inline-block;
+      vertical-align: top;
+      height: 10rem;
+    }
+  }
+
+  &__text {
+    @include media-breakpoint-up(lg) {
+      display: inline-block;
+      vertical-align: top;
+      padding-top: 1.5rem;
+      padding-left: 2rem;
+    }
+  }
+
+  &__title {
+    font-family: 'Reem Kufi', sans-serif;
+    margin-top: 2rem;
+    letter-spacing: 0.1rem;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    color: $dark-blue;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+    }
+  }
+
+  &__subtitle {
+    font-family: 'Reem Kufi', sans-serif;
+    line-height: 2.2rem;
+    letter-spacing: 0.1rem;
+    font-size: 1.4rem;
+    color: $dark-blue;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 1.6rem;
+      line-height: 2.7rem;
+    }
+  }
+
+  &__nav {
+    margin-top: 3rem;
+    
+    &--secondary {
+      margin-top: 0;
+    }
+
+    &--mobile {
+      margin: 3rem 1rem 0;
+    }
+    &-button {
+      margin-bottom: 1rem;
+      margin-right: 1rem;
+
+      @include media-breakpoint-up(md) {
+        width: 12rem;
+        display: inline-block;
+      }
+    }
+  }
+
+  &__featurette {
+    position: relative;
+    left: -4rem;
+    top: 2rem;
+    transform: scale(.95);
+
+    @include media-breakpoint-up(md) {
+      left: -11rem;
+    }
+    @include media-breakpoint-down(md) {
+      left: -12rem;
+      transform: scale(.75);
+    }
+    @include media-breakpoint-up(lg) {
+      top: -3rem;
+    }
+    @include media-breakpoint-up(xl) {
+      left: -12rem;
+    }
+  }
+}

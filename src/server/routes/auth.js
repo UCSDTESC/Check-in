@@ -3,7 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
-const {setUserInfo} = require('./helper');
+const {setUserInfo, roleAuth, roles} = require('./helper');
 
 const Admin = mongoose.model('Admin');
 
@@ -40,8 +40,7 @@ module.exports = function(app) {
     });
   });
 
-  //TODO: Replace permissions
-  auth.post('/register', /*requireLogin, roleAuth(roles.ROLE_DEVELOPER),*/
+  auth.post('/register', requireLogin, roleAuth(roles.ROLE_DEVELOPER),
     function(req, res, next) {
       if (!req.body.username || !req.body.password) {
         return next('Bad Registration: Could not find username and password');

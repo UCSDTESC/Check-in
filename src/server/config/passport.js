@@ -5,11 +5,16 @@ const LocalStrategy = require('passport-local');
 const mongoose = require('mongoose');
 
 const Admin = mongoose.model('Admin');
+const Account = mongoose.model('Account');
 
 require('dotenv').config();
 
-const localOptions = {
+const localAdminOptions = {
   usernameField: 'username'
+};
+
+const localUserOptions = {
+  usernameField: 'email'
 };
 
 const jwtOptions = {
@@ -25,7 +30,7 @@ const returnMessages = {
   NOT_CONFIRMED: 'You have not yet confirmed this account'
 };
 
-const adminLogin = new LocalStrategy(localOptions,
+const adminLogin = new LocalStrategy(localAdminOptions,
   function(username, password, done) {
     Admin.findOne({username: {$regex : new RegExp(`^${username}$`, 'i')}},
       function(err, admin) {
@@ -62,5 +67,45 @@ const jwtAdminLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   });
 });
 
+const userLogin = new LocalStrategy(localUserOptions,
+  function(email, password, done) {
+    Account.findOne({email: {$regex : new RegExp(`^${email}$`, 'i')}},
+      function(err, account) {
+        if (err) {
+          return done(err);
+        }
+        if (!account || account.deleted) {
+          return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
+        }
+
+        account.comparePassword(password, function(err, isMatch) {
+          if (err) {
+            return done(err);
+          }
+          if (!isMatch) {
+            return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
+          }
+
+          return done(null, account);
+        });
+      });
+  });
+
+const jwtUserLogin = new JwtStrategy(jwtOptions, function(payload, done) {
+  Account.findById(payload._id, function(err, account) {
+    if (err || account.deleted) {
+      return done(err, false);
+    }
+
+    if (account) {
+      return done(null, account);
+    }
+    return done(null, false);
+  });
+});
+
 passport.use('adminJwt', jwtAdminLogin);
 passport.use('admin', adminLogin);
+
+passport.use('userJwt', jwtUserLogin);
+passport.use('user', userLogin);

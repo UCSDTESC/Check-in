@@ -17,6 +17,7 @@ module.exports = function(app) {
   const api = express.Router();
 
   app.use('/api', api);
+  require('./user')(api);
   require('./auth')(api);
   require('./registration')(api);
 
