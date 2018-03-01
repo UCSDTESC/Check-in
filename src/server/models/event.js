@@ -31,6 +31,10 @@ var EventSchema = new Schema({
   closeTime: {
     type: Date,
     required: [true, 'Your event must close registrations by a given date']
+  },
+  homepage: {
+    type: String,
+    require: [true, 'Your event must have an event page']
   }
 });
 

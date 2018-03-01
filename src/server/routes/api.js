@@ -49,7 +49,7 @@ module.exports = function(app) {
 
   api.get('/events', (req, res) => {
     return Event.find()
-      .select('name alias logo closeTime')
+      .select('name alias logo closeTime homepage')
       .exec()
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
@@ -84,7 +84,8 @@ module.exports = function(app) {
             _id: event._id,
             name: event.name,
             logo: event.logo,
-            alias: event.alias
+            alias: event.alias,
+            homepage: event.homepage
           });
         });
     });

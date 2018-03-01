@@ -202,7 +202,7 @@ class ApplyPage extends React.Component {
               previousPage={this.previousPage} submitError={this.state.error}
               isSubmitting={this.state.isSubmitting}
               validate={validator} options={options} />}
-            {page === 4 && <SubmittedSection />}
+            {page === 4 && <SubmittedSection event={event} />}
           </div>
         </div>
       </div>
