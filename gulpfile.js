@@ -49,7 +49,7 @@ gulp.task('css', function () {
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('src/assets/public/css'))
-    .pipe(gulpif(browserSync, browserSync.stream()));
+    .pipe(gulpif(browserSync, browserSync && browserSync.stream()));
 });
 
 gulp.task('eslint', function() {
