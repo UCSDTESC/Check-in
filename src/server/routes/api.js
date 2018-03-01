@@ -51,8 +51,8 @@ module.exports = function(app) {
     return Event.find()
       .select('name alias logo closeTime')
       .exec()
-      .then(addEventStatistics)
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(addEventStatistics)
       .then(events => res.json(events));
   });
 
