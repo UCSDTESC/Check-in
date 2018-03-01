@@ -25,13 +25,6 @@ export default class Hero extends React.Component {
 
     return (<div className={heroClass} style={heroStyle}>
       <NavHeader />
-      <div className="container">
-        <div className="row">
-          <div className="col-md-12 text-center">
-            <h1>Welcome to the TESC Check-In System</h1>
-          </div>
-        </div>
-      </div>
     </div>);
   }
 };

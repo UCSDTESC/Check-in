@@ -10,7 +10,7 @@ var gulp = require('gulp'),
   eslint = require('gulp-eslint'),
   plumber = require('gulp-plumber'),
   gutil = require('gulp-util'),
-  gulpif = require('gulp-if');
+  through2 = require('through2');
 let browserSync = gutil.env.production ?
   undefined : require('browser-sync').create();
 
@@ -38,9 +38,13 @@ var plumberOptions = {
   errorHandler: handleError
 };
 
+function browserStream() {
+  browserSync.stream();
+}
+
 gulp.task('css', function () {
   gutil.log('Generating css');
-  return gulp.src('src/assets/scss/checkin.scss')
+  let stream = gulp.src('src/assets/scss/checkin.scss')
     .pipe(sourcemaps.init())
     .pipe(sass().on('error', sass.logError))
     .pipe(autoprefixer('last 4 version'))
@@ -48,8 +52,12 @@ gulp.task('css', function () {
     .pipe(cssnano())
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write())
-    .pipe(gulp.dest('src/assets/public/css'))
-    .pipe(gulpif(browserSync, browserSync && browserSync.stream()));
+    .pipe(gulp.dest('src/assets/public/css'));
+
+  if (browserSync) {
+    stream.pipe(browserSync.stream());
+  }
+  return stream;
 });
 
 gulp.task('eslint', function() {
