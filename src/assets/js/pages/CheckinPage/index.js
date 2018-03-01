@@ -73,7 +73,7 @@ class CheckinPage extends React.Component {
           return reject('User never confirmed their invitation');
         case ('Rejected'):
         default:
-          return reject('User was not invited to SD Hacks');
+          return reject('User was not invited to event');
         }
       }
       if (user.checkedIn) {

@@ -201,7 +201,7 @@ class UserPage extends React.Component {
    * option exists.
    */
   userRSVP = (status, bussing) => {
-    let {user, updateCurrentUser} = this.props;
+    let {user, updateCurrentUser, event} = this.props;
     if (user.status !== 'Unconfirmed') {
       return;
     }
@@ -209,7 +209,7 @@ class UserPage extends React.Component {
     rsvpUser(status, bussing)
       .then((newUser) => {
         updateCurrentUser(newUser);
-        this.createAlert('You have successfully RSVPed to SD Hacks 2017',
+        this.createAlert(`You have successfully RSVPed to ${event.name}`,
           'success');
       })
       .catch((err) => {
