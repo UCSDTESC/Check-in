@@ -26,6 +26,10 @@ module.exports = function(app) {
       newEvents = [];
       updated = 0;
 
+      if (!events || events.length === 0) {
+        resolve([]);
+      }
+
       events.forEach((event) => {
         User.count({event})
           .catch(logging.error)

@@ -16,7 +16,8 @@ class UserProfile extends React.Component {
 
   genderSelect = ({input, className}) => {
     let genders = [
-      'Male', 'Female', 'Non-Binary', 'I prefer not to say', 'Other'
+      'Male', 'Female', 'Non-Binary', 'Transgender',
+      'I prefer not to say', 'Other'
     ];
 
     return (<select {...input} className={className}>
@@ -27,10 +28,10 @@ class UserProfile extends React.Component {
 
   shirtSizeSelect = ({input, className}) => {
     let sizes = [
-      'X-Small', 'Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
+      'Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
     ];
     let values = [
-      'XS', 'S', 'M', 'L', 'XL', 'XXL'
+      'S', 'M', 'L', 'XL', 'XXL'
     ];
 
     return (<select {...input} className={className}>
