@@ -26,6 +26,10 @@ module.exports = function(app) {
       newEvents = [];
       updated = 0;
 
+      if (!events || events.length === 0) {
+        resolve([]);
+      }
+
       events.forEach((event) => {
         User.count({event})
           .catch(logging.error)
@@ -47,8 +51,8 @@ module.exports = function(app) {
     return Event.find()
       .select('name alias logo closeTime')
       .exec()
-      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(events => res.json(events));
   });
 
