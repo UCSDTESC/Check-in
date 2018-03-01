@@ -195,10 +195,6 @@ class CheckinPage extends React.Component {
 
     return (
       <div className="full-height">
-        <div className="hexagon-hero__background checkin__background">
-          <div className="hexagon-hero__water"></div>
-          <div className="hexagon-hero__beach"></div>
-        </div>
         <Modal isOpen={isModalShowing} toggle={this.toggleModal}
           className="modal-lg">
           <ModalHeader toggle={this.toggleModal}>Liability Waiver</ModalHeader>

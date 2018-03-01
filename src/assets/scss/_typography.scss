@@ -1,8 +1,13 @@
 //Include fonts
-@import 'https://fonts.googleapis.com/css?family=Source+Sans+Pro|Reem+Kufi:300,400,600';
+@import 'https://fonts.googleapis.com/css?family=Quattrocento+Sans:300,400,600';
 
-$body-font-family: 'Source Sans Pro', Helvetica, Roboto, Arial, sans-serif !default;
-$header-font-family: 'Reem Kufi', Helvetica, Roboto, Arial, sans-serif !default;
+@font-face {
+  font-family: 'Futura';
+  src: url('../fonts/Futura-Light.ttf')
+}
+
+$body-font-family: 'Quattrocento Sans', Helvetica, Roboto, Arial, sans-serif !default;
+$header-font-family: 'Futura', Helvetica, Roboto, Arial, sans-serif !default;
 $input-font-family: $header-font-family;
 
 body {
@@ -16,7 +21,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: $dark-blue;
+  color: $header-font-color;
   font-family: $header-font-family;
   letter-spacing: 0.1rem;
 }

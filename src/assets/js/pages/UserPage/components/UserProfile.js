@@ -129,7 +129,7 @@ class UserProfile extends React.Component {
           <Field component="input" type="text" name="website"
             className={`sd-form__input-text user-profile__input
             user-profile__website`}
-            placeholder="https://www.tesccheckin.com/" />
+            placeholder="https://www.tesc.events/" />
         </div>
       </div>
       <div className="row mt-4">
