@@ -13,7 +13,8 @@ module.exports.up = function (done) {
       events.insert({
         name,
         alias: 'hackxx',
-        logo: 'http://hackxx.sdhacks.io/images/logo.png',
+        logo: 'https://s3-us-west-1.amazonaws.com/tesc-checkin/public/' +
+          'logos/hackxx.png',
         organisers: [admin._id]
       }, done);
     })

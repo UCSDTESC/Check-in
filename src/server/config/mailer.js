@@ -29,6 +29,12 @@ module.exports = function() {
     views: {
       root: EMAIL_PATH,
     },
+    juice: true,
+    juiceResources: {
+      webResources: {
+        relativeTo: EMAIL_PATH
+      }
+    },
     transport: transporter
   });
 

@@ -125,7 +125,7 @@ module.exports = function(app) {
         .send({
           template: 'confirmation',
           message: {
-            to: account.email
+            to: `"${user.firstName} ${user.lastName}" <${account.email}>`
           },
           locals: {
             'user': user,

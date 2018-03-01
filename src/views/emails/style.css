@@ -1,18 +1,13 @@
 @import url('https://fonts.googleapis.com/css?family=Reem+Kufi');
 
-$primary-color: #2B6177;
-$gray: #666666;
-
 h1 {
   font-family: 'Reem Kufi', sans-serif;
   letter-spacing: 1.6px;
-  color: $primary-color;
+  color: #2B6177;
   line-height: 1em;
 }
 
 .content {
-  background: url('https://s3-us-west-1.amazonaws.com/sdhacks2017-production/assets/email-background.png');
-  background-size: cover;
   max-width: 600px !important;
   border-spacing: 0;
   border-collapse: collapse;
@@ -23,11 +18,11 @@ h1 {
   font-size: 18px;
   line-height: 150%;
   margin: 0;
-  padding: 2rem;
+  padding: 2rem; 
+}
 
-  p {
-    color: $gray;
-  }
+.content p {
+  color: #666666;
 }
 
 .refer-text {
@@ -35,8 +30,8 @@ h1 {
 }
 
 .logo {
-  max-width: 128px;
-  max-height: 128px;
+  width: 128px;
+  height: 128px;
   margin-bottom: 2rem;
 }
 
