@@ -42,7 +42,8 @@ const createValidator = (options) => (values) => {
   }
 
   if (values.birthdateYear > 1999) {
-    if (values.university.indexOf('The University of California') === -1) {
+    if (!values.university ||
+        values.university.indexOf('The University of California') === -1) {
       errors.birthdateYear = 'Invalid Year';
     }
   }

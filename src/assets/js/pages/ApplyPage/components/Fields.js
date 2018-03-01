@@ -179,8 +179,9 @@ creates.errorMajorPicker =
 
 creates.createLabel = function createLabel(text, required=true, className='',
   forTag='') {
-  return (<label className={required ? 'sd-form__required ' +
-    className : className} htmlFor={forTag}>{text}</label>);
+  return (<label className={'sd-form__label ' + (required ?
+    'sd-form__required ' + className : className)}
+    htmlFor={forTag}>{text}</label>);
 };
 
 creates.createInput = function createInput(name, placeholder, type='text',

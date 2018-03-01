@@ -10,9 +10,9 @@
 
   // Default hidden navigation bar
   &__background {
+    @include input-style;
     background-color: $white;
     opacity: 0;
-    box-shadow: $default-shadow;
     position: absolute;
     top: 0;
     bottom: 0;

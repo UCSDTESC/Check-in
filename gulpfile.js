@@ -9,8 +9,10 @@ var gulp = require('gulp'),
   webpack = require('webpack'),
   eslint = require('gulp-eslint'),
   plumber = require('gulp-plumber'),
-  gutil = require('gulp-util');
-let browserSync = gutil.env.production ? undefined : require('browser-sync');
+  gutil = require('gulp-util'),
+  gulpif = require('gulp-if');
+let browserSync = gutil.env.production ?
+  undefined : require('browser-sync').create();
 
 const paths = {
   src: [
@@ -47,11 +49,7 @@ gulp.task('css', function () {
     .pipe(rename({suffix: '.min'}))
     .pipe(sourcemaps.write())
     .pipe(gulp.dest('src/assets/public/css'))
-    .on('end', function() {
-      if (browserSync) {
-        browserSync.reload();
-      }
-    });
+    .pipe(gulpif(browserSync, browserSync.stream()));
 });
 
 gulp.task('eslint', function() {
