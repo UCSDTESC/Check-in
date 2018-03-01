@@ -11,9 +11,6 @@ import ReactGA from 'react-ga';
 import Routes from './routes';
 import reducer from './reducers';
 
-import 'jquery';
-import 'bootstrap/dist/js/bootstrap';
-
 ReactGA.initialize('UA-114986326-1');
 
 // Required for Redux Devtools Chrome extension

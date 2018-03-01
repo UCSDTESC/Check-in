@@ -3,6 +3,7 @@ var http = require('http');
 var path = require('path');
 
 var express = require('express');
+var compression = require('compression');
 var bodyParser = require('body-parser');
 var passport = require('passport');
 var throng = require('throng');
@@ -33,6 +34,7 @@ function startInstance() {
   var port = process.env.PORT || 3000;
   app.listen(port);
 
+  app.use(compression());
   app.use(bodyParser.json({type: 'application/json', limit: '50mb'}));
   app.use(bodyParser.urlencoded({
     extended: true,
