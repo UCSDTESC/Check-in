@@ -1,7 +1,7 @@
 .user-profile {
   margin-top: 1rem;
   font-family: $header-font-family;
-  color: $dark-blue;
+  color: $tesc-blue;
 
   h4 {
     margin-bottom: 1rem;
@@ -90,11 +90,10 @@
 
   &__school-image {
     width: 100%;
-    border: 2px solid $dark-blue;
+    border: 2px solid $tesc-blue;
     border-radius: $global-radius;
     background-color: $white;
     padding: 0.5rem 1rem;
-    box-shadow: $extended-shadow;
     max-height: 3rem;
 
     @include media-breakpoint-up(md) {

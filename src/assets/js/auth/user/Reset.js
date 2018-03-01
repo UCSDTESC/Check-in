@@ -79,10 +79,6 @@ class Reset extends React.Component {
     return (
       <form className="user-login"
         onSubmit={this.props.handleSubmit}>
-        <div className="hexagon-hero__background user-login__background">
-          <div className="hexagon-hero__water"></div>
-          <div className="hexagon-hero__beach"></div>
-        </div>
         <div className="user-login__above">
           <div className="user-login__alerts">
             {this.renderErrorAlert()}
