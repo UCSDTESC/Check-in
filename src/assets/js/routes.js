@@ -12,7 +12,7 @@ import {AUTH_USER as AUTH_ADMIN} from './auth/admin/actions/types';
 import {AUTH_USER} from './auth/user/actions/types';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
-import UserLayout from './layouts/User';
+import UserLayout from './layouts/user';
 import HomePage from './pages/HomePage';
 import ApplyPage from './pages/ApplyPage';
 import Dashboard from './pages/DashboardPage';
