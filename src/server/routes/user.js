@@ -80,7 +80,7 @@ module.exports = function(app) {
     function(req, res) {
       var user = req.user;
       const delta = req.body;
-      console.log(`User ${user._id} has updated ${Object.keys(delta).length} `+
+      logging.info(`User ${user._id} has updated ${Object.keys(delta).length} `+
       'fields in their profile');
 
       // Ensure final delta is only editing editable fields.
@@ -104,7 +104,7 @@ module.exports = function(app) {
           if (req.file) {
             return user.attach('resume', {path: req.file.path}, (error) =>{
               if (error) {
-                console.error(error);
+                logging.error(error);
                 return Errors.respondUserError(res, Errors.RESUME_UPDATE_ERROR);
               }
               user.save();

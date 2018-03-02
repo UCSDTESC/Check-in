@@ -75,7 +75,7 @@ const userLogin = new LocalStrategy(localUserOptions,
           return done(err);
         }
         if (!account || account.deleted) {
-          return done(null, false, {error: returnMessages.INCORRECT_LOGIN});
+          return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
         }
 
         account.comparePassword(password, function(err, isMatch) {
