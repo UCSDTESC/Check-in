@@ -6,15 +6,12 @@ import {BrowserRouter as Router} from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 import {render} from 'react-dom';
 import LoadingBar from 'react-redux-loading-bar';
-//import ReactGA from 'react-ga';
+import ReactGA from 'react-ga';
 
 import Routes from './routes';
 import reducer from './reducers';
 
-import 'jquery';
-import 'bootstrap/dist/js/bootstrap';
-
-//ReactGA.initialize('UA-80513105-1');
+ReactGA.initialize('UA-114986326-1');
 
 // Required for Redux Devtools Chrome extension
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ||
