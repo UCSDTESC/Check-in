@@ -43,58 +43,6 @@
     margin: .5rem .75rem .75rem $left-padding;
   }
 
-  &__status-box {
-    text-align: left;
-    font-family: $header-font-family;
-    font-size: 1.2rem;
-
-    @include media-breakpoint-up(md) {
-      text-align: right;
-    }
-  }
-
-  &__status {
-    &--confirmed {
-      color: $default-green;
-    }
-
-    &--rejected, &--declined, &--late {
-      color: $default-red;
-    }
-
-    &--waitlisted {
-      color: $default-blue;
-    }
-
-    &--unconfirmed {
-      color: $default-purple;
-    }
-
-    &--applied {
-      color: $default-purple;
-    }
-  }
-
-  &__bussing {
-    margin-right: 1rem;
-
-    &--confirmed {
-      color: $default-purple;
-    }
-
-    &--declined {
-      color: $default-red;
-    }
-
-    &--unavailable {
-      color: $default-red;
-    }
-  }
-
-  &__rsvp {
-    margin-left: 1rem;
-  }
-
   &__alerts {
     width: 100%;
   }
