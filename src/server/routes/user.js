@@ -4,12 +4,22 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
 const logging = require('../config/logging');
+const upload = require('../config/uploads')();
 
 const {setUserInfo} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const User = mongoose.model('User');
 const Event = mongoose.model('Event');
+
+const editableFields = [
+  'teammates', 'food', 'diet', 'travel', 'shirtSize', 'github', 'website',
+  'shareResume', 'gender'
+];
+const readOnlyFields = [
+  'status', 'firstName', 'lastName', 'university', 'email', 'phone', 'resume',
+  'availableBus', 'bussing'
+];
 
 module.exports = function(app) {
   const userRoute = express.Router();
@@ -29,6 +39,18 @@ module.exports = function(app) {
     return jwt.sign(user, process.env.SESSION_SECRET, {
       expiresIn: 10080
     });
+  }
+
+  /**
+   * Returns an output object that has profile fields of the user.
+   * @param {Object} user The user object to output.
+   */
+  function outputCurrentUser(user) {
+    var outputUser = {};
+    [... editableFields, ...readOnlyFields].forEach(function(field) {
+      outputUser[field] = user[field];
+    });
+    return outputUser;
   }
 
   // Authentication
@@ -53,4 +75,45 @@ module.exports = function(app) {
         return Errors.respondUserError(res, Errors.USER_NOT_REGISTERED);
       });
   });
+
+  userRoute.post('/update/:eventAlias', upload.single('resume'), requireAuth,
+    function(req, res) {
+      var user = req.user;
+      const delta = req.body;
+      console.log(`User ${user._id} has updated ${Object.keys(delta).length} `+
+      'fields in their profile');
+
+      // Ensure final delta is only editing editable fields.
+      var updateDelta = {};
+      Object.keys(delta).forEach(function(field) {
+        if (editableFields.indexOf(field) !== -1) {
+          updateDelta[field] = delta[field];
+        }
+      });
+
+      return Event.findOne({alias: req.params.eventAlias})
+        .then((event) => {
+          return User.findOneAndUpdate({account: user, event: event},
+            {$set: updateDelta}, {new: true});
+        })
+        .then((user) => {
+          if (!user) {
+            return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
+          }
+
+          if (req.file) {
+            return user.attach('resume', {path: req.file.path}, (error) =>{
+              if (error) {
+                console.error(error);
+                return Errors.respondUserError(res, Errors.RESUME_UPDATE_ERROR);
+              }
+              user.save();
+              return res.json(outputCurrentUser(user));
+            });
+          }
+
+          return res.json(outputCurrentUser(user));
+        })
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+    });
 };

@@ -74,9 +74,9 @@ export const getCurrentUser = (eventAlias) => {
  * Updates a field for a given user.
  * @returns {Promise} A promise of the request.
  */
-export const updateUserField = (user) => {
+export const updateUserField = (user, eventAlias) => {
   return promisify(request
-    .post('/update')
+    .post('/update/' + eventAlias)
     .field(user)
     .attach('resume', user.resume ? user.resume[0] : null)
     .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))

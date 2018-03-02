@@ -99,88 +99,17 @@ class UserPage extends React.Component {
   }
 
   /**
-   * Renders the status for the navigation bar.
-   * @param {String} status The status of the user in the database.
-   * @returns {Component}
-   */
-  renderUserStatus(status) {
-    // If there is no status
-    if (!status) {
-      status = 'Applied';
-    }
-    let button = <span></span>;
-
-    switch (status) {
-    case ('Unconfirmed'):
-      button = (<button type="button" className={`btn rounded-button
-        rounded-button--small rounded-button--short user-page__rsvp`}
-        onClick={this.toggleRSVP}>
-        RSVP
-      </button>);
-    };
-
-    let statusText = status;
-    switch (status) {
-    case ('Declined'):
-    case ('Rejected'):
-      statusText = 'Not Attending';
-      break;
-    case ('Confirmed'):
-      statusText = 'Attending';
-      break;
-    case ('Waitlisted'):
-      statusText = 'On Waitlist';
-      break;
-    }
-
-    return (<span>
-      Status:&nbsp;
-      <span className={`user-page__status
-        user-page__status--${status.toLowerCase()}`}>
-        {statusText}
-      </span>
-      {button}
-    </span>);
-  }
-
-  /**
-   * Renders the bussing status for the current user.
-   * @param {Object} user The current user to render for.
-   * @returns {Component}
-   */
-  renderUserBussing = (user) => {
-    if (user.status !== 'Confirmed') {
-      return <span></span>;
-    }
-
-    let statusClass = 'user-page__bussing user-page__bussing--';
-
-    if (!user.availableBus) {
-      return (<span>Bussing:&nbsp;
-        <span className={statusClass + 'unavailable'}>
-          Not Available
-        </span>
-      </span>);
-    }
-
-    return (<span>Bussing:&nbsp;
-      <span className={statusClass + (user.bussing ? 'confirmed' : 'declined')}>
-        {user.bussing ? user.availableBus : 'Declined'}
-      </span>
-    </span>);
-  }
-
-  /**
    * Requests that the server update the current user to the new, given values.
    * @param {Object} newUser The new user object to update to.
    */
   updateUser = (newUser) => {
     let {updateCurrentUser} = this.props;
+    let {eventAlias} = this.props.match.params;
     let oldUser = this.props.user;
     // Delta is all the changed fields in the form
     const delta = diff(oldUser, newUser);
 
-    updateUserField(delta)
+    updateUserField(delta, eventAlias)
       .then((newUser) => {
         updateCurrentUser(newUser);
         this.createAlert('You have successfully updated your profile',
@@ -233,16 +162,11 @@ class UserPage extends React.Component {
           </div>
 
           <NavHeader title="Your Profile" />
-
-          <div className="user-page__status-box container">
-            {this.renderUserBussing(user)}
-            {this.renderUserStatus(user.status)}
-          </div>
         </div>
 
         <div className="user-page__container container">
           <UserProfile user={user} initialValues={user}
-            onSubmit={this.updateUser} />
+            onSubmit={this.updateUser} toggleRSVP={this.toggleRSVP} />
         </div>
       </div>
     );

@@ -37,7 +37,7 @@ class PersonalSection extends React.Component {
       <label>
         <Field component="input" type="checkbox" name="shareResume"
           className="sd-form__input-checkbox" />
-        I would like {event && event.name} to share my resume and personal&nbsp;
+        I would like {event && event.name} to share my resume and personal{' '}
         information so that companies may contact me about job opportunities
       </label>);
   }

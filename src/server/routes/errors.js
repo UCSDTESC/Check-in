@@ -22,6 +22,7 @@ module.exports = (logging) => {
     NOT_ORGANISER: 'You are not an organiser of this event',
     PHONE_NUMBER_INVALID: 'Your phone number must be exactly 10 digits',
     EMAIL_IN_USE: 'This email has already been used',
-    USER_NOT_REGISTERED: 'This user is not registered for this event'
+    USER_NOT_REGISTERED: 'This user is not registered for this event',
+    RESUME_UPDATE_ERROR: 'There was an error updating your resume'
   };
 };

@@ -106,7 +106,7 @@ class Login extends React.Component {
               <label>Email</label>
               <Field name="email" component="input" type="email"
                 className="form-control sd-form__input-text"
-                placeholder="Email" />
+                placeholder="email@ucsd.edu" />
             </div>
           </div>
           <div className="user-login__password row sd-form__row">

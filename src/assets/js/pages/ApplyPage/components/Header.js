@@ -20,7 +20,8 @@ export default class Header extends React.Component {
           <div className="col-12 col-md-2 text-center">
             <img className="sd-form__header-logo" src={logo} />
           </div>
-          <div className="col-12 col-md-10 text-left align-self-center">
+          <div className={`col-12 col-md-10 text-center text-md-left
+          align-self-center`}>
             <div className="sd-form__header-text">Register for {name}</div>
           </div>
         </div>
