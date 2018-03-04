@@ -45,8 +45,14 @@ var UserSchema = new Schema({
   // Declares which university the user attends
   university: {
     type: String,
+    enum: ['uni', 'hs'],
     trim: true,
     required: [true, 'You must have a university or high school']
+  },
+  // Declares the UCSD student ID
+  pid: {
+    type: String,
+    trim: true
   },
   // Declares which major the user has specified
   major: {

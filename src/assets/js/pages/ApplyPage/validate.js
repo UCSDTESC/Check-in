@@ -24,6 +24,10 @@ const createValidator = (options) => (values) => {
     required.push('resume');
   }
 
+  if (values.institution === 'ucsd') {
+    required.push('pid');
+  }
+
   const notValid = required.filter(name => !(name in values));
   notValid.forEach(name => errors[name] = 'Required');
 
