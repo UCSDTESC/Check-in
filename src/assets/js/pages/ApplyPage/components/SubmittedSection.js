@@ -8,7 +8,6 @@ class SubmittedSection extends React.Component {
 
   render() {
     let {event} = this.props;
-    console.log(event);
 
     return (
       <div className="container">

@@ -13,7 +13,7 @@ const Account = mongoose.model('Account');
 const autoPopulateFields = [
   'firstName', 'lastName', 'gender', 'phone',
   'university', 'major', 'year', 'github', 'website', 'shareResume', 'food',
-  'diet', 'shirtSize'
+  'diet', 'shirtSize', 'pid'
 ];
 
 module.exports = function(app) {
@@ -48,6 +48,11 @@ module.exports = function(app) {
         outOfState: values.outOfState,
         city: values.city
       };
+    }
+
+    if (values.institution === 'ucsd') {
+      user.institution = 'uni';
+      user.university = 'The University of California, San Diego';
     }
 
     user.teammates = [];
@@ -101,7 +106,8 @@ module.exports = function(app) {
         return true;
       })
       .then(() => applyAutoPopulate(user, values))
-      .then((values) => applyManualField(user, values, event, account))
+      .then((populatedValues) =>
+        applyManualField(user, populatedValues, event, account))
       .then(() => {
         if (req.file) {
           return user.attach('resume', {path: req.file.path});
