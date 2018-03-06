@@ -94,7 +94,6 @@ module.exports = function(app) {
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
-      
       let query = User.find({event: req.event});
 
       return query
