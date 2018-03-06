@@ -178,7 +178,6 @@ class ApplyPage extends React.Component {
     };
 
     let validator = createValidator(options);
-    console.log(event);
     if (!event) {
       return (<div className="page apply-page apply-page--loading">
         <NavHeader />
