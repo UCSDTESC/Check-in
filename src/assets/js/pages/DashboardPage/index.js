@@ -27,7 +27,7 @@ class DashboardPage extends React.Component {
 
   render() {
     let {events} = this.props;
-
+    console.log(events);
     return (
       <div className="page page--admin dashboard-page">
         <div className="container-fluid">
