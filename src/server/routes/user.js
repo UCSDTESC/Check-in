@@ -5,12 +5,14 @@ const mongoose = require('mongoose');
 
 const logging = require('../config/logging');
 const upload = require('../config/uploads')();
+var {createTESCEmail} = require('../config/mailer')();
 
 const {setUserInfo} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const User = mongoose.model('User');
 const Event = mongoose.model('Event');
+const Account = mongoose.model('Account');
 
 const editableFields = [
   'teammates', 'food', 'diet', 'travel', 'shirtSize', 'github', 'website',
@@ -61,6 +63,56 @@ module.exports = function(app) {
       token: `JWT ${generateToken(userInfo)}`,
       user: userInfo
     });
+  });
+
+  userRoute.post('/forgot', function (req, res) {
+    if (!req.body.email) {
+      return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+    }
+
+    return Account.findOne({email: req.body.email}, function(e, account) {
+      if (e || account === null) {
+        return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
+      }
+
+      return createTESCEmail()
+        .send({
+          template: 'forgot',
+          message: {
+            to: account.email
+          },
+          locals: {
+            'account': account,
+            'resetUrl': req.protocol + '://' + req.get('host') +
+              '/user/reset/' + account._id
+          }
+        })
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.EMAIL_ERROR);
+        })
+        .then(() => {
+          return res.json({success: true});
+        });
+    });
+  });
+
+  userRoute.post('/reset', function(req, res) {
+    if (!req.body.id || !req.body.newPassword) {
+      return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+    }
+
+    const password = req.body.newPassword;
+
+    return Account.findById(req.body.id, function(e, user) {
+      if (e || user === null) {
+        return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
+      }
+
+      user.password = password;
+      user.save();
+      return res.json({success: true});
+    });
+
   });
 
   userRoute.get('/current/:eventAlias', requireAuth, function(req, res) {

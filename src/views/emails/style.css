@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Reem+Kufi');
+@import url('https://fonts.googleapis.com/css?family=Quattrocento+Sans:300,400,600');
 
 h1 {
   font-family: 'Reem Kufi', sans-serif;
@@ -11,7 +11,7 @@ h1 {
   max-width: 600px !important;
   border-spacing: 0;
   border-collapse: collapse;
-  font-family: 'Reem Kufi', 'Source Sans Pro','helvetica neue',helvetica,'Segoe UI',Roboto,geneva,sans-serif;
+  font-family: 'Quattrocento Sans', Helvetica, Roboto, Arial, sans-serif;
   height: 100% !important;
   width: 100% !important;
   color: #646464;
@@ -32,6 +32,11 @@ h1 {
 .logo {
   width: 128px;
   height: 128px;
+  margin-bottom: 2rem;
+}
+
+.tesc-logo {
+  height: 50px;
   margin-bottom: 2rem;
 }
 

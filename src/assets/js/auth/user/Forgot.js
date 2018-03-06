@@ -79,9 +79,17 @@ class Forgot extends React.Component {
     return (
       <form className="user-login"
         onSubmit={this.props.handleSubmit}>
-        <NavHeader title="Forgot Password" />
+        <div className="user-login__above">
+          <div className="user-login__alerts">
+            {this.renderErrorAlert()}
+            {this.renderSuccessAlert()}
+          </div>
+          <NavHeader />
+        </div>
 
         <div className="user-login__container sd-form">
+          {this.renderErrorAlert()}
+          {this.renderSuccessAlert()}
           <div className="user-login__username row sd-form__row">
             <div className="col-12">
               <label>Email</label>
