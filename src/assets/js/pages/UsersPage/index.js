@@ -71,7 +71,6 @@ class UsersPage extends React.Component {
     let eventAlias = this.props.match.params.eventAlias;
 
     showLoading();
-
     loadAllUsers(eventAlias)
       .then(res => {
         hideLoading();
