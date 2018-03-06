@@ -35,6 +35,11 @@ var EventSchema = new Schema({
   homepage: {
     type: String,
     require: [true, 'Your event must have an event page']
+  },
+  description: {
+    type: String,
+    trim: true,
+    required: [true, 'Your event must have a description']
   }
 });
 
