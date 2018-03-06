@@ -82,6 +82,8 @@ class Forgot extends React.Component {
         <NavHeader title="Forgot Password" />
 
         <div className="user-login__container sd-form">
+          {this.renderErrorAlert()}
+          {this.renderSuccessAlert()}
           <div className="user-login__username row sd-form__row">
             <div className="col-12">
               <label>Email</label>
