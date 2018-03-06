@@ -19,7 +19,7 @@ html
             columns
               h1 Dear #{user.firstName} #{user.lastName},
               p.body
-                | Exciting news! We’ve just received your application to SD Hacks 2017! One thing though: we need you to confirm your email here:
+                | Exciting news! We’ve just received your application to #{event.name}! One thing though: we need you to confirm your email here:
                 br
                 a(href=confirmUrl)
                   img.button(src="https://s3-us-west-1.amazonaws.com/sdhacks2017-production/assets/email-confirm-button.png")
