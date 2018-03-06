@@ -40,7 +40,8 @@ module.exports = function(app) {
     user.account = account;
 
     user.birthdate = values.birthdateYear + '-' +
-      values.birthdateMonth + '-' + values.birthdateDay
+      values.birthdateMonth.padStart(2, '0') + '-' +
+      values.birthdateDay.padStart(2, '0')
       + 'T00:00:00.000Z'; // Timezone agnostic
 
     if (values.outOfState && values.city) {
