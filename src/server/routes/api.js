@@ -133,8 +133,19 @@ module.exports = function(app) {
     (req, res) =>
       Admin.find({deleted: {$ne: true}}).sort({createdAt: -1})
         .exec()
+        .then((response) => res.json(response))
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+  );
+
+  api.post('/admins/register', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
+    (req, res) =>
+      Admin.create(req.body)
+        .then(() =>
+          res.json({success: true})
+        )
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(res.json)
   );
 
   // Use API for any API endpoints
