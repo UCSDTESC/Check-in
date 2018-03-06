@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    block head
+      meta(charset="utf-8")
+      meta(name="viewport", content="width=device-width")
+      meta(http-equiv="X-UA-Compatible", content="IE=edge")
+      meta(name="x-apple-disable-message-reformatting")
+      title= subject
+      link(rel="stylesheet", href="style.css", data-inline)
+  body
+    container
+      spacer(size="16")
+      div.content
+        center
+          img.tesc-logo(src="https://www.tesc.events/img/vectors/tesc-blue.svg")
+        row
+          center
+            columns
+              h1 Forgot your Password?
+              p.body
+                | No problem! Here's a link you can use to reset your password:
+                br
+                a(href=resetUrl)
+                  img.button(src="https://s3-us-west-1.amazonaws.com/sdhacks2017-production/assets/email-reset-button.png")
+                p.refer-text If that link doesn’t work, copy paste this into your browser:
+                a.refer-link(href=resetUrl) #{resetUrl}
