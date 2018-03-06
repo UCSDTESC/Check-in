@@ -96,6 +96,25 @@ module.exports = function(app) {
     });
   });
 
+  userRoute.post('/reset', function(req, res) {
+    if (!req.body.id || !req.body.newPassword) {
+      return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+    }
+
+    const password = req.body.newPassword;
+
+    return Account.findById(req.body.id, function(e, user) {
+      if (e || user === null) {
+        return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
+      }
+
+      user.password = password;
+      user.save();
+      return res.json({success: true});
+    });
+
+  });
+
   userRoute.get('/current/:eventAlias', requireAuth, function(req, res) {
     Event.findOne({alias: req.params.eventAlias})
       .then((event) => {
