@@ -196,7 +196,7 @@ class ApplyPage extends React.Component {
                 {event.description}
               </div>
             </div>
-            {event && <Header name={event.name} logo={event.logo} />}
+            {event && <Header name={event.name} logo={event.logo} email={event.email} />}
             {page === 1 && <PersonalSection onSubmit={this.nextPage}
               validate={validator} event={event} options={options} />}
             {page === 2 && <ResponseSection onSubmit={this.nextPage}

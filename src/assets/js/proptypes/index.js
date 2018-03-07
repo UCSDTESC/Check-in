@@ -26,5 +26,6 @@ export const Event = {
   users: PropTypes.number.isRequired,
   closeTime: PropTypes.instanceOf(Date),
   homepage: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired
+  description: PropTypes.string.isRequired,
+  email: PropTypes.string.isRequired
 };

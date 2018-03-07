@@ -8,7 +8,7 @@ export default class Header extends React.Component {
   };
 
   render() {
-    let {name, logo} = this.props;
+    let {name, logo, email} = this.props;
 
     if (!name || !logo) {
       return (<div></div>);
@@ -23,6 +23,7 @@ export default class Header extends React.Component {
           <div className={`col-12 col-md-10 text-center text-md-left
           align-self-center`}>
             <div className="sd-form__header-text">Register for {name}</div>
+            <a style={{float : 'right'}} href={"mailto:" + email}> Contact Organiser </a> 
           </div>
         </div>
       </div>
