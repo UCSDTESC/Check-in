@@ -118,11 +118,12 @@ module.exports = function(app) {
   userRoute.get('/current/:eventAlias', requireAuth, function(req, res) {
     Event.findOne({alias: req.params.eventAlias})
       .then((event) => {
-        return User.findOne({account: req.user, event});
+        return User
+              .findOne({account: req.user, event})
+              .populate('event')
+              .exec();
       })
-      .then((user) => {
-        return res.json(user);
-      })
+      .then(obj => res.json(obj))
       .catch(() => {
         return Errors.respondUserError(res, Errors.USER_NOT_REGISTERED);
       });
