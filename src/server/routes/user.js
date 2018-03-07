@@ -119,9 +119,9 @@ module.exports = function(app) {
     Event.findOne({alias: req.params.eventAlias})
       .then((event) => {
         return User
-              .findOne({account: req.user, event})
-              .populate('event')
-              .exec();
+          .findOne({account: req.user, event})
+          .populate('event')
+          .exec();
       })
       .then(obj => res.json(obj))
       .catch(() => {

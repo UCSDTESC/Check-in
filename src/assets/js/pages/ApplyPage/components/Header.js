@@ -4,11 +4,13 @@ import PropTypes from 'prop-types';
 export default class Header extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    logo: PropTypes.string.isRequired
+    logo: PropTypes.string.isRequired,
+    email: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired
   };
 
   render() {
-    let {name, logo, email, description} = this.props;
+    let {name, logo, description} = this.props;
 
     if (!name || !logo) {
       return (<div></div>);

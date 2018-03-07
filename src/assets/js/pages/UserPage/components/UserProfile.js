@@ -126,7 +126,7 @@ class UserProfile extends React.Component {
       </h4>
 
       If you&#39;ve made a mistake in this section, please{' '}
-      <a href={"mailto:" + user.event.email}
+      <a href={'mailto:' + user.event.email}
         className="sd-link__underline">
         email us
       </a>{' '}
@@ -247,10 +247,11 @@ class UserProfile extends React.Component {
             </div>
 
             <h1 className="order-2 order-md-1 col-md-10 col-lg-8">
-              Your {' '} 
-              <a href={user.event.homepage} className="sd-link__underline" target="_blank"> 
+              Your {' '}
+              <a href={user.event.homepage} className="sd-link__underline"
+                target="_blank">
                 {user.event.name}
-              </a> 
+              </a>
               &nbsp;Application
             </h1>
           </div>

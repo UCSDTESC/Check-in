@@ -191,7 +191,7 @@ class ApplyPage extends React.Component {
         <div className="sd-form__wrapper">
           <Progress percent={(page * 100) / 4} />
           <div className="sd-form">
-            {event && <Header name={event.name} logo={event.logo} email={event.email} 
+            {event && <Header name={event.name} logo={event.logo}
               description={event.description} />}
             {page === 1 && <PersonalSection onSubmit={this.nextPage}
               validate={validator} event={event} options={options} />}
