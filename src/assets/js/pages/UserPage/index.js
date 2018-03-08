@@ -153,7 +153,7 @@ class UserPage extends React.Component {
     let {alerts, showRSVP} = this.state;
     let {user} = this.props;
 
-    if (!user) {
+    if (!user || !user.event) {
       return <Loading />;
     }
 
