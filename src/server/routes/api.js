@@ -95,10 +95,13 @@ module.exports = function(app) {
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
-      return User.find({event: req.event})
+      let query = User.find({event: req.event});
+
+      return query
+        .populate('account')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(res.json);
+        .then(users => res.json(users));
     });
 
   api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),

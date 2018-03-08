@@ -25,6 +25,7 @@ export default class Header extends React.Component {
           <div className={`col-12 col-md-10 text-center text-md-left
           align-self-center`}>
             <div className="sd-form__header-text">Register for {name}</div>
+            {description && <div className="sd-form__desc">{description}</div>}
           </div>
           <div className="col-12 sd-form__desc">
             {description}

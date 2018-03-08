@@ -94,11 +94,6 @@
     border-bottom: none;
   }
 
-  &__desc {
-    margin : 1.5rem 0 2rem 0;
-    text-align: center;
-  }
-
   // Resets
   select,
   input[type="radio"],
@@ -289,6 +284,10 @@
 
     &-logo {
       max-height: 5rem;
+
+      @include media-breakpoint-up(md) {
+        max-height: 6rem;
+      }
     }
 
     &--close {
