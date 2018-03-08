@@ -1,8 +1,8 @@
-<img src="https://github.com/UCSDTESC/Check-in/blob/master/src/assets/public/img/tesc-logo.png" height="40px" />
+<img src="https://github.com/UCSDTESC/Check-in/blob/master/src/assets/public/img/vectors/tesc-blue.svg" height="40px" />
 
-# TESC Check-In
+# TESC Events
 [![CircleCI](https://circleci.com/gh/UCSDTESC/Check-in.svg?style=svg)](https://circleci.com/gh/UCSDTESC/Check-in)
-### TESC Check-In is a purpose-built registration and event management system for hackathons, recruiting events or any number of other student-centred initiatives. 
+### TESC Events is a purpose-built registration and event management system for hackathons, recruiting events or any number of other student-centred initiatives. 
 The system allows organisers of events to create, update and manage their events registration system. Students are able to register for the events, manage their registration information and check in to the events all through the platform.
 
 ## Requirements
