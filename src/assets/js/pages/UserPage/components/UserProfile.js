@@ -99,14 +99,14 @@ class UserProfile extends React.Component {
     let statusClass = 'user-profile__bussing user-profile__bussing--';
 
     if (!user.availableBus) {
-      return (<span>Bussing:&nbsp;
+      return (<span>Bussing {' '}
         <span className={statusClass + 'unavailable'}>
           Not Available
         </span>
       </span>);
     }
 
-    return (<span>Bussing:&nbsp;
+    return (<span>Bussing: {' '}
       <span className={statusClass + (user.bussing ? 'confirmed' : 'declined')}>
         {user.bussing ? user.availableBus : 'Declined'}
       </span>
@@ -252,7 +252,7 @@ class UserProfile extends React.Component {
                 target="_blank">
                 {user.event.name}
               </a>
-              &nbsp;Application
+              {' '} Application
             </h1>
           </div>
           <div className={`user-profile__apply ${pristine ?
