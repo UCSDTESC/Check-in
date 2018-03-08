@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Field, reduxForm} from 'redux-form';
 
+import Loading from '~/components/Loading';
+
 import FileField from '~/components/FileField';
 
 class UserProfile extends React.Component {
@@ -235,6 +237,10 @@ class UserProfile extends React.Component {
 
   render() {
     let {user, pristine, submitting, handleSubmit} = this.props;
+
+    if (!user.event) {
+      return <Loading />;
+    }
 
     return (
       <form className="user-profile" onSubmit={handleSubmit}>

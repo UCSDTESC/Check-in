@@ -12,6 +12,8 @@ import {getCurrentUser, updateCurrentUser} from './actions';
 
 import NavHeader from '~/components/NavHeader';
 
+import Loading from '~/components/Loading';
+
 import {updateUserField, rsvpUser} from '~/data/User';
 
 import {Event as EventPropType} from '~/proptypes';
@@ -150,6 +152,10 @@ class UserPage extends React.Component {
   render() {
     let {alerts, showRSVP} = this.state;
     let {user} = this.props;
+
+    if (!user) {
+      return <Loading />;
+    }
 
     return (
       <div className="user-page">
