@@ -99,14 +99,14 @@ class UserProfile extends React.Component {
     let statusClass = 'user-profile__bussing user-profile__bussing--';
 
     if (!user.availableBus) {
-      return (<span>Bussing:&nbsp;
+      return (<span>Bussing {' '}
         <span className={statusClass + 'unavailable'}>
           Not Available
         </span>
       </span>);
     }
 
-    return (<span>Bussing:&nbsp;
+    return (<span>Bussing: {' '}
       <span className={statusClass + (user.bussing ? 'confirmed' : 'declined')}>
         {user.bussing ? user.availableBus : 'Declined'}
       </span>
@@ -119,9 +119,14 @@ class UserProfile extends React.Component {
 
   renderApplicantInfoSection = (user) => (
     <div className="user-profile__section">
-      <h4>Applicant Info</h4>
+      <h4>
+        Hello, <span className="user-profile__name">
+          {user.firstName} {user.lastName}
+        </span>!
+      </h4>
+
       If you&#39;ve made a mistake in this section, please{' '}
-      <a href="mailto:nick.thomson@tesc.ucsd.edu"
+      <a href={'mailto:' + user.event.email}
         className="sd-link__underline">
         email us
       </a>{' '}
@@ -242,9 +247,12 @@ class UserProfile extends React.Component {
             </div>
 
             <h1 className="order-2 order-md-1 col-md-10 col-lg-8">
-              Hello, <span className="user-profile__name">
-                {user.firstName} {user.lastName}
-              </span>!
+              Your {' '}
+              <a href={user.event.homepage} className="sd-link__underline"
+                target="_blank">
+                {user.event.name}
+              </a>
+              {' '} Application
             </h1>
           </div>
           <div className={`user-profile__apply ${pristine ?

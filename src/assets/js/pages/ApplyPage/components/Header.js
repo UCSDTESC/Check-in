@@ -5,7 +5,8 @@ export default class Header extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
     logo: PropTypes.string.isRequired,
-    description: PropTypes.string
+    email: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired
   };
 
   render() {
@@ -25,6 +26,9 @@ export default class Header extends React.Component {
           align-self-center`}>
             <div className="sd-form__header-text">Register for {name}</div>
             {description && <div className="sd-form__desc">{description}</div>}
+          </div>
+          <div className="col-12 sd-form__desc">
+            {description}
           </div>
         </div>
       </div>

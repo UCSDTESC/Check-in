@@ -86,7 +86,8 @@ module.exports = function(app) {
             logo: event.logo,
             alias: event.alias,
             homepage: event.homepage,
-            description: event.description
+            description: event.description,
+            email: event.email
           });
         });
     });
