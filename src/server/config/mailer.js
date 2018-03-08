@@ -17,9 +17,30 @@ module.exports = function() {
     }
   });
 
+  var createTESCSender = () => ({
+    name: 'TESC Events Team',
+    address: process.env.MAIL_USER
+  });
+
   var createEventSender = (event) => ({
     name: event.name + ' Team',
     address: process.env.MAIL_USER
+  });
+
+  var createTESCEmail = (event) => new Email({
+    message: {
+      from: createTESCSender(event)
+    },
+    views: {
+      root: EMAIL_PATH,
+    },
+    juice: true,
+    juiceResources: {
+      webResources: {
+        relativeTo: EMAIL_PATH
+      }
+    },
+    transport: transporter
   });
 
   var createEventEmail = (event) => new Email({
@@ -39,6 +60,7 @@ module.exports = function() {
   });
 
   return {
-    createEventEmail
+    createEventEmail,
+    createTESCEmail
   };
 };

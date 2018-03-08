@@ -111,10 +111,6 @@ class NavHeader extends React.Component {
             </Link>
           </div>
 
-          <div className={'sd-nav__title'}>
-            {title}
-          </div>
-
           <ul className={`sd-nav__links flex-row ml-md-auto d-none d-md-flex
           align-items-center`}>
             {!authenticated && this.renderUnauthenticatedLinks()}

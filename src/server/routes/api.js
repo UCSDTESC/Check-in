@@ -85,7 +85,8 @@ module.exports = function(app) {
             name: event.name,
             logo: event.logo,
             alias: event.alias,
-            homepage: event.homepage
+            homepage: event.homepage,
+            description: event.description
           });
         });
     });
@@ -93,10 +94,13 @@ module.exports = function(app) {
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
-      return User.find({event: req.event})
+      let query = User.find({event: req.event});
+
+      return query
+        .populate('account')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(res.json);
+        .then(users => res.json(users));
     });
 
   api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
@@ -133,8 +137,19 @@ module.exports = function(app) {
     (req, res) =>
       Admin.find({deleted: {$ne: true}}).sort({createdAt: -1})
         .exec()
+        .then((response) => res.json(response))
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+  );
+
+  api.post('/admins/register', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
+    (req, res) =>
+      Admin.create(req.body)
+        .then(() =>
+          res.json({success: true})
+        )
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(res.json)
   );
 
   // Use API for any API endpoints

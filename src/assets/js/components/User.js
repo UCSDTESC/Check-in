@@ -93,8 +93,7 @@ class User extends React.Component {
             <div className="col-6">
               <h5>Login Information</h5>
               <div className="form-group row mb-2">
-                {this.renderFormField('Username', 'username')}
-                {this.renderFormField('Email', 'email')}
+                {this.renderFormField('Email', 'account.email')}
               </div>
               <h5>Portfolio</h5>
               <div className="form-group row mb-2">
@@ -120,7 +119,7 @@ class User extends React.Component {
                 <span>
                   <h5>Admin Flags</h5>
                   <div className="form-group row mb-2">
-                    {this.renderFormCheckbox('Confirmed', 'confirmed',
+                    {this.renderFormCheckbox('Confirmed', 'account.confirmed',
                       'col-sm-4')}
                     {this.renderFormCheckbox('Checked In', 'checkedIn',
                       'col-sm-4')}
@@ -146,6 +145,7 @@ class User extends React.Component {
                 {this.renderFormField('Shirt Size', 'shirtSize', 'col-sm-4')}
                 {this.renderFormField('Diet', 'diet', 'col-sm-4')}
                 {this.renderFormField('Food', 'food', 'col-sm-4')}
+                {this.renderFormField('PID', 'pid', 'col-sm-4')}
               </div>
               <button type="submit"
                 className="btn rounded-button rounded-button--small"

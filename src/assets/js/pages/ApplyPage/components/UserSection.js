@@ -80,7 +80,7 @@ class UserSection extends React.Component {
         fields.createColumn('col-sm-12',
           <h4 key="0">You&#39;re Almost Done!</h4>,
           <h5 key="1">
-            To complete your application, please create an account
+            To complete your application, please add a password
           </h5>
         ),
         fields.createColumn('col-md-6',

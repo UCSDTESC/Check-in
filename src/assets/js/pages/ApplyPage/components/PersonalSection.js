@@ -37,7 +37,7 @@ class PersonalSection extends React.Component {
       <label>
         <Field component="input" type="checkbox" name="shareResume"
           className="sd-form__input-checkbox" />
-        I would like {event && event.name} to share my resume and personal&nbsp;
+        I would like {event && event.name} to share my resume and personal{' '}
         information so that companies may contact me about job opportunities
       </label>);
   }
@@ -108,27 +108,48 @@ class PersonalSection extends React.Component {
   }
 
   /**
+   * Create the input field for a student's PID for UCSD students
+   * @param {Object} info Information returned by the {@link Fields} companent.
+   * @returns {Component}
+   */
+  showPIDBox(info) {
+    const value = info.institution.input.value;
+    // Only show for UCSD institution
+    if (value !== 'ucsd') {
+      return <span></span>;
+    }
+    return (fields.createRow(
+      fields.createColumn('col',
+        fields.createLabel('Student PID'),
+        fields.createInput('pid', 'AXXXXXXXX')
+      )
+    ));
+  }
+
+  /**
    * Renders the components necessary for students to choose which institution
    * they're coming from.
+   * @param {Boolean} allowHighSchool Whether the High School option should be
+   * rendered.
    * @returns {Component} The institution selection components.
    */
-  renderInstitutionOptions() {
+  renderInstitutionOptions(allowHighSchool) {
     return (<span>
       {fields.createRow(
         fields.createColumn('col-sm-12 no-margin-bottom',
           fields.createLabel('Institution')
         ),
-        fields.createColumn('col-md-4',
+        fields.createColumn('col-md',
           this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
             'UCSD')
         ),
-        fields.createColumn('col-md-4',
+        fields.createColumn('col-md',
           this.createInstitutionCard('uni', 'institution-radio-uni',
             'Other University')
         ),
-        fields.createColumn('col-md-4',
-          this.createInstitutionCard('hs', 'institution-radio-hs',
-            'High School')
+        fields.createColumn('col-md',
+          allowHighSchool ? this.createInstitutionCard('hs',
+            'institution-radio-hs', 'High School') : ''
         ),
         fields.createColumn('col-sm-12',
           <Fields names={['institution']}
@@ -137,6 +158,7 @@ class PersonalSection extends React.Component {
       )}
 
       <Fields names={['institution']} component={this.showInstitutionBox} />
+      <Fields names={['institution']} component={this.showPIDBox} />
     </span>);
   }
 
@@ -193,16 +215,7 @@ class PersonalSection extends React.Component {
         )
       )}
 
-      {options.allowHighSchool && this.renderInstitutionOptions()}
-
-      {!options.allowHighSchool && fields.createRow(
-        fields.createColumn('col-sm-12',
-          fields.createLabel('University'),
-          <Field component={UniversityField} name='university'
-            className="sd-form__input-text"
-            placeholder="University" />
-        )
-      )}
+      {this.renderInstitutionOptions(options.allowHighSchool)}
 
       {fields.createRow(
         fields.createColumn('col-lg-6',

@@ -10,6 +10,7 @@ class UserProfile extends React.Component {
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    toggleRSVP: PropTypes.func.isRequired,
 
     user: PropTypes.object.isRequired
   };
@@ -40,6 +41,78 @@ class UserProfile extends React.Component {
     </select>);
   };
 
+  /**
+   * Renders the status for the navigation bar.
+   * @param {String} status The status of the user in the database.
+   * @returns {Component}
+   */
+  renderUserStatus(status) {
+    // If there is no status
+    if (!status) {
+      status = 'Applied';
+    }
+    let button = <span></span>;
+
+    switch (status) {
+    case ('Unconfirmed'):
+      button = (<button type="button" className={`btn rounded-button
+        rounded-button--small rounded-button--short user-profile__rsvp`}
+        onClick={this.props.toggleRSVP}>
+        RSVP
+      </button>);
+    };
+
+    let statusText = status;
+    switch (status) {
+    case ('Declined'):
+    case ('Rejected'):
+      statusText = 'Not Attending';
+      break;
+    case ('Confirmed'):
+      statusText = 'Attending';
+      break;
+    case ('Waitlisted'):
+      statusText = 'On Waitlist';
+      break;
+    }
+
+    return (<span>
+      Status:{' '}
+      <span className={`user-profile__status
+        user-profile__status--${status.toLowerCase()}`}>
+        {statusText}
+      </span>
+      {button}
+    </span>);
+  }
+
+  /**
+   * Renders the bussing status for the current user.
+   * @param {Object} user The current user to render for.
+   * @returns {Component}
+   */
+  renderUserBussing = (user) => {
+    if (user.status !== 'Confirmed') {
+      return <span></span>;
+    }
+
+    let statusClass = 'user-profile__bussing user-profile__bussing--';
+
+    if (!user.availableBus) {
+      return (<span>Bussing:&nbsp;
+        <span className={statusClass + 'unavailable'}>
+          Not Available
+        </span>
+      </span>);
+    }
+
+    return (<span>Bussing:&nbsp;
+      <span className={statusClass + (user.bussing ? 'confirmed' : 'declined')}>
+        {user.bussing ? user.availableBus : 'Declined'}
+      </span>
+    </span>);
+  }
+
   renderPhoneNumber = (phone) => (
     phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
   );
@@ -47,11 +120,11 @@ class UserProfile extends React.Component {
   renderApplicantInfoSection = (user) => (
     <div className="user-profile__section">
       <h4>Applicant Info</h4>
-      If you&#39;ve made a mistake in this section, please&nbsp;
+      If you&#39;ve made a mistake in this section, please{' '}
       <a href="mailto:nick.thomson@tesc.ucsd.edu"
         className="sd-link__underline">
         email us
-      </a>&nbsp;
+      </a>{' '}
       to request a change.
 
       <div className="user-profile__school row">
@@ -161,11 +234,19 @@ class UserProfile extends React.Component {
     return (
       <form className="user-profile" onSubmit={handleSubmit}>
         <div className="user-profile__header">
-          <h1 className="user-profile__hello">
-            Hello, <span className="user-profile__name">
-              {user.firstName} {user.lastName}
-            </span>!
-          </h1>
+          <div className="user-profile__hello row">
+            <div className={`order-1 order-md-2 col-md-2 col-lg-4
+              user-profile__status-box`}>
+              {this.renderUserBussing(user)}
+              {this.renderUserStatus(user.status)}
+            </div>
+
+            <h1 className="order-2 order-md-1 col-md-10 col-lg-8">
+              Hello, <span className="user-profile__name">
+                {user.firstName} {user.lastName}
+              </span>!
+            </h1>
+          </div>
           <div className={`user-profile__apply ${pristine ?
             'user-profile__apply--hidden' : ''}`}>
             <input type="submit" value="Update"

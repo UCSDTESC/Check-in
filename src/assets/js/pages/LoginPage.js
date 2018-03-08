@@ -52,8 +52,10 @@ class LoginPage extends React.Component {
   }
 }
 
-function mapStateToProps() {
-  return { };
+function mapStateToProps(state) {
+  return {
+    loginError: state.user.auth.error
+  };
 };
 
 export default connect(mapStateToProps, {loginUser})(withRouter(LoginPage));

@@ -13,15 +13,15 @@ html
       spacer(size="16")
       div.content
         center
-          img.logo(src=event.logo)
+          img.tesc-logo(src="https://www.tesc.events/img/vectors/tesc-blue.svg")
         row
           center
             columns
-              h1 Dear #{user.firstName} #{user.lastName},
+              h1 Forgot your Password?
               p.body
-                | Exciting news! We’ve just received your application to #{event.name}! One thing though: we need you to confirm your email here:
+                | No problem! Here's a link you can use to reset your password:
                 br
-                a(href=confirmUrl)
-                  img.button(src="https://s3-us-west-1.amazonaws.com/sdhacks2017-production/assets/email-confirm-button.png")
+                a(href=resetUrl)
+                  img.button(src="https://s3-us-west-1.amazonaws.com/sdhacks2017-production/assets/email-reset-button.png")
                 p.refer-text If that link doesn’t work, copy paste this into your browser:
-                a.refer-link(href=confirmUrl) #{confirmUrl}
+                a.refer-link(href=resetUrl) #{resetUrl}
