@@ -80,7 +80,6 @@ function roleAuth(role) {
  */
 function isOrganiser(req, res, next) {
   const Event = require('mongoose').model('Event');
-
   Event.findOne({'alias': req.params.eventAlias}, (err, event) => {
     if (err) {
       Errors.respondError(res, err, Errors.DATABASE_ERROR);
