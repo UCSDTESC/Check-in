@@ -206,3 +206,14 @@ export const pollDownload = (downloadId) =>
     .get('/sponsors/applicants/download/' + downloadId)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
+
+/**
+ * Requests the download of all users as a CSV file.
+ * @param {String} eventAlias The alias associated with the event.
+ * @returns {Request} A request object not wrapped in a promise.
+ */
+export const exportUsers = (eventAlias) =>
+  request
+    .get('/admin/export/' + eventAlias)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix);
