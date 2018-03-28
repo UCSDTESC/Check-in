@@ -1,6 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const json2CSVParser = require('json2csv').Parser;
 
 const logging = require('../config/logging');
 
@@ -88,6 +89,26 @@ module.exports = function(app) {
             homepage: event.homepage,
             description: event.description
           });
+        });
+    });
+
+  api.get('/admin/export/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    isOrganiser, (req, res) => {
+      return User.find({event: req.event})
+        .populate('account')
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then((users) => {
+          var filledUsers = [];
+          users.forEach((user) => {
+            filledUsers.push(user.csvFlatten());
+          });
+          const parser = new json2CSVParser();
+          const csv = parser.parse(filledUsers);
+          //res.attachment(`${eventAlias}-${Date.now()}`);
+          res.setHeader('Content-disposition', 'attachment; filename=data.csv');
+          res.set('Content-Type', 'text/csv');
+          return res.send(csv);
         });
     });
 

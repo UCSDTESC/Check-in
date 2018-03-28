@@ -6,7 +6,7 @@ import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadEventStatistics} from '~/data/Api';
+import {loadEventStatistics, exportUsers} from '~/data/Api';
 
 import {loadAllAdminEvents} from '~/actions';
 
@@ -57,6 +57,23 @@ class EventPage extends React.Component {
     }
   };
 
+  exportUsers = () => {
+    let eventAlias = this.props.match.params.eventAlias;
+    exportUsers(eventAlias)
+      .end((err, res) => {
+        // Download as file
+        var encodedUri = encodeURI(res.text);
+        var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href=url;
+        link.setAttribute('download', `${eventAlias}-${Date.now()}.csv`);
+        document.body.appendChild(link);
+
+        link.click();
+      });
+  }
+
   render() {
     let {event} = this.props;
     let {statistics} = this.state;
@@ -85,7 +102,8 @@ class EventPage extends React.Component {
               <OrganiserList organisers={event.organisers} />
             </div>
             <div className="col-lg-4 col-md-6">
-              <EventStatistics event={event} statistics={statistics} />
+              <EventStatistics event={event} statistics={statistics}
+                exportUsers={this.exportUsers}/>
             </div>
           </div>
         </div>

@@ -24,7 +24,7 @@ export const Event = {
   organisers: PropTypes.arrayOf(PropTypes.shape(Admin)),
   logo: PropTypes.string.isRequired,
   users: PropTypes.number.isRequired,
-  closeTime: PropTypes.instanceOf(Date),
+  closeTime: PropTypes.string.isRequired,
   homepage: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired
 };
