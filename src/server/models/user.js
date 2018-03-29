@@ -160,4 +160,23 @@ UserSchema.plugin(crate, {
   }
 });
 
+UserSchema.methods.csvFlatten = function(cb) {
+  const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
+    'gender', 'phone', 'university', 'pid', 'major', 'year', 'github',
+    'website', 'shareResume', 'food', 'diet', 'shirtSize', 'availableBus',
+    'bussing', 'teammates', 'status', 'checkedIn'];
+
+  var autoFilled = autoFill.reduce((acc, val) => {
+    return Object.assign(acc, {[val]: this[val]});
+  }, {});
+
+  autoFilled.outOfState = this.travel.outOfState;
+  autoFilled.city = this.travel.city;
+  autoFilled.resume = this.resume ? this.resume.url : '';
+
+  autoFilled.email = this.account ? this.account.email : '';
+
+  return autoFilled;
+};
+
 mongoose.model('User', UserSchema);
