@@ -11,7 +11,7 @@ export const addUsers = (users) => (dispatch) =>
 
 // Update the user in the database, and then on the client
 export const updateUser = (user) => (dispatch) =>
-  Api.updateUser(user._id, user)
+  Api.updateUser(user._id, user.event.alias, user)
     .then(() => {
       dispatch({
         type: Types.UPDATE_USER,

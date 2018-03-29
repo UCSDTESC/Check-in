@@ -120,9 +120,22 @@ module.exports = function(app) {
 
       return query
         .populate('account')
+        .populate('event')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(users => res.json(users));
+    });
+
+  api.post('/users/:eventAlias/:userId', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser,
+    (req, res) => {
+      User.findByIdAndUpdate(req.params.userId, req.body)
+        .exec()
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+        .then(() => res.json({success : true}));
+
     });
 
   api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
