@@ -124,9 +124,9 @@ export const loadUser = (id) =>
  * @param  {Object} user The new user object to save.
  * @returns {Promise} A promise of the request.
  */
-export const updateUser = (id, user) =>
+export const updateUser = (id, eventAlias, user) =>
   promisify(request
-    .post('/users/' + id)
+    .post('/users/' + eventAlias + '/' + id)
     .send(user)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
