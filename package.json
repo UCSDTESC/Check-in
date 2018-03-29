@@ -62,7 +62,7 @@
     "json2csv": "^4.0.2",
     "jsonwebtoken": "^8.1.1",
     "mime": "^1.3.6",
-    "moment": "^2.19.2",
+    "moment": "^2.19.3",
     "mongodb-migrations": "github:emirotin/mongodb-migrations#run-custom-sets",
     "mongoose": "^5.0.3",
     "mongoose-cachebox": "^1.2.0",
