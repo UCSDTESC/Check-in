@@ -151,7 +151,8 @@ module.exports = function(app) {
             {
               $group: {_id: '$gender', count: {$sum: 1}}
             }
-          ]).exec()
+          ]).exec(),
+          User.count({event: req.event, checkedIn: true})
         ])
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(values => {
@@ -163,7 +164,8 @@ module.exports = function(app) {
           return res.json({
             count: values[0],
             universities: values[1].length,
-            genders
+            genders,
+            checkedIn: values[3]
           });
         });
     });

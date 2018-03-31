@@ -7,6 +7,8 @@ import {bindActionCreators} from 'redux';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
+import Loading from '~/components/Loading';
+
 import {addUsers} from '../UsersPage/actions';
 
 import {loadAllUsers, checkinUser} from '~/data/Api';
@@ -15,6 +17,12 @@ import {User as UserPropTypes} from '~/proptypes';
 
 class CheckinPage extends React.Component {
   static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        eventAlias: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired,
+
     auth: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     users: PropTypes.arrayOf(PropTypes.shape(
@@ -55,7 +63,7 @@ class CheckinPage extends React.Component {
 
     showLoading();
 
-    loadAllUsers()
+    loadAllUsers(this.props.match.params.eventAlias)
       .then(res => {
         hideLoading();
         return addUsers(res);
@@ -187,9 +195,7 @@ class CheckinPage extends React.Component {
 
     if (!users.length) {
       return (
-        <div className="checkin-loading">
-          <h1>Loading Checkin...</h1>
-        </div>
+        <Loading />
       );
     }
 
