@@ -15,7 +15,7 @@ const initialState = [
   },
   {
     Header: 'Email',
-    accessor: 'email'
+    accessor: 'account.email'
   },
   {
     Header: 'Major',
