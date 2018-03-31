@@ -97,7 +97,7 @@ class User extends React.Component {
                   Email
                 </label>
                 <div key="1" className="col-sm-4 col-form-label">
-                  {this.props.user.event.email}
+                  {this.props.user.account.email}
                 </div>
               </div>
               <h5>Portfolio</h5>
