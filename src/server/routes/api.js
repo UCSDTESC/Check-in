@@ -135,7 +135,7 @@ module.exports = function(app) {
         .catch(err => {
           return Errors.respondError(res, err, Errors.DATABASE_ERROR);
         })
-        .then(() => res.json({success : true}))
+        .then(() => res.json({success : true}));
     });
 
   api.post('/users/:eventAlias/:userId', requireAuth,

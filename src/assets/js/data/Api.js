@@ -137,7 +137,7 @@ export const updateUser = (id, eventAlias, user) =>
  * @param  {String} eventAlias of the event we want to check in to
  * @returns {Promise} A promise of the request.
  */
-export const checkinUser = (id, eventAlias) => 
+export const checkinUser = (id, eventAlias) =>
   promisify(request
     .post('/users/checkin/' + eventAlias)
     .send({id})

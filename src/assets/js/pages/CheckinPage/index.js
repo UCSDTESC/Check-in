@@ -9,7 +9,7 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import Loading from '~/components/Loading';
 
-import {addUsers, updateUser} from '../UsersPage/actions';
+import {addUsers} from '../UsersPage/actions';
 
 import {loadAllAdminEvents} from '~/actions';
 
@@ -86,7 +86,6 @@ class CheckinPage extends React.Component {
   validateUser = (user) =>
     Q.promise((resolve, reject) => {
       // Ensure they're eligible
-      console.log(user);
       if (user.status !== 'Confirmed') {
         switch (user.status) {
         case ('Declined'):
@@ -118,7 +117,7 @@ class CheckinPage extends React.Component {
 
       // Get the particular user
       const user = eligibleUsers[0];
-      
+
       this.validateUser(user)
         .then(() => {
           checkinUser(user._id, event.alias)
@@ -127,9 +126,9 @@ class CheckinPage extends React.Component {
               resolve(user);
             })
             .catch(reject);
-          })
-        .catch(reject)
-      });
+        })
+        .catch(reject);
+    });
 
   onScan = (data) => {
     if (data === null || this.state.isProcessing) {
@@ -183,7 +182,7 @@ class CheckinPage extends React.Component {
   startCheckin = () => {
     this.setState({
       isModalShowing: false
-    }); 
+    });
 
     this.checkinById(this.state.lastUser)
       .then((user) => {
