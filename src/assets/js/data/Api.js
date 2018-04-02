@@ -133,15 +133,17 @@ export const updateUser = (id, eventAlias, user) =>
 
 /**
  * Request a user marked as checked in.
- * @param  {String} email The email of the user.
+ * @param  {String} id of the user.
+ * @param  {String} eventAlias of the event we want to check in to
  * @returns {Promise} A promise of the request.
  */
-export const checkinUser = (email) =>
+export const checkinUser = (id, eventAlias) => 
   promisify(request
-    .post('/users/checkin')
-    .send({email})
+    .post('/users/checkin/' + eventAlias)
+    .send({id})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
+
 
 /**
  * Request to register a new user.

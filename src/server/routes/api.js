@@ -126,6 +126,18 @@ module.exports = function(app) {
         .then(users => res.json(users));
     });
 
+  api.post('/users/checkin/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser,
+    (req, res) => {
+      User
+        .findByIdAndUpdate(req.body.id, {'checkedIn' : true})
+        .exec()
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+        .then(() => res.json({success : true}))
+    });
+
   api.post('/users/:eventAlias/:userId', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser,
     (req, res) => {

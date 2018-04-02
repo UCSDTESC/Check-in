@@ -122,7 +122,7 @@ class Routes extends React.Component {
         <PrivateRoute path="/admin/users/:eventAlias"
           component={this.renderAdmin(UsersPage)} />
         <PrivateRoute path="/admin/checkin/:eventAlias"
-          component={CheckinPage} />
+          component={this.renderAdmin(CheckinPage)} />
 
         {/* User Routes */}
         <Route exact path="/login" component={this.renderUser(LoginPage)} />
