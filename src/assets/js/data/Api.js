@@ -217,3 +217,16 @@ export const exportUsers = (eventAlias) =>
     .get('/admin/export/' + eventAlias)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix);
+
+/**
+ * Bulk updates a list of users to all have the same status.
+ * @param {String} users A newline-delimited list of User IDs.
+ * @param {String} status The new status string for all of the users
+ * @returns {Promise} A promise of the request.
+ */
+export const bulkChange = (users, status) =>
+  promisify(request
+    .post('/admin/bulkChange')
+    .send({users, status})
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));

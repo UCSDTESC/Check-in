@@ -113,6 +113,21 @@ module.exports = function(app) {
         });
     });
 
+  api.post('/admin/bulkChange', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    (req, res) => {
+      if (!req.body.users || !req.body.status) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      let users = req.body.users.split(/\n/);
+      let status = req.body.status;
+
+      return User.updateMany({_id: {$in: users}}, {status})
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(users => res.json({success: true}));
+    });
+
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
