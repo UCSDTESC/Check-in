@@ -93,7 +93,12 @@ class User extends React.Component {
             <div className="col-6">
               <h5>Login Information</h5>
               <div className="form-group row mb-2">
-                {this.renderFormField('Email', 'account.email')}
+                <label key="0" className="col-sm-2 col-form-label">
+                  Email
+                </label>
+                <div key="1" className="col-sm-4 col-form-label">
+                  {this.props.user.account.email}
+                </div>
               </div>
               <h5>Portfolio</h5>
               <div className="form-group row mb-2">

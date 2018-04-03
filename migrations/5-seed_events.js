@@ -17,7 +17,7 @@ module.exports.up = function (done) {
           'logos/hackxx.png',
         organisers: [admin._id],
         description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-        email: "fakeemail@email.com"
+        email: "FakeEvent@email.com"
       }, done);
     })
     .catch(done);
