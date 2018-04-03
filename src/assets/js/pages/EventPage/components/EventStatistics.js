@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-export default class EventList extends React.Component {
+export default class EventStatistics extends React.Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
     statistics: PropTypes.object,

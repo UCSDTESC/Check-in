@@ -7,23 +7,35 @@ import {bindActionCreators} from 'redux';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
+import Loading from '~/components/Loading';
+
 import {addUsers} from '../UsersPage/actions';
+
+import {loadAllAdminEvents} from '~/actions';
 
 import {loadAllUsers, checkinUser} from '~/data/Api';
 
-import {User as UserPropTypes} from '~/proptypes';
+import {User as UserPropTypes, Event as EventPropType} from '~/proptypes';
 
 class CheckinPage extends React.Component {
   static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        eventAlias: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired,
+
     auth: PropTypes.object.isRequired,
     user: PropTypes.object.isRequired,
     users: PropTypes.arrayOf(PropTypes.shape(
       UserPropTypes
     ).isRequired).isRequired,
+    event : PropTypes.shape(EventPropType),
 
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
     addUsers: PropTypes.func.isRequired,
+    loadAllAdminEvents: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -41,9 +53,18 @@ class CheckinPage extends React.Component {
   }
 
   componentWillMount() {
-    let {users} = this.props;
+    let {users, event} = this.props;
+
     if (!users.length) {
       this.loadUsers();
+    }
+
+    if (!event) {
+      showLoading();
+
+      this.props.loadAllAdminEvents()
+        .catch(console.error)
+        .finally(hideLoading);
     }
   }
 
@@ -55,7 +76,7 @@ class CheckinPage extends React.Component {
 
     showLoading();
 
-    loadAllUsers()
+    loadAllUsers(this.props.match.params.eventAlias)
       .then(res => {
         hideLoading();
         return addUsers(res);
@@ -79,12 +100,12 @@ class CheckinPage extends React.Component {
       if (user.checkedIn) {
         return reject('User has already checked in');
       }
-      return resolve();
+      return resolve(user);
     })
 
   checkinById = (id) =>
     Q.promise((resolve, reject) => {
-      let {users} = this.props;
+      let {users, event} = this.props;
 
       // Filter by given ID
       let eligibleUsers = users.filter((user) => user._id === id);
@@ -97,8 +118,15 @@ class CheckinPage extends React.Component {
       // Get the particular user
       const user = eligibleUsers[0];
 
-      checkinUser(user.email)
-        .then(() => resolve(user))
+      this.validateUser(user)
+        .then(() => {
+          checkinUser(user._id, event.alias)
+            .then(() => {
+
+              resolve(user);
+            })
+            .catch(reject);
+        })
         .catch(reject);
     });
 
@@ -171,11 +199,17 @@ class CheckinPage extends React.Component {
       })
       .finally(() => this.setState({
         isProcessing: false
-      }));
+      }))
+      .catch((err) => {
+        this.setState({
+          wasSuccessful : false,
+          errorMessage : err
+        });
+      });
   }
 
   render() {
-    let {users} = this.props;
+    let {users, event} = this.props;
     let {errorMessage, wasSuccessful, lastName, nameApplicants, isModalShowing}
       = this.state;
 
@@ -187,13 +221,12 @@ class CheckinPage extends React.Component {
 
     if (!users.length) {
       return (
-        <div className="checkin-loading">
-          <h1>Loading Checkin...</h1>
-        </div>
+        <Loading />
       );
     }
 
     return (
+
       <div className="full-height">
         <Modal isOpen={isModalShowing} toggle={this.toggleModal}
           className="modal-lg">
@@ -212,10 +245,10 @@ class CheckinPage extends React.Component {
         <div className="checkin container">
           <div className="row">
             <div className="col-12 text-center">
-              <h1>SDHacks 2017 Checkin</h1>
+              <h1>{event.name} Checkin</h1>
               <h2>Scan QR</h2>
               {errorMessage && <h2 className="checkin__error">
-                {errorMessage}
+                {JSON.stringify(errorMessage)}
               </h2>}
               {wasSuccessful &&
                 <h2 className="checkin__success">Checked In&nbsp;
@@ -255,11 +288,12 @@ class CheckinPage extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     auth: state.admin.auth,
     user: state.admin.auth.user,
     users: state.admin.users,
+    event: state.admin.events[ownProps.match.params.eventAlias]
   };
 }
 
@@ -268,6 +302,7 @@ function mapDispatchToProps(dispatch) {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
     addUsers: bindActionCreators(addUsers, dispatch),
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
   };
 };
 

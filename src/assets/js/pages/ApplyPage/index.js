@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {withRouter} from 'react-router-dom';
 import Progress from 'react-progress';
 import ReactGA from 'react-ga';
+import {Link} from 'react-router-dom';
 
 import {registerUser, loadEventByAlias} from '~/data/Api';
 
@@ -182,6 +183,29 @@ class ApplyPage extends React.Component {
       return (<div className="page apply-page apply-page--loading">
         <NavHeader />
         <Loading title="Registration" />
+      </div>);
+    }
+
+    // Check for closed
+    if (new Date(event.closeTime) < Date.now()) {
+      return (<div className="page apply-page">
+        <NavHeader />
+        <div className="container">
+          <div className="row">
+            <div className="col-md-4 text-md-right text-center">
+              <img className="apply-page__logo" src={event.logo} />
+            </div>
+            <div className="col-md-8 text-md-left text-center">
+              <h2>Applications for {event.name} are now closed</h2>
+              <Link className="btn rounded-button rounded-button--small"
+                to="/login">Log In</Link>{' '}
+              <a className="btn rounded-button rounded-button--small
+                rounded-button--secondary mt-2 mt-md-0" href={event.homepage}>
+                Event Homepage
+              </a>
+            </div>
+          </div>
+        </div>
       </div>);
     }
 
