@@ -4,11 +4,14 @@ import PropTypes from 'prop-types';
 import RSVPModal from './RSVPModal';
 import BussingModal from './BussingModal';
 
+import {Event as EventPropType} from '~/proptypes';
+
 export default class RSVPConfirm extends React.Component {
   static propTypes = {
     availableBus: PropTypes.string,
     onUpdate: PropTypes.func.isRequired,
-    onClose: PropTypes.func.isRequired
+    onClose: PropTypes.func.isRequired,
+    event: PropTypes.shape(EventPropType)
   };
 
   constructor(props) {
@@ -48,12 +51,12 @@ export default class RSVPConfirm extends React.Component {
 
   render() {
     let {page} = this.state;
-    let {availableBus, onClose} = this.props;
+    let {availableBus, onClose, event} = this.props;
 
     switch (page) {
     case (0):
       return (<RSVPModal isOpen toggle={onClose}
-        onChooseStatus={this.onChooseStatus} />);
+        onChooseStatus={this.onChooseStatus} event={event} />);
     case (1):
       return (<BussingModal isOpen availableBus={availableBus}
         onChooseBus={this.onChooseBus} />);
