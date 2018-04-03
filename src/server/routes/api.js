@@ -127,6 +127,18 @@ module.exports = function(app) {
         .then(users => res.json(users));
     });
 
+  api.post('/users/checkin/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser,
+    (req, res) => {
+      User
+        .findByIdAndUpdate(req.body.id, {'checkedIn' : true})
+        .exec()
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+        .then(() => res.json({success : true}));
+    });
+
   api.post('/users/:eventAlias/:userId', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser,
     (req, res) => {
@@ -152,7 +164,8 @@ module.exports = function(app) {
             {
               $group: {_id: '$gender', count: {$sum: 1}}
             }
-          ]).exec()
+          ]).exec(),
+          User.count({event: req.event, checkedIn: true})
         ])
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(values => {
@@ -164,7 +177,8 @@ module.exports = function(app) {
           return res.json({
             count: values[0],
             universities: values[1].length,
-            genders
+            genders,
+            checkedIn: values[3]
           });
         });
     });

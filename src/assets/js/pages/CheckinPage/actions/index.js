@@ -30,3 +30,13 @@ export const loadAllStats = () => {
       });
   };
 };
+
+export const userCheckin = (user, eventAlias) => (dispatch) =>
+  Api.checkinUser(user._id, eventAlias)
+    .then(() => {
+      dispatch({
+        type: Types.CHECKIN_USER,
+        user
+      });
+    })
+    .catch(console.error);

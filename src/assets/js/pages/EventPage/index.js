@@ -14,6 +14,7 @@ import Loading from '~/components/Loading';
 
 import OrganiserList from './components/OrganiserList';
 import EventStatistics from './components/EventStatistics';
+import CheckinStatistics from './components/CheckinStatistics';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -62,7 +63,6 @@ class EventPage extends React.Component {
     exportUsers(eventAlias)
       .end((err, res) => {
         // Download as file
-        var encodedUri = encodeURI(res.text);
         var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
         var url = URL.createObjectURL(blob);
         var link = document.createElement('a');
@@ -104,6 +104,9 @@ class EventPage extends React.Component {
             <div className="col-lg-4 col-md-6">
               <EventStatistics event={event} statistics={statistics}
                 exportUsers={this.exportUsers}/>
+            </div>
+            <div className="col-lg-4 col-md-6">
+              <CheckinStatistics event={event} statistics={statistics} />
             </div>
           </div>
         </div>
