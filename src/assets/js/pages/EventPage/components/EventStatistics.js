@@ -30,7 +30,7 @@ export default class EventStatistics extends React.Component {
       ...Object.keys(statistics.status).map(key =>
         ([
           <dt key={key + 'Tag'} className="col-5 offset-1">
-            {key}
+            {(key === 'null') ? 'No Status' : {key}}
           </dt>,
           <dd key={key + 'Value'} className="col-5">
             {statistics.status[key]}
