@@ -45,6 +45,11 @@ var EventSchema = new Schema({
     type: String,
     trim: true,
     required: [true, 'You must have a contact email']
+  },
+  checkinWaiver: {
+    type: String,
+    trim: true,
+    required: false
   }
 });
 

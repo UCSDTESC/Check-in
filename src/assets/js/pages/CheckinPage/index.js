@@ -234,9 +234,8 @@ class CheckinPage extends React.Component {
           <ModalHeader toggle={this.toggleModal}>Liability Waiver</ModalHeader>
           <ModalBody>
             <object width="100%" height="500px"
-              data={'https://s3-us-west-1.amazonaws.com/' +
-              'sdhacks2017-production/assets/waiver.pdf'}></object>
-          </ModalBody>
+              data={event.checkinWaiver}></object>
+          </ModalBody>t
           <ModalFooter>
             <Button color="primary" onClick={this.startCheckin}>I agree</Button>
             {' '}
