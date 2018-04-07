@@ -93,6 +93,7 @@ class CheckinPage extends React.Component {
         case ('Unconfirmed'):
           return reject('User never confirmed their invitation');
         case ('Rejected'):
+          return reject('User was rejected from ' + user.event.name);
         default:
           return reject('User was not invited to event');
         }
