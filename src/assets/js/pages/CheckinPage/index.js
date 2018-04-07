@@ -276,7 +276,7 @@ class CheckinPage extends React.Component {
                     <button className="rounded-button rounded-button--small"
                       onClick={() => this.selectApplicant(app._id)}>
                       {app.firstName} {app.lastName}<br/>
-                      <small>{app.email}</small>
+                      <small>{app.account.email}</small>
                     </button>
                   </li>)
                 )}
