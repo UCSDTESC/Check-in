@@ -17,6 +17,7 @@ class AdminLayout extends React.Component {
     user: PropTypes.object.isRequired,
     children: PropTypes.object.isRequired,
     isEditing: PropTypes.bool.isRequired,
+    events: PropTypes.object.isRequired,
 
     loginUser: PropTypes.func.isRequired,
     loginError: PropTypes.string.isRequired,
@@ -50,8 +51,7 @@ class AdminLayout extends React.Component {
   }
 
   render() {
-    let {isAuthenticated, user} = this.props;
-    let {isEditing} = this.props;
+    let {isAuthenticated, user, events, isEditing} = this.props;
 
     let containerState = 'admin-sidebar__container--' +
       (isAuthenticated ? 'authenticated' : 'logged-out');
@@ -69,7 +69,8 @@ class AdminLayout extends React.Component {
           <div className="d-flex flex-column flex-md-row h-100">
             <div className={`admin-sidebar__container ${containerState}`}>
               <Sidebar isEditing={isEditing} isAuthenticated={isAuthenticated}
-                user={user} onEditChange={this.props.toggleEditing}>
+                user={user} onEditChange={this.props.toggleEditing}
+                events={events}>
                 {!isAuthenticated && login}
               </Sidebar>
             </div>
@@ -89,7 +90,8 @@ function mapStateToProps(state) {
     isAuthenticated: state.admin.auth.authenticated,
     user: state.admin.auth.user,
     loginError: state.admin.auth.error,
-    isEditing: state.admin.general.editing
+    isEditing: state.admin.general.editing,
+    events: state.admin.events
   };
 };
 

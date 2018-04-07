@@ -16,7 +16,8 @@ class AdminSidebar extends React.Component {
     isEditing: PropTypes.bool.isRequired,
     user: PropTypes.object,
     isHidden: PropTypes.bool,
-    children: PropTypes.node
+    events: PropTypes.object.isRequired,
+    children: PropTypes.node,
   };
 
   constructor(props) {
@@ -65,6 +66,24 @@ class AdminSidebar extends React.Component {
       getRole(this.props.user.role) :
       getRole(Roles.ROLE_MEMBER);
 
+    let checkinAdmin = this.props.user ? !!this.props.user.checkin : false;
+
+    if (checkinAdmin) {
+      return (<div>
+        {auth && <Section name='Check In'>
+          {Object.values(this.props.events).map((event, i) => {
+            let alias = Object.keys(this.props.events)[i];
+            return (<Link key={alias}
+              dest={`/checkin/${alias}`}>{event.name}</Link>);
+          })}
+
+          {auth && <Section name='General'>
+            <Link dest='/logout'>Logout</Link>
+          </Section>}
+        </Section>}
+      </div>);
+    }
+
     return (<div>
       {auth && role >= getRole(Roles.ROLE_DEVELOPER) && this.developerTools()}
 
@@ -91,6 +110,7 @@ class AdminSidebar extends React.Component {
     let role = this.props.user ?
       getRole(this.props.user.role) :
       getRole(Roles.ROLE_MEMBER);
+    let checkinAdmin = this.props.user ? this.props.user.checkin : false;
 
     return (
       <div className="admin-sidebar__user-box admin-sidebar__dark">
@@ -100,7 +120,7 @@ class AdminSidebar extends React.Component {
         <div className="admin-sidebar__user-role">
           Your Role: {user && user.role}
         </div>
-        {auth && role >= getRole(Roles.ROLE_ADMIN) &&
+        {auth && !checkinAdmin && role >= getRole(Roles.ROLE_ADMIN) &&
         <div className="admin-sidebar__user-toggle">
           <ToggleSwitch onChange={this.props.onEditChange}
             checked={isEditing} />

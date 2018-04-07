@@ -14,7 +14,8 @@ class DashboardPage extends React.Component {
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
     loadAllAdminEvents: PropTypes.func.isRequired,
-    editing: PropTypes.bool.isRequired
+    editing: PropTypes.bool.isRequired,
+    user: PropTypes.object.isRequired
   };
 
   componentWillMount() {
@@ -26,12 +27,15 @@ class DashboardPage extends React.Component {
   }
 
   render() {
-    let {events} = this.props;
+    let {events, user} = this.props;
+    let checkinUser = !!user.checkin;
     return (
       <div className="page page--admin dashboard-page">
         <div className="container-fluid">
           <h1>Dashboard</h1>
-          <EventList events={Object.values(events)} />
+
+          {!checkinUser && <EventList events={Object.values(events)} />}
+          {checkinUser && <h2>Check-In links are in the sidebar</h2>}
         </div>
       </div>
     );
@@ -41,7 +45,8 @@ class DashboardPage extends React.Component {
 function mapStateToProps(state) {
   return {
     events: state.admin.events,
-    editing: state.admin.general.editing
+    editing: state.admin.general.editing,
+    user: state.admin.auth.user
   };
 };
 

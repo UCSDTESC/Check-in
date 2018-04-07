@@ -89,7 +89,8 @@ module.exports = function(app) {
             homepage: event.homepage,
             description: event.description,
             email: event.email,
-            closeTime: event.closeTime
+            closeTime: event.closeTime,
+            checkinWaiver: event.checkinWaiver
           });
         });
     });
@@ -200,7 +201,7 @@ module.exports = function(app) {
             ret[status._id] = status.count;
             return ret;
           }, {});
-          
+
           return res.json({
             count: values[0],
             universities: values[1].length,

@@ -20,6 +20,7 @@ function setUserInfo(request) {
     _id: request._id,
     username: request.username,
     role: request.role,
+    checkin: request.checkin
   };
 };
 
