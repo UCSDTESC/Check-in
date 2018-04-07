@@ -25,6 +25,17 @@ export default class EventStatistics extends React.Component {
             {statistics.genders[gender]}
           </dd>
         ])
+      ),
+      <dt key="statusTag" className="col-12">Status Breakdown</dt>,
+      ...Object.keys(statistics.status).map(key =>
+        ([
+          <dt key={key + 'Tag'} className="col-5 offset-1">
+            {key}
+          </dt>,
+          <dd key={key + 'Value'} className="col-5">
+            {statistics.status[key]}
+          </dd>
+        ])
       )
     ];
   }

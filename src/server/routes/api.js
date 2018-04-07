@@ -180,7 +180,14 @@ module.exports = function(app) {
               $group: {_id: '$gender', count: {$sum: 1}}
             }
           ]).exec(),
-          User.count({event: req.event, checkedIn: true})
+          User.count({event: req.event, checkedIn: true}),
+          User.aggregate([
+            {
+              $match: {event: req.event._id}
+            },
+            {
+              $group : {_id: '$status', count: {$sum: 1}}
+            }]).exec()
         ])
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(values => {
@@ -189,11 +196,17 @@ module.exports = function(app) {
             return ret;
           }, {});
 
+          let status = values[4].reduce((ret, status) => {
+            ret[status._id] = status.count;
+            return ret;
+          }, {});
+          
           return res.json({
             count: values[0],
             universities: values[1].length,
             genders,
-            checkedIn: values[3]
+            checkedIn: values[3],
+            status
           });
         });
     });
