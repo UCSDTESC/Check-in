@@ -27,6 +27,11 @@ var AdminSchema = new Schema({
       roles.ROLE_SPONSOR, roles.ROLE_MEMBER],
     default: roles.ROLE_MEMBER
   },
+  // Admin solely defined to check-in users
+  checkin: {
+    type: Boolean,
+    default: false
+  },
   resetPasswordToken: {
     type: String
   },
@@ -78,6 +83,7 @@ AdminSchema.set('toJSON', {
       _id: ret._id,
       username: ret.username,
       role: ret.role,
+      checkin: ret.checkin,
       createdAt: ret.createdAt,
       deleted: ret.deleted,
       deletedAt: ret.deletedAt,
