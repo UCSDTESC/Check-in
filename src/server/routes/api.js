@@ -3,10 +3,13 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const json2CSVParser = require('json2csv').Parser;
 const S3Archiver = require('s3-archiver');
+const moment = require('moment');
+const generatePassword = require('password-generator');
 
 const logging = require('../config/logging');
 
-const {roleAuth, roles, getRole, isOrganiser} = require('./helper');
+const {roleAuth, roles, getRole, isOrganiser, exportApplicantInfo} =
+  require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
@@ -313,9 +316,13 @@ module.exports = function(app) {
             return newDownload.save();
           });
         })
+        .catch(err => {
+          logging.error(err);
+          return Errors.respondError(res, err, Errors.S3_ERROR);
+        })
   );
 
-  api.post('/sponsors/downloads/:id', requireAuth,
+  api.get('/sponsors/downloads/:id', requireAuth,
     roleAuth(roles.ROLE_SPONSOR), (req, res) =>
       Download.findById(req.params.id, function(err, download) {
         if (err || download.error) {

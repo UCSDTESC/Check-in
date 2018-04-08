@@ -19,6 +19,7 @@ module.exports = (logging) => {
     DATABASE_ERROR: 'An error occurred with the database',
     EMAIL_ERROR: 'An error occurred with the email server',
     PERMISSION_ERROR: 'You do not have permission to perform that action',
+    S3_ERROR: 'There was an error with the resume server',
     NO_ALIAS_EXISTS: 'Could not find event by that alias',
     NO_USER_EXISTS: 'Could not find a user by that identifier',
     NOT_ORGANISER: 'You are not an organiser of this event',
