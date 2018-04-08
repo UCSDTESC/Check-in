@@ -110,6 +110,40 @@ function isOrganiser(req, res, next) {
 }
 
 /**
+ * Creates a middleware that ensures the authenticated user has permissions to
+ * access information about an event.
+ */
+function isSponsor(req, res, next) {
+  const Event = require('mongoose').model('Event');
+  Event.findOne({'alias': req.params.eventAlias}, (err, event) => {
+    if (err) {
+      Errors.respondError(res, err, Errors.DATABASE_ERROR);
+      return next('Database Error');
+    }
+
+    if (!event) {
+      Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
+      return next('User Error');
+    }
+
+    if (getRole(req.user.role) === getRole(roles.ROLE_ADMIN)) {
+      return isOrganiser(req, res, next);
+    }
+
+    if (getRole(req.user.role) < getRole(roles.ROLE_DEVELOPER) &&
+      event.sponsors.indexOf(req.user._id) === -1) {
+      Errors.respondUserError(res, Errors.NOT_SPONSOR);
+      return next('User Error');
+    }
+
+    // Put it into the request object
+    req.event = event;
+
+    return next();
+  });
+}
+
+/**
  * Puts all the users into a CSV file for exporting to ZIP.
  * @param {Object[]} users The list of users to put into the CSV.
  * @param {Object} archive The zip file object to place the CSV.
@@ -157,5 +191,6 @@ module.exports = {
   getRole,
   roleAuth,
   isOrganiser,
+  isSponsor,
   exportApplicantInfo
 };

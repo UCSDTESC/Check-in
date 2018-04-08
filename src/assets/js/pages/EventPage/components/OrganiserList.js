@@ -3,7 +3,7 @@ import React from 'react';
 
 import {Admin as AdminPropTypes} from '~/proptypes';
 
-export default class EventList extends React.Component {
+export default class OrganiserList extends React.Component {
   static propTypes = {
     organisers: PropTypes.arrayOf(PropTypes.shape(
       AdminPropTypes

@@ -23,6 +23,10 @@ var EventSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Admin'
   }],
+  sponsors: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Admin'
+  }],
   logo: {
     type: String,
     trim: true,

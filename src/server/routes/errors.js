@@ -23,6 +23,7 @@ module.exports = (logging) => {
     NO_ALIAS_EXISTS: 'Could not find event by that alias',
     NO_USER_EXISTS: 'Could not find a user by that identifier',
     NOT_ORGANISER: 'You are not an organiser of this event',
+    NOT_SPONSOR: 'You are not a sponsor of this event',
     PHONE_NUMBER_INVALID: 'Your phone number must be exactly 10 digits',
     EMAIL_IN_USE: 'This email has already been used',
     USER_NOT_REGISTERED: 'This user is not registered for this event',

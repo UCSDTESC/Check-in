@@ -8,7 +8,7 @@ const generatePassword = require('password-generator');
 
 const logging = require('../config/logging');
 
-const {roleAuth, roles, getRole, isOrganiser, exportApplicantInfo} =
+const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo} =
   require('./helper');
 const Errors = require('./errors')(logging);
 
@@ -80,6 +80,7 @@ module.exports = function(app) {
       }
       return query
         .populate('organisers')
+        .populate('sponsors')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(addEventStatistics)
@@ -245,7 +246,7 @@ module.exports = function(app) {
   );
 
   api.get('/sponsors/applicants/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_SPONSOR), isOrganiser, (req, res) =>
+    roleAuth(roles.ROLE_SPONSOR), isSponsor, (req, res) =>
       User.find(
         {
           deleted: {$ne: true},
