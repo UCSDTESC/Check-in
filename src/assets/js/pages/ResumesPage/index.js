@@ -16,6 +16,12 @@ import ResumeList from './components/ResumeList';
 
 class ResumesPage extends React.Component {
   static propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        eventAlias: PropTypes.string.isRequired
+      }).isRequired
+    }).isRequired,
+
     replaceApplicants: PropTypes.func.isRequired,
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
@@ -40,7 +46,7 @@ class ResumesPage extends React.Component {
 
     showLoading();
 
-    loadAllApplicants()
+    loadAllApplicants(this.props.match.params.eventAlias)
       .then(res => {
         hideLoading();
         return replaceApplicants(res);

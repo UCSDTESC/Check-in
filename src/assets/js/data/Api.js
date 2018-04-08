@@ -68,21 +68,22 @@ export const loadAllEvents = () =>
 
 /**
  * Requests event information based on a given event alias.
- * @param {String} alias The event alias.
+ * @param {String} eventAlias The event alias.
  */
-export const loadEventByAlias = (alias) =>
+export const loadEventByAlias = (eventAlias) =>
   promisify(request
-    .get('/admin/events/' + alias)
+    .get('/admin/events/' + eventAlias)
     .use(apiPrefix)
     .use(nocache));
 
 /**
  * Request a list of all applicants.
+ * @param {String} eventAlias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadAllApplicants = () =>
+export const loadAllApplicants = (eventAlias) =>
   promisify(request
-    .get('/sponsors/applicants')
+    .get('/sponsors/applicants/' + eventAlias)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
@@ -193,7 +194,7 @@ export const deleteAdmin = (adminId) =>
  */
 export const downloadResumes = (applicants) =>
   promisify(request
-    .post('/sponsors/applicants/download')
+    .post('/sponsors/download')
     .send({applicants})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
@@ -205,7 +206,7 @@ export const downloadResumes = (applicants) =>
  */
 export const pollDownload = (downloadId) =>
   promisify(request
-    .get('/sponsors/applicants/download/' + downloadId)
+    .get('/sponsors/downloads/' + downloadId)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 

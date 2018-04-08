@@ -1,3 +1,5 @@
+const csv = require('fast-csv');
+
 const logging = require('../config/logging');
 
 const Errors = require('./errors')(logging);
@@ -105,10 +107,53 @@ function isOrganiser(req, res, next) {
   });
 }
 
+/**
+ * Puts all the users into a CSV file for exporting to ZIP.
+ * @param {Object[]} users The list of users to put into the CSV.
+ * @param {Object} archive The zip file object to place the CSV.
+ * @param {Function} finalize Callback to finish zipping the file.
+ */
+function exportApplicantInfo(users, archive, finalize) {
+  var csvStream = csv.format({headers: true});
+
+  var fileName = __dirname + '/' + process.hrtime()[1] + '.csv';
+  //Create a new CSV with the timestamp to store the user information
+  var writableStream = fs.createWriteStream(fileName);
+  csvStream.pipe(writableStream);
+
+  for (var user of Array.from(users)) {
+    csvStream.write({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      schoolYear: user.year,
+      university: user.university,
+      gender: user.gender,
+      status: user.status,
+      website: user.website,
+      github: user.github,
+      resumeFile: user.resume.name,
+      resumeLink: user.resume.url
+    });
+  }
+
+  //Wait until the CSV file is written
+  writableStream.on('finish', function() {
+    //Append file to the zip
+    archive.append(fs.createReadStream(fileName), {name: 'applicants.csv'});
+
+    //Finish the process
+    finalize();
+    return fs.unlink(fileName);
+  });
+
+  return csvStream.end();
+};
+
 module.exports = {
   roles,
   setUserInfo,
   getRole,
   roleAuth,
-  isOrganiser
+  isOrganiser,
+  exportApplicantInfo
 };
