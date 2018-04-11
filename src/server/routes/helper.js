@@ -1,3 +1,7 @@
+const fs = require('fs');
+
+const csv = require('fast-csv');
+
 const logging = require('../config/logging');
 
 const Errors = require('./errors')(logging);
@@ -8,6 +12,16 @@ const roles = {
   ROLE_SPONSOR: 'Sponsor',
   ROLE_MEMBER: 'Member'
 };
+
+// Conditions that must be met for sponsors to see resumes
+const getResumeConditions = (req) => ({
+  deleted: {$ne: true},
+  shareResume: true,
+  resume: {$exists: true},
+  'resume.size': {$gt: 0},
+  sanitized: true,
+  event: req.event
+});
 
 // Authentication Helper
 /**
@@ -105,10 +119,89 @@ function isOrganiser(req, res, next) {
   });
 }
 
+/**
+ * Creates a middleware that ensures the authenticated user has permissions to
+ * access information about an event.
+ */
+function isSponsor(req, res, next) {
+  const Event = require('mongoose').model('Event');
+  Event.findOne({'alias': req.params.eventAlias}, (err, event) => {
+    if (err) {
+      Errors.respondError(res, err, Errors.DATABASE_ERROR);
+      return next('Database Error');
+    }
+
+    if (!event) {
+      Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
+      return next('User Error');
+    }
+
+    if (getRole(req.user.role) === getRole(roles.ROLE_ADMIN)) {
+      return isOrganiser(req, res, next);
+    }
+
+    if (getRole(req.user.role) < getRole(roles.ROLE_DEVELOPER) &&
+      event.sponsors.indexOf(req.user._id) === -1) {
+      Errors.respondUserError(res, Errors.NOT_SPONSOR);
+      return next('User Error');
+    }
+
+    // Put it into the request object
+    req.event = event;
+
+    return next();
+  });
+}
+
+/**
+ * Puts all the users into a CSV file for exporting to ZIP.
+ * @param {Object[]} users The list of users to put into the CSV.
+ * @param {Object} archive The zip file object to place the CSV.
+ * @param {Function} finalize Callback to finish zipping the file.
+ */
+function exportApplicantInfo(users, archive, finalize) {
+  var csvStream = csv.format({headers: true});
+
+  var fileName = __dirname + '/' + process.hrtime()[1] + '.csv';
+  //Create a new CSV with the timestamp to store the user information
+  var writableStream = fs.createWriteStream(fileName);
+  csvStream.pipe(writableStream);
+
+  for (var user of Array.from(users)) {
+    csvStream.write({
+      firstName: user.firstName,
+      lastName: user.lastName,
+      schoolYear: user.year,
+      university: user.university,
+      gender: user.gender,
+      status: user.status,
+      website: user.website,
+      github: user.github,
+      resumeFile: user.resume.name,
+      resumeLink: user.resume.url
+    });
+  }
+
+  //Wait until the CSV file is written
+  writableStream.on('finish', function() {
+    //Append file to the zip
+    archive.append(fs.createReadStream(fileName), {name: 'applicants.csv'});
+
+    //Finish the process
+    finalize();
+    return fs.unlink(fileName);
+  });
+
+  return csvStream.end();
+};
+
 module.exports = {
   roles,
   setUserInfo,
   getRole,
   roleAuth,
-  isOrganiser
+  isOrganiser,
+  isSponsor,
+  exportApplicantInfo,
+  getResumeConditions
 };

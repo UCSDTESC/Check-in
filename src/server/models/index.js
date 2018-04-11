@@ -18,6 +18,7 @@ module.exports = () => new Promise((fulfill, reject) => {
       require('./user');
       require('./admin');
       require('./event');
+      require('./download');
 
       fulfill();
     })

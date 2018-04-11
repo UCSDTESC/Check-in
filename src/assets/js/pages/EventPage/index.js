@@ -13,11 +13,12 @@ import {loadAllAdminEvents} from '~/actions';
 
 import Loading from '~/components/Loading';
 
-import OrganiserList from './components/OrganiserList';
 import EventStatistics from './components/EventStatistics';
-
+import OrganiserList from './components/OrganiserList';
+import SponsorList from './components/SponsorList';
 import BulkChange from './components/BulkChange';
 import CheckinStatistics from './components/CheckinStatistics';
+import ResumeStatistics from './components/ResumeStatistics';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -160,6 +161,7 @@ class EventPage extends React.Component {
           <div className="row">
             <div className="col-lg-4 col-md-6">
               <OrganiserList organisers={event.organisers} />
+              <SponsorList sponsors={event.sponsors} />
             </div>
             <div className="col-lg-4 col-md-6">
               <EventStatistics event={event} statistics={statistics}
@@ -167,6 +169,7 @@ class EventPage extends React.Component {
             </div>
             <div className="col-lg-4 col-md-6">
               <CheckinStatistics event={event} statistics={statistics} />
+              <ResumeStatistics event={event} statistics={statistics} />
             </div>
           </div>
           <div className="row">
