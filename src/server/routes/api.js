@@ -72,12 +72,17 @@ module.exports = function(app) {
       .then(events => res.json(events));
   });
 
-  api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_ADMIN),
+  api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_SPONSOR),
     (req, res) => {
-      var query = Event.find({'organisers': req.user});
-      if (getRole(req.user.role) >= getRole(roles.ROLE_DEVELOPER)) {
+      var query;
+      if (getRole(req.user.role) === getRole(roles.ROLE_SPONSOR)) {
+        query = Event.find({'sponsors': req.user});
+      } else if (getRole(req.user.role) >= getRole(roles.ROLE_DEVELOPER)) {
         query = Event.find();
+      } else {
+        query = Event.find({'organisers': req.user});
       }
+
       return query
         .populate('organisers')
         .populate('sponsors')

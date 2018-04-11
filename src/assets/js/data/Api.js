@@ -233,3 +233,4 @@ export const bulkChange = (users, status) =>
     .send({users, status})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
+

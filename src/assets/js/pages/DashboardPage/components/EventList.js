@@ -8,11 +8,12 @@ export default class EventList extends React.Component {
   static propTypes = {
     events: PropTypes.arrayOf(PropTypes.shape(
       EventPropTypes
-    ).isRequired).isRequired
+    ).isRequired).isRequired,
+    resumeLink: PropTypes.bool
   };
 
   render() {
-    let {events} = this.props;
+    let {events, resumeLink} = this.props;
 
     return (
       <div className="event-list">
@@ -25,7 +26,8 @@ export default class EventList extends React.Component {
                   src={event.logo} alt={event.name} />
                 <div className="card-body">
                   <h5 className="card-title">
-                    <Link to={'/admin/events/' + event.alias}>
+                    <Link to={`/admin/${resumeLink ? 'resumes' :
+                      'events'}/${event.alias}`}>
                       {event.name}
                     </Link>
                   </h5>

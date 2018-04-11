@@ -6,7 +6,12 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
 
+import {Roles, getRole} from '~/static/Roles';
+
 import EventList from './components/EventList';
+import AdminDashboard from './components/AdminDashboard';
+import CheckinDashboard from './components/CheckinDashboard';
+import SponsorDashboard from './components/SponsorDashboard';
 
 class DashboardPage extends React.Component {
   static propTypes = {
@@ -29,13 +34,17 @@ class DashboardPage extends React.Component {
   render() {
     let {events, user} = this.props;
     let checkinUser = !!user.checkin;
+
     return (
       <div className="page page--admin dashboard-page">
         <div className="container-fluid">
           <h1>Dashboard</h1>
 
-          {!checkinUser && <EventList events={Object.values(events)} />}
-          {checkinUser && <h2>Check-In links are in the sidebar</h2>}
+          {checkinUser && <CheckinDashboard />}
+          {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
+            <AdminDashboard events={Object.values(events)} />}
+          {getRole(user.role) === getRole(Roles.ROLE_SPONSOR) &&
+            <SponsorDashboard events={Object.values(events)} />}
         </div>
       </div>
     );

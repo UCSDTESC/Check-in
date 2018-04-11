@@ -42,24 +42,20 @@ class AdminSidebar extends React.Component {
       <Link dest='/admins'>Admins</Link>
     </Section>);
 
-  administratorTools = () =>
-    (<Section name='Administrator Tools'>
-    </Section>);
-
-  sponsorTools = () =>
-    (<Section name='Sponsor Tools'>
-      <Link dest='/resumes'>Resumes</Link>
-    </Section>);
-
-  memberTools = () =>
-    (<Section name='Member Tools'>
-      <Link dest='/checkin'>Checkin</Link>
+  eventTools = (events, resumeLink) =>
+    (<Section name='Your Events'>
+      {Object.keys(events).map((eventAlias) => (
+        <Link key={eventAlias} dest={resumeLink ? `/resumes/${eventAlias}` :
+          `/events/${eventAlias}`}>
+          {events[eventAlias].name}
+        </Link>))}
     </Section>);
 
   /**
    * Creates the menu based off user role and authentication
    */
   renderMenu() {
+    let {events} = this.props;
     let auth = this.props.isAuthenticated;
 
     let role = this.props.user ?
@@ -87,12 +83,8 @@ class AdminSidebar extends React.Component {
     return (<div>
       {auth && role >= getRole(Roles.ROLE_DEVELOPER) && this.developerTools()}
 
-      {/* {auth && role >= getRole(Roles.ROLE_ADMIN) &&
-        this.administratorTools()} */}
-
-      {auth && role >= getRole(Roles.ROLE_SPONSOR) && this.sponsorTools()}
-
-      {auth && role === getRole(Roles.ROLE_MEMBER) && this.memberTools()}
+      {auth && role >= getRole(Roles.ROLE_SPONSOR) &&
+        this.eventTools(events, role === getRole(Roles.ROLE_SPONSOR))}
 
       {auth && <Section name='General'>
         <Link dest='/' exact>Dashboard</Link>
