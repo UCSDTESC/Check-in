@@ -18,6 +18,7 @@ import OrganiserList from './components/OrganiserList';
 import SponsorList from './components/SponsorList';
 import BulkChange from './components/BulkChange';
 import CheckinStatistics from './components/CheckinStatistics';
+import ResumeStatistics from './components/ResumeStatistics';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -168,6 +169,7 @@ class EventPage extends React.Component {
             </div>
             <div className="col-lg-4 col-md-6">
               <CheckinStatistics event={event} statistics={statistics} />
+              <ResumeStatistics event={event} statistics={statistics} />
             </div>
           </div>
           <div className="row">

@@ -8,8 +8,8 @@ const generatePassword = require('password-generator');
 
 const logging = require('../config/logging');
 
-const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo} =
-  require('./helper');
+const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo,
+  getResumeConditions} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
@@ -204,7 +204,8 @@ module.exports = function(app) {
             },
             {
               $group : {_id: '$status', count: {$sum: 1}}
-            }]).exec()
+            }]).exec(),
+          User.count(getResumeConditions(req))
         ])
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(values => {
@@ -223,7 +224,8 @@ module.exports = function(app) {
             universities: values[1].length,
             genders,
             checkedIn: values[3],
-            status
+            status,
+            resumes: values[5]
           });
         });
     });
@@ -247,15 +249,7 @@ module.exports = function(app) {
 
   api.get('/sponsors/applicants/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_SPONSOR), isSponsor, (req, res) =>
-      User.find(
-        {
-          deleted: {$ne: true},
-          shareResume: true,
-          resume: {$exists: true},
-          'resume.size': {$gt: 0},
-          sanitized: true,
-          event: req.event
-        },
+      User.find(getResumeConditions(req),
         'firstName lastName university year gender major resume.url')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))

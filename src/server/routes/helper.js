@@ -13,6 +13,16 @@ const roles = {
   ROLE_MEMBER: 'Member'
 };
 
+// Conditions that must be met for sponsors to see resumes
+const getResumeConditions = (req) => ({
+  deleted: {$ne: true},
+  shareResume: true,
+  resume: {$exists: true},
+  'resume.size': {$gt: 0},
+  sanitized: true,
+  event: req.event
+});
+
 // Authentication Helper
 /**
  * Reduces a user object down into public information.
@@ -192,5 +202,6 @@ module.exports = {
   roleAuth,
   isOrganiser,
   isSponsor,
-  exportApplicantInfo
+  exportApplicantInfo,
+  getResumeConditions
 };
