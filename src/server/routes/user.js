@@ -20,7 +20,7 @@ const editableFields = [
 ];
 const readOnlyFields = [
   'status', 'firstName', 'lastName', 'university', 'email', 'phone', 'resume',
-  'availableBus', 'bussing'
+  'availableBus', 'bussing', 'event'
 ];
 
 module.exports = function(app) {
@@ -164,7 +164,6 @@ module.exports = function(app) {
               return res.json(outputCurrentUser(user));
             });
           }
-
           return res.json(outputCurrentUser(user));
         })
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
