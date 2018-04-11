@@ -217,12 +217,12 @@ class UserProfile extends React.Component {
         </div>
       </div>
       <div className="row mt-4">
-        <div className="col-lg-6">
-          <a tabIndex="-1" href={user.resume ? user.resume.url : ''} download
-            className="btn rounded-button rounded-button--small">
-            View Current Resume
+        {user.resume && <div className="col-lg-6">
+          <a tabIndex="-1" href={user.resume ? user.resume.url : ''}
+            download className="btn rounded-button rounded-button--small">
+              View Current Resume
           </a>
-        </div>
+        </div>}
         <div className="col-lg-6 mt-3 mt-lg-0">
           <Field component={FileField} name="resume"
             placeholder="Resume" button className="sd-form__dropzone--button"
