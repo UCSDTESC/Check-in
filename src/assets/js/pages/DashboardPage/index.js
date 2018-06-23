@@ -6,7 +6,12 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
 
+import {Roles, getRole} from '~/static/Roles';
+
 import EventList from './components/EventList';
+import AdminDashboard from './components/AdminDashboard';
+import CheckinDashboard from './components/CheckinDashboard';
+import SponsorDashboard from './components/SponsorDashboard';
 
 class DashboardPage extends React.Component {
   static propTypes = {
@@ -14,7 +19,8 @@ class DashboardPage extends React.Component {
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
     loadAllAdminEvents: PropTypes.func.isRequired,
-    editing: PropTypes.bool.isRequired
+    editing: PropTypes.bool.isRequired,
+    user: PropTypes.object.isRequired
   };
 
   componentWillMount() {
@@ -26,12 +32,19 @@ class DashboardPage extends React.Component {
   }
 
   render() {
-    let {events} = this.props;
+    let {events, user} = this.props;
+    let checkinUser = !!user.checkin;
+
     return (
       <div className="page page--admin dashboard-page">
         <div className="container-fluid">
           <h1>Dashboard</h1>
-          <EventList events={Object.values(events)} />
+
+          {checkinUser && <CheckinDashboard />}
+          {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
+            <AdminDashboard events={Object.values(events)} />}
+          {getRole(user.role) === getRole(Roles.ROLE_SPONSOR) &&
+            <SponsorDashboard events={Object.values(events)} />}
         </div>
       </div>
     );
@@ -41,7 +54,8 @@ class DashboardPage extends React.Component {
 function mapStateToProps(state) {
   return {
     events: state.admin.events,
-    editing: state.admin.general.editing
+    editing: state.admin.general.editing,
+    user: state.admin.auth.user
   };
 };
 

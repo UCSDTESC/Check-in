@@ -25,6 +25,8 @@ import ForgotPage from './pages/ForgotPage';
 import UserPage from './pages/UserPage';
 import AdminLogout from './auth/admin/Logout';
 import UserLogout from './auth/user/Logout';
+import CheckinPage from './pages/CheckinPage';
+import ResumesPage from './pages/ResumesPage';
 
 import CookieTypes from '~/static/Cookies';
 
@@ -120,6 +122,10 @@ class Routes extends React.Component {
           component={this.renderAdmin(EventPage)} />
         <PrivateRoute path="/admin/users/:eventAlias"
           component={this.renderAdmin(UsersPage)} />
+        <PrivateRoute path="/admin/checkin/:eventAlias"
+          component={this.renderAdmin(CheckinPage)} />
+        <PrivateRoute path="/admin/resumes/:eventAlias"
+          component={this.renderSponsor(ResumesPage)} />
 
         {/* User Routes */}
         <Route exact path="/login" component={this.renderUser(LoginPage)} />

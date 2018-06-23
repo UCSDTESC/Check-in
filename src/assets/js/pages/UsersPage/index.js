@@ -82,8 +82,19 @@ class UsersPage extends React.Component {
    * Handles an updated user.
    * @param {Object} user The updated user.
    */
-  onUserUpdate = (user) =>
-    this.props.updateUser(user);
+  onUserUpdate = (user) =>{
+    this.props.updateUser(user)
+      .then(() => {
+        let {users} = this.state;
+
+        this.setState({
+          users: [
+            ...users.filter((curr) => curr._id !== user._id),
+            user
+          ]
+        });
+      });
+  }
 
   onAddColumn = (columnName) =>
     this.props.addColumn(columnName)

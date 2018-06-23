@@ -16,8 +16,6 @@ import Loading from '~/components/Loading';
 
 import {updateUserField, rsvpUser} from '~/data/User';
 
-import {Event as EventPropType} from '~/proptypes';
-
 class UserPage extends React.Component {
   static propTypes = {
     user: PropTypes.object.isRequired,
@@ -27,7 +25,6 @@ class UserPage extends React.Component {
       }).isRequired
     }).isRequired,
 
-    event: PropTypes.shape(EventPropType),
     getCurrentUser: PropTypes.func.isRequired,
     updateCurrentUser: PropTypes.func.isRequired,
     showLoading: PropTypes.func.isRequired,
@@ -132,15 +129,15 @@ class UserPage extends React.Component {
    * option exists.
    */
   userRSVP = (status, bussing) => {
-    let {user, updateCurrentUser, event} = this.props;
+    let {user, updateCurrentUser} = this.props;
     if (user.status !== 'Unconfirmed') {
       return;
     }
 
-    rsvpUser(status, bussing)
+    rsvpUser(this.props.match.params.eventAlias, status, bussing)
       .then((newUser) => {
         updateCurrentUser(newUser);
-        this.createAlert(`You have successfully RSVPed to ${event.name}`,
+        this.createAlert(`You have successfully RSVPed to ${user.event.name}`,
           'success');
       })
       .catch((err) => {
@@ -160,7 +157,8 @@ class UserPage extends React.Component {
     return (
       <div className="user-page">
         {showRSVP && <RSVPConfirm availableBus={user.availableBus}
-          onUpdate={this.userRSVP} onClose={this.toggleRSVP} />}
+          onUpdate={this.userRSVP} onClose={this.toggleRSVP}
+          event={user.event} />}
         <div className="user-page__above">
           <div className="user-page__alerts">
             {alerts.map(({message, type, title}, i) =>

@@ -85,15 +85,16 @@ export const updateUserField = (user, eventAlias) => {
 };
 
 /**
- * RSVPs the current user..
+ * RSVPs the current user.
+ * @param {String} eventAlias The alias of the event to RSVP.
  * @param {Boolean} status True if the user is confirming their spot.
  * @param {Boolean} bussing True if the user is taking the bus, null if the user
  * wasn't offered a seat.
  * @returns {Promise} A promise of the request.
  */
-export const rsvpUser = (status, bussing) => {
+export const rsvpUser = (eventAlias, status, bussing) => {
   return promisify(request
-    .post('/rsvp')
+    .post('/rsvp/' + eventAlias)
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .send({status, bussing})

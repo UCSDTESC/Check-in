@@ -68,21 +68,22 @@ export const loadAllEvents = () =>
 
 /**
  * Requests event information based on a given event alias.
- * @param {String} alias The event alias.
+ * @param {String} eventAlias The event alias.
  */
-export const loadEventByAlias = (alias) =>
+export const loadEventByAlias = (eventAlias) =>
   promisify(request
-    .get('/admin/events/' + alias)
+    .get('/admin/events/' + eventAlias)
     .use(apiPrefix)
     .use(nocache));
 
 /**
  * Request a list of all applicants.
+ * @param {String} eventAlias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadAllApplicants = () =>
+export const loadAllApplicants = (eventAlias) =>
   promisify(request
-    .get('/sponsors/applicants')
+    .get('/sponsors/applicants/' + eventAlias)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
@@ -124,24 +125,26 @@ export const loadUser = (id) =>
  * @param  {Object} user The new user object to save.
  * @returns {Promise} A promise of the request.
  */
-export const updateUser = (id, user) =>
+export const updateUser = (id, eventAlias, user) =>
   promisify(request
-    .post('/users/' + id)
+    .post('/users/' + eventAlias + '/' + id)
     .send(user)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
  * Request a user marked as checked in.
- * @param  {String} email The email of the user.
+ * @param  {String} id of the user.
+ * @param  {String} eventAlias of the event we want to check in to
  * @returns {Promise} A promise of the request.
  */
-export const checkinUser = (email) =>
+export const checkinUser = (id, eventAlias) =>
   promisify(request
-    .post('/users/checkin')
-    .send({email})
+    .post('/users/checkin/' + eventAlias)
+    .send({id})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
+
 
 /**
  * Request to register a new user.
@@ -191,7 +194,7 @@ export const deleteAdmin = (adminId) =>
  */
 export const downloadResumes = (applicants) =>
   promisify(request
-    .post('/sponsors/applicants/download')
+    .post('/sponsors/download')
     .send({applicants})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
@@ -203,6 +206,31 @@ export const downloadResumes = (applicants) =>
  */
 export const pollDownload = (downloadId) =>
   promisify(request
-    .get('/sponsors/applicants/download/' + downloadId)
+    .get('/sponsors/downloads/' + downloadId)
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
+
+/**
+ * Requests the download of all users as a CSV file.
+ * @param {String} eventAlias The alias associated with the event.
+ * @returns {Request} A request object not wrapped in a promise.
+ */
+export const exportUsers = (eventAlias) =>
+  request
+    .get('/admin/export/' + eventAlias)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix);
+
+/**
+ * Bulk updates a list of users to all have the same status.
+ * @param {String} users A newline-delimited list of User IDs.
+ * @param {String} status The new status string for all of the users
+ * @returns {Promise} A promise of the request.
+ */
+export const bulkChange = (users, status) =>
+  promisify(request
+    .post('/admin/bulkChange')
+    .send({users, status})
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
+

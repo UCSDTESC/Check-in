@@ -20,7 +20,7 @@ const editableFields = [
 ];
 const readOnlyFields = [
   'status', 'firstName', 'lastName', 'university', 'email', 'phone', 'resume',
-  'availableBus', 'bussing'
+  'availableBus', 'bussing', 'event'
 ];
 
 module.exports = function(app) {
@@ -164,9 +164,35 @@ module.exports = function(app) {
               return res.json(outputCurrentUser(user));
             });
           }
-
           return res.json(outputCurrentUser(user));
         })
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
     });
+
+  userRoute.post('/rsvp/:eventAlias', requireAuth, function(req, res) {
+    const user = req.user;
+
+    if (req.body.status === undefined) {
+      return Errors.respondUserError(res, Errors.NO_STATUS_SENT);
+    }
+
+    const {status, bussing} = req.body;
+    const newStatus = status ? 'Confirmed' : 'Declined';
+    const newBussing = user.availableBus && bussing;
+
+    return Event.findOne({alias: req.params.eventAlias})
+      .then((event) => {
+        return User.findOneAndUpdate({account: user, event: event},
+          {$set: {
+            status: newStatus,
+            bussing: newBussing
+          }}, {new: true})
+          .populate('event')
+          .exec();
+      })
+      .then((user) => {
+        return res.json(user);
+      })
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+  });
 };

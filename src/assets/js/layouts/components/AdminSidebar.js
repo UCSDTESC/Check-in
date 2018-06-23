@@ -16,7 +16,8 @@ class AdminSidebar extends React.Component {
     isEditing: PropTypes.bool.isRequired,
     user: PropTypes.object,
     isHidden: PropTypes.bool,
-    children: PropTypes.node
+    events: PropTypes.object.isRequired,
+    children: PropTypes.node,
   };
 
   constructor(props) {
@@ -39,42 +40,51 @@ class AdminSidebar extends React.Component {
   developerTools = () =>
     (<Section name='Developer Tools'>
       <Link dest='/admins'>Admins</Link>
-      <Link dest='/checkin'>Checkin</Link>
     </Section>);
 
-  administratorTools = () =>
-    (<Section name='Administrator Tools'>
-    </Section>);
-
-  sponsorTools = () =>
-    (<Section name='Sponsor Tools'>
-      <Link dest='/resumes'>Resumes</Link>
-    </Section>);
-
-  memberTools = () =>
-    (<Section name='Member Tools'>
-      <Link dest='/checkin'>Checkin</Link>
+  eventTools = (events, resumeLink) =>
+    (<Section name='Your Events'>
+      {Object.keys(events).map((eventAlias) => (
+        <Link key={eventAlias} dest={resumeLink ? `/resumes/${eventAlias}` :
+          `/events/${eventAlias}`}>
+          {events[eventAlias].name}
+        </Link>))}
     </Section>);
 
   /**
    * Creates the menu based off user role and authentication
    */
   renderMenu() {
+    let {events} = this.props;
     let auth = this.props.isAuthenticated;
 
     let role = this.props.user ?
       getRole(this.props.user.role) :
       getRole(Roles.ROLE_MEMBER);
 
+    let checkinAdmin = this.props.user ? !!this.props.user.checkin : false;
+
+    if (checkinAdmin) {
+      return (<div>
+        {auth && <Section name='Check In'>
+          {Object.values(this.props.events).map((event, i) => {
+            let alias = Object.keys(this.props.events)[i];
+            return (<Link key={alias}
+              dest={`/checkin/${alias}`}>{event.name}</Link>);
+          })}
+
+          {auth && <Section name='General'>
+            <Link dest='/logout'>Logout</Link>
+          </Section>}
+        </Section>}
+      </div>);
+    }
+
     return (<div>
       {auth && role >= getRole(Roles.ROLE_DEVELOPER) && this.developerTools()}
 
-      {/* {auth && role >= getRole(Roles.ROLE_ADMIN) &&
-        this.administratorTools()} */}
-
-      {auth && role >= getRole(Roles.ROLE_SPONSOR) && this.sponsorTools()}
-
-      {auth && role === getRole(Roles.ROLE_MEMBER) && this.memberTools()}
+      {auth && role >= getRole(Roles.ROLE_SPONSOR) &&
+        this.eventTools(events, role === getRole(Roles.ROLE_SPONSOR))}
 
       {auth && <Section name='General'>
         <Link dest='/' exact>Dashboard</Link>
@@ -92,6 +102,7 @@ class AdminSidebar extends React.Component {
     let role = this.props.user ?
       getRole(this.props.user.role) :
       getRole(Roles.ROLE_MEMBER);
+    let checkinAdmin = this.props.user ? this.props.user.checkin : false;
 
     return (
       <div className="admin-sidebar__user-box admin-sidebar__dark">
@@ -101,7 +112,7 @@ class AdminSidebar extends React.Component {
         <div className="admin-sidebar__user-role">
           Your Role: {user && user.role}
         </div>
-        {auth && role >= getRole(Roles.ROLE_ADMIN) &&
+        {auth && !checkinAdmin && role >= getRole(Roles.ROLE_ADMIN) &&
         <div className="admin-sidebar__user-toggle">
           <ToggleSwitch onChange={this.props.onEditChange}
             checked={isEditing} />
