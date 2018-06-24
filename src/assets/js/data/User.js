@@ -101,3 +101,18 @@ export const rsvpUser = (eventAlias, status, bussing) => {
     .use(prefix)
     .use(nocache));
 };
+
+/**
+ * Loads all events that a current user is signed up for
+ * @param {String} users A newline-delimited list of User IDs.
+ * @param {String} status The new status string for all of the users
+ * @returns {Promise} A promise of the request.
+ */
+export const loadAllUserEvents = (user) => {
+  return promisify(request
+    .get('/events')
+    .set('Content-Type', 'application/json')
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .use(prefix)
+    .use(nocache));
+};

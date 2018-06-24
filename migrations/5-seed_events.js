@@ -10,7 +10,7 @@ module.exports.up = function (done) {
 
   admins.findOne({username: 'redbackthomson'})
     .then((admin) => {
-      events.insert({
+      events.insert([{
         name,
         alias: 'hackxx',
         logo: 'https://s3-us-west-1.amazonaws.com/tesc-checkin/public/' +
@@ -18,7 +18,15 @@ module.exports.up = function (done) {
         organisers: [admin._id],
         description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
         email: "FakeEvent@email.com"
-      }, done);
+      },
+      {
+        name: "SD Hacks",
+        alias: 'sdhacks',
+        logo: "https://s3-us-west-1.amazonaws.com/sdhacks2017-production/assets/logo.png",
+        organisers: [admin._id],
+        description : "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+        email: "sdhacks@email.com"
+      }], done);
     })
     .catch(done);
 };

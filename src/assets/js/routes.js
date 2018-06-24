@@ -27,6 +27,8 @@ import AdminLogout from './auth/admin/Logout';
 import UserLogout from './auth/user/Logout';
 import CheckinPage from './pages/CheckinPage';
 import ResumesPage from './pages/ResumesPage';
+import EventsPage from './pages/EventsPage';
+
 
 import CookieTypes from '~/static/Cookies';
 
@@ -135,6 +137,9 @@ class Routes extends React.Component {
 
         <PrivateUserRoute exact path="/logout"
           component={this.renderUser(UserLogout)} />
+
+        <PrivateUserRoute exact path="/user/events"
+          component={this.renderUser(EventsPage)} />
         <PrivateUserRoute exact path="/user/:eventAlias"
           component={this.renderUser(UserPage)} />
       </Switch>

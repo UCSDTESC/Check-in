@@ -29,7 +29,7 @@ module.exports.up = function (done) {
               phone: '0000000000',
               university: 'Fake University',
               password: hash
-            }, done);
+            },done);
           })
           .catch(done);
       });

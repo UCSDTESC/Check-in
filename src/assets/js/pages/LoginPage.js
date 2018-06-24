@@ -36,7 +36,9 @@ class LoginPage extends React.Component {
   loginUser = (formProps) => {
     let {loginUser, history} = this.props;
     return loginUser(formProps)
-      .then(() => history.push('/user/hackxx'))
+      .then(() => {
+        return history.push('/user/events')
+      })
       .catch((e) => {
         console.error('Could not log in', e);
       });

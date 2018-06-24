@@ -8,6 +8,7 @@ module.exports.up = function (done) {
   // 5 year's time
   let closeTime = new Date(Date.now() + 5*365*24*60*60*1000);
   events.findOneAndUpdate({alias: 'hackxx'}, {$set:{closeTime}}, done);
+  events.findOneAndUpdate({alias: 'sdhacks'}, {$set:{closeTime}}, done);
 };
 
 module.exports.down = function (done) {

@@ -195,4 +195,19 @@ module.exports = function(app) {
       })
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
   });
+
+  userRoute.get('/events', requireAuth, function(req, res) {
+
+    const user = req.user;
+
+    return User.find({account: user._id})
+      .populate('event')
+      .then((users) => {
+        let arr = users.map(x => x.event);
+
+        res.json({events: arr});
+      })
+
+    res.json({success: "nice!"});
+  });
 };

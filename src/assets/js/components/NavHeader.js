@@ -67,7 +67,7 @@ class NavHeader extends React.Component {
   renderAuthenticatedLinks() {
     return ([
       <li className="sd-nav__link-item" key={0}>
-        <Link className="sd-nav__link" to="/user/hackxx">
+        <Link className="sd-nav__link" to="/user/events">
           Profile
         </Link>
       </li>,
