@@ -21,6 +21,10 @@ const events = (state = initialState, action) => {
         result[current.alias] = current;
         return result;
       }, {});
+  case ActionTypes.REPLACE_DROP_EVENTS:
+    return {...action.events};
+  case ActionTypes.LOAD_RESUME_EVENT:
+    return {...state, drop: {...action.event}};
   default:
     return state;
   }

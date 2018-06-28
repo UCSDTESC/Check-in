@@ -103,6 +103,11 @@ export const replaceEvents = (events) => ({
   events
 });
 
+export const replaceDropEvents = (events) => ({
+  type: Types.REPLACE_DROP_EVENTS,
+  events
+});
+
 // Admin Events
 export const addAdminEvent = (event) => ({
   type: Types.ADD_ADMIN_EVENT,
@@ -144,3 +149,36 @@ export const loadAllPublicEvents = () => (dispatch) => {
 
   return deferred.promise;
 };
+
+export const loadAllPublicDropEvents = () => (dispatch) => {
+  var deferred = Q.defer();
+
+  Api.loadAllPublicDropEvents()
+    .then(res => {
+      dispatch(replaceDropEvents(res));
+      return deferred.resolve();
+    })
+    .catch(deferred.reject);
+
+  return deferred.promise;
+};
+
+export const updateResumeEvent = (event) => {
+
+  return {
+    type: Types.LOAD_RESUME_EVENT,
+    event
+  };
+};
+
+export const loadResumeEvent = (eventAlias) => (dispatch) => {
+  var deferred = Q.defer();
+  Api.getResumeEvent(eventAlias)
+    .then((res) => {
+      dispatch(updateResumeEvent(res.event));
+      return deferred.resolve();
+    })
+    .catch(deferred.reject);
+  return deferred.promise;
+};
+

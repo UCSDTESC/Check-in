@@ -15,7 +15,8 @@ The system allows organisers of events to create, update and manage their events
 2. Run ```npm install```
 3. Copy ```.env.example``` to a new file ```.env```
 4. Enter all of the information into the ```.env``` file
-5. Run ```npm run migrate``` to migrate and seed the database
+5. Run Mongo in a Docker container - ```docker run --rm -it --name tesc-checkin -p 32678:27017 mongo```
+6. Run ```npm run migrate``` to migrate and seed the database
 
 ## Development
 #### All pushes should be made to a feature branch

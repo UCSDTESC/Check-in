@@ -56,6 +56,17 @@ export const loadAllPublicEvents = () =>
     .use(nocache));
 
 /**
+ * Request a list of all resume drop events that is available to the public.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadAllPublicDropEvents = () =>
+  promisify(request
+    .get('/drops')
+    .use(apiPrefix)
+    .use(nocache));
+
+
+/**
  * Request a list of all events the user has access to.
  * @returns {Promise} A promise of the request.
  */
@@ -75,6 +86,18 @@ export const loadEventByAlias = (eventAlias) =>
     .get('/admin/events/' + eventAlias)
     .use(apiPrefix)
     .use(nocache));
+
+/**
+ * Get a resume only event from it's eventAlias.
+ * @param {Object} admin The admin fields to register.
+ * @returns {Promise} A promise of the request.
+ */
+export const getResumeEvent = (eventAlias) =>
+  promisify(request
+    .get('/drop/' + eventAlias)
+    .use(apiPrefix)
+    .use(nocache));
+
 
 /**
  * Request a list of all applicants.

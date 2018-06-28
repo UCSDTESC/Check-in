@@ -16,6 +16,7 @@ const Admin = mongoose.model('Admin');
 const Download = mongoose.model('Download');
 const Event = mongoose.model('Event');
 const User = mongoose.model('User');
+const ResumeDrop = mongoose.model('ResumeDrop');
 
 const requireAuth = passport.authenticate('adminJwt', {session: false});
 
@@ -331,6 +332,24 @@ module.exports = function(app) {
         return res.json({url: download.accessUrl});
       })
   );
+
+  api.get('/drops', (req, res) => {
+    ResumeDrop.find()
+      .exec()
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(dropEvents => {
+        return res.json({dropEvents});
+      });
+  });
+
+  api.get('/drop/:eventAlias', (req, res) => {
+    ResumeDrop.find({alias: req.params.eventAlias})
+      .exec()
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(event => {
+        return res.json({event});
+      });
+  });
 
   // Use API for any API endpoints
   api.get('/', (req, res) => {

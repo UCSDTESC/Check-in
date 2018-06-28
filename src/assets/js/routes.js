@@ -27,6 +27,8 @@ import AdminLogout from './auth/admin/Logout';
 import UserLogout from './auth/user/Logout';
 import CheckinPage from './pages/CheckinPage';
 import ResumesPage from './pages/ResumesPage';
+import DropPage from './pages/DropPage';
+import DropFormPage from './pages/DropFormPage';
 
 import CookieTypes from '~/static/Cookies';
 
@@ -132,6 +134,9 @@ class Routes extends React.Component {
         <Route exact path="/user/forgot"
           component={this.renderUser(ForgotPage)} />
         <Route path="/user/reset/:id" component={this.renderUser(ResetPage)} />
+        <Route exact path="/drop/" component={this.renderUser(DropPage)} />
+        <Route path="/drop/:eventAlias"
+          component={this.renderUser(DropFormPage)} />
 
         <PrivateUserRoute exact path="/logout"
           component={this.renderUser(UserLogout)} />
