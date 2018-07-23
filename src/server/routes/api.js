@@ -65,7 +65,7 @@ module.exports = function(app) {
 
   api.get('/events', (req, res) => {
     return Event.find()
-      .select('name alias logo closeTime homepage')
+      .select('name alias logo closeTime homepage options')
       .exec()
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
@@ -111,7 +111,8 @@ module.exports = function(app) {
             description: event.description,
             email: event.email,
             closeTime: event.closeTime,
-            checkinWaiver: event.checkinWaiver
+            checkinWaiver: event.checkinWaiver,
+            options: event.options
           });
         });
     });
@@ -148,7 +149,24 @@ module.exports = function(app) {
       return User.updateMany({_id: {$in: users}}, {status})
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(users => res.json({success: true}));
+        .then(() => res.json({success: true}));
+    });
+
+  api.post('/admin/update/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    isOrganiser, (req, res) => {
+      if (!req.body.options) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      let options = req.body.options;
+
+      req.event.options = options;
+      return req.event
+        .save()
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+        .then(() => res.json({success : true}));
     });
 
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
