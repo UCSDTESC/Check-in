@@ -46,6 +46,16 @@ export const loadAllAdmins = () =>
     .use(nocache));
 
 /**
+ * Checks whether the email is already in use.
+ * @param {String} email The user email.
+ * @returns {Promise} A promise of the request.
+ */
+export const checkUserExists = (email) =>
+  promisify(request
+    .get('/verify/' + email)
+    .use(apiPrefix));
+
+/**
  * Request a list of all events that is available to the public.
  * @returns {Promise} A promise of the request.
  */

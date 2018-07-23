@@ -169,4 +169,13 @@ module.exports = function(app) {
       })
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
   });
+
+  app.get('/verify/:email', (req, res) => {
+    return Account.count({email: {
+      $regex: new RegExp(req.params.email, 'i')
+    }})
+      .exec()
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(count => res.json({exists: (count !== 0)}));
+  });
 };
