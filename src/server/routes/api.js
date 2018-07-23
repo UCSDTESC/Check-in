@@ -65,7 +65,7 @@ module.exports = function(app) {
 
   api.get('/events', (req, res) => {
     return Event.find()
-      .select('name alias logo closeTime homepage')
+      .select('name alias logo closeTime homepage, isMLHEvent')
       .exec()
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
@@ -111,7 +111,8 @@ module.exports = function(app) {
             description: event.description,
             email: event.email,
             closeTime: event.closeTime,
-            checkinWaiver: event.checkinWaiver
+            checkinWaiver: event.checkinWaiver,
+            isMLHEvent: event.isMLHEvent
           });
         });
     });

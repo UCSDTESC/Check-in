@@ -54,7 +54,12 @@ var EventSchema = new Schema({
     type: String,
     trim: true,
     required: false
-  }
+  },
+  isMLHEvent: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
 });
 
 EventSchema.plugin(timestamps);

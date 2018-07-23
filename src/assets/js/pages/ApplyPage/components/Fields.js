@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import {Field} from 'redux-form';
+import {Field, formValueSelector} from 'redux-form';
 import React from 'react';
 
 import majors from '~/static/Majors.json';

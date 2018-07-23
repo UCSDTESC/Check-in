@@ -169,9 +169,16 @@ class ApplyPage extends React.Component {
   render() {
     const {page, event} = this.state;
 
+    if (!event) {
+      return (<div className="page apply-page apply-page--loading">
+        <NavHeader />
+        <Loading title="Registration" />
+      </div>);
+    }
+
     let options = {
       allowHighSchool: false,
-      mlhProvisions: false,
+      mlhProvisions: event.isMLHEvent,
       allowOutOfState: false,
       foodOption: false,
       requireResume: true,
@@ -179,12 +186,6 @@ class ApplyPage extends React.Component {
     };
 
     let validator = createValidator(options);
-    if (!event) {
-      return (<div className="page apply-page apply-page--loading">
-        <NavHeader />
-        <Loading title="Registration" />
-      </div>);
-    }
 
     // Check for closed
     if (new Date(event.closeTime) < Date.now()) {

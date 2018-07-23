@@ -70,6 +70,10 @@ const createValidator = (options) => (values) => {
     errors.confirmPassword = 'Your passwords do not match';
   }
 
+  if (values.provision === false) {
+    errors.dataSharing = 'You must agree to the MLH Data Sharing Policy';
+  }
+
   return errors;
 };
 
