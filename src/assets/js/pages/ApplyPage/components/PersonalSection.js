@@ -147,7 +147,7 @@ class PersonalSection extends React.Component {
         fields.createColumn('col-sm-12 no-margin-bottom',
           fields.createLabel('Institution')
         ),
-        fields.createColumn('col-md',
+        fields.createColumn('col-md offset-md-3',
           this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
             'UCSD')
         ),
