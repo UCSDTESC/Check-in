@@ -11,6 +11,7 @@ class UserSection extends React.Component {
     reset: PropTypes.func.isRequired,
     isSubmitting: PropTypes.bool.isRequired,
     previousPage: PropTypes.func.isRequired,
+    emailExists: PropTypes.bool.isRequired,
     submitError: PropTypes.object
   }
 
@@ -73,10 +74,21 @@ class UserSection extends React.Component {
   }
 
   render() {
-    const {previousPage, handleSubmit, pristine, isSubmitting, submitError} =
-      this.props;
+    const {previousPage, handleSubmit, pristine, isSubmitting, submitError,
+      emailExists} = this.props;
     return (<form onSubmit={handleSubmit}>
-      {fields.createRow(
+      {emailExists && fields.createRow(
+        fields.createColumn('col-sm-12',
+          <h4 key="0">You&#39;re Almost Done!</h4>,
+          <h5 key="1">
+            <strong><i className="fa fa-check"></i></strong>
+            We see you already have a TESC Events account<br/>
+            We will link this application to that
+          </h5>
+      )
+      )}
+
+      {!emailExists && fields.createRow(
         fields.createColumn('col-sm-12',
           <h4 key="0">You&#39;re Almost Done!</h4>,
           <h5 key="1">
