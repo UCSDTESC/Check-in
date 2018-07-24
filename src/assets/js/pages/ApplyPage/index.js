@@ -122,6 +122,8 @@ class ApplyPage extends React.Component {
           action: 'Successful',
         });
 
+
+
         this.nextPage();
       })
       .catch((err) => {

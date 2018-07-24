@@ -3,6 +3,11 @@ export const ENABLE_EDITING = 'ENABLE_EDITING';
 export const DISABLE_EDITING = 'DISABLE_EDITING';
 export const TOGGLE_EDITING = 'TOGGLE_EDITING';
 
+// User Events
+export const REPLACE_USER_EVENTS = 'REPLACE_USER_EVENTS';
+export const ADD_USER_EVENT = 'ADD_USER_EVENT';
+export const DELETE_USER_EVENTS = 'DELETE_USER_EVENTS';
+
 // Filters
 export const ADD_FILTER = 'ADD_FILTER';
 export const REMOVE_FILTER = 'REMOVE_FILTER';

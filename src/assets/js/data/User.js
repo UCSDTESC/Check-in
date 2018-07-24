@@ -71,6 +71,18 @@ export const getCurrentUser = (eventAlias) => {
 };
 
 /**
+ * Get a list of events for which the user has applied.
+ * @returns {Promise} A promise of the request.
+ */
+export const getUserEvents = () => {
+  return promisify(request
+    .get('/events')
+    .set('Content-Type', 'application/json')
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .use(prefix));
+};
+
+/**
  * Updates a field for a given user.
  * @returns {Promise} A promise of the request.
  */

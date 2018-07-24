@@ -13,6 +13,8 @@ const roles = {
   ROLE_MEMBER: 'Member'
 };
 
+const PUBLIC_EVENT_FIELDS = 'name alias logo closeTime homepage';
+
 // Conditions that must be met for sponsors to see resumes
 const getResumeConditions = (req) => ({
   deleted: {$ne: true},
@@ -203,5 +205,6 @@ module.exports = {
   isOrganiser,
   isSponsor,
   exportApplicantInfo,
-  getResumeConditions
+  getResumeConditions,
+  PUBLIC_EVENT_FIELDS
 };

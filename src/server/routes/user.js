@@ -7,7 +7,7 @@ const logging = require('../config/logging');
 const upload = require('../config/uploads')();
 var {createTESCEmail} = require('../config/mailer')();
 
-const {setUserInfo} = require('./helper');
+const {setUserInfo, PUBLIC_EVENT_FIELDS} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const User = mongoose.model('User');
@@ -194,5 +194,16 @@ module.exports = function(app) {
         return res.json(user);
       })
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+  });
+
+  userRoute.get('/events', requireAuth, (req, res) => {
+    return User
+      .find({account: req.user})
+      .populate('event', PUBLIC_EVENT_FIELDS)
+      .exec()
+      .then((users) => {
+        let events = users.map((user) => user.event);
+        return res.json(events);
+      });
   });
 };

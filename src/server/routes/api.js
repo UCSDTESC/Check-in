@@ -9,7 +9,7 @@ const generatePassword = require('password-generator');
 const logging = require('../config/logging');
 
 const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo,
-  getResumeConditions} = require('./helper');
+  getResumeConditions, PUBLIC_EVENT_FIELDS} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
@@ -65,7 +65,7 @@ module.exports = function(app) {
 
   api.get('/events', (req, res) => {
     return Event.find()
-      .select('name alias logo closeTime homepage')
+      .select(PUBLIC_EVENT_FIELDS)
       .exec()
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
