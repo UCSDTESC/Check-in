@@ -4,7 +4,7 @@ import {Link} from 'react-router-dom';
 
 export default class CurrentEvents extends React.Component {
   static propTypes = {
-    events: PropTypes.array.isRequired,
+    events: PropTypes.array.isRequired
   };
 
   render() {
@@ -18,7 +18,11 @@ export default class CurrentEvents extends React.Component {
             <h1>Current Events</h1>
           </div>
 
-          {events.map(event => (
+          {events.length === 0 && <div className="col-md-12">
+            <h3>No New Upcoming Events</h3>
+          </div>}
+
+          {events.length !== 0 && events.map(event => (
             <div key={event._id} className="col-md-4">
               <Link to={`/register/${event.alias}`}>
                 <div className="card mb-4 box-shadow">

@@ -4,6 +4,8 @@ import * as Types from './types';
 
 import * as Api from '~/data/Api';
 
+import * as UserApi from '~/data/User';
+
 
 // General
 
@@ -17,6 +19,22 @@ export const disableEditing = () => ({
 
 export const toggleEditing = () => ({
   type: Types.TOGGLE_EDITING
+});
+
+// User Events
+
+export const replaceUserEvents = (events) => ({
+  type: Types.REPLACE_USER_EVENTS,
+  events
+});
+
+export const addUserEvents = (event) => ({
+  type: Types.ADD_USER_EVENT,
+  event
+});
+
+export const deleteUserEvents = () => ({
+  type: Types.DELETE_USER_EVENTS
 });
 
 // Filters
@@ -138,6 +156,19 @@ export const loadAllPublicEvents = () => (dispatch) => {
   Api.loadAllPublicEvents()
     .then(res => {
       dispatch(replaceEvents(res));
+      return deferred.resolve();
+    })
+    .catch(deferred.reject);
+
+  return deferred.promise;
+};
+
+export const loadUserEvents = () => (dispatch) => {
+  var deferred = Q.defer();
+
+  UserApi.getUserEvents()
+    .then(res => {
+      dispatch(replaceUserEvents(res));
       return deferred.resolve();
     })
     .catch(deferred.reject);

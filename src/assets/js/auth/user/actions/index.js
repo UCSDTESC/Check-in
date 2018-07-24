@@ -2,6 +2,8 @@ import * as Auth from '~/data/User';
 
 import * as Types from './types';
 
+import {deleteUserEvents} from '~/actions';
+
 import Cookies from 'universal-cookie';
 import Q from 'q';
 
@@ -64,6 +66,7 @@ export function loginUser({email, password}) {
 export function logoutUser() {
   return function(dispatch) {
     dispatch({type: Types.UNAUTH_USER});
+    dispatch(deleteUserEvents());
     cookies.remove(CookieTypes.user.token, {path: '/'});
     cookies.remove(CookieTypes.user.user, {path: '/'});
   };
