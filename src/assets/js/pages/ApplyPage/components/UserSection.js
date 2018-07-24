@@ -42,12 +42,9 @@ class UserSection extends React.Component {
     return (<span>
       {fields.createRow(
         fields.createColumn('col-sm-12',
-          fields.createLabel(`We participate in Major League Hacking (MLH) as
-            a MLH Member Event. You authorize us to share certain
-            application/registration information for event administration,
-            ranking, MLH administration, pre and post-event informational
-            e-mails, and occasional messages about hackathons in line with the
-            MLH Privacy Policy.`)
+          fields.createLabel(`I authorize you to share my application/registration information for event administration, ranking,
+            MLH administration, pre- and post-event informational e-mails, and occasional messages about hackathons in-line
+            with the MLH Privacy Policy. I further I agree to the terms of both the MLH Contest Terms and Conditions and the MLH Privacy Policy.`)
         )
       )}
 
@@ -63,7 +60,7 @@ class UserSection extends React.Component {
         ),
         fields.createColumn('col-sm-12',
           this.createAcceptBox(),
-          <span>I accept the&nbsp;
+          <span>I have read and agree to the&nbsp;
             <a className="sd-link__underline sd-link__hover-purple"
               href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">
               MLH Code of Conduct

@@ -24,6 +24,10 @@ const createValidator = (options) => (values) => {
     required.push('resume');
   }
 
+  if (options.requireDiversityOption) {
+    required.push('race');
+  }
+
   if (values.institution === 'ucsd') {
     required.push('pid');
   }
@@ -45,7 +49,7 @@ const createValidator = (options) => (values) => {
     errors.birthdateYear = 'Invalid Year';
   }
 
-  if (values.birthdateYear > 1999) {
+  if (values.birthdateYear > 2000) {
     if (!values.university ||
         values.university.indexOf('The University of California') === -1) {
       errors.birthdateYear = 'Invalid Year';
