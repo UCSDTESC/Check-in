@@ -7,7 +7,7 @@ module.exports.up = function (done) {
 
   let options = {
     allowHighSchool: false,
-    mlhProvisions: false,
+    mlhProvisions: true,
     allowOutOfState: false,
     foodOption: false,
     requireResume: true,

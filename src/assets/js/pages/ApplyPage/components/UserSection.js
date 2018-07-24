@@ -12,7 +12,8 @@ class UserSection extends React.Component {
     isSubmitting: PropTypes.bool.isRequired,
     previousPage: PropTypes.func.isRequired,
     emailExists: PropTypes.bool.isRequired,
-    submitError: PropTypes.object
+    submitError: PropTypes.object,
+    options: PropTypes.object
   }
 
   /**
@@ -75,12 +76,12 @@ class UserSection extends React.Component {
 
   render() {
     const {previousPage, handleSubmit, pristine, isSubmitting, submitError,
-      emailExists} = this.props;
+      emailExists, options} = this.props;
     return (<form onSubmit={handleSubmit}>
       {emailExists && fields.createRow(
-        fields.createColumn('col-sm-12',
+        fields.createColumn('col-sm-12 mt-4 text-center',
           <h4 key="0">You&#39;re Almost Done!</h4>,
-          <h5 key="1">
+          <h5 key="1" className="mt-3">
             <strong><i className="fa fa-check"></i></strong>
             We see you already have a TESC Events account<br/>
             We will link this application to that
@@ -105,13 +106,15 @@ class UserSection extends React.Component {
         )
       )}
 
+      {options.mlhProvisions && this.createMLHProvisions()}
+
       {fields.createRow(
         fields.createColumn('col-sm-12 col-md-4 text-center',
           <button className="btn rounded-button rounded-button--secondary"
             type="button" onClick={previousPage}
             disabled={isSubmitting}>Go Back</button>
         ),
-        fields.createColumn('col-sm-12 col-md-4 text-center',
+        fields.createColumn('col-sm-12 col-md-8 text-right',
           <button className={'btn sd-form__nav-button rounded-button ' +
             'success button'} type="submit"
             disabled={pristine || isSubmitting}>Apply!</button>
