@@ -54,6 +54,32 @@ var EventSchema = new Schema({
     type: String,
     trim: true,
     required: false
+  },
+  options: {
+    allowHighSchool: {
+      type: Boolean,
+      default: false
+    },
+    mlhProvisions: {
+      type: Boolean,
+      default: false
+    },
+    allowOutOfState: {
+      type: Boolean,
+      default: false
+    },
+    foodOption: {
+      type: Boolean,
+      default: false
+    },
+    requireResume: {
+      type: Boolean,
+      default: true
+    },
+    allowTeammates: {
+      type: Boolean,
+      default: false
+    }
   }
 });
 

@@ -190,22 +190,15 @@ class ApplyPage extends React.Component {
   render() {
     const {page, event, emailExists} = this.state;
 
-    let options = {
-      allowHighSchool: false,
-      mlhProvisions: false,
-      allowOutOfState: false,
-      foodOption: false,
-      requireResume: true,
-      allowTeammates: true
-    };
-
-    let validator = createValidator(options);
     if (!event) {
       return (<div className="page apply-page apply-page--loading">
         <NavHeader />
         <Loading title="Registration" />
       </div>);
     }
+
+    let options = event.options;
+    let validator = createValidator(options);
 
     // Check for closed
     if (new Date(event.closeTime) < Date.now()) {

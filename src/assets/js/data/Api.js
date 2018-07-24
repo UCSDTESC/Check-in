@@ -244,3 +244,15 @@ export const bulkChange = (users, status) =>
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
+/**
+ * Request an update for the event options.
+ * @param  {String} eventAlias The alias for the event.
+ * @param  {Object} options The new event options.
+ * @returns {Promise} A promise of the request.
+ */
+export const updateOptions = (eventAlias, options) =>
+  promisify(request
+    .post('/admin/update/' + eventAlias)
+    .send({options})
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
