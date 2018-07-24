@@ -137,6 +137,10 @@ var UserSchema = new Schema({
   sanitized: {
     type: Boolean,
     default: false
+  },
+  race: {
+    type: String,
+    required: false
   }
 });
 

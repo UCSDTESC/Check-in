@@ -13,7 +13,7 @@ const Account = mongoose.model('Account');
 const autoPopulateFields = [
   'firstName', 'lastName', 'gender', 'phone',
   'university', 'major', 'year', 'github', 'website', 'shareResume', 'food',
-  'diet', 'shirtSize', 'pid'
+  'diet', 'shirtSize', 'pid', 'race'
 ];
 
 module.exports = function(app) {

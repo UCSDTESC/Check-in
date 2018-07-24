@@ -170,6 +170,14 @@ class PersonalSection extends React.Component {
     </span>);
   }
 
+  createDiversityOptions() {
+    return (fields.createRow(
+      fields.createColumn('col-md-6',
+        fields.createLabel('What is your race / ethnicity?'),
+        fields.createDiversityOptions()
+      )));
+  }
+
   render() {
     const {handleSubmit, pristine, submitting, options} = this.props;
 
@@ -246,8 +254,11 @@ class PersonalSection extends React.Component {
         )
       )}
 
+      {options.requireDiversityOption && this.createDiversityOptions()}
+
+
       {fields.createRow(
-        fields.createColumn('col-md-4 col-md-offset-4',
+        fields.createColumn('col-md-6',
           fields.createLabel('Resume'),
           this.createResumeUpload()
         )

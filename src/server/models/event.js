@@ -79,6 +79,10 @@ var EventSchema = new Schema({
     allowTeammates: {
       type: Boolean,
       default: false
+    },
+    requireDiversityOption: {
+      type: Boolean,
+      default: false
     }
   }
 });
