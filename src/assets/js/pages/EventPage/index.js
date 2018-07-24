@@ -7,7 +7,8 @@ import FA from 'react-fontawesome';
 import {UncontrolledAlert} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadEventStatistics, exportUsers, bulkChange} from '~/data/Api';
+import {loadEventStatistics, exportUsers, bulkChange, updateOptions}
+  from '~/data/Api';
 
 import {loadAllAdminEvents} from '~/actions';
 
@@ -19,6 +20,7 @@ import SponsorList from './components/SponsorList';
 import BulkChange from './components/BulkChange';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
+import EventOptions from './components/EventOptions';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -131,6 +133,20 @@ class EventPage extends React.Component {
       });
   };
 
+  onOptionsUpdate = (options) => {
+    let {event} = this.props;
+
+    updateOptions(event.alias, options)
+      .then(() => {
+        this.createAlert('Successfully updated options!', 'success',
+          'Event Options');
+      })
+      .catch((err) => {
+        this.createAlert(err.message, 'danger', 'Event Options');
+        console.error(err);
+      });
+  };
+
   render() {
     let {event} = this.props;
     let {statistics, alerts} = this.state;
@@ -175,6 +191,9 @@ class EventPage extends React.Component {
           <div className="row">
             <div className="col-lg-4 col-md-6">
               <BulkChange onSubmit={this.onBulkChange} />
+            </div>
+            <div className="col-lg-4 col-md-6">
+              <EventOptions options={event.options} onOptionsUpdate={this.onOptionsUpdate} />
             </div>
           </div>
         </div>

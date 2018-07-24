@@ -88,7 +88,9 @@ module.exports = function(app) {
 
         return req.body;
       }, err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-      .then((values) => Account.findOne({email: values.email}))
+      .then((values) => Account.findOne({email: {
+        $regex: new RegExp(values.email, 'i')
+      }}))
       .then((foundAccount) => {
         if (foundAccount) {
           account = foundAccount;
@@ -109,6 +111,13 @@ module.exports = function(app) {
       .then(() => applyAutoPopulate(user, values))
       .then((populatedValues) =>
         applyManualField(user, populatedValues, event, account))
+      .then(() => User.count({account, event}))
+      .then((count) => {
+        if (count !== 0) {
+          throw Errors.USER_ALREADY_REGISTERED;
+        }
+        return true;
+      })
       .then(() => {
         if (req.file) {
           return user.attach('resume', {path: req.file.path});
@@ -168,5 +177,14 @@ module.exports = function(app) {
         return res.redirect('/login#confirmed');
       })
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+  });
+
+  app.get('/verify/:email', (req, res) => {
+    return Account.count({email: {
+      $regex: new RegExp(req.params.email, 'i')
+    }})
+      .exec()
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(count => res.json({exists: (count !== 0)}));
   });
 };

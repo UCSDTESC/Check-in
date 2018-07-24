@@ -14,7 +14,15 @@ class PersonalSection extends React.Component {
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     event: PropTypes.object.isRequired,
-    options: PropTypes.object.isRequired
+    options: PropTypes.object.isRequired,
+    onEmailChange: PropTypes.func.isRequired
+  }
+
+  createEmailField() {
+    return (<Field className={'sd-form__input-email'}
+      name={'email'} component={fields.errorTextInput}
+      placeholder={'email@university.edu'} type={'email'}
+      onBlur={(e) => this.props.onEmailChange(e.target.value)} />);
   }
 
   /**
@@ -139,7 +147,7 @@ class PersonalSection extends React.Component {
         fields.createColumn('col-sm-12 no-margin-bottom',
           fields.createLabel('Institution')
         ),
-        fields.createColumn('col-md',
+        fields.createColumn('col-md offset-md-3',
           this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
             'UCSD')
         ),
@@ -179,8 +187,7 @@ class PersonalSection extends React.Component {
       {fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel('Email'),
-          fields.createInput('email', 'email@university.edu', 'email',
-            'sd-form__input-email')
+          this.createEmailField()
         )
       )}
 

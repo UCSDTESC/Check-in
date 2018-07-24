@@ -5,7 +5,7 @@ import Progress from 'react-progress';
 import ReactGA from 'react-ga';
 import {Link} from 'react-router-dom';
 
-import {registerUser, loadEventByAlias} from '~/data/Api';
+import {registerUser, loadEventByAlias, checkUserExists} from '~/data/Api';
 
 import Loading from '~/components/Loading';
 
@@ -37,7 +37,8 @@ class ApplyPage extends React.Component {
       page: 1,
       error: null,
       isSubmitting: false,
-      event: null
+      event: null,
+      emailExists: false
     };
   }
 
@@ -100,6 +101,26 @@ class ApplyPage extends React.Component {
     }
 
     return values;
+  }
+
+  /**
+   * Looks up emails to link previous accounts.
+   * @param {String} email The new value of the email address.
+   */
+  lookupEmail = (email) => {
+    if (email.length === 0) {
+      this.setState({
+        emailExists: false
+      });
+      return;
+    }
+
+    checkUserExists(email)
+      .then((ret) => {
+        this.setState({
+          emailExists: ret.exists
+        });
+      });
   }
 
   /**
@@ -169,24 +190,17 @@ class ApplyPage extends React.Component {
   }
 
   render() {
-    const {page, event} = this.state;
+    const {page, event, emailExists} = this.state;
 
-    let options = {
-      allowHighSchool: false,
-      mlhProvisions: false,
-      allowOutOfState: false,
-      foodOption: false,
-      requireResume: true,
-      allowTeammates: true
-    };
-
-    let validator = createValidator(options);
     if (!event) {
       return (<div className="page apply-page apply-page--loading">
         <NavHeader />
         <Loading title="Registration" />
       </div>);
     }
+
+    let options = event.options;
+    let validator = createValidator(options);
 
     // Check for closed
     if (new Date(event.closeTime) < Date.now()) {
@@ -220,14 +234,16 @@ class ApplyPage extends React.Component {
             {event && <Header name={event.name} logo={event.logo}
               description={event.description} />}
             {page === 1 && <PersonalSection onSubmit={this.nextPage}
-              validate={validator} event={event} options={options} />}
+              validate={validator} event={event} options={options}
+              onEmailChange={this.lookupEmail} />}
             {page === 2 && <ResponseSection onSubmit={this.nextPage}
               previousPage={this.previousPage}
               validate={validator} options={options} />}
             {page === 3 && <UserSection onSubmit={this.onFinalSubmit}
               previousPage={this.previousPage} submitError={this.state.error}
               isSubmitting={this.state.isSubmitting}
-              validate={validator} options={options} />}
+              validate={validator} options={options}
+              emailExists={emailExists} />}
             {page === 4 && <SubmittedSection event={event} />}
           </div>
         </div>
