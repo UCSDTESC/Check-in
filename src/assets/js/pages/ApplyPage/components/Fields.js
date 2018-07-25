@@ -140,6 +140,26 @@ creates.errorGenderPicker =
       </div>);
   };
 
+creates.errorDiversityOptions =
+  function errorDiversityOptions({input, className, type,
+    meta: {touched, error}}) {
+    let errorClass = creates.errorClass(className, touched, error);
+    let opts = ['American Indian or Alaskan Native', 'Asian / Pacific Islander',
+      'Black or African American', 'Hispanic', 'White / Caucasian', 'Multiple ethnicity / Other',
+      'Prefer Not To Answer']
+
+    return (
+      <div>
+        <select {...input} className={errorClass}
+          type={type}>
+          <option key={-1}></option>
+          {opts.map((opt, i) =>
+            <option key={i} value={opt}>{opt}</option>)}
+        </select>
+        {touched && error && creates.createError(error)}
+      </div>);
+  };
+
 creates.errorYearPicker =
   function errorYearPicker({input, className, type,
     meta: {touched, error}}) {
@@ -206,6 +226,11 @@ creates.createGenderPicker = function createGenderPicker() {
   return (<Field component={creates.errorGenderPicker}
     className="sd-form__input-select" name="gender" />);
 };
+
+creates.createDiversityOptions = function createDiversityOptions() {
+  return (<Field component={creates.errorDiversityOptions}
+    className="sd-form__input-select" name="race" />);
+}
 
 creates.createTShirtSizePicker = function createTShirtSizePicker() {
   return (<Field component={creates.errorTShirtSizePicker}

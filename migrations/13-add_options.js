@@ -11,7 +11,8 @@ module.exports.up = function (done) {
     allowOutOfState: false,
     foodOption: false,
     requireResume: true,
-    allowTeammates: true
+    allowTeammates: true,
+    requireDiversityOption: true,
   };
   events.findOneAndUpdate({alias: 'hackxx'}, {$set:{options}}, done);
 };
