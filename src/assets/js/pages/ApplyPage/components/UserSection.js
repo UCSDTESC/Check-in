@@ -11,7 +11,9 @@ class UserSection extends React.Component {
     reset: PropTypes.func.isRequired,
     isSubmitting: PropTypes.bool.isRequired,
     previousPage: PropTypes.func.isRequired,
-    submitError: PropTypes.object
+    emailExists: PropTypes.bool.isRequired,
+    submitError: PropTypes.object,
+    options: PropTypes.object
   }
 
   /**
@@ -40,12 +42,9 @@ class UserSection extends React.Component {
     return (<span>
       {fields.createRow(
         fields.createColumn('col-sm-12',
-          fields.createLabel(`We participate in Major League Hacking (MLH) as
-            a MLH Member Event. You authorize us to share certain
-            application/registration information for event administration,
-            ranking, MLH administration, pre and post-event informational
-            e-mails, and occasional messages about hackathons in line with the
-            MLH Privacy Policy.`)
+          fields.createLabel(`I authorize you to share my application/registration information for event administration, ranking,
+            MLH administration, pre- and post-event informational e-mails, and occasional messages about hackathons in-line
+            with the MLH Privacy Policy. I further I agree to the terms of both the MLH Contest Terms and Conditions and the MLH Privacy Policy.`)
         )
       )}
 
@@ -55,15 +54,16 @@ class UserSection extends React.Component {
           <span>
             I agree to the&nbsp;
             <a className="sd-link__underline sd-link__hover-purple"
-              href="https://git.io/v7bCA">MLH Data Sharing Policy
+              href="https://git.io/v7bCA" target="_blank">
+                MLH Data Sharing Policy
             </a>.
           </span>
         ),
         fields.createColumn('col-sm-12',
           this.createAcceptBox(),
-          <span>I accept the&nbsp;
+          <span>I have read and agree to the&nbsp;
             <a className="sd-link__underline sd-link__hover-purple"
-              href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf">
+              href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" target="_blank">
               MLH Code of Conduct
             </a>
           </span>
@@ -73,10 +73,21 @@ class UserSection extends React.Component {
   }
 
   render() {
-    const {previousPage, handleSubmit, pristine, isSubmitting, submitError} =
-      this.props;
+    const {previousPage, handleSubmit, pristine, isSubmitting, submitError,
+      emailExists, options} = this.props;
     return (<form onSubmit={handleSubmit}>
-      {fields.createRow(
+      {emailExists && fields.createRow(
+        fields.createColumn('col-sm-12 mt-4 text-center',
+          <h4 key="0">You&#39;re Almost Done!</h4>,
+          <h5 key="1" className="mt-3">
+            <strong><i className="fa fa-check"></i></strong>
+            We see you already have a TESC Events account<br/>
+            We will link this application to that
+          </h5>
+      )
+      )}
+
+      {!emailExists && fields.createRow(
         fields.createColumn('col-sm-12',
           <h4 key="0">You&#39;re Almost Done!</h4>,
           <h5 key="1">
@@ -93,13 +104,15 @@ class UserSection extends React.Component {
         )
       )}
 
+      {options.mlhProvisions && this.createMLHProvisions()}
+
       {fields.createRow(
         fields.createColumn('col-sm-12 col-md-4 text-center',
           <button className="btn rounded-button rounded-button--secondary"
             type="button" onClick={previousPage}
             disabled={isSubmitting}>Go Back</button>
         ),
-        fields.createColumn('col-sm-12 col-md-4 text-center',
+        fields.createColumn('col-sm-12 col-md-8 text-right',
           <button className={'btn sd-form__nav-button rounded-button ' +
             'success button'} type="submit"
             disabled={pristine || isSubmitting}>Apply!</button>

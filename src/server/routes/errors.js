@@ -27,6 +27,8 @@ module.exports = (logging) => {
     PHONE_NUMBER_INVALID: 'Your phone number must be exactly 10 digits',
     EMAIL_IN_USE: 'This email has already been used',
     USER_NOT_REGISTERED: 'This user is not registered for this event',
+    USER_ALREADY_REGISTERED: 'This account has already registered for this '+
+      'event',
     RESUME_UPDATE_ERROR: 'There was an error updating your resume',
     NO_STATUS_SENT: 'There was no status sent in the request'
   };
