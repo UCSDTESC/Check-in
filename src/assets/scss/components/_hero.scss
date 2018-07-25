@@ -1,6 +1,9 @@
 .hero {
   padding: 0 0 1rem;
-  margin-bottom: 2rem;
+
+  @include media-breakpoint-up(md) {
+    margin-bottom: 2rem;
+  }
   
   &--expanded {
     padding: 2rem 0 10rem;
