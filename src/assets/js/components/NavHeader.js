@@ -66,11 +66,6 @@ class NavHeader extends React.Component {
 
   renderAuthenticatedLinks() {
     return ([
-      <li className="sd-nav__link-item" key={0}>
-        <Link className="sd-nav__link" to="/user/hackxx">
-          Profile
-        </Link>
-      </li>,
       <li className="sd-nav__link-item" key={1}>
         <Link className="sd-nav__link" to="/logout">
           Logout
@@ -81,11 +76,6 @@ class NavHeader extends React.Component {
 
   renderAuthenticatedHamburgerLinks() {
     return ([
-      <li className="hamburger__link-item" key={0}>
-        <Link className="hamburger__link" to="/user/hackxx">
-          Profile
-        </Link>
-      </li>,
       <li className="hamburger__link-item" key={1}>
         <Link className="hamburger__link" to="/logout">
           Logout
