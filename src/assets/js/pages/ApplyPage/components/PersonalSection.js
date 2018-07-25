@@ -258,8 +258,8 @@ class PersonalSection extends React.Component {
 
 
       {fields.createRow(
-        fields.createColumn('col-md-6',
-          fields.createLabel('Resume'),
+        fields.createColumn('col-md-4 col-md-offset-4',
+          fields.createLabel('Resume (5MB Max)'),
           this.createResumeUpload()
         )
       )}
