@@ -32,6 +32,10 @@ const createValidator = (options) => (values) => {
     required.push('pid');
   }
 
+  if (values.pid && values.pid.length() != 9) {
+    errors.pidError = 'Invalid PID';
+  }
+
   const notValid = required.filter(name => !(name in values));
   notValid.forEach(name => errors[name] = 'Required');
 
@@ -42,7 +46,7 @@ const createValidator = (options) => (values) => {
   if (values.birthdateDay < 1 || values.birthdateDay > 31) {
     errors.birthdateDay = 'Invalid Day';
   }
-  if (values.birthdateMonth < 1 || values.birthdateMonth > 12) {
+  if (values.birthdateMonth == 'Month' || values.birthdateMonth < 1 || values.birthdateMonth > 12) {
     errors.birthdateMonth = 'Invalid Month';
   }
   if (values.birthdateYear < 1900) {

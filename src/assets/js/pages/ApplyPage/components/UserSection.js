@@ -127,7 +127,7 @@ class UserSection extends React.Component {
 
       {submitError && fields.createRow(
         fields.createColumn('col-sm-12',
-          fields.createError(submitError.message)
+          fields.createError(submitError.message + ' (Your Resume Upload Might Be Too Big)')
         )
       )}
     </form>);
