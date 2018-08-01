@@ -32,10 +32,6 @@ const createValidator = (options) => (values) => {
     required.push('pid');
   }
 
-  if (values.pid && values.pid.length() != 9) {
-    errors.pidError = 'Invalid PID';
-  }
-
   const notValid = required.filter(name => !(name in values));
   notValid.forEach(name => errors[name] = 'Required');
 
