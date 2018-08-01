@@ -165,7 +165,7 @@ creates.errorYearPicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let years = [
-      '1', '2', '3', '4', '5+'
+      '1', '2', '3', '4', '5+', 'Graduate'
     ];
 
     return (

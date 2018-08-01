@@ -11,6 +11,8 @@ export const promisify = (request) => {
       if (res.body) {
         return deferred.reject(new Error(res.body.error));
       }
+
+      console.log(err);
       return deferred.reject(new Error(err));
     }
     deferred.resolve(res.body);

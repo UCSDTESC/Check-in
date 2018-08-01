@@ -127,7 +127,7 @@ class Login extends React.Component {
           </div>
         </div>
         <div className="user-login__below">
-          <div className="row sd-form__row">
+          {/*<div className="row sd-form__row">
             <div className="col-12">
               <Link to="/register/hackxx" className={`btn rounded-button
                 rounded-button--secondary rounded-button--small
@@ -135,7 +135,7 @@ class Login extends React.Component {
                 I don‘t have an account, I still need to apply
               </Link>
             </div>
-          </div>
+          </div>*/}
           <div className="row sd-form__row">
             <div className="col-12">
               <Link to="/user/forgot"
