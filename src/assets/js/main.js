@@ -11,7 +11,7 @@ import ReactGA from 'react-ga';
 import Routes from './routes';
 import reducer from './reducers';
 
-ReactGA.initialize('UA-114986326-1');
+ReactGA.initialize('UA-123201625-1');
 
 // Required for Redux Devtools Chrome extension
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ||
