@@ -151,7 +151,7 @@ class UserProfile extends React.Component {
       </div>
 
       <div className="user-profile__email">
-        Email: {user.email}
+        Email: {user.account.email}
       </div>
       <div className="user-profile__phone">
         Phone: {this.renderPhoneNumber(String(user.phone))}
