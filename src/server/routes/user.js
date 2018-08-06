@@ -121,6 +121,7 @@ module.exports = function(app) {
         return User
           .findOne({account: req.user, event})
           .populate('event')
+          .populate('account')
           .exec();
       })
       .then(obj => res.json(obj))
