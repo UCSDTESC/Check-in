@@ -7,7 +7,7 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
 
-import {addColumn, updateUser, removeColumn} from './actions';
+import {addColumn, updateUser, deleteUser, removeColumn} from './actions';
 
 import {loadAllUsers} from '~/data/Api';
 
@@ -36,7 +36,8 @@ class UsersPage extends React.Component {
     addColumn: PropTypes.func.isRequired,
     removeColumn: PropTypes.func.isRequired,
     loadAllAdminEvents: PropTypes.func.isRequired,
-    updateUser: PropTypes.func.isRequired
+    updateUser: PropTypes.func.isRequired,
+    deleteUser: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -96,6 +97,20 @@ class UsersPage extends React.Component {
       });
   }
 
+  onDeleteUser = (user) => {
+    this.props.deleteUser(user)
+      .catch(console.error)
+      .then(() => {
+        let {users} = this.state;
+        this.setState({
+          users: [
+            ...users.filter((curr) => curr._id !== user._id),
+            {...user, deleted: true}
+          ]
+        });
+      });
+  }
+
   onAddColumn = (columnName) =>
     this.props.addColumn(columnName)
 
@@ -134,8 +149,9 @@ class UsersPage extends React.Component {
             </button>
           </div>
         </div>
-        <UserList users={users} columns={columns}
-          onUserUpdate={this.onUserUpdate} />
+        <UserList users={users.filter(x => x.deleted === false)} columns={columns}
+          onUserUpdate={this.onUserUpdate}
+          onDeleteUser={this.onDeleteUser}/>
       </div>
     );
   }
@@ -153,7 +169,8 @@ function mapDispatchToProps(dispatch) {
     removeColumn: bindActionCreators(removeColumn,dispatch),
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
+    deleteUser: bindActionCreators(deleteUser, dispatch)
   };
 };
 

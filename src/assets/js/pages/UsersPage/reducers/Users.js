@@ -3,6 +3,7 @@ import * as ActionTypes from '../actions/types';
 const initialState = [];
 
 const user = (state, action) => {
+
   switch (action.type) {
   case ActionTypes.ADD_USERS:
     return action.users;

@@ -20,6 +20,18 @@ export const updateUser = (user) => (dispatch) =>
     })
     .catch(console.error);
 
+export const deleteUser = (user) => (dispatch) => {
+  return Api.deleteUser(user.event.alias, user._id)
+    .then(() => {
+      let newUser = {...user, deleted: true};
+      dispatch({
+        type: Types.UPDATE_USER,
+        user: newUser
+      });
+    })
+    .catch(console.error);
+};
+
 //Columns
 export const addColumn = (column) => ({
   type: Types.ADD_COLUMN,

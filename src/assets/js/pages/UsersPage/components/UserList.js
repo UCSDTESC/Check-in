@@ -16,7 +16,8 @@ class UserList extends React.Component {
     columns: PropTypes.arrayOf(PropTypes.shape(
       ColumnPropTypes
     ).isRequired).isRequired,
-    onUserUpdate: PropTypes.func.isRequired
+    onUserUpdate: PropTypes.func.isRequired,
+    onDeleteUser: PropTypes.func.isRequired
   };
 
   renderPaginationPanel = (props) =>
@@ -31,7 +32,8 @@ class UserList extends React.Component {
   expandComponent = (row) => (
     <div className="user-list__child">
       <User user={row} initialValues={row}
-        onSubmit={this.props.onUserUpdate.bind(this)} />
+        onSubmit={this.props.onUserUpdate.bind(this)}
+        onDeleteUser={this.props.onDeleteUser.bind(this)}/>
     </div>);
 
   render() {

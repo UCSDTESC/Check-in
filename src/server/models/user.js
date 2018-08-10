@@ -141,6 +141,10 @@ var UserSchema = new Schema({
   race: {
     type: String,
     required: false
+  },
+  deleted: {
+    type: Boolean,
+    default: false
   }
 });
 

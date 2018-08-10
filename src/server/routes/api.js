@@ -206,6 +206,17 @@ module.exports = function(app) {
 
     });
 
+  api.delete('/users/:eventAlias/:userId', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser,
+    (req, res) => {
+      User.findByIdAndUpdate(req.params.userId, {deleted: true})
+        .exec()
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+        .then(() => res.json({success: true}));
+    });
+
   api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {

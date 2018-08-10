@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {default as UUID} from 'node-uuid';
+import {Button} from 'reactstrap';
 
 import {User as UserPropType} from '~/proptypes';
 
@@ -12,6 +13,14 @@ import {getRole, Roles} from '~/static/Roles';
 import CheckboxButton from './CheckboxButton';
 
 class User extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      showConfirm: false
+    };
+  }
+
   static propTypes = {
     user: PropTypes.shape(
       UserPropType
@@ -21,11 +30,16 @@ class User extends React.Component {
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     resume: PropTypes.object,
-    role: PropTypes.string.isRequired
+    role: PropTypes.string.isRequired,
+    onDeleteUser: PropTypes.func.isRequired
   };
 
   handleFormSubmit(formProps) {
     return formProps;
+  }
+
+  toggleConfirmation() {
+    this.setState({showConfirm: !this.state.showConfirm});
   }
 
   /**
@@ -83,11 +97,36 @@ class User extends React.Component {
   }
 
   render() {
-    const {handleSubmit, pristine, reset, submitting} = this.props;
+    const {handleSubmit, pristine, reset, submitting, onDeleteUser, user} = this.props;
 
     return (
       <div>
-        <h3>User <small>{this.props.user._id}</small></h3>
+        <div className="row">
+          <div className="col-md-6">
+            <h3>User <small>{this.props.user._id}</small></h3>
+          </div>
+          <div className="col-md-6">
+            <div className="float-right">
+              {this.state.showConfirm ?
+                <div>
+                  <Button color="success" outline
+                    onClick={() => onDeleteUser(user)}
+                    className="mr-5">
+                    <i className="fa fa-2x fa-check"></i>
+                  </Button>
+                  <Button color="danger" outline
+                    onClick={this.toggleConfirmation.bind(this)}>
+                    <i className="fa fa-2x fa-times"></i>
+                  </Button>
+                </div> :
+                <Button color="danger" outline
+                  onClick={this.toggleConfirmation.bind(this)}>
+                  <i className="fa fa-2x fa-trash"></i>
+                </Button>
+              }
+            </div>
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-6">
@@ -152,14 +191,18 @@ class User extends React.Component {
                 {this.renderFormField('Food', 'food', 'col-sm-4')}
                 {this.renderFormField('PID', 'pid', 'col-sm-4')}
               </div>
-              <button type="submit"
-                className="btn rounded-button rounded-button--small"
-                disabled={pristine || submitting}>Apply</button>
-              <button type="button" disabled={pristine || submitting}
-                className={`btn rounded-button rounded-button--small
-                  rounded-button--secondary`} onClick={reset}>
-                Reset
-              </button>
+              <div className="row mt-3">
+                <button type="submit"
+                  className={`btn rounded-button rounded-button--small col-md-4
+                    offset-md-1`}
+                  disabled={pristine || submitting}>Apply</button>
+                <button type="button" disabled={pristine || submitting}
+                  className={`btn rounded-button rounded-button--small
+                    rounded-button--secondary col-md-4 offset-md-2`}
+                  onClick={reset}>
+                  Reset
+                </button>
+              </div>
             </div>
           </div>
         </form>

@@ -197,6 +197,13 @@ export const deleteAdmin = (adminId) =>
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
+
+export const deleteUser = (eventAlias, id) =>
+  promisify(request
+    .delete('/users/' + eventAlias + '/' + id)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix));
+
 /**
  * Request to download a given set of resumes.
  * @param {String[]} applicants An array of User IDs to download
