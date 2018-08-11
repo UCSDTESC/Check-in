@@ -11,5 +11,5 @@ module.exports.up = function (done) {
 module.exports.down = function (done) {
   var users = this.db.collection('users');
 
-  users.update({alias: 'hackxx'}, {$unset: {delete: 1}}, done);
+  users.update({alias: 'hackxx'}, {$unset: {deleted: 1}}, done);
 };
