@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Link} from 'react-router-dom';
+import FA from 'react-fontawesome';
 
 import {Event as EventPropTypes} from '~/proptypes';
 
@@ -9,11 +10,12 @@ export default class EventList extends React.Component {
     events: PropTypes.arrayOf(PropTypes.shape(
       EventPropTypes
     ).isRequired).isRequired,
-    resumeLink: PropTypes.bool
+    resumeLink: PropTypes.bool,
+    canCreate: PropTypes.bool
   };
 
   render() {
-    let {events, resumeLink} = this.props;
+    let {events, resumeLink, canCreate} = this.props;
 
     return (
       <div className="event-list">
@@ -40,6 +42,12 @@ export default class EventList extends React.Component {
             </div>)
           )}
         </div>
+        {canCreate &&
+        <h2 className="mt-2">
+          <Link to="/admin/new">
+            New Event
+          </Link>
+        </h2>}
       </div>
     );
   }

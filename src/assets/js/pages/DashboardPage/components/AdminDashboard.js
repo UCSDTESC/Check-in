@@ -16,7 +16,7 @@ export default class AdminDashboard extends React.Component {
     let {events} = this.props;
 
     return (
-      <EventList events={events} />
+      <EventList events={events} canCreate />
     );
   }
 }

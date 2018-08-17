@@ -27,6 +27,7 @@ import AdminLogout from './auth/admin/Logout';
 import UserLogout from './auth/user/Logout';
 import CheckinPage from './pages/CheckinPage';
 import ResumesPage from './pages/ResumesPage';
+import NewEventPage from './pages/NewEventPage';
 
 import CookieTypes from '~/static/Cookies';
 
@@ -116,6 +117,8 @@ class Routes extends React.Component {
           component={this.renderAdmin(AdminLogout)} />
         <PrivateRoute path="/admin/admins"
           component={this.renderAdmin(AdminsPage)} />
+        <PrivateRoute path="/admin/new"
+          component={this.renderAdmin(NewEventPage)} />
 
         {/* Event Specific Routes */}
         <PrivateRoute path="/admin/events/:eventAlias"
