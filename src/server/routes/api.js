@@ -211,7 +211,9 @@ module.exports = function(app) {
     (req, res) => {
       return Promise.all(
         [User.count({event: req.event}),
-          User.distinct('university').exec(),
+          User.find({
+            event: req.event._id
+          }).distinct('university').exec(),
           User.aggregate([
             {
               $match: {event: req.event._id}
