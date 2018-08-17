@@ -66,6 +66,17 @@ export const loadAllPublicEvents = () =>
     .use(nocache));
 
 /**
+ * Request a list of all resume drop events that is available to the public.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadAllDropEvents = () =>
+  promisify(request
+    .get('/drops')
+    .use(apiPrefix)
+    .use(nocache));
+
+
+/**
  * Request a list of all events the user has access to.
  * @returns {Promise} A promise of the request.
  */

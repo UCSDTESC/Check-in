@@ -97,7 +97,7 @@ function mapDispatchToProps(dispatch) {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
     loadAllPublicEvents: bindActionCreators(loadAllPublicEvents, dispatch),
-    loadUserEvents: bindActionCreators(loadUserEvents, dispatch)
+    loadUserEvents: bindActionCreators(loadUserEvents, dispatch),
   };
 };
 

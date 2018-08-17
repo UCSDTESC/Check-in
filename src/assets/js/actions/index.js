@@ -153,9 +153,10 @@ export const loadAllAdminEvents = () => (dispatch) => {
 export const loadAllPublicEvents = () => (dispatch) => {
   var deferred = Q.defer();
 
-  Api.loadAllPublicEvents()
+  Promise.all([Api.loadAllPublicEvents(),
+    Api.loadAllDropEvents()])
     .then(res => {
-      dispatch(replaceEvents(res));
+      dispatch(replaceEvents([...res[0], ...res[1]]));
       return deferred.resolve();
     })
     .catch(deferred.reject);

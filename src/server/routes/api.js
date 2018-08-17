@@ -16,6 +16,7 @@ const Admin = mongoose.model('Admin');
 const Download = mongoose.model('Download');
 const Event = mongoose.model('Event');
 const User = mongoose.model('User');
+const Drop = mongoose.model('Drop');
 
 const requireAuth = passport.authenticate('adminJwt', {session: false});
 
@@ -70,6 +71,14 @@ module.exports = function(app) {
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
       .then(events => res.json(events));
+  });
+
+  api.get('/drops', (req, res) => {
+    return Drop.find()
+      .select(PUBLIC_EVENT_FIELDS)
+      .exec()
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(drops => res.json(drops));
   });
 
   api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_SPONSOR),
