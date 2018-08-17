@@ -126,6 +126,19 @@ module.exports = function(app) {
         });
     });
 
+  api.get('/admin/drops/:dropAlias', (req, res) => {
+    return Drop.findOne({'alias': req.params.dropAlias})
+      .exec()
+      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+      .then(drop => {
+        if (!drop) {
+          return Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
+        }
+
+        return res.json(drop);
+      }) 
+  });
+
   api.get('/admin/export/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser, (req, res) => {
       return User.find({event: req.event})

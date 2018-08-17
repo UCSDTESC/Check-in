@@ -9,7 +9,7 @@ import {registerUser, loadEventByAlias, checkUserExists} from '~/data/Api';
 
 import Loading from '~/components/Loading';
 
-import NavHeader from '~/components/NavHeader.js';
+import NavHeader from '~/components/NavHeader';
 
 import Header from './components/Header';
 import PersonalSection from './components/PersonalSection';

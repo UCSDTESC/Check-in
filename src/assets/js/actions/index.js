@@ -156,6 +156,11 @@ export const loadAllPublicEvents = () => (dispatch) => {
   Promise.all([Api.loadAllPublicEvents(),
     Api.loadAllDropEvents()])
     .then(res => {
+
+      //setting a property to help us internally differentiate
+      res[0] = res[0].map(x => ({...x, type: 'event'}));
+      res[1] = res[1].map(x => ({...x, type: 'drop'}));
+
       dispatch(replaceEvents([...res[0], ...res[1]]));
       return deferred.resolve();
     })

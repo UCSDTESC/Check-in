@@ -24,7 +24,7 @@ export default class CurrentEvents extends React.Component {
 
           {events.length !== 0 && events.map(event => (
             <div key={event._id} className="col-md-4">
-              <Link to={`/register/${event.alias}`}>
+              <Link to={event.type === 'event' ? `/register/${event.alias}` : `/drop/${event.alias}`}>
                 <div className="card mb-4 box-shadow">
                   <img src={event.logo} className="card-img-top" />
                   <div className="card-body">

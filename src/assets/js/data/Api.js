@@ -98,6 +98,16 @@ export const loadEventByAlias = (eventAlias) =>
     .use(nocache));
 
 /**
+ * Requests drop information based on a given drop alias.
+ * @param {String} eventAlias The event alias.
+ */
+export const loadDropByAlias = (dropAlias) =>
+  promisify(request
+    .get('/admin/drops/' + dropAlias)
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
  * Request a list of all applicants.
  * @param {String} eventAlias The event alias.
  * @returns {Promise} A promise of the request.
