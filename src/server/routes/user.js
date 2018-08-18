@@ -20,7 +20,7 @@ const editableFields = [
 ];
 const readOnlyFields = [
   'status', 'firstName', 'lastName', 'university', 'email', 'phone', 'resume',
-  'availableBus', 'bussing', 'event',
+  'availableBus', 'bussing', 'event', 'account'
 ];
 
 module.exports = function(app) {
@@ -148,7 +148,7 @@ module.exports = function(app) {
       return Event.findOne({alias: req.params.eventAlias})
         .then((event) => {
           return User.findOneAndUpdate({account: user, event: event},
-            {$set: updateDelta}, {new: true});
+            {$set: updateDelta}, {new: true}).populate('account');
         })
         .then((user) => {
           if (!user) {
