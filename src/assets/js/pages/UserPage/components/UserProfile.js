@@ -240,7 +240,6 @@ class UserProfile extends React.Component {
 
   render() {
     let {user, pristine, submitting, handleSubmit} = this.props;
-
     return (
       <form className="user-profile" onSubmit={handleSubmit}>
         <div className="user-profile__header">
