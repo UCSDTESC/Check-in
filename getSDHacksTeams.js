@@ -9,14 +9,13 @@ let writeToCSV = (masterList) => {
 
   console.log('\x1b[32m', '✓ Writing To teams.csv' ,'\x1b[0m');
 
-
   let csvStream = csv.createWriteStream({headers: true}),
     writableStream = fs.createWriteStream("teams.csv");
 
   csvStream.pipe(writableStream);
 
   masterList.forEach((o, i) => {
-    o.team = [..o.team]
+    o.team = [...o.team];
     csvStream.write(o);
 
     if (i === masterList.length - 1) {
@@ -26,7 +25,6 @@ let writeToCSV = (masterList) => {
   });
 
 }
-
 
 let bfs = (vertices) => {
 
@@ -46,6 +44,7 @@ let bfs = (vertices) => {
   //for each node...
   Object.keys(vertices).forEach((v, j) => {
 
+
     let q = [v],
       currTeam = new Set(),
       flag = true,
@@ -54,41 +53,58 @@ let bfs = (vertices) => {
     while (q.length !== 0) {
       v = q.shift();
 
+      //don't revisit
       if (visited.has(v)) {
         continue;
       }
 
       visited.add(v);
       currTeam.add(v);
+
+      //if an application for this email exists..
       if (vertices[v]) {
+        //loop through children
         vertices[v].forEach(c => {
+
           if (visited.has(c)) {
+
+            //if we hit a child that exists in masterList
             if (masterList[indexMapper[c]]) {
+
+              //update masterList and reflect the change in indexMapper
               masterList[indexMapper[c]].team = masterList[indexMapper[c]].team.add(v);
               indexMapper[v] = indexMapper[c];
+
+              //set flag to end BFS 
               flag = false;
             }
             return;
           }
           else {
+
+            //unvisit node, enqueue it
             q.push(c);
           }
         });
       }
       else {
+        //no application found
         info += v + "     ";
       }
 
+      //break out of the BFS
       if (flag === false) {
         break;
       }
     }
 
+    //these changes are already made in lines 74-76 for when flag = false
     if (flag && currTeam.size > 0) {
       currTeam.forEach(c => indexMapper[c] = masterList.length);
       masterList.push({team: currTeam, info});
     }
 
+    //write to CSV on end of this loop
     if (j === Object.keys(vertices).length - 1) {
       return writeToCSV(masterList);
     }
