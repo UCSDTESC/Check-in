@@ -1,0 +1,132 @@
+const mongoose = require('mongoose');
+let csv = require('fast-csv');
+let fs = require('fs');
+require('dotenv').config({silent: process.env.NODE_ENV !== 'development'});
+
+const SDHACKS_OBJECT_ID = '5b2ec82efb6fc048e105e593';
+
+let writeToCSV = (masterList) => {
+
+  console.log('\x1b[32m', '✓ Writing To teams.csv' ,'\x1b[0m');
+
+
+  let csvStream = csv.createWriteStream({headers: true}),
+    writableStream = fs.createWriteStream("teams.csv");
+
+  csvStream.pipe(writableStream);
+
+  masterList.forEach((o, i) => {
+    o.team = [..o.team]
+    csvStream.write(o);
+
+    if (i === masterList.length - 1) {
+      console.log('\x1b[32m', '✓ Done' ,'\x1b[0m');
+      return csvStream.end();
+    }
+  });
+
+}
+
+
+let bfs = (vertices) => {
+
+  /*vertices = {
+    'David': ['Panda'],
+    'Yacoub': ['Panda'],
+    'Nick' : ['Yacoub', 'David'],
+    'Panda' : [],
+  };*/
+ 
+  let visited = new Set(),
+    indexMapper = {},
+    masterList = [];
+
+    console.log('\x1b[32m', '✓ Building Teams' ,'\x1b[0m');
+
+  //for each node...
+  Object.keys(vertices).forEach((v, j) => {
+
+    let q = [v],
+      currTeam = new Set(),
+      flag = true,
+      info = 'Applications Not Found: ';
+
+    while (q.length !== 0) {
+      v = q.shift();
+
+      if (visited.has(v)) {
+        continue;
+      }
+
+      visited.add(v);
+      currTeam.add(v);
+      if (vertices[v]) {
+        vertices[v].forEach(c => {
+          if (visited.has(c)) {
+            if (masterList[indexMapper[c]]) {
+              masterList[indexMapper[c]].team = masterList[indexMapper[c]].team.add(v);
+              indexMapper[v] = indexMapper[c];
+              flag = false;
+            }
+            return;
+          }
+          else {
+            q.push(c);
+          }
+        });
+      }
+      else {
+        info += v + "     ";
+      }
+
+      if (flag === false) {
+        break;
+      }
+    }
+
+    if (flag && currTeam.size > 0) {
+      currTeam.forEach(c => indexMapper[c] = masterList.length);
+      masterList.push({team: currTeam, info});
+    }
+
+    if (j === Object.keys(vertices).length - 1) {
+      return writeToCSV(masterList);
+    }
+  });
+};
+
+let buildVertices = (users) => {
+  console.log('\x1b[32m', '✓ Building Graph Vertices' ,'\x1b[0m');
+  let vertices = {};
+
+  users.forEach((user, i) => {
+    let currNodeChildren = [];
+    if (user.teammates && user.teammates.length > 0) {
+      user.teammates.forEach(x => {
+        if (x.length > 0) currNodeChildren.push(x.toLowerCase());
+      });
+    }
+    vertices[user.account.email.toLowerCase()] = currNodeChildren;
+
+    if (i === users.length - 1) {
+      return bfs(vertices);
+    }
+  });
+};
+
+let main = () => {
+  const User = mongoose.model('User');
+
+  User.find({event: SDHACKS_OBJECT_ID, deleted: false})
+    .populate('account')
+    .then(buildVertices)
+};
+
+mongoose.connect(`mongodb://${process.env.MLAB_READONLY_USER}` +
+  `:${process.env.MLAB_READONLY_PASS}@ds233218.mlab.com:33218/heroku_7qhq69wb`)
+  .then(() => {
+    console.log('\x1b[32m', '✓ Connected to Production Database' ,'\x1b[0m');
+    require('./src/server/models/user');
+    require('./src/server/models/account');
+    main();
+  })
