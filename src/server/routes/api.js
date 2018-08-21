@@ -197,6 +197,7 @@ module.exports = function(app) {
   api.post('/users/:eventAlias/:userId', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser,
     (req, res) => {
+
       User.findByIdAndUpdate(req.params.userId, req.body)
         .exec()
         .catch(err => {

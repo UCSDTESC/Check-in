@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 mongoose.Promise = require('q').Promise;
-var timestamps = require('mongoose-timestamp');
 var mongooseDelete = require('mongoose-delete');
 var bcrypt = require('bcrypt-nodejs');
 
@@ -41,7 +40,7 @@ var AdminSchema = new Schema({
   lastAccessed: {
     type: Date
   }
-});
+}, {timestamps: true});
 
 AdminSchema.pre('save', function(next) {
   const user = this;
@@ -94,7 +93,6 @@ AdminSchema.set('toJSON', {
 
 AdminSchema.plugin(require('mongoose-sanitizer'));
 
-AdminSchema.plugin(timestamps);
 AdminSchema.plugin(mongooseDelete);
 
 module.exports = mongoose.model('Admin', AdminSchema);
