@@ -71,7 +71,6 @@
     "mongoose-crate-s3": "^1.2.0",
     "mongoose-delete": "^0.4.0",
     "mongoose-sanitizer": "^1.0.0",
-    "mongoose-timestamp": "^0.6.0",
     "multer": "^1.3.0",
     "node-uuid": "^1.4.8",
     "nodemailer": "^4.4.2",

@@ -198,10 +198,6 @@ module.exports = function(app) {
     roleAuth(roles.ROLE_ADMIN), isOrganiser,
     (req, res) => {
 
-      //deletes mongoose-timestamp's fields 
-      delete req.body.createdAt;
-      delete req.body.updatedAt;
-
       User.findByIdAndUpdate(req.params.userId, req.body)
         .exec()
         .catch(err => {

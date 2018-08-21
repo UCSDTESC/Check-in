@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var timestamps = require('mongoose-timestamp');
 var mongooseDelete = require('mongoose-delete');
 var bcrypt = require('bcrypt-nodejs');
 
@@ -27,7 +26,7 @@ var AccountSchema = new Schema({
     type: Boolean,
     default: false
   }
-});
+}, {timestamps: true});
 
 AccountSchema.pre('save', function(next) {
   const user = this;
@@ -65,7 +64,6 @@ AccountSchema.methods.comparePassword = function(candidatePassword, cb) {
 
 AccountSchema.plugin(require('mongoose-sanitizer'));
 
-AccountSchema.plugin(timestamps);
 AccountSchema.plugin(mongooseDelete);
 
 mongoose.model('Account', AccountSchema);

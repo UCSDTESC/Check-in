@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var timestamps = require('mongoose-timestamp');
 var mongooseDelete = require('mongoose-delete');
 
 var Schema = mongoose.Schema;
@@ -31,9 +30,8 @@ var DownloadSchema = new Schema({
     default: false,
     required: [true, 'You must specify whether the download has been fulfilled']
   }
-});
+}, {timestamps: true});
 
-DownloadSchema.plugin(timestamps);
 DownloadSchema.plugin(mongooseDelete);
 
 mongoose.model('Download', DownloadSchema);
