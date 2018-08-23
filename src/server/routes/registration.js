@@ -112,7 +112,7 @@ module.exports = function(app) {
       .then((populatedValues) =>
         applyManualField(user, populatedValues, event, account))
       .then(() => {
-        if (!user.university && user.highSchool) {
+        if (!user.university && !user.highSchool) {
           throw Errors.INSTITUTION_NOT_PROVIDED
         }
       })
