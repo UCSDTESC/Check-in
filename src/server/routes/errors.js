@@ -30,6 +30,7 @@ module.exports = (logging) => {
     USER_ALREADY_REGISTERED: 'This account has already registered for this '+
       'event',
     RESUME_UPDATE_ERROR: 'There was an error updating your resume',
-    NO_STATUS_SENT: 'There was no status sent in the request'
+    NO_STATUS_SENT: 'There was no status sent in the request',
+    INSTITUTION_NOT_PROVIDED: 'You must provide a University or High School'
   };
 };

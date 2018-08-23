@@ -45,7 +45,11 @@ var UserSchema = new Schema({
   university: {
     type: String,
     trim: true,
-    required: [true, 'You must have a University / High School']
+  },
+  // Declares which high school the user attends
+  highSchool: {
+    type: String,
+    trim: true
   },
   // Declares the UCSD student ID
   pid: {

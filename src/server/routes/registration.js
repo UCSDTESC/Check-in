@@ -13,7 +13,7 @@ const Account = mongoose.model('Account');
 const autoPopulateFields = [
   'firstName', 'lastName', 'gender', 'phone',
   'university', 'major', 'year', 'github', 'website', 'shareResume', 'food',
-  'diet', 'shirtSize', 'pid', 'race'
+  'diet', 'shirtSize', 'pid', 'race', 'highSchool'
 ];
 
 module.exports = function(app) {
@@ -111,6 +111,11 @@ module.exports = function(app) {
       .then(() => applyAutoPopulate(user, values))
       .then((populatedValues) =>
         applyManualField(user, populatedValues, event, account))
+      .then(() => {
+        if (!user.university && user.highSchool) {
+          throw Errors.INSTITUTION_NOT_PROVIDED
+        }
+      })
       .then(() => User.count({account, event}))
       .then((count) => {
         if (count !== 0) {
