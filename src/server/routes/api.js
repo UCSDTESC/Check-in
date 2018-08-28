@@ -276,7 +276,7 @@ module.exports = function(app) {
   api.get('/sponsors/applicants/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_SPONSOR), isSponsor, (req, res) =>
       User.find(getResumeConditions(req),
-        'firstName lastName university year gender major resume.url')
+        'firstName lastName university year gender major resume.url status')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then((users) => res.json(users))

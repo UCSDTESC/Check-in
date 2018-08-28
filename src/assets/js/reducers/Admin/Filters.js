@@ -29,6 +29,7 @@ const INITIAL_STATE = {
       '3': false,
       '4': false,
       '5+': false,
+      'Graduate': false
     }
   },
   'gender': {

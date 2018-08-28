@@ -48,6 +48,10 @@ class ResumesPage extends React.Component {
 
     loadAllApplicants(this.props.match.params.eventAlias)
       .then(res => {
+        res = res.map(x => {
+          if (!x.status) x.status = 'No Status';
+          return x;
+        })
         hideLoading();
         return replaceApplicants(res);
       })
