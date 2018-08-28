@@ -41,7 +41,7 @@ export default class EventOptions extends React.Component {
       allowOutOfState: 'Allow Out-of-State Students',
       foodOption : 'Add Food Preference Section',
       requireResume: 'Require Resume Uploads',
-      allowTeammates : 'Allow Team Memebers',
+      allowTeammates : 'Allow Team Members',
       requireDiversityOption: 'Require Race In Application'
     };
 
