@@ -21,13 +21,15 @@ class ResumeList extends React.Component {
         'firstName': 'First Name',
         'lastName': 'Last Name',
         'year': 'Year',
+        'status': 'Status',
         'university': 'University',
         'gender': 'Gender',
         'major': 'Major'
       },
       smallColumns: [
         'Year',
-        'Gender'
+        'Gender',
+        'Status'
       ],
       mediumColumns: [
         'First Name',
