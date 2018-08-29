@@ -133,7 +133,7 @@ let buildVertices = (users) => {
 let main = () => {
   const User = mongoose.model('User');
 
-  User.find({event: SDHACKS_OBJECT_ID, deleted: false})
+  User.find({event: SDHACKS_OBJECT_ID, deleted: false, sanitized: true})
     .populate('account')
     .then(buildVertices)
 };
