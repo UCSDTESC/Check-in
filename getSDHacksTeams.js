@@ -30,9 +30,9 @@ let bfs = (vertices) => {
 
   /*vertices = {
     'David': ['Panda'],
-    'Yacoub': ['Nick'],
-    'Nick' : ['David'],
-    'Panda' : ['Yacoub'],
+    'Yacoub': ['Panda'],
+    'Nick' : ['Yacoub', 'David'],
+    'Panda' : [],
   };*/
  
   let visited = new Set(),
