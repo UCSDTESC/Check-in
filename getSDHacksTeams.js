@@ -1,3 +1,10 @@
+/*
+ * Run this script with
+ *      node getSDHacksTeams.js <path to cherry pick json array>
+ * 
+ * The cherry pick json file is optional - if it is not provided the script will default to building the whole teams CSV
+ * */
+
 const mongoose = require('mongoose');
 let csv = require('fast-csv');
 let fs = require('fs');
@@ -24,6 +31,27 @@ let writeToCSV = (masterList) => {
     }
   });
 
+}
+
+let cherryPick = (masterList, indexMapper) => {
+  //if nothing is passed, build the whole csv
+  if (!process.argv[2]) {
+    console.log("\x1b[35m", `You did not pass a cherry pick JSON file - building all teams` , "\x1b[35m");
+    return writeToCSV(masterList);
+  }
+
+  let toBePicked = require(process.argv[2]);
+  let newMasterList = [];
+
+  toBePicked.forEach((x) => {
+    if (!indexMapper[x]) {
+      console.log("\x1b[31m", `X There was an email, ${x} in your file that there is no application for -- this should never happen` , "\x1b[31m");
+      return;
+    }
+    newMasterList.push(masterList[indexMapper[x]]);
+  })
+
+  return writeToCSV(newMasterList);
 }
 
 let bfs = (vertices) => {
@@ -106,7 +134,7 @@ let bfs = (vertices) => {
 
     //write to CSV on end of this loop
     if (j === Object.keys(vertices).length - 1) {
-      return writeToCSV(masterList);
+      return cherryPick(masterList, indexMapper);
     }
   });
 };
