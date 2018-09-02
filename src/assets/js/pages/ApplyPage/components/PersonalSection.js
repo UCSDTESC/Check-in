@@ -147,7 +147,7 @@ class PersonalSection extends React.Component {
         fields.createColumn('col-sm-12 no-margin-bottom',
           fields.createLabel('Institution')
         ),
-        fields.createColumn('col-md offset-md-3',
+        fields.createColumn('col-md',
           this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
             'UCSD')
         ),
@@ -155,10 +155,10 @@ class PersonalSection extends React.Component {
           this.createInstitutionCard('uni', 'institution-radio-uni',
             'Other University')
         ),
-        fields.createColumn('col-md',
-          allowHighSchool ? this.createInstitutionCard('hs',
-            'institution-radio-hs', 'High School') : ''
-        ),
+        allowHighSchool ? fields.createColumn('col-md',
+          this.createInstitutionCard('hs',
+            'institution-radio-hs', 'High School')
+        ) : '',
         fields.createColumn('col-sm-12',
           <Fields names={['institution']}
             component={this.showInstitutionError} />
