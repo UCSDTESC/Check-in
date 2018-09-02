@@ -1,0 +1,31 @@
+.not-found {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 10;
+  left: 0;
+  width: 600px;
+  height: 300px;
+
+  &__panel {
+    background: #eee;
+    padding: 40px 40px;
+    border-radius: 6px;
+    width: 40em;
+    margin: 50px auto;
+    max-width: 100%;
+  }
+
+  &__header {
+    margin-bottom: 20px;
+  }
+
+  &__body {
+    margin-top: 10px;
+  }
+
+  &__info {
+    margin-bottom: 10px;
+  }
+}

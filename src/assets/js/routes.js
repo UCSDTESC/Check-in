@@ -27,6 +27,7 @@ import AdminLogout from './auth/admin/Logout';
 import UserLogout from './auth/user/Logout';
 import CheckinPage from './pages/CheckinPage';
 import ResumesPage from './pages/ResumesPage';
+import NotFoundPage from './pages/NotFound';
 
 import CookieTypes from '~/static/Cookies';
 
@@ -137,6 +138,9 @@ class Routes extends React.Component {
           component={this.renderUser(UserLogout)} />
         <PrivateUserRoute exact path="/user/:eventAlias"
           component={this.renderUser(UserPage)} />
+
+        {/* Not-Found Route */}
+        <Route component={NotFoundPage}></Route>
       </Switch>
     );
   }
