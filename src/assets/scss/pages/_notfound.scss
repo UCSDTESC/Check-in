@@ -5,27 +5,27 @@
   right: 0;
   bottom: 10;
   left: 0;
-  width: 600px;
-  height: 300px;
+  width: 37.5rem;
+  height: 18.75rem;
 
   &__panel {
     background: #eee;
-    padding: 40px 40px;
-    border-radius: 6px;
+    padding: 2.5rem 2.5rem;
+    border-radius: 0.375rem;
     width: 40em;
-    margin: 50px auto;
+    margin: 3.125rem auto;
     max-width: 100%;
   }
 
   &__header {
-    margin-bottom: 20px;
+    margin-bottom: 1.25rem;
   }
 
   &__body {
-    margin-top: 10px;
+    margin-top: 1rem;
   }
 
   &__info {
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
   }
 }
