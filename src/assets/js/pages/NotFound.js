@@ -1,4 +1,5 @@
 import React from 'react';
+import {Link} from 'react-router-dom';
 
 class NotFoundPage extends React.Component {
   render() {
@@ -11,7 +12,7 @@ class NotFoundPage extends React.Component {
               I&#39;m sorry, the page you were looking for cannot be found!
             </p>
             <p className="not-found__info">
-              <a href="/">← Back to our homepage</a>
+              <Link to="/">← Back to our homepage</Link>
             </p>
           </div>
         </div>
