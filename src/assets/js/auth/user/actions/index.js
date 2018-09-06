@@ -22,7 +22,7 @@ export function errorHandler(dispatch, error, type) {
   if (error.status === 401) {
     dispatch({
       type: type,
-      payload: 'Unable to log in with that username and password.'
+      payload: 'Unable to find an account with that email and password'
     });
     logoutUser();
   } else {
