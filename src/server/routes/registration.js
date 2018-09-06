@@ -72,10 +72,13 @@ module.exports = function(app) {
   };
 
   app.post('/register/:eventAlias', upload.single('resume'), (req, res) => {
-    var user = new User;
+    let user = new User;
     let event = undefined;
     let values = undefined;
     let account = undefined;
+    
+    // Track whether the account already existed
+    let accountExisted = false;
 
     // Load event
     Event.findOne({alias: req.params.eventAlias}).exec()
@@ -94,6 +97,7 @@ module.exports = function(app) {
       .then((foundAccount) => {
         if (foundAccount) {
           account = foundAccount;
+          accountExisted = true;
           return false;
         }
         return new Account({
@@ -142,23 +146,28 @@ module.exports = function(app) {
             return Errors.respondError(res, err, Errors.DATABASE_ERROR);
           });
       })
-      .then(() => createEventEmail(event)
-        .send({
-          template: 'confirmation',
-          message: {
-            to: `"${user.firstName} ${user.lastName}" <${account.email}>`
-          },
-          locals: {
-            'user': user,
-            'confirmUrl': req.protocol + '://' + req.get('host') +
-              '/api/confirm/' + account._id,
-            'event': event
-          }
-        })
-        .catch(err => {
-          return Errors.respondError(res, err, Errors.EMAIL_ERROR);
-        })
-      )
+      .then(() => {
+        if (accountExisted) {
+          return;
+        }
+        
+        createEventEmail(event)
+          .send({
+            template: 'confirmation',
+            message: {
+              to: `"${user.firstName} ${user.lastName}" <${account.email}>`
+            },
+            locals: {
+              'user': user,
+              'confirmUrl': req.protocol + '://' + req.get('host') +
+                '/api/confirm/' + account._id,
+              'event': event
+            }
+          })
+          .catch(err => {
+            return Errors.respondError(res, err, Errors.EMAIL_ERROR);
+          });
+      })
       .then(() => {
         res.status(200).json({'email': account.email});
 
