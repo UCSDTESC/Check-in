@@ -120,9 +120,8 @@ class EventPage extends React.Component {
   }
 
   onBulkChange = (values) => {
-    let {users, status} = values;
-
-    bulkChange(users, status)
+    let {users, status, sanitize} = values;
+    bulkChange(users, status, sanitize)
       .then(() => {
         this.createAlert('Successfully updated users!', 'success',
           'Bulk Change');

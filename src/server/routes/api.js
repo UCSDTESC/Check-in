@@ -145,8 +145,9 @@ module.exports = function(app) {
 
       let users = req.body.users.split(/\n/);
       let status = req.body.status;
+      let sanitized = req.body.sanitize || false; 
 
-      return User.updateMany({_id: {$in: users}}, {status})
+      return User.updateMany({_id: {$in: users}}, {status, sanitized})
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(() => res.json({success: true}));
