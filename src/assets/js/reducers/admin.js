@@ -1,6 +1,10 @@
+import reduceReducers from 'reduce-reducers';
+
 import userColumns from '~/pages/UsersPage/reducers/Columns';
 
-import users from '~/pages/UsersPage/reducers/Users';
+import usersReducer from '~/pages/UsersPage/reducers/Users';
+
+import checkinReducer from '~/pages/CheckinPage/reducers/Checkin';
 
 import auth from '~/auth/admin/reducers/Auth';
 
@@ -21,7 +25,7 @@ export default {
   filters,
   general,
   userColumns,
-  users,
+  users: reduceReducers(usersReducer, checkinReducer),
   resumes,
   dashboardStats,
 };
