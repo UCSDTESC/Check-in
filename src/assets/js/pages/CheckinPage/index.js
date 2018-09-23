@@ -15,6 +15,8 @@ import {loadAllAdminEvents} from '~/actions';
 
 import {loadAllUsers, checkinUser} from '~/data/Api';
 
+import {userCheckin} from './actions'
+
 import {User as UserPropTypes, Event as EventPropType} from '~/proptypes';
 
 class CheckinPage extends React.Component {
@@ -88,19 +90,20 @@ class CheckinPage extends React.Component {
       // Ensure they're eligible
       if (user.status !== 'Confirmed') {
         switch (user.status) {
-        case ('Declined'):
-          return reject('User marked as rejecting invitation');
-        case ('Unconfirmed'):
-          return reject('User never confirmed their invitation');
-        case ('Rejected'):
-          return reject('User was rejected from ' + user.event.name);
-        default:
-          return reject('User was not invited to event');
+          case ('Declined'):
+            return reject('User marked as rejecting invitation');
+          case ('Unconfirmed'):
+            return reject('User never confirmed their invitation');
+          case ('Rejected'):
+            return reject('User was rejected from ' + user.event.name);
+          default:
+            return reject('User was not invited to event');
         }
       }
       if (user.checkedIn) {
         return reject('User has already checked in');
       }
+
       return resolve(user);
     })
 
@@ -121,9 +124,8 @@ class CheckinPage extends React.Component {
 
       this.validateUser(user)
         .then(() => {
-          checkinUser(user._id, event.alias)
+          this.props.userCheckin(user, event.alias)
             .then(() => {
-
               resolve(user);
             })
             .catch(reject);
@@ -137,7 +139,7 @@ class CheckinPage extends React.Component {
     }
 
     if (data === this.state.lastUser) {
-      return;
+      return this.setState({errorMessage: 'User has already checked in', wasSuccessful: false});
     }
 
     this.setState({
@@ -247,7 +249,7 @@ class CheckinPage extends React.Component {
             <div className="col-12 text-center">
               <h1>{event.name} Checkin</h1>
               <h2>Scan QR</h2>
-              {errorMessage && <h2 className="checkin__error">
+              {errorMessage && <h2 className="checkin__error text-danger">
                 {JSON.stringify(errorMessage)}
               </h2>}
               {wasSuccessful &&
@@ -302,7 +304,8 @@ function mapDispatchToProps(dispatch) {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
     addUsers: bindActionCreators(addUsers, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
+    userCheckin: bindActionCreators(userCheckin, dispatch)
   };
 };
 
