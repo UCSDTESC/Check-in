@@ -16,13 +16,13 @@ class BulkChange extends React.Component {
       <form className="bulk-change" onSubmit={handleSubmit}>
         <h2>Bulk Change</h2>
         <div className="form-group">
-          <label>User IDs (one per line)</label>
+          <label htmlFor="users">User IDs (one per line)</label>
           <Field component="textarea" className="form-control" name="users"
             placeholder={'5a963f3614d80d32f82ed877'} required="required"/>
         </div>
 
         <div className="form-group">
-          <label>New Status</label>
+          <label htmlFor="status">New Status</label>
           <Field component="select" name="status" className="form-control"
             required="required">
             <option></option>
@@ -33,6 +33,11 @@ class BulkChange extends React.Component {
             <option>Late</option>
             <option>Waitlisted</option>
           </Field>
+        </div>
+
+        <div className="form-check mb-3">
+          <Field name="sanitize" component="input" type="checkbox" className="form-check-input"/>
+          <label htmlFor="sanitize" className="form-check-label">Sanitize Updated Users</label>
         </div>
 
         <button type="submit" disabled={pristine || submitting}

@@ -237,10 +237,10 @@ export const exportUsers = (eventAlias) =>
  * @param {String} status The new status string for all of the users
  * @returns {Promise} A promise of the request.
  */
-export const bulkChange = (users, status) =>
+export const bulkChange = (users, status, sanitize) =>
   promisify(request
     .post('/admin/bulkChange')
-    .send({users, status})
+    .send({users, status, sanitize})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
