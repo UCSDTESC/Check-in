@@ -15,7 +15,7 @@ import {loadAllAdminEvents} from '~/actions';
 
 import {loadAllUsers, checkinUser} from '~/data/Api';
 
-import {userCheckin} from './actions'
+import {userCheckin} from './actions';
 
 import {User as UserPropTypes, Event as EventPropType} from '~/proptypes';
 
@@ -38,6 +38,7 @@ class CheckinPage extends React.Component {
     hideLoading: PropTypes.func.isRequired,
     addUsers: PropTypes.func.isRequired,
     loadAllAdminEvents: PropTypes.func.isRequired,
+    userCheckin: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -90,14 +91,14 @@ class CheckinPage extends React.Component {
       // Ensure they're eligible
       if (user.status !== 'Confirmed') {
         switch (user.status) {
-          case ('Declined'):
-            return reject('User marked as rejecting invitation');
-          case ('Unconfirmed'):
-            return reject('User never confirmed their invitation');
-          case ('Rejected'):
-            return reject('User was rejected from ' + user.event.name);
-          default:
-            return reject('User was not invited to event');
+        case ('Declined'):
+          return reject('User marked as rejecting invitation');
+        case ('Unconfirmed'):
+          return reject('User never confirmed their invitation');
+        case ('Rejected'):
+          return reject('User was rejected from ' + user.event.name);
+        default:
+          return reject('User was not invited to event');
         }
       }
       if (user.checkedIn) {

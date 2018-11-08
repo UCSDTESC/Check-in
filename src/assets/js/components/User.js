@@ -84,11 +84,11 @@ class User extends React.Component {
 
   renderInstitution(user) {
     if (user.university) {
-      return this.renderFormField('University', 'university', 'col-sm-4')
+      return this.renderFormField('University', 'university', 'col-sm-4');
     } else if (user.highSchool) {
-      return this.renderFormField('High School', 'highSchool', 'col-sm-4')
+      return this.renderFormField('High School', 'highSchool', 'col-sm-4');
     }
-    return <span></span>
+    return <span></span>;
   }
 
   render() {

@@ -342,8 +342,8 @@ module.exports = function(app) {
         .catch(err => {
           logging.error(err);
           return Errors.respondError(res, err, Errors.S3_ERROR);
-        })
-      }
+        });
+    }
   );
 
   api.get('/sponsors/downloads/:id', requireAuth,
