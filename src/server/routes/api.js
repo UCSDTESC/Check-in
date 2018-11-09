@@ -276,16 +276,18 @@ module.exports = function(app) {
   api.get('/sponsors/applicants/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_SPONSOR), isSponsor, (req, res) =>
       User.find(getResumeConditions(req),
-        'firstName lastName university year gender major resume.url status')
+        'firstName lastName university year gender major resume.url status account')
+        .populate('account')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then((users) => res.json(users))
   );
 
   api.post('/sponsors/download', requireAuth,
-    roleAuth(roles.ROLE_SPONSOR), (req, res) =>
-      User
+    roleAuth(roles.ROLE_SPONSOR), (req, res) => {
+      return User
         .find({_id: {$in: req.body.applicants}})
+        .populate('account')
         .exec()
         .catch(err => {
           logging.error(err);
@@ -340,7 +342,8 @@ module.exports = function(app) {
         .catch(err => {
           logging.error(err);
           return Errors.respondError(res, err, Errors.S3_ERROR);
-        })
+        });
+    }
   );
 
   api.get('/sponsors/downloads/:id', requireAuth,

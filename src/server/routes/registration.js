@@ -76,7 +76,7 @@ module.exports = function(app) {
     let event = undefined;
     let values = undefined;
     let account = undefined;
-    
+
     // Track whether the account already existed
     let accountExisted = false;
 
@@ -117,7 +117,7 @@ module.exports = function(app) {
         applyManualField(user, populatedValues, event, account))
       .then(() => {
         if (!user.university && !user.highSchool) {
-          throw Errors.INSTITUTION_NOT_PROVIDED
+          throw Errors.INSTITUTION_NOT_PROVIDED;
         }
       })
       .then(() => User.count({account, event}))
@@ -150,7 +150,7 @@ module.exports = function(app) {
         if (accountExisted) {
           return;
         }
-        
+
         createEventEmail(event)
           .send({
             template: 'confirmation',

@@ -24,7 +24,7 @@ class ResumeList extends React.Component {
         'status': 'Status',
         'university': 'University',
         'gender': 'Gender',
-        'major': 'Major'
+        'major': 'Major',
       },
       smallColumns: [
         'Year',
@@ -87,7 +87,7 @@ class ResumeList extends React.Component {
               <td className="admin-list__value admin-list__value--spacer">
               </td>
               {Object.keys(columns).map(column =>
-                (<td className="admin-list__value" key={column}>
+                (<td className="admin-list__value text-wrap" key={column}>
                   {applicant[column]}
                 </td>)
               )}

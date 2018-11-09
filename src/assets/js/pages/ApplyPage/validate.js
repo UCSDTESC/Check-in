@@ -42,7 +42,7 @@ const createValidator = (options) => (values) => {
   if (values.birthdateDay < 1 || values.birthdateDay > 31) {
     errors.birthdateDay = 'Invalid Day';
   }
-  if (values.birthdateMonth == 'Month' || values.birthdateMonth < 1 || values.birthdateMonth > 12) {
+  if (values.birthdateMonth === 'Month' || values.birthdateMonth < 1 || values.birthdateMonth > 12) {
     errors.birthdateMonth = 'Invalid Month';
   }
   if (values.birthdateYear < 1900) {
