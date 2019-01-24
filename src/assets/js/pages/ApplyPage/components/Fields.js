@@ -101,7 +101,7 @@ creates.errorTShirtSizePicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let sizes = [
-      'Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
+      'X-Small','Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
     ];
     let values = [
       'XS', 'S', 'M', 'L', 'XL', 'XXL'
