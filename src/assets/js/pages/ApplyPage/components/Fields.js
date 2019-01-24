@@ -101,10 +101,10 @@ creates.errorTShirtSizePicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let sizes = [
-      'Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
+      'X-Small','Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
     ];
     let values = [
-      'S', 'M', 'L', 'XL', 'XXL'
+      'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ];
 
     return (
@@ -124,7 +124,7 @@ creates.errorGenderPicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let genders = [
-      'Male', 'Female', 'Non-Binary', 'Transgender',
+      'Female', 'Male', 'Non-Binary', 'Transgender',
       'I prefer not to say', 'Other'
     ];
 
