@@ -192,6 +192,7 @@ class EventPage extends React.Component {
               <EventStatistics event={event} statistics={statistics} />
             </div>
             <div className="col-lg-4 col-md-6">
+              <EventOptions options={event.options} onOptionsUpdate={this.onOptionsUpdate} />
             </div>
           </div>
           <div className="row">
@@ -199,7 +200,6 @@ class EventPage extends React.Component {
               <BulkChange onSubmit={this.onBulkChange} />
             </div>
             <div className="col-lg-4 col-md-6">
-              <EventOptions options={event.options} onOptionsUpdate={this.onOptionsUpdate} />
             </div>
           </div>
         </div>
