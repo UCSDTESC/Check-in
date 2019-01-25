@@ -16,7 +16,7 @@ export default class ResumeStatistics extends React.Component {
   renderHelpTooltip() {
     return (<span>
       <a href="#" id="resumesHelp">
-        <FA name="question-circle" style={{fontSize: '0.6em'}} />
+        <FA name="question-circle" className="text-white" style={{fontSize: '1em'}} />
       </a>
       <UncontrolledTooltip target="resumesHelp" placement="bottom">
         This only accounts for users that have been sanitised and agree to share
@@ -30,13 +30,11 @@ export default class ResumeStatistics extends React.Component {
     let resumes = statistics.resumes;
 
     return (
-      <div className="resume-statistics">
-        <h2>Resumes{' '}
+        <Link to={`/admin/resumes/${event.alias}`} 
+          className="btn event-page__btn rounded-button rounded-button--small">
+          {resumes} Available Resume{resumes === 1 ? ' ' : 's '} 
           {this.renderHelpTooltip()}
-        </h2>
-        <h3>{resumes} Available Resume{resumes === 1 ? '' : 's'}</h3>
-        <Link to={`/admin/resumes/${event.alias}`}>View Resumes</Link>
-      </div>
+        </Link>
     );
   }
 }

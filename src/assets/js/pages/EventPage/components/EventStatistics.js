@@ -6,7 +6,6 @@ export default class EventStatistics extends React.Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
     statistics: PropTypes.object,
-    exportUsers: PropTypes.func.isRequired
   };
 
   renderStats(statistics) {
@@ -41,7 +40,7 @@ export default class EventStatistics extends React.Component {
   }
 
   render() {
-    let {event, statistics, exportUsers} = this.props;
+    let {event, statistics} = this.props;
 
     return (
       <div className="event-statistics">
@@ -53,9 +52,7 @@ export default class EventStatistics extends React.Component {
           </dd>
 
           {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
-        </dl>
-        <Link to={`/admin/users/${event.alias}`}>View All Users</Link><br/>
-        <a onClick={exportUsers} href="#">Export All Users</a>
+        </dl>        
       </div>
     );
   }

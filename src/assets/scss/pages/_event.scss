@@ -15,4 +15,10 @@
     margin: 0;
     flex: 1;
   }
+
+  &__btn {
+    & + & {
+      margin-left: 1rem;
+    }
+  }
 }
