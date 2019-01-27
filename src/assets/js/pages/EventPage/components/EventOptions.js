@@ -64,7 +64,7 @@ export default class EventOptions extends React.Component {
 
           return (<div className="form-check pl-0" key={option}>
             <label className="form-check-label w-75 d-flex align-items-center flex-row my-3" htmlFor={checkId}>
-              {optionName} &nbsp; {optionDescription ?
+              <span>{optionName}&nbsp;</span> {optionDescription ?
                 this.renderDescriptionTag(option, optionDescription) : ''}
                 <ToggleSwitch className="d-inline-block ml-auto" type="checkbox" name={option}
                   id={checkId} checked={options[option]}

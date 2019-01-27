@@ -43,7 +43,7 @@ export default class EventStatistics extends React.Component {
     let {event, statistics} = this.props;
 
     return (
-      <div className="event-statistics">
+      <div className="event-statistics event-page__card">
         <h2>Statistics</h2>
         <dl className="row">
           <dt className="col-6">Total Users</dt>

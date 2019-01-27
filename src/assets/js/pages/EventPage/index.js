@@ -168,7 +168,7 @@ class EventPage extends React.Component {
             <div className={'col-md-auto d-flex align-items-center ' +
               ' '}>
               <img className="event-page__logo" src={event.logo} />
-              <h1 className="event-page__title">{event.name}</h1>
+              <a target="_blank" href={event.homepage}><h1 className="event-page__title">{event.name}</h1></a>
             </div>
             <div className="col-md-auto ml-auto d-flex align-items-center">
               <Link to={`/admin/users/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
