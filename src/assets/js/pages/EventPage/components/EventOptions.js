@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {UncontrolledTooltip} from 'reactstrap';
 import FA from 'react-fontawesome';
+import ToggleSwitch from '~/components/ToggleSwitch';
 
 export default class EventOptions extends React.Component {
   static propTypes = {
@@ -61,13 +62,14 @@ export default class EventOptions extends React.Component {
           let optionName = optionNames[option];
           let optionDescription = optionDescriptions[option];
 
-          return (<div className="form-check" key={option}>
-            <input className="form-check-input" type="checkbox" name={option}
-              id={checkId} checked={options[option]}
-              onChange={this.toggleOption(option)} />
-            <label className="form-check-label" htmlFor={checkId}>
-              {optionName} {optionDescription ?
+          return (<div className="form-check pl-0" key={option}>
+            <label className="form-check-label w-75 d-flex align-items-center flex-row my-3" htmlFor={checkId}>
+              <span>{optionName}&nbsp;</span> {optionDescription ?
                 this.renderDescriptionTag(option, optionDescription) : ''}
+                <ToggleSwitch className="d-inline-block ml-auto" type="checkbox" name={option}
+                  id={checkId} checked={options[option]}
+                  onChange={this.toggleOption(option)} 
+                />
             </label>
           </div>);
         })}

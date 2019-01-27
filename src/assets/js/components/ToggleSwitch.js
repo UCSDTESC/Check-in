@@ -29,7 +29,7 @@ class ToggleSwitch extends React.Component {
     let {checked} = this.props;
 
     return (
-      <div className="switch">
+      <div className={`switch ${this.props.className}`} >
         <input id={this.state.id}
           className="toggle-switch toggle-switch-round-flat"
           type="checkbox" onChange={this.toggle}

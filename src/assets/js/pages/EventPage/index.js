@@ -164,13 +164,22 @@ class EventPage extends React.Component {
             this.renderAlert(message, type, title, i))}
         </div>
         <div className="container-fluid">
-          <div className="row">
-            <div className={'col-12 d-flex align-items-center' +
-              ' event-page__header'}>
+          <div className="row event-page__header">
+            <div className={'col-md-auto d-flex align-items-center ' +
+              ' '}>
               <img className="event-page__logo" src={event.logo} />
-              <h1 className="event-page__title">{event.name}</h1>
-              <Link to={`/register/${event.alias}`}>Go To Form&nbsp;
-                <FA name='arrow-right' />
+              <a target="_blank" href={event.homepage}><h1 className="event-page__title">{event.name}</h1></a>
+            </div>
+            <div className="col-md-auto ml-auto d-flex align-items-center">
+              <Link to={`/admin/users/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
+                View All Users
+              </Link>
+              <a className="btn event-page__btn rounded-button rounded-button--small" onClick={this.exportUsers} href="#">Export All Users</a>
+              <CheckinStatistics event={event} statistics={statistics} />
+              <ResumeStatistics event={event} statistics={statistics} />
+
+              <Link to={`/register/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
+                Go To Form&nbsp;<FA name='arrow-right' />
               </Link>
             </div>
           </div>
@@ -180,12 +189,10 @@ class EventPage extends React.Component {
               <SponsorList sponsors={event.sponsors} />
             </div>
             <div className="col-lg-4 col-md-6">
-              <EventStatistics event={event} statistics={statistics}
-                exportUsers={this.exportUsers}/>
+              <EventStatistics event={event} statistics={statistics} />
             </div>
             <div className="col-lg-4 col-md-6">
-              <CheckinStatistics event={event} statistics={statistics} />
-              <ResumeStatistics event={event} statistics={statistics} />
+              <EventOptions options={event.options} onOptionsUpdate={this.onOptionsUpdate} />
             </div>
           </div>
           <div className="row">
@@ -193,7 +200,6 @@ class EventPage extends React.Component {
               <BulkChange onSubmit={this.onBulkChange} />
             </div>
             <div className="col-lg-4 col-md-6">
-              <EventOptions options={event.options} onOptionsUpdate={this.onOptionsUpdate} />
             </div>
           </div>
         </div>
