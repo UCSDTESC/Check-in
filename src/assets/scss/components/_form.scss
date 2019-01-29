@@ -59,6 +59,10 @@
     width: 100%;
   }
 
+  &__progress {
+    z-index: 100;
+  }
+
   &__row {
     margin: 0;
 
