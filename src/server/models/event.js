@@ -82,6 +82,10 @@ var EventSchema = new Schema({
     requireDiversityOption: {
       type: Boolean,
       default: false
+    },
+    requireGPA: {
+      type: Boolean,
+      default: false
     }
   }
 }, {timestamps: true});

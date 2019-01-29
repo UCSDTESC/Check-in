@@ -28,6 +28,10 @@ const createValidator = (options) => (values) => {
     required.push('race');
   }
 
+  if (options.requireGPA) {
+    required.push('gpa')
+  }
+
   if (values.institution === 'ucsd') {
     required.push('pid');
   }
