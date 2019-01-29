@@ -150,7 +150,7 @@ var UserSchema = new Schema({
     type: String,
     required: false
   },
-  // Declares the user's GPA, required by events on an optional basis
+  // Declares the user's major GPA, required by events on an optional basis
   majorGPA: {
     type: String,
     required: false
