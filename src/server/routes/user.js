@@ -16,7 +16,7 @@ const Account = mongoose.model('Account');
 
 const editableFields = [
   'teammates', 'food', 'diet', 'travel', 'shirtSize', 'github', 'website',
-  'shareResume', 'gender'
+  'shareResume', 'gender', 'gpa', 'majorGPA'
 ];
 const readOnlyFields = [
   'status', 'firstName', 'lastName', 'university', 'email', 'phone', 'resume',
@@ -148,7 +148,9 @@ module.exports = function(app) {
       return Event.findOne({alias: req.params.eventAlias})
         .then((event) => {
           return User.findOneAndUpdate({account: user, event: event},
-            {$set: updateDelta}, {new: true}).populate('account');
+            {$set: updateDelta}, {new: true})
+              .populate('account')
+              .populate('event');
         })
         .then((user) => {
           if (!user) {
