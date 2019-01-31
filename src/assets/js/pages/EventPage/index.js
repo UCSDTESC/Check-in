@@ -165,12 +165,12 @@ class EventPage extends React.Component {
         </div>
         <div className="container-fluid">
           <div className="row event-page__header">
-            <div className={'col-md-auto d-flex align-items-center ' +
+            <div className={'col-lg-auto d-flex flex-column flex-lg-row align-items-center ' +
               ' '}>
               <img className="event-page__logo" src={event.logo} />
               <a target="_blank" href={event.homepage}><h1 className="event-page__title">{event.name}</h1></a>
             </div>
-            <div className="col-md-auto ml-auto d-flex align-items-center">
+            <div className="col-lg-auto ml-auto d-flex flex-column flex-lg-row align-items-center">
               <Link to={`/admin/users/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
                 View All Users
               </Link>
@@ -191,7 +191,7 @@ class EventPage extends React.Component {
             <div className="col-lg-4 col-md-6">
               <EventStatistics event={event} statistics={statistics} />
             </div>
-            <div className="col-lg-4 col-md-6">
+            <div className="col-lg-4 col">
               <EventOptions options={event.options} onOptionsUpdate={this.onOptionsUpdate} />
             </div>
           </div>
