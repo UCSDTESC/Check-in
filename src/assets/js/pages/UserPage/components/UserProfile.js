@@ -122,8 +122,9 @@ class UserProfile extends React.Component {
     phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
   );
 
-  renderApplicantInfoSection = (user) => (
-    <div className="user-profile__section">
+  renderApplicantInfoSection = (user) => {
+    const institution = user.university || user.highSchool;
+    return (<div className="user-profile__section">
       <h4>
         Hello, <span className="user-profile__name">
           {user.firstName} {user.lastName}
@@ -145,7 +146,7 @@ class UserProfile extends React.Component {
         <div className="col-8 col-md-6 col-lg-9 user-profile__school-info">
           <div>School: </div>
           <div className="user-profile__school-name">
-            {user.university}
+            {institution}
           </div>
         </div>
       </div>
@@ -156,8 +157,8 @@ class UserProfile extends React.Component {
       <div className="user-profile__phone">
         Phone: {this.renderPhoneNumber(String(user.phone))}
       </div>
-    </div>
-  );
+    </div>);
+  }
 
   renderDesiredTeammatesSection = () => (
     <div className="user-profile__section sd-form">
@@ -240,7 +241,6 @@ class UserProfile extends React.Component {
 
   render() {
     let {user, pristine, submitting, handleSubmit} = this.props;
-
     return (
       <form className="user-profile" onSubmit={handleSubmit}>
         <div className="user-profile__header">

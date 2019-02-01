@@ -101,10 +101,10 @@ creates.errorTShirtSizePicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let sizes = [
-      'Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
+      'X-Small','Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
     ];
     let values = [
-      'S', 'M', 'L', 'XL', 'XXL'
+      'XS', 'S', 'M', 'L', 'XL', 'XXL'
     ];
 
     return (
@@ -124,7 +124,7 @@ creates.errorGenderPicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let genders = [
-      'Male', 'Female', 'Non-Binary', 'Transgender',
+      'Female', 'Male', 'Non-Binary', 'Transgender',
       'I prefer not to say', 'Other'
     ];
 
@@ -146,7 +146,7 @@ creates.errorDiversityOptions =
     let errorClass = creates.errorClass(className, touched, error);
     let opts = ['American Indian or Alaskan Native', 'Asian / Pacific Islander',
       'Black or African American', 'Hispanic', 'White / Caucasian', 'Multiple ethnicity / Other',
-      'Prefer Not To Answer']
+      'Prefer Not To Answer'];
 
     return (
       <div>
@@ -230,7 +230,7 @@ creates.createGenderPicker = function createGenderPicker() {
 creates.createDiversityOptions = function createDiversityOptions() {
   return (<Field component={creates.errorDiversityOptions}
     className="sd-form__input-select" name="race" />);
-}
+};
 
 creates.createTShirtSizePicker = function createTShirtSizePicker() {
   return (<Field component={creates.errorTShirtSizePicker}

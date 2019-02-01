@@ -1,4 +1,5 @@
 .event-page {
+
   &__header {
     background: $admin-background-blue;
     padding: 1rem;
@@ -7,12 +8,31 @@
 
   &__logo {
     max-height: 5rem;
-    margin-right: 2rem;
+
+    @include media-breakpoint-up(lg) {
+      margin-right: 1rem;
+    }
   }
 
   &__title {
     display: inline-block;
-    margin: 0;
+    margin-bottom: 0.5rem;
     flex: 1;
+
+    @include media-breakpoint-up(lg) {
+      margin-bottom: 0;
+    }
+  }
+
+  &__btn {
+    padding: 0.5rem 0.3rem;
+    margin-bottom: 0.25rem;
+
+    @include media-breakpoint-up(lg) {
+      margin-bottom: 0;
+      & + & {
+        margin-left: 1rem;
+      }
+    }
   }
 }

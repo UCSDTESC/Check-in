@@ -82,6 +82,15 @@ class User extends React.Component {
       </div>];
   }
 
+  renderInstitution(user) {
+    if (user.university) {
+      return this.renderFormField('University', 'university', 'col-sm-4');
+    } else if (user.highSchool) {
+      return this.renderFormField('High School', 'highSchool', 'col-sm-4');
+    }
+    return <span></span>;
+  }
+
   render() {
     const {handleSubmit, pristine, reset, submitting} = this.props;
 
@@ -145,7 +154,7 @@ class User extends React.Component {
                 {this.renderFormField('Birthdate', 'birthdate', 'col-sm-4')}
                 {this.renderFormField('Year', 'year', 'col-sm-4')}
                 {this.renderFormField('Phone', 'phone', 'col-sm-4', 'tel')}
-                {this.renderFormField('University', 'university', 'col-sm-4')}
+                {this.renderInstitution(this.props.user)}
                 {this.renderFormField('Major', 'major', 'col-sm-4')}
                 {this.renderFormField('Shirt Size', 'shirtSize', 'col-sm-4')}
                 {this.renderFormField('Diet', 'diet', 'col-sm-4')}

@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 mongoose.Promise = require('q').Promise;
-var timestamps = require('mongoose-timestamp');
 var mongooseDelete = require('mongoose-delete');
 
 var Schema = mongoose.Schema;
@@ -85,9 +84,8 @@ var EventSchema = new Schema({
       default: false
     }
   }
-});
+}, {timestamps: true});
 
-EventSchema.plugin(timestamps);
 EventSchema.plugin(mongooseDelete);
 
 mongoose.model('Event', EventSchema);

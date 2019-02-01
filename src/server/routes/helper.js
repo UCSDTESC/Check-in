@@ -174,13 +174,14 @@ function exportApplicantInfo(users, archive, finalize) {
       firstName: user.firstName,
       lastName: user.lastName,
       schoolYear: user.year,
+      email: user.account.email,
       university: user.university,
       gender: user.gender,
       status: user.status,
       website: user.website,
       github: user.github,
       resumeFile: user.resume.name,
-      resumeLink: user.resume.url
+      resumeLink: user.resume.url,
     });
   }
 

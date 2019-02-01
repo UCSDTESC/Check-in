@@ -1,5 +1,4 @@
 var mongoose = require('mongoose');
-var timestamps = require('mongoose-timestamp');
 var crate = require('mongoose-crate');
 var S3 = require('mongoose-crate-s3');
 var mongooseDelete = require('mongoose-delete');
@@ -45,9 +44,12 @@ var UserSchema = new Schema({
   // Declares which university the user attends
   university: {
     type: String,
-
     trim: true,
-    required: [true, 'You must have a university or high school']
+  },
+  // Declares which high school the user attends
+  highSchool: {
+    type: String,
+    trim: true
   },
   // Declares the UCSD student ID
   pid: {
@@ -142,11 +144,10 @@ var UserSchema = new Schema({
     type: String,
     required: false
   }
-});
+}, {timestamps: true});
 
 UserSchema.plugin(require('mongoose-sanitizer'));
 
-UserSchema.plugin(timestamps);
 UserSchema.plugin(mongooseDelete);
 UserSchema.plugin(crate, {
   storage: new S3({
