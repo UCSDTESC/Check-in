@@ -13,6 +13,17 @@ const apiPrefix = pref(API_URL_PREFIX);
 const cookies = new Cookies();
 
 /**
+ * Checks whether the user is still authorised.
+ * @returns {Promise} A promise of the request.
+ */
+export const authorised = () =>
+  promisify(request
+    .get('/auth/authorised')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
  * Request a list of all users.
  * @param {String} alias The event alias.
  * @returns {Promise} A promise of the request.

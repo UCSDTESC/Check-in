@@ -13,6 +13,18 @@ const prefix = pref(URL_PREFIX);
 const cookies = new Cookies();
 
 /**
+ * Checks whether the user is still authorised.
+ * @returns {Promise} A promise of the request.
+ */
+export const authorised = () => {
+  return promisify(request
+    .get('/authorised')
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .use(prefix)
+    .use(nocache));
+};
+
+/**
  * Log in as a user.
  * @param  {String} email The email of the login.
  * @param  {String} password The password of the login.

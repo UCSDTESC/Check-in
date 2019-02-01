@@ -8,7 +8,6 @@ import {loadAllAdminEvents} from '~/actions';
 
 import {Roles, getRole} from '~/static/Roles';
 
-import EventList from './components/EventList';
 import AdminDashboard from './components/AdminDashboard';
 import CheckinDashboard from './components/CheckinDashboard';
 import SponsorDashboard from './components/SponsorDashboard';

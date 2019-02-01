@@ -8,8 +8,9 @@ import ReactGA from 'react-ga';
 
 import PrivateRoute from './PrivateRoute';
 import PrivateUserRoute from './PrivateUserRoute';
-import {AUTH_USER as AUTH_ADMIN} from './auth/admin/actions/types';
-import {AUTH_USER} from './auth/user/actions/types';
+import {AUTH_USER as AUTH_ADMIN,
+  FINISH_AUTH as FINISH_ADMIN_AUTH} from './auth/admin/actions/types';
+import {AUTH_USER, FINISH_AUTH} from './auth/user/actions/types';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
 import UserLayout from './layouts/user';
@@ -29,31 +30,54 @@ import CheckinPage from './pages/CheckinPage';
 import ResumesPage from './pages/ResumesPage';
 import NotFoundPage from './pages/NotFound';
 
+import {authorised as AdminAuthorised} from '~/data/Api';
+
+import {authorised as UserAuthorised} from '~/data/User';
+
 import CookieTypes from '~/static/Cookies';
 
 class Routes extends React.Component {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     cookies: instanceOf(Cookies).isRequired,
-    location: PropTypes.object.isRequired
+    location: PropTypes.object.isRequired,
+    authenticated: PropTypes.bool.isRequired
   };
 
-  constructor(props) {
-    super(props);
+  componentDidMount() {
+    const dispatch = this.props.dispatch;
 
     // Check initial authentication
     const {cookies} = this.props;
+
     if (cookies.get(CookieTypes.admin.token)) {
-      props.dispatch({
-        type: AUTH_ADMIN,
-        payload: cookies.get(CookieTypes.admin.user)
+      // Verify the JWT Token is still valid
+      AdminAuthorised()
+        .then(() =>
+          dispatch({
+            type: AUTH_ADMIN,
+            payload: cookies.get(CookieTypes.admin.user)
+          })
+        );
+    } else {
+      dispatch({
+        type: FINISH_ADMIN_AUTH
       });
     }
 
     if (cookies.get(CookieTypes.user.token)) {
-      props.dispatch({
-        type: AUTH_USER,
-        payload: cookies.get(CookieTypes.user.user)
+      // Verify the user JWT Token is still valid
+      UserAuthorised()
+        .then(() =>
+          dispatch({
+            type: AUTH_USER,
+            payload: cookies.get(CookieTypes.user.user)
+          })
+        );
+    } else {
+      // Finish auth process
+      dispatch({
+        type: FINISH_AUTH
       });
     }
   }
@@ -150,4 +174,10 @@ class Routes extends React.Component {
   }
 }
 
-export default withRouter(connect()(withCookies(Routes)));
+function mapStateToProps(state) {
+  return {
+    authenticated: state.user.auth.authenticated
+  };
+}
+
+export default withRouter(connect(mapStateToProps)(withCookies(Routes)));
