@@ -5,6 +5,7 @@ const json2CSVParser = require('json2csv').Parser;
 const S3Archiver = require('s3-archiver');
 const moment = require('moment');
 const generatePassword = require('password-generator');
+const upload = require('../config/uploads')();
 
 const logging = require('../config/logging');
 
@@ -206,6 +207,11 @@ module.exports = function(app) {
         .then(() => res.json({success : true}));
 
     });
+
+  api.post('/admin/events', requireAuth, 
+    roleAuth(roles.ROLE_ADMIN), upload.single('logo'), (req, res) => {
+      console.log(req.body);
+  });
 
   api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,

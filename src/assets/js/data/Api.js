@@ -65,12 +65,6 @@ export const loadAllPublicEvents = () =>
     .use(apiPrefix)
     .use(nocache));
 
-export const registerNewEvent = (e) => 
-  promisify(request.post('/admin/events')
-    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .use(apiPrefix)
-    .use(nocache))
-
 /**
  * Request a list of all events the user has access to.
  * @returns {Promise} A promise of the request.
@@ -178,6 +172,18 @@ export const registerUser = (eventAlias, user) => {
   }
   return promisify(baseReq);
 };
+
+export const registerNewEvent = (event) => 
+  promisify(request
+    .post('/admin/events')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .attach('logo', event.logo[0])
+    .field(event)
+    .use(apiPrefix)
+    .use(nocache));
+
+
+
 
 /**
  * Request to register a new admin.

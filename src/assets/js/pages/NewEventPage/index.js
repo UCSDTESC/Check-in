@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import createValidator from './validate';
-import registerNewEvent from '~/data/Api'
+import {registerNewEvent} from '~/data/Api'
 import NewEventForm from './components/NewEventForm'
 
 class NewEventPage extends React.Component {
@@ -22,8 +22,11 @@ class NewEventPage extends React.Component {
   componentWillMount() {
   }
 
-  createNewEvent(e) {
-    registerNewEvent()
+  createNewEvent(event) {
+    console.log(event)
+    registerNewEvent(event)
+      .then(console.log)
+      .catch(console.error);
   }
 
   render() {
