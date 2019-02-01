@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router-dom';
+import {withRouter, Redirect} from 'react-router-dom';
 
 import {loginUser} from '~/auth/user/actions';
 
@@ -10,7 +10,6 @@ import Login from '~/auth/user/Login';
 class LoginPage extends React.Component {
   static propTypes = {
     history: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
     location: PropTypes.object.isRequired,
 
     loginUser: PropTypes.func.isRequired,
@@ -20,7 +19,8 @@ class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      alerts: []
+      alerts: [],
+      redirectToReferrer: false
     };
 
     if (props.location.hash === '#confirmed') {
@@ -43,6 +43,13 @@ class LoginPage extends React.Component {
   };
 
   render() {
+    const {from} = this.props.location.state || {from: {pathname: '/'}};
+    const {redirectToReferrer} = this.state;
+
+    if (redirectToReferrer === true) {
+      return <Redirect to={from} />;
+    }
+
     let {loginError} = this.props;
 
     return (
