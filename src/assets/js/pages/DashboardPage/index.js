@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+import {Link} from 'react-router-dom';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
@@ -46,6 +47,12 @@ class DashboardPage extends React.Component {
           {getRole(user.role) === getRole(Roles.ROLE_SPONSOR) &&
             <SponsorDashboard events={Object.values(events)} />}
         </div>
+        {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
+        <h2 className="mt-2 event dashboard-page__btn">
+          <Link to="/admin/new" className="text-white">
+            +
+          </Link>
+        </h2>}
       </div>
     );
   }

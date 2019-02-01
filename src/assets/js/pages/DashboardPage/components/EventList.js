@@ -42,12 +42,6 @@ export default class EventList extends React.Component {
             </div>)
           )}
         </div>
-        {canCreate &&
-        <h2 className="mt-2">
-          <Link to="/admin/new">
-            New Event
-          </Link>
-        </h2>}
       </div>
     );
   }

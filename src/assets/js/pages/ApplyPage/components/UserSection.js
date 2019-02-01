@@ -2,7 +2,7 @@ import {Field, reduxForm} from 'redux-form';
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import fields from './Fields';
+import fields from '~/components/Fields';
 
 class UserSection extends React.Component {
   static propTypes = {

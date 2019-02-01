@@ -217,9 +217,9 @@ creates.createTextArea = function createTextArea(name, placeholder,
     component={creates.errorTextArea} placeholder={placeholder} />);
 };
 
-creates.createMonthPicker = function createMonthPicker() {
+creates.createMonthPicker = function createMonthPicker(name) {
   return (<Field component={creates.errorMonthPicker}
-    className="sd-form__input-select mb-1 mb-md-0" name="birthdateMonth" />);
+    className="sd-form__input-select mb-1 mb-md-0" name={`${name || 'birthdateMonth'}`} />);
 };
 
 creates.createGenderPicker = function createGenderPicker() {

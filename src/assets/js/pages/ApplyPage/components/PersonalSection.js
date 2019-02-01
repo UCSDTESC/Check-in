@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import UniversityField from './UniversityField';
-import fields from './Fields';
 
+import fields from '~/components/Fields';
 import FileField from '~/components/FileField';
 
 class PersonalSection extends React.Component {
