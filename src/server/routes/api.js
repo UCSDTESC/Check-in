@@ -210,7 +210,33 @@ module.exports = function(app) {
 
   api.post('/admin/events', requireAuth, 
     roleAuth(roles.ROLE_ADMIN), upload.single('logo'), (req, res) => {
-      console.log(req.body);
+
+      let event = new Event;
+      const {closeTimeDay, closeTimeMonth, closeTimeYear} = req.body;
+
+      ['closeTimeDay', 'closeTimeMonth', 'closeTimeYear', 'logo'].forEach(k => delete req.body[k]);
+
+      req.body.closeTime = closeTimeYear + '-' +
+      closeTimeMonth.padStart(2, '0') + '-' +
+      closeTimeDay.padStart(2, '0')
+      + 'T00:00:00.000Z';
+
+      Object.entries(req.body).forEach(([k, v]) => event[k] = v);
+      event.attach('logo', {path: req.file.path})
+      event.save()
+        .then(() => {
+          res.json(event);
+        })
+        .catch(err => {
+          if (err.name === 'ValidationError') {
+            for (var field in err.errors) {
+              return Errors.respondUserError(res, err.errors[field].message);
+            }
+          }
+
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+            
   });
 
   api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),

@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var crate = require('mongoose-crate');
+var S3 = require('mongoose-crate-s3');
 mongoose.Promise = require('q').Promise;
 var mongooseDelete = require('mongoose-delete');
 
@@ -85,6 +87,22 @@ var EventSchema = new Schema({
     }
   }
 }, {timestamps: true});
+
+EventSchema.plugin(crate, {
+  storage: new S3({
+    key: process.env.S3_KEY,
+    secret: process.env.S3_SECRET,
+    bucket: process.env.S3_BUCKET,
+    acl: 'public-read',
+    region: 'us-west-1',
+    path(attachment) {
+      return `resumes/${attachment.name}`;
+    }
+  }),
+  fields: {
+    logo: {}
+  }
+});
 
 EventSchema.plugin(mongooseDelete);
 
