@@ -30,11 +30,11 @@ export default class ResumeStatistics extends React.Component {
     let resumes = statistics.resumes;
 
     return (
-        <Link to={`/admin/resumes/${event.alias}`} 
-          className="btn event-page__btn rounded-button rounded-button--small">
-          {resumes} Available Resume{resumes === 1 ? ' ' : 's '} 
-          {this.renderHelpTooltip()}
-        </Link>
+      <Link to={`/admin/resumes/${event.alias}`} 
+        className="btn event-page__btn rounded-button rounded-button--small">
+        {resumes} Available Resume{resumes === 1 ? ' ' : 's '}
+        {this.renderHelpTooltip()}
+      </Link>
     );
   }
 }

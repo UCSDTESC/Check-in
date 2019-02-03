@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
-import {UncontrolledAlert} from 'reactstrap';
+import {UncontrolledAlert, Nav, NavItem, NavLink} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadEventStatistics, exportUsers, bulkChange, updateOptions}
@@ -21,6 +21,11 @@ import BulkChange from './components/BulkChange';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
 import EventOptions from './components/EventOptions';
+import ActionsTab from './tabs/ActionsTab';
+import InsightsTab from './tabs/InsightsTab';
+import StatisticsTab from './tabs/StatisticsTab';
+import AdministratorsTab from './tabs/AdministratorsTab';
+import SettingsTab from './tabs/SettingsTab';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -41,9 +46,43 @@ class EventPage extends React.Component {
   constructor(props) {
     super(props);
 
+    this.tabPages = [
+      {
+        icon: 'wrench',
+        name: 'Actions',
+        anchor: 'actions',
+        render: this.renderActions
+      },
+      {
+        icon: 'pie-chart',
+        name: 'Insights',
+        anchor: 'insights',
+        render: this.renderInsights
+      },
+      {
+        icon: 'bar-chart',
+        name: 'Statistics',
+        anchor: 'statistics',
+        render: this.renderStatistics
+      },
+      {
+        icon: 'star',
+        name: 'Administrators',
+        anchor: 'administrators',
+        render: this.renderAdministrators
+      },
+      {
+        icon: 'cog',
+        name: 'Settings',
+        anchor: 'settings',
+        render: this.renderSettings
+      }
+    ];
+
     this.state = {
       statistics: {},
-      alerts: []
+      alerts: [],
+      activeTab: this.tabPages[0]
     };
   }
 
@@ -147,9 +186,49 @@ class EventPage extends React.Component {
       });
   };
 
+  /**
+   * Renders the event tab for actions.
+   * @returns {Component} The action tab.
+   */
+  renderActions() {
+    return (<ActionsTab event={this.props.event} />);
+  }
+
+  /**
+   * Renders the event tab for insights.
+   * @returns {Component} The insights tab.
+   */
+  renderInsights() {
+    return (<InsightsTab event={this.props.event} />);
+  }
+
+  /**
+   * Renders the event tab for statistics.
+   * @returns {Component} The statistics tab.
+   */
+  renderStatistics() {
+    return (<StatisticsTab event={this.props.event} />);
+  }
+
+  /**
+   * Renders the event tab for administrators.
+   * @returns {Component} The administrators tab.
+   */
+  renderAdministrators() {
+    return (<AdministratorsTab event={this.props.event} />);
+  }
+
+  /**
+   * Renders the event tab for settings.
+   * @returns {Component} The settings tab.
+   */
+  renderSettings() {
+    return (<SettingsTab event={this.props.event} />);
+  }
+
   render() {
     let {event} = this.props;
-    let {statistics, alerts} = this.state;
+    let {statistics, alerts, activeTab} = this.state;
 
     if (!event) {
       return (
@@ -168,7 +247,9 @@ class EventPage extends React.Component {
             <div className={'col-lg-auto d-flex flex-column flex-lg-row align-items-center ' +
               ' '}>
               <img className="event-page__logo" src={event.logo} />
-              <a target="_blank" href={event.homepage}><h1 className="event-page__title">{event.name}</h1></a>
+              <a target="_blank" href={event.homepage}>
+                <h1 className="event-page__title">{event.name}</h1>
+              </a>
             </div>
             <div className="col-lg-auto ml-auto d-flex flex-column flex-lg-row align-items-center">
               <Link to={`/admin/users/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
@@ -183,6 +264,25 @@ class EventPage extends React.Component {
               </Link>
             </div>
           </div>
+
+          <div className="row">
+            <div className="col">
+              <Nav tabs>
+                {this.tabPages.map((page) => (
+                  <NavItem key={page.anchor}>
+                    <NavLink href={`#${page.anchor}`}
+                      active={page === activeTab}>
+                      <FA name={page.icon} /> {page.name}
+                    </NavLink>
+                  </NavItem>
+                ))}
+              </Nav>
+            </div>
+          </div>
+
+          {activeTab.render()}
+
+
           <div className="row">
             <div className="col-lg-4 col-md-6">
               <OrganiserList organisers={event.organisers} />
