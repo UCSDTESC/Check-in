@@ -63,6 +63,10 @@ class ResponseSection extends React.Component {
         )
       )}
 
+
+      {options.allowOutOfState &&
+        <Fields names={['outOfState']} component={this.showCity} />}
+
       {options.requireExtraCurriculars && fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel('Please put down any extra curriculars or Student' + 
@@ -70,9 +74,6 @@ class ResponseSection extends React.Component {
           fields.createTextArea('extraCurriculars', 'Extra Curriculars')
         )
       )}
-
-      {options.allowOutOfState &&
-        <Fields names={['outOfState']} component={this.showCity} />}
 
       {options.requireClassRequirement && fields.createRow(
         fields.createColumn('col-lg-12',
