@@ -14,7 +14,8 @@ module.exports.up = function (done) {
     allowTeammates: true,
     requireDiversityOption: true,
     requireExtraCurriculars: false,
-    requireClassRequirement: false
+    requireClassRequirement: false,
+    requireGPA: false
   };
   events.findOneAndUpdate({alias: 'hackxx'}, {$set:{options}}, done);
 };

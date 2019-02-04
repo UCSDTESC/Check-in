@@ -90,6 +90,10 @@ var EventSchema = new Schema({
     requireExtraCurriculars: {
       type: Boolean,
       default: false
+    },
+    requireGPA: {
+      type: Boolean,
+      default: false
     }
   }
 }, {timestamps: true});
