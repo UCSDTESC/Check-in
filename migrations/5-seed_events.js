@@ -13,8 +13,8 @@ module.exports.up = function (done) {
       events.insert({
         name,
         alias: 'hackxx',
-        logo: 'https://s3-us-west-1.amazonaws.com/tesc-checkin/public/' +
-          'logos/hackxx.png',
+        logo: {url: 'https://s3-us-west-1.amazonaws.com/tesc-checkin/public/' +
+          'logos/hackxx.png'},
         organisers: [admin._id],
         description : `Lorem ipsum dolor sit amet, consectetur adipiscing elit, 
             sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 

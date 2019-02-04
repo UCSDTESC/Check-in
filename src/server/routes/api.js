@@ -223,18 +223,17 @@ module.exports = function(app) {
 
       Object.entries(req.body).forEach(([k, v]) => event[k] = v);
       event.attach('logo', {path: req.file.path})
-      event.save()
         .then(() => {
-          res.json(event);
-        })
-        .catch(err => {
-          if (err.name === 'ValidationError') {
-            for (var field in err.errors) {
-              return Errors.respondUserError(res, err.errors[field].message);
-            }
-          }
-
-          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+          event.save()
+            .then(() => res.json(event))
+            .catch(err => {
+              if (err.name === 'ValidationError') {
+                for (var field in err.errors) {
+                  return Errors.respondUserError(res, err.errors[field].message);
+                }
+              }
+              return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+            })
         })
             
   });

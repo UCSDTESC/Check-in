@@ -19,7 +19,7 @@ export default class Header extends React.Component {
       <div className="container sd-form__header">
         <div className="row">
           <div className="col-12 col-md-2 text-center">
-            <img className="sd-form__header-logo" src={logo} />
+            <img className="sd-form__header-logo" src={logo.url} />
           </div>
           <div className={`col-12 col-md-10 text-center text-md-left
           align-self-center`}>

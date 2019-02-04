@@ -25,7 +25,7 @@ export default class EventList extends React.Component {
             <div className="col-lg-2 col-md-6" key={event._id}>
               <div className="card">
                 <img className="card__image card-img-top event-list__image"
-                  src={event.logo} alt={event.name} />
+                  src={event.logo.url} alt={event.name} />
                 <div className="card-body">
                   <h5 className="card-title">
                     <Link to={`/admin/${resumeLink ? 'resumes' :

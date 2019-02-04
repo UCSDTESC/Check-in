@@ -16,24 +16,52 @@ class NewEventPage extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      error: null,
+      event: null
+    }
+
     this.createNewEvent = this.createNewEvent.bind(this);
   }
 
-  componentWillMount() {
+  createNewEvent(event) {
+    registerNewEvent(event)
+      .then((res) => {
+        console.log("res");
+        this.setState({
+          error: null,
+          event: res
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        this.setState({
+          error: err,
+          event: null
+        })
+      });
   }
 
-  createNewEvent(event) {
-    console.log(event)
-    registerNewEvent(event)
-      .then(console.log)
-      .catch(console.error);
+  renderAlert() {
+    if (this.state.event) {
+      return (
+        <h3 className="text-success">Created The {this.state.event.name} Event!</h3>
+      )
+    }
+    else if (this.state.error) {
+      <h3 className="text-danger">Something Went Wrong: {this.state.error.message}</h3>
+    }
   }
 
   render() {
     let validator = createValidator();
     return (
       <div className="page page--admin">
-        <h1 className="sd-form__header-text text-center mt-3 mb-5">Create A New Event</h1>
+        <div className="sd-form__header-text text-center mt-3 mb-5">
+          <h1>Create A New Event</h1>
+          {this.renderAlert()}
+        </div>
+        
         <div className="sd-form__wrapper">
           <div className="sd-form">
             <NewEventForm validate={validator} onSubmit={this.createNewEvent} />

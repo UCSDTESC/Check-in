@@ -28,11 +28,6 @@ var EventSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Admin'
   }],
-  logo: {
-    type: String,
-    trim: true,
-    required: [true, 'Your event must have a logo']
-  },
   closeTime: {
     type: Date,
     required: [true, 'Your event must close registrations by a given date']

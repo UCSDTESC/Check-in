@@ -177,8 +177,8 @@ export const registerNewEvent = (event) =>
   promisify(request
     .post('/admin/events')
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .attach('logo', event.logo[0])
     .field(event)
+    .attach('logo', event.logo[0])
     .use(apiPrefix)
     .use(nocache));
 
