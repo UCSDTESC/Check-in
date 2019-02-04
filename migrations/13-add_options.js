@@ -13,6 +13,10 @@ module.exports.up = function (done) {
     requireResume: true,
     allowTeammates: true,
     requireDiversityOption: true,
+    requireExtraCurriculars: false,
+    requireClassRequirement: false,
+    requireGPA: false,
+    requireMajorGPA: false
   };
   events.findOneAndUpdate({alias: 'hackxx'}, {$set:{options}}, done);
 };

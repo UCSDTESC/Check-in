@@ -134,6 +134,28 @@ class PersonalSection extends React.Component {
     ));
   }
 
+  createGPAFields(requireGPA, requireMajorGPA) {
+    
+    let gpaFields = [];
+
+    if (requireGPA) {
+      gpaFields.push(fields.createColumn('col-lg-6',
+        fields.createLabel('Grade Point Average (GPA)', true),
+        fields.createInput('gpa', '4.00')
+      ))
+    }
+
+    if (requireMajorGPA) {
+      gpaFields.push(fields.createColumn('col-lg-6',
+        fields.createLabel('Major GPA', true),
+        fields.createInput('majorGPA', '4.00')
+      ))
+    }
+
+
+    return fields.createRow(...gpaFields)
+  }
+
   /**
    * Renders the components necessary for students to choose which institution
    * they're coming from.
@@ -254,6 +276,7 @@ class PersonalSection extends React.Component {
         )
       )}
 
+      {this.createGPAFields(options.requireGPA, options.requireMajorGPA)}
       {options.requireDiversityOption && this.createDiversityOptions()}
 
 
