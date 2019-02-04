@@ -66,7 +66,7 @@ class ResponseSection extends React.Component {
       {options.requireExtraCurriculars && fields.createRow(
         fields.createColumn('col-sm-12',
           fields.createLabel('Please put down any extra curriculars or Student' + 
-            ' Organisations you are affiliated with', false),
+            ' Organizations you are affiliated with', false),
           fields.createTextArea('extraCurriculars', 'Extra Curriculars')
         )
       )}
