@@ -46,7 +46,8 @@ export default class EventOptions extends React.Component {
       requireDiversityOption: 'Require Race In Application',
       requireClassRequirement: 'Require Applicant To Have Completed CSE 100',
       requireExtraCurriculars: 'Require Extra Curriculars',
-      requireGPA: 'Require GPA In Application'
+      requireGPA: 'Require GPA In Application',
+      requireMajorGPA: 'Require Major GPA In Application'
     };
 
     const optionDescriptions = {
@@ -56,8 +57,7 @@ export default class EventOptions extends React.Component {
       allowTeammates: 'Allow the applicant the option to specify their '+
         'teammates',
       requireExtraCurriculars: 'Create a text field on the application for' +
-        ' the applicant to put their extra curriculars / student orgs',
-      requireGPA: 'This options also adds Major GPA as an optional field'
+        ' the applicant to put their extra curriculars / student orgs'
     };
 
     return (

@@ -94,6 +94,10 @@ var EventSchema = new Schema({
     requireGPA: {
       type: Boolean,
       default: false
+    },
+    requireMajorGPA: {
+      type: Boolean,
+      default: false
     }
   }
 }, {timestamps: true});

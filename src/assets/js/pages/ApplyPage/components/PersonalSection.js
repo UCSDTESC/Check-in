@@ -134,18 +134,26 @@ class PersonalSection extends React.Component {
     ));
   }
 
-  createGPAFields() {
+  createGPAFields(requireGPA, requireMajorGPA) {
     
-    return fields.createRow(
-      fields.createColumn('col-lg-6',
+    let gpaFields = [];
+
+    if (requireGPA) {
+      gpaFields.push(fields.createColumn('col-lg-6',
         fields.createLabel('Grade Point Average (GPA)', true),
         fields.createInput('gpa', '4.00')
-      ),
-      fields.createColumn('col-lg-6',
-        fields.createLabel('Major GPA', false),
+      ))
+    }
+
+    if (requireMajorGPA) {
+      gpaFields.push(fields.createColumn('col-lg-6',
+        fields.createLabel('Major GPA', true),
         fields.createInput('majorGPA', '4.00')
-      )
-    )
+      ))
+    }
+
+
+    return fields.createRow(...gpaFields)
   }
 
   /**
@@ -268,7 +276,7 @@ class PersonalSection extends React.Component {
         )
       )}
 
-      {options.requireGPA && this.createGPAFields()}
+      {this.createGPAFields(options.requireGPA, options.requireMajorGPA)}
       {options.requireDiversityOption && this.createDiversityOptions()}
 
 

@@ -35,8 +35,13 @@ const createValidator = (options) => (values) => {
   if (options.requireClassRequirement) {
     required.push('classRequirement')
   }
+
   if (options.requireGPA) {
     required.push('gpa')
+  }
+
+  if (options.requireMajorGPA) {
+    required.push('majorGPA')
   }
 
   if (values.institution === 'ucsd') {

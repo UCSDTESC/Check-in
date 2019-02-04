@@ -91,11 +91,11 @@ class User extends React.Component {
     return <span></span>;
   }
 
-  renderGPAFields(user) {
+  renderGPAFields(event) {
     return (
       <React.Fragment>
-        {user.gpa && this.renderFormField('GPA', 'gpa', 'col-sm-4')}
-        {user.majorGPA && this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
+        {event.options.requireGPA && this.renderFormField('GPA', 'gpa', 'col-sm-4')}
+        {event.options.requireMajorGPA && this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
       </React.Fragment>
     )
   }
@@ -168,7 +168,7 @@ class User extends React.Component {
                 {this.renderFormField('Diet', 'diet', 'col-sm-4')}
                 {this.renderFormField('Food', 'food', 'col-sm-4')}
                 {this.renderFormField('PID', 'pid', 'col-sm-4')}
-                {this.renderGPAFields(this.props.user)}
+                {this.renderGPAFields(event)}
               </div>
 
               {event.options.requireClassRequirement || 

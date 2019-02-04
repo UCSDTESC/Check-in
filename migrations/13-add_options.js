@@ -15,7 +15,8 @@ module.exports.up = function (done) {
     requireDiversityOption: true,
     requireExtraCurriculars: false,
     requireClassRequirement: false,
-    requireGPA: false
+    requireGPA: false,
+    requireMajorGPA: false
   };
   events.findOneAndUpdate({alias: 'hackxx'}, {$set:{options}}, done);
 };
