@@ -55,11 +55,31 @@ class ResponseSection extends React.Component {
       )}
 
       {options.allowOutOfState && fields.createRow(
-        fields.createColumn('col-lg-6',
+        fields.createColumn('col-lg-12',
           fields.createLabel('I will be travelling from outside the '+
               'San Diego county'),
           fields.createRadio('outOfState', true, 'Yes'),
           fields.createRadio('outOfState', false, 'No')
+        )
+      )}
+
+      {options.requireExtraCurriculars && fields.createRow(
+        fields.createColumn('col-sm-12',
+          fields.createLabel('Please put down any extra curriculars or Student' + 
+            ' Organisations you are affiliated with', false),
+          fields.createTextArea('extraCurriculars', 'Extra Curriculars')
+        )
+      )}
+
+      {options.allowOutOfState &&
+        <Fields names={['outOfState']} component={this.showCity} />}
+
+      {options.requireClassRequirement && fields.createRow(
+        fields.createColumn('col-lg-12',
+          fields.createLabel('Have you taken an Advanced Data Structures (CSE 100)' + 
+            ' or equivalent class?'),
+          fields.createRadio('classRequirement', true, 'Yes'),
+          fields.createRadio('classRequirement', false, 'No')
         )
       )}
 
@@ -69,9 +89,6 @@ class ResponseSection extends React.Component {
           fields.createTShirtSizePicker()
         )
       )}
-
-      {options.allowOutOfState &&
-        <Fields names={['outOfState']} component={this.showCity} />}
 
       {options.allowTeammates && fields.createRow(
         fields.createColumn('col-sm-12',

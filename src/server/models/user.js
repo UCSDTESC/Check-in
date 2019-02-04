@@ -140,9 +140,20 @@ var UserSchema = new Schema({
     type: Boolean,
     default: false
   },
+  // Declares the user's specified race
   race: {
     type: String,
     required: false
+  },
+  // Declares whether or not the user has taken the class specified in the application
+  classRequirement: {
+    type: Boolean,
+    default: false
+  },
+  // Declares the user's specified extra curriculars
+  extraCurriculars: {
+    type: String,
+    trim: true
   }
 }, {timestamps: true});
 

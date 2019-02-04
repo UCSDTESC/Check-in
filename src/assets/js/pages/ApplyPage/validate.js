@@ -28,6 +28,14 @@ const createValidator = (options) => (values) => {
     required.push('race');
   }
 
+  if (options.requireExtraCurriculars) {
+    required.push('extraCurriculars')
+  }
+
+  if (options.requireClassRequirement) {
+    required.push('classRequirement')
+  }
+
   if (values.institution === 'ucsd') {
     required.push('pid');
   }
