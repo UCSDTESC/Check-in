@@ -235,7 +235,6 @@ class EventPage extends React.Component {
               <Link to={`/admin/users/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
                 View All Users
               </Link>
-              <a className="btn event-page__btn rounded-button rounded-button--small" onClick={this.exportUsers} href="#">Export All Users</a>
               <CheckinStatistics event={event} statistics={statistics} />
               <ResumeStatistics event={event} statistics={statistics} />
 

@@ -46,6 +46,12 @@ export default class ActionsTab extends React.Component {
     return (
       <div className="event-tab">
         <div className="row">
+          <div className="col-lg-3 col-md-6">
+            <h2>User Actions</h2>
+            <a className={`btn event-page__btn rounded-button
+              rounded-button--small`} onClick={this.exportUsers}
+              href="#">Export All Users</a>
+          </div>
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />
           </div>
