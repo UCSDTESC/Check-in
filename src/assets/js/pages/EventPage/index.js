@@ -124,7 +124,6 @@ class EventPage extends React.Component {
    * @returns {Component}
    */
   renderAlert(message, severity='danger', title, timestamp) {
-    console.log(timestamp);
     if (message) {
       return (
         <div className="user-page__error" key={timestamp}>
@@ -211,8 +210,6 @@ class EventPage extends React.Component {
     let {event, statistics, alerts} = this.props;
     let {activeTab} = this.state;
 
-    console.log(alerts);
-
     if (!event) {
       return (
         <Loading />
@@ -248,12 +245,13 @@ class EventPage extends React.Component {
             </div>
           </div>
 
-          <div className="row">
+          <div className="row event-tab__container">
             <div className="col">
               <Nav tabs>
                 {this.tabPages.map((page) => (
-                  <NavItem key={page.anchor}>
+                  <NavItem key={page.anchor} className="event-tab__nav">
                     <NavLink href={`#${page.anchor}`}
+                      className="event-tab__link"
                       active={page === activeTab}>
                       <FA name={page.icon} /> {page.name}
                     </NavLink>
