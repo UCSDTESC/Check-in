@@ -1,65 +1,27 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {exportUsers, bulkChange} from '~/data/Api';
-
-import Loading from '~/components/Loading';
-
-import BulkChange from '../components/BulkChange';
+import OrganiserList from '../components/OrganiserList';
+import SponsorList from '../components/SponsorList';
 
 import {Event as EventPropType} from '~/proptypes';
 
-export default class ActionsTab extends React.Component {
+export default class AdministratorsTab extends React.Component {
   static propTypes = {
     event: PropTypes.shape(EventPropType).isRequired
-  };
-
-  exportUsers = () => {
-    let eventAlias = this.props.event.alias;
-    exportUsers(eventAlias)
-      .end((err, res) => {
-        // Download as file
-        var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
-        var url = URL.createObjectURL(blob);
-        var link = document.createElement('a');
-        link.href=url;
-        link.setAttribute('download', `${eventAlias}-${Date.now()}.csv`);
-        document.body.appendChild(link);
-
-        link.click();
-      });
-  }
-
-  onBulkChange = (values) => {
-    let {users, status} = values;
-
-    bulkChange(users, status)
-      .then(() => {
-        this.createAlert('Successfully updated users!', 'success',
-          'Bulk Change');
-      })
-      .catch((err) => {
-        this.createAlert(err.message, 'danger', 'Bulk Change');
-        console.error(err);
-      });
   };
 
   render() {
     let {event} = this.props;
 
-    if (!event) {
-      return (
-        <Loading />
-      );
-    }
-
     return (
       <div className="event-tab">
         <div className="row">
           <div className="col-lg-4 col-md-6">
-            <BulkChange onSubmit={this.onBulkChange} />
+            <OrganiserList organisers={event.organisers} />
           </div>
           <div className="col-lg-4 col-md-6">
+            <SponsorList sponsors={event.sponsors} />
           </div>
         </div>
       </div>

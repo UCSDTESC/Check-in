@@ -1,45 +1,32 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {exportUsers, bulkChange} from '~/data/Api';
+import {updateOptions} from '~/data/Api';
 
-import Loading from '~/components/Loading';
-
-import BulkChange from '../components/BulkChange';
+import EventOptions from '../components/EventOptions';
 
 import {Event as EventPropType} from '~/proptypes';
 
 export default class ActionsTab extends React.Component {
   static propTypes = {
-    event: PropTypes.shape(EventPropType).isRequired
+    event: PropTypes.shape(EventPropType).isRequired,
+    addEventAlert: PropTypes.func.isRequired
   };
 
-  exportUsers = () => {
-    let eventAlias = this.props.event.alias;
-    exportUsers(eventAlias)
-      .end((err, res) => {
-        // Download as file
-        var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
-        var url = URL.createObjectURL(blob);
-        var link = document.createElement('a');
-        link.href=url;
-        link.setAttribute('download', `${eventAlias}-${Date.now()}.csv`);
-        document.body.appendChild(link);
+  /**
+   * Handles the EventOptions callback for when options should be updated.
+   * @param {Object} options The new options to send to the server.
+   */
+  onOptionsUpdate = (options) => {
+    let {event, addEventAlert} = this.props;
 
-        link.click();
-      });
-  }
-
-  onBulkChange = (values) => {
-    let {users, status} = values;
-
-    bulkChange(users, status)
+    updateOptions(event.alias, options)
       .then(() => {
-        this.createAlert('Successfully updated users!', 'success',
-          'Bulk Change');
+        addEventAlert(event.alias, 'Successfully updated options!', 'success',
+          'Event Options');
       })
       .catch((err) => {
-        this.createAlert(err.message, 'danger', 'Bulk Change');
+        addEventAlert(event.alias, err.message, 'danger', 'Event Options');
         console.error(err);
       });
   };
@@ -47,19 +34,12 @@ export default class ActionsTab extends React.Component {
   render() {
     let {event} = this.props;
 
-    if (!event) {
-      return (
-        <Loading />
-      );
-    }
-
     return (
       <div className="event-tab">
         <div className="row">
           <div className="col-lg-4 col-md-6">
-            <BulkChange onSubmit={this.onBulkChange} />
-          </div>
-          <div className="col-lg-4 col-md-6">
+            <EventOptions options={event.options}
+              onOptionsUpdate={this.onOptionsUpdate} />
           </div>
         </div>
       </div>

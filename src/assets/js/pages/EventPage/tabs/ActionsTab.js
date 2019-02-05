@@ -3,8 +3,6 @@ import React from 'react';
 
 import {exportUsers, bulkChange} from '~/data/Api';
 
-import Loading from '~/components/Loading';
-
 import BulkChange from '../components/BulkChange';
 
 import {Event as EventPropType} from '~/proptypes';
@@ -45,14 +43,6 @@ export default class ActionsTab extends React.Component {
   };
 
   render() {
-    let {event} = this.props;
-
-    if (!event) {
-      return (
-        <Loading />
-      );
-    }
-
     return (
       <div className="event-tab">
         <div className="row">

@@ -4,23 +4,20 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
-import {UncontrolledAlert, Nav, NavItem, NavLink} from 'reactstrap';
+import {Alert, Nav, NavItem, NavLink} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadEventStatistics, exportUsers, bulkChange, updateOptions}
-  from '~/data/Api';
+import {loadEventStatistics} from '~/data/Api';
 
 import {loadAllAdminEvents} from '~/actions';
 
+import {addEventAlert, removeEventAlert,
+  updateEventStatistics} from './actions';
+
 import Loading from '~/components/Loading';
 
-import EventStatistics from './components/EventStatistics';
-import OrganiserList from './components/OrganiserList';
-import SponsorList from './components/SponsorList';
-import BulkChange from './components/BulkChange';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
-import EventOptions from './components/EventOptions';
 import ActionsTab from './tabs/ActionsTab';
 import InsightsTab from './tabs/InsightsTab';
 import StatisticsTab from './tabs/StatisticsTab';
@@ -40,12 +37,19 @@ class EventPage extends React.Component {
     showLoading: PropTypes.func.isRequired,
     hideLoading: PropTypes.func.isRequired,
     loadAllAdminEvents: PropTypes.func.isRequired,
-    event: PropTypes.shape(EventPropType)
+    updateEventStatistics: PropTypes.func.isRequired,
+    addEventAlert: PropTypes.func.isRequired,
+    removeEventAlert: PropTypes.func.isRequired,
+
+    event: PropTypes.shape(EventPropType),
+    statistics: PropTypes.object,
+    alerts: PropTypes.array
   };
 
   constructor(props) {
     super(props);
 
+    // List of possible tabs
     this.tabPages = [
       {
         icon: 'wrench',
@@ -53,12 +57,13 @@ class EventPage extends React.Component {
         anchor: 'actions',
         render: this.renderActions
       },
-      {
-        icon: 'pie-chart',
-        name: 'Insights',
-        anchor: 'insights',
-        render: this.renderInsights
-      },
+      // Left blank until content is added.
+      // {
+      //   icon: 'pie-chart',
+      //   name: 'Insights',
+      //   anchor: 'insights',
+      //   render: this.renderInsights
+      // },
       {
         icon: 'bar-chart',
         name: 'Statistics',
@@ -80,57 +85,77 @@ class EventPage extends React.Component {
     ];
 
     this.state = {
-      statistics: {},
-      alerts: [],
       activeTab: this.tabPages[0]
     };
   }
 
-  /**
-   * Creates a new alert to render to the top of the screen.
-   * @param {String} message The message to display in the alert.
-   * @param {String} type The type of alert to show.
-   * @param {String} title The title of the alert.
-   */
-  createAlert(message, type='danger', title) {
-    this.setState({
-      alerts: [...this.state.alerts, {
-        message,
-        type,
-        title
-      }]
-    });
-  }
+  componentDidUpdate() {
+    this.changeTab();
+  };
 
   /**
-   * Creates a new error alert if there was a login error.
+   * Changes the tab based on the URL hash.
+   */
+  changeTab = () => {
+    let hash = window.location.hash;
+
+    if (hash.length === 0) {
+      return;
+    }
+
+    const {activeTab} = this.state;
+    hash = hash.substring(1);
+
+    if (hash !== activeTab.anchor) {
+      let matchingTab = this.tabPages.find((page) => page.anchor === hash);
+      if (matchingTab === undefined) {
+        return;
+      }
+      this.setState({activeTab: matchingTab});
+    }
+  };
+
+  /**
+   * Renders the alerts for the current event.
    * @param {String} message The message to display in the alert.
-   * @param {String} type The type of alert to show.
+   * @param {String} severity The severity of alert to show.
    * @param {String} title The title of the alert.
-   * @param {String} key The given key for the element.
+   * @param {String} timestamp The given timestamp for this alert.
    * @returns {Component}
    */
-  renderAlert(message, type='danger', title, key='0') {
+  renderAlert(message, severity='danger', title, timestamp) {
+    console.log(timestamp);
     if (message) {
       return (
-        <div className="user-page__error" key={key}>
-          <UncontrolledAlert color={type}>
+        <div className="user-page__error" key={timestamp}>
+          <Alert color={severity}
+            toggle={() => this.dismissAlert(timestamp)}
+            key={timestamp} >
             <div className="container">
               <strong>{title}</strong> {message}
             </div>
-          </UncontrolledAlert>
+          </Alert>
         </div>
       );
     }
   }
 
+  /**
+   * Dismisses a visible alert and removes from redux store.
+   * @param {Integer} timestamp The timestamp key associated with the alert.
+   */
+  dismissAlert = (timestamp) => {
+    let {event, removeEventAlert} = this.props;
+    removeEventAlert(event.alias, timestamp);
+  };
+
   componentDidMount() {
+    this.changeTab();
     loadEventStatistics(this.props.match.params.eventAlias)
       .catch(console.error)
       .then(res => {
-        this.setState({
-          statistics: res
-        });
+        this.props.updateEventStatistics(this.props.match.params.eventAlias,
+          res);
       });
 
     if (!this.props.event) {
@@ -142,93 +167,51 @@ class EventPage extends React.Component {
     }
   };
 
-  exportUsers = () => {
-    let eventAlias = this.props.match.params.eventAlias;
-    exportUsers(eventAlias)
-      .end((err, res) => {
-        // Download as file
-        var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
-        var url = URL.createObjectURL(blob);
-        var link = document.createElement('a');
-        link.href=url;
-        link.setAttribute('download', `${eventAlias}-${Date.now()}.csv`);
-        document.body.appendChild(link);
-
-        link.click();
-      });
-  }
-
-  onBulkChange = (values) => {
-    let {users, status} = values;
-
-    bulkChange(users, status)
-      .then(() => {
-        this.createAlert('Successfully updated users!', 'success',
-          'Bulk Change');
-      })
-      .catch((err) => {
-        this.createAlert(err.message, 'danger', 'Bulk Change');
-        console.error(err);
-      });
-  };
-
-  onOptionsUpdate = (options) => {
-    let {event} = this.props;
-
-    updateOptions(event.alias, options)
-      .then(() => {
-        this.createAlert('Successfully updated options!', 'success',
-          'Event Options');
-      })
-      .catch((err) => {
-        this.createAlert(err.message, 'danger', 'Event Options');
-        console.error(err);
-      });
-  };
-
   /**
    * Renders the event tab for actions.
    * @returns {Component} The action tab.
    */
-  renderActions() {
-    return (<ActionsTab event={this.props.event} />);
+  renderActions(props) {
+    return (<ActionsTab {...props} />);
   }
 
   /**
    * Renders the event tab for insights.
    * @returns {Component} The insights tab.
    */
-  renderInsights() {
-    return (<InsightsTab event={this.props.event} />);
+  renderInsights(props) {
+    return (<InsightsTab {...props} />);
   }
 
   /**
    * Renders the event tab for statistics.
    * @returns {Component} The statistics tab.
    */
-  renderStatistics() {
-    return (<StatisticsTab event={this.props.event} />);
+  renderStatistics(props) {
+    return (<StatisticsTab {...props} />);
   }
 
   /**
    * Renders the event tab for administrators.
    * @returns {Component} The administrators tab.
    */
-  renderAdministrators() {
-    return (<AdministratorsTab event={this.props.event} />);
+  renderAdministrators(props) {
+    return (<AdministratorsTab {...props} />);
   }
 
   /**
    * Renders the event tab for settings.
    * @returns {Component} The settings tab.
    */
-  renderSettings() {
-    return (<SettingsTab event={this.props.event} />);
+  renderSettings(props) {
+    return (<SettingsTab {...props} />);
   }
 
   render() {
-    let {event} = this.props;
-    let {statistics, alerts, activeTab} = this.state;
+    let {event, statistics, alerts} = this.props;
+    let {activeTab} = this.state;
+
+    console.log(alerts);
 
     if (!event) {
       return (
@@ -239,8 +222,8 @@ class EventPage extends React.Component {
     return (
       <div className="page page--admin event-page d-flex flex-column h-100">
         <div className="event-page__above">
-          {alerts.map(({message, type, title}, i) =>
-            this.renderAlert(message, type, title, i))}
+          {alerts.map(({message, severity, title, timestamp}) =>
+            this.renderAlert(message, severity, title, timestamp))}
         </div>
         <div className="container-fluid">
           <div className="row event-page__header">
@@ -280,43 +263,32 @@ class EventPage extends React.Component {
             </div>
           </div>
 
-          {activeTab.render()}
-
-
-          <div className="row">
-            <div className="col-lg-4 col-md-6">
-              <OrganiserList organisers={event.organisers} />
-              <SponsorList sponsors={event.sponsors} />
-            </div>
-            <div className="col-lg-4 col-md-6">
-              <EventStatistics event={event} statistics={statistics} />
-            </div>
-            <div className="col-lg-4 col">
-              <EventOptions options={event.options} onOptionsUpdate={this.onOptionsUpdate} />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-lg-4 col-md-6">
-              <BulkChange onSubmit={this.onBulkChange} />
-            </div>
-            <div className="col-lg-4 col-md-6">
-            </div>
-          </div>
+          {activeTab.render(this.props)}
         </div>
       </div>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-  event: state.admin.events[ownProps.match.params.eventAlias]
-});
+const mapStateToProps = (state, ownProps) => {
+  const eventAlias = ownProps.match.params.eventAlias;
+  return {
+    event: state.admin.events[eventAlias],
+    statistics: eventAlias in state.admin.eventStatistics ?
+      state.admin.eventStatistics[eventAlias] : {},
+    alerts: eventAlias in state.admin.eventAlerts ?
+      state.admin.eventAlerts[eventAlias] : []
+  };
+};
 
 function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
+    updateEventStatistics: bindActionCreators(updateEventStatistics, dispatch),
+    addEventAlert: bindActionCreators(addEventAlert, dispatch),
+    removeEventAlert: bindActionCreators(removeEventAlert, dispatch)
   };
 };
 
