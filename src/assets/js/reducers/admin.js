@@ -14,6 +14,10 @@ import admins from '~/pages/AdminsPage/reducers/Admins';
 
 import resumes from '~/pages/ResumesPage/reducers/Resumes';
 
+import eventAlerts from '~/pages/EventPage/reducers/EventAlerts';
+
+import eventStatistics from '~/pages/EventPage/reducers/EventStatistics';
+
 import events from './Admin/Events';
 import filters from './Admin/Filters';
 import general from './Admin/General';
@@ -28,4 +32,6 @@ export default {
   users: reduceReducers(usersReducer, checkinReducer),
   resumes,
   dashboardStats,
+  eventAlerts,
+  eventStatistics
 };

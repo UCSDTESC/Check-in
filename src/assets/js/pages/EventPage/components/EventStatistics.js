@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {Link} from 'react-router-dom';
 
 export default class EventStatistics extends React.Component {
   static propTypes = {
@@ -44,15 +43,15 @@ export default class EventStatistics extends React.Component {
 
     return (
       <div className="event-statistics event-page__card">
-        <h2>Statistics</h2>
+        <h2>Applicant Demographics</h2>
         <dl className="row">
-          <dt className="col-6">Total Users</dt>
+          <dt className="col-6">Total Applicants</dt>
           <dd className="col-6">
             {event.users}
           </dd>
 
           {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
-        </dl>        
+        </dl>
       </div>
     );
   }
