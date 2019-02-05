@@ -1,4 +1,5 @@
 import * as ActionTypes from '../actions/types';
+import ColumnHeaders from '~/static/ColumnHeaders';
 
 const initialState = [
   {
@@ -29,7 +30,7 @@ const userColumns = (state = initialState, action) => {
     return [
       ...state,
       {
-        Header: action.column,
+        Header: ColumnHeaders[action.column] || action.column ,
         accessor: action.column
       }
     ];

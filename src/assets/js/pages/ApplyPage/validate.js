@@ -28,6 +28,22 @@ const createValidator = (options) => (values) => {
     required.push('race');
   }
 
+  if (options.requireExtraCurriculars) {
+    required.push('extraCurriculars')
+  }
+
+  if (options.requireClassRequirement) {
+    required.push('classRequirement')
+  }
+
+  if (options.requireGPA) {
+    required.push('gpa')
+  }
+
+  if (options.requireMajorGPA) {
+    required.push('majorGPA')
+  }
+
   if (values.institution === 'ucsd') {
     required.push('pid');
   }
@@ -49,7 +65,7 @@ const createValidator = (options) => (values) => {
     errors.birthdateYear = 'Invalid Year';
   }
 
-  if (values.birthdateYear > 2000) {
+  if (values.birthdateYear > 2001) {
     if (!values.university ||
         values.university.indexOf('The University of California') === -1) {
       errors.birthdateYear = 'Invalid Year';

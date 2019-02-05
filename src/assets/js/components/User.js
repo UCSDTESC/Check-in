@@ -91,9 +91,17 @@ class User extends React.Component {
     return <span></span>;
   }
 
-  render() {
-    const {handleSubmit, pristine, reset, submitting} = this.props;
+  renderGPAFields(event) {
+    return (
+      <React.Fragment>
+        {event.options.requireGPA && this.renderFormField('GPA', 'gpa', 'col-sm-4')}
+        {event.options.requireMajorGPA && this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
+      </React.Fragment>
+    )
+  }
 
+  render() {
+    const {handleSubmit, pristine, reset, submitting, event} = this.props;
     return (
       <div>
         <h3>User <small>{this.props.user._id}</small></h3>
@@ -160,6 +168,30 @@ class User extends React.Component {
                 {this.renderFormField('Diet', 'diet', 'col-sm-4')}
                 {this.renderFormField('Food', 'food', 'col-sm-4')}
                 {this.renderFormField('PID', 'pid', 'col-sm-4')}
+                {this.renderGPAFields(event)}
+              </div>
+
+              {event.options.requireClassRequirement || 
+                event.options.requireExtraCurriculars ?  
+                  <h5 className="mt-3">Miscellaneous Questions</h5> : ''}
+              <div className="row my-2 pt-2">
+                {event.options.requireClassRequirement && 
+                  <React.Fragment>
+                    <div className="col-sm-8">This user has completed Advanced Data Structures (CSE 100)</div>
+                    <div className="col-sm-4 d-flex justify-content-center">
+                      {this.renderFormCheckbox('', 'classRequirement', 'ml-auto')}
+                    </div>
+                  </React.Fragment>
+                }
+                {event.options.requireExtraCurriculars &&
+                  <React.Fragment>
+                    <div className="col-sm-12 mt-3">
+                      Extra Curriculars
+                      {this.renderFormField('', 'extraCurriculars', '')}
+                    </div>
+                  </React.Fragment>
+
+                }
               </div>
               <button type="submit"
                 className="btn rounded-button rounded-button--small"
@@ -182,6 +214,7 @@ const mapStateToProps = (state, ownProps) => {
   return {
     resume: ownProps.user.resume ? ownProps.user.resume : null,
     //form: ownProps.user._id,
+    event: ownProps.user.event ? ownProps.user.event : null,
     role: state.admin.auth.user.role
   };
 };

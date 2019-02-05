@@ -44,7 +44,11 @@ export default class EventOptions extends React.Component {
       foodOption : 'Add Food Preference Section',
       requireResume: 'Require Resume Uploads',
       allowTeammates : 'Allow Team Members',
-      requireDiversityOption: 'Require Race In Application'
+      requireDiversityOption: 'Require Race In Application',
+      requireClassRequirement: 'Require Applicant To Have Completed CSE 100',
+      requireExtraCurriculars: 'Require Extra Curriculars',
+      requireGPA: 'Require GPA In Application',
+      requireMajorGPA: 'Require Major GPA In Application'
     };
 
     const optionDescriptions = {
@@ -52,7 +56,9 @@ export default class EventOptions extends React.Component {
       foodOption: 'Give the applicant the option to let you know their ' +
         'preference for catering',
       allowTeammates: 'Allow the applicant the option to specify their '+
-        'teammates'
+        'teammates',
+      requireExtraCurriculars: 'Create a text field on the application for' +
+        ' the applicant to put their extra curriculars / student orgs'
     };
 
     return (

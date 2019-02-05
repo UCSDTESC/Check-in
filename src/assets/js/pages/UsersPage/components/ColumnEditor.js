@@ -3,6 +3,9 @@ import React from 'react';
 
 import {Column as ColumnPropTypes} from '~/proptypes';
 
+//TODO: make the input here a dropdown with the entries from this file
+//import ColumnHeaders from '~/static/ColumnHeaders';
+
 export default class UserList extends React.Component {
   static propTypes = {
     columns: PropTypes.arrayOf(PropTypes.shape(
@@ -44,17 +47,17 @@ export default class UserList extends React.Component {
           <div className="col-12">
             <input type="text" placeholder="Column Field"
               className="column-editor__input sd-form__input-text"
-              value={this.state.newFilter} onChange={this.changeFilter} />
+                value={this.state.newFilter} onChange={this.changeFilter} />
           </div>
           <div className="col-12">
-            {columns.map((column) => (<button key={column.accessor}
+            {columns.map((column) => (<div key={column.accessor}
               className="btn column-editor">
               {column.Header}&nbsp;
               <a onClick={() => onDeleteColumn(column.accessor)}
                 className="badge badge-dark column-editor__badge">
                 <i className="fa fa-close"></i></a>
               <span className="sr-only">delete column</span>
-            </button>))}
+            </div>))}
           </div>
         </div>
       </form>
