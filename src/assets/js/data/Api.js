@@ -267,3 +267,14 @@ export const updateOptions = (eventAlias, options) =>
     .send({options})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
+
+/**
+ * Request a list of columns that define the user.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadColumns = () =>
+  promisify(request
+    .get('/admin/columns')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix)
+    .use(nocache));
