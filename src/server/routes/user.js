@@ -7,7 +7,7 @@ const logging = require('../config/logging');
 const upload = require('../config/uploads')();
 var {createTESCEmail} = require('../config/mailer')();
 
-const {setUserInfo, PUBLIC_EVENT_FIELDS} = require('./helper');
+const {setUserInfo, PUBLIC_EVENT_FIELDS, USER_JWT_TIMEOUT} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const User = mongoose.model('User');
@@ -16,7 +16,7 @@ const Account = mongoose.model('Account');
 
 const editableFields = [
   'teammates', 'food', 'diet', 'travel', 'shirtSize', 'github', 'website',
-  'shareResume', 'gender'
+  'shareResume', 'gender', 'gpa', 'majorGPA'
 ];
 const readOnlyFields = [
   'status', 'firstName', 'lastName', 'university', 'email', 'phone', 'resume',
@@ -39,7 +39,7 @@ module.exports = function(app) {
    */
   function generateToken(user) {
     return jwt.sign(user, process.env.SESSION_SECRET, {
-      expiresIn: 10080
+      expiresIn: USER_JWT_TIMEOUT
     });
   }
 
@@ -54,6 +54,13 @@ module.exports = function(app) {
     });
     return outputUser;
   }
+
+  /**
+   * Used to verify that the JWT Token is still valid.
+   */
+  userRoute.get('/authorised', requireAuth, function (req, res) {
+    return res.sendStatus(200);
+  });
 
   // Authentication
   userRoute.post('/login', requireLogin, function (req, res) {
@@ -148,7 +155,9 @@ module.exports = function(app) {
       return Event.findOne({alias: req.params.eventAlias})
         .then((event) => {
           return User.findOneAndUpdate({account: user, event: event},
-            {$set: updateDelta}, {new: true}).populate('account');
+            {$set: updateDelta}, {new: true})
+              .populate('account')
+              .populate('event');
         })
         .then((user) => {
           if (!user) {

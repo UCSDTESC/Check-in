@@ -140,7 +140,28 @@ var UserSchema = new Schema({
     type: Boolean,
     default: false
   },
+  //Declares the user's provided race, required by events on an optional basis
   race: {
+    type: String,
+    required: false
+  },
+  // Declares whether or not the user has taken the class specified in the application
+  classRequirement: {
+    type: Boolean,
+    default: false
+  },
+  // Declares the user's specified extra curriculars
+  extraCurriculars: {
+    type: String,
+    trim: true
+  },
+  // Declares the user's GPA, required by events on an optional basis
+  gpa: {
+    type: String,
+    required: false
+  },
+  // Declares the user's major GPA, required by events on an optional basis
+  majorGPA: {
     type: String,
     required: false
   }

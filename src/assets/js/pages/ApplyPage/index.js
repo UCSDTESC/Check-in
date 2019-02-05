@@ -229,7 +229,7 @@ class ApplyPage extends React.Component {
       <div className="page apply-page">
         <NavHeader />
         <div className="sd-form__wrapper">
-          <Progress percent={(page * 100) / 4} />
+          <Progress percent={(page * 100) / 4} className="sd-form__progress" />
           <div className="sd-form">
             {event && <Header name={event.name} logo={event.logo}
               description={event.description} />}

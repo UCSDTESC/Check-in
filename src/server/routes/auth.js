@@ -3,7 +3,7 @@ const passport = require('passport');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 
-const {setUserInfo, roleAuth, roles} = require('./helper');
+const {ADMIN_JWT_TIMEOUT, setUserInfo, roleAuth, roles} = require('./helper');
 
 const Admin = mongoose.model('Admin');
 
@@ -14,6 +14,7 @@ module.exports = function(app) {
 
   // Middleware to require login/auth
   const requireLogin = passport.authenticate('admin', {session: false});
+  const requireAuth = passport.authenticate('adminJwt', {session: false});
 
   /**
    * Signs a user with the JWT secret.
@@ -22,9 +23,16 @@ module.exports = function(app) {
    */
   function generateToken(user) {
     return jwt.sign(user, process.env.SESSION_SECRET, {
-      expiresIn: 10080
+      expiresIn: ADMIN_JWT_TIMEOUT
     });
   }
+
+  /**
+   * Used to verify that the JWT Token is still valid.
+   */
+  auth.get('/authorised', requireAuth, function (req, res) {
+    return res.sendStatus(200);
+  });
 
   // Authentication
   auth.post('/login', requireLogin, function (req, res) {

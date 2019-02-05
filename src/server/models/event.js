@@ -79,6 +79,22 @@ var EventSchema = new Schema({
     requireDiversityOption: {
       type: Boolean,
       default: false
+    },
+    requireClassRequirement: {
+      type: Boolean,
+      default: false
+    },
+    requireExtraCurriculars: {
+      type: Boolean,
+      default: false
+    },
+    requireGPA: {
+      type: Boolean,
+      default: false
+    },
+    requireMajorGPA: {
+      type: Boolean,
+      default: false
     }
   }
 }, {timestamps: true});

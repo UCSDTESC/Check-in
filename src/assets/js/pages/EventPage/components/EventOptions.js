@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {UncontrolledTooltip} from 'reactstrap';
 import FA from 'react-fontawesome';
+
 import ToggleSwitch from '~/components/ToggleSwitch';
 
 export default class EventOptions extends React.Component {
@@ -43,7 +44,11 @@ export default class EventOptions extends React.Component {
       foodOption : 'Add Food Preference Section',
       requireResume: 'Require Resume Uploads',
       allowTeammates : 'Allow Team Members',
-      requireDiversityOption: 'Require Race In Application'
+      requireDiversityOption: 'Require Race In Application',
+      requireClassRequirement: 'Require Applicant To Have Completed CSE 100',
+      requireExtraCurriculars: 'Require Extra Curriculars',
+      requireGPA: 'Require GPA In Application',
+      requireMajorGPA: 'Require Major GPA In Application'
     };
 
     const optionDescriptions = {
@@ -51,12 +56,14 @@ export default class EventOptions extends React.Component {
       foodOption: 'Give the applicant the option to let you know their ' +
         'preference for catering',
       allowTeammates: 'Allow the applicant the option to specify their '+
-        'teammates'
+        'teammates',
+      requireExtraCurriculars: 'Create a text field on the application for' +
+        ' the applicant to put their extra curriculars / student orgs'
     };
 
     return (
       <div className="event-options">
-        <h2>Options</h2>
+        <h2>Registration Options</h2>
         {Object.keys(options).map((option) => {
           let checkId = option + 'Check';
           let optionName = optionNames[option];
@@ -66,10 +73,9 @@ export default class EventOptions extends React.Component {
             <label className="form-check-label w-75 d-flex align-items-center flex-row my-3" htmlFor={checkId}>
               <span>{optionName}&nbsp;</span> {optionDescription ?
                 this.renderDescriptionTag(option, optionDescription) : ''}
-                <ToggleSwitch className="d-inline-block ml-auto" type="checkbox" name={option}
-                  id={checkId} checked={options[option]}
-                  onChange={this.toggleOption(option)} 
-                />
+              <ToggleSwitch className="d-inline-block ml-auto" type="checkbox" name={option}
+                id={checkId} checked={options[option]}
+                onChange={this.toggleOption(option)} />
             </label>
           </div>);
         })}

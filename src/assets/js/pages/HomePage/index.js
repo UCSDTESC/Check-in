@@ -27,8 +27,8 @@ class HomePage extends React.Component {
   }
 
   componentDidMount() {
-    Promise.all([this.props.loadAllPublicEvents(),
-      this.optionalLoadUserEvents()])
+    this.props.loadAllPublicEvents()
+      .then(this.optionalLoadUserEvents)
       .catch(console.error)
       .finally(this.props.hideLoading);
   }
@@ -36,7 +36,7 @@ class HomePage extends React.Component {
   /**
    * Ensures the user is authenticated before trying to load their events.
    */
-  optionalLoadUserEvents() {
+  optionalLoadUserEvents = () => {
     if (this.props.authenticated) {
       return this.props.loadUserEvents();
     }

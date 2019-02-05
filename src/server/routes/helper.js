@@ -13,6 +13,9 @@ const roles = {
   ROLE_MEMBER: 'Member'
 };
 
+const ADMIN_JWT_TIMEOUT = 3 * 60 * 60;
+const USER_JWT_TIMEOUT = 7 * 24 * 60 * 60;
+
 const PUBLIC_EVENT_FIELDS = 'name alias logo closeTime homepage';
 
 // Conditions that must be met for sponsors to see resumes
@@ -207,5 +210,7 @@ module.exports = {
   isSponsor,
   exportApplicantInfo,
   getResumeConditions,
-  PUBLIC_EVENT_FIELDS
+  PUBLIC_EVENT_FIELDS,
+  ADMIN_JWT_TIMEOUT,
+  USER_JWT_TIMEOUT
 };

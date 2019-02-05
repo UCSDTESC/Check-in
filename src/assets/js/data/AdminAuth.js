@@ -5,6 +5,7 @@ import request from 'superagent';
 const URL_PREFIX = '/api/auth';
 
 const prefix = pref(URL_PREFIX);
+
 /**
  * Requests a login for the given administrator.
  * @param  {String} username The username of the login.

@@ -8,14 +8,18 @@ import Q from 'q';
 import CookieTypes from '~/static/Cookies';
 
 const cookies = new Cookies();
+const COOKIE_OPTIONS = {
+  path: '/',
+  maxAge: 3 * 60 * 60
+};
 
 /**
  * Stores cookies from a login response.
  * @param {Object} res HTTP request response object.
  */
 function storeLogin(res) {
-  cookies.set(CookieTypes.admin.token, res.body.token, {path: '/'});
-  cookies.set(CookieTypes.admin.user, res.body.user, {path: '/'});
+  cookies.set(CookieTypes.admin.token, res.body.token, COOKIE_OPTIONS);
+  cookies.set(CookieTypes.admin.user, res.body.user, COOKIE_OPTIONS);
 }
 
 /**
