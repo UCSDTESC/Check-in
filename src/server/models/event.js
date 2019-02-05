@@ -106,6 +106,20 @@ var EventSchema = new Schema({
       type: Boolean,
       default: false
     }
+  },
+  customQuestions: {
+    longText: [{
+      type: String,
+      trim: true
+    }],
+    shortText: [{
+      type: String,
+      trim: true
+    }],
+    checkBox: [{
+      type: String,
+      trim: true
+    }]
   }
 }, {timestamps: true});
 

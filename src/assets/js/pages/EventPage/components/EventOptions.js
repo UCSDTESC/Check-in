@@ -63,14 +63,21 @@ export default class EventOptions extends React.Component {
 
     return (
       <div className="event-options">
-        <h2>Registration Options</h2>
+      <div className="d-flex flex-row">
+        <h2 className="align-self-start">Registration Options</h2>         
+        <button className="btn rounded-button rounded-button--small align-self-end my-auto"
+          onClick={() => onOptionsUpdate(this.state.options)}>
+          Update
+        </button>
+      </div>
+
         {Object.keys(options).map((option) => {
           let checkId = option + 'Check';
           let optionName = optionNames[option];
           let optionDescription = optionDescriptions[option];
 
           return (<div className="form-check pl-0" key={option}>
-            <label className="form-check-label w-75 d-flex align-items-center flex-row my-3" htmlFor={checkId}>
+            <label className="form-check-label w-100 d-flex align-items-center flex-row my-3" htmlFor={checkId}>
               <span>{optionName}&nbsp;</span> {optionDescription ?
                 this.renderDescriptionTag(option, optionDescription) : ''}
               <ToggleSwitch className="d-inline-block ml-auto" type="checkbox" name={option}
@@ -79,11 +86,6 @@ export default class EventOptions extends React.Component {
             </label>
           </div>);
         })}
-
-        <button className="btn rounded-button rounded-button--small"
-          onClick={() => onOptionsUpdate(this.state.options)}>
-          Update
-        </button>
       </div>
     );
   }

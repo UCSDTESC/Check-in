@@ -4,6 +4,7 @@ import React from 'react';
 import {updateOptions} from '~/data/Api';
 
 import EventOptions from '../components/EventOptions';
+import CustomQuestions from '../components/CustomQuestions';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -37,8 +38,12 @@ export default class ActionsTab extends React.Component {
     return (
       <div className="event-tab">
         <div className="row">
-          <div className="col-lg-4 col-md-6">
+          <div className="col-lg-5 col-md-5">
             <EventOptions options={event.options}
+              onOptionsUpdate={this.onOptionsUpdate} />
+          </div>
+          <div className="col-lg-5 col-md-5 offset-md-2 offset-lg-1">
+            <CustomQuestions options={event.options}
               onOptionsUpdate={this.onOptionsUpdate} />
           </div>
         </div>
