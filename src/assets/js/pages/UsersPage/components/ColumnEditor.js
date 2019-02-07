@@ -3,11 +3,11 @@ import React from 'react';
 
 import {Column as ColumnPropTypes} from '~/proptypes';
 
-//TODO: make the input here a dropdown with the entries from this file
-//import ColumnHeaders from '~/static/ColumnHeaders';
-
 export default class UserList extends React.Component {
   static propTypes = {
+    available: PropTypes.arrayOf(PropTypes.shape(
+      ColumnPropTypes
+    ).isRequired).isRequired,
     columns: PropTypes.arrayOf(PropTypes.shape(
       ColumnPropTypes
     ).isRequired).isRequired,
@@ -27,27 +27,39 @@ export default class UserList extends React.Component {
 
   /**
    * Add a new column to the list.
+   * @param {Object} event The select onChange event.
    */
-  newColumn = (e) => {
-    e.preventDefault();
-    this.props.onAddColumn(this.state.newFilter);
-    this.setState({
-      newFilter: ''
-    });
+  newColumn = (event) => {
+    this.props.onAddColumn(this.props.available[event.target.value]);
   };
 
   render() {
-    let {columns, onDeleteColumn} = this.props;
+    let {available, columns, onDeleteColumn} = this.props;
+    let activeColumnAccessors = Object.values(columns)
+      .reduce((agg, col) => {
+        agg.push(col.accessor);
+        return agg;
+      }, []);
 
     return (
-      <form className="sd-form column-editor__container"
-        onSubmit={this.newColumn}>
+      <form className="sd-form column-editor__container">
         <h4>Columns</h4>
         <div className="row">
           <div className="col-12">
-            <input type="text" placeholder="Column Field"
-              className="column-editor__input sd-form__input-text"
-                value={this.state.newFilter} onChange={this.changeFilter} />
+            <select className="column-editor__input sd-form__input-select"
+              onChange={this.newColumn}>
+              {available
+                .map((available, i) => {
+                  available.index = i;
+                  return available;
+                })
+                .filter((available) =>
+                  !(activeColumnAccessors.includes(available.accessor)))
+                .map((available) =>
+                (<option key={available.index} value={available.index}>
+                  {available.Header}
+                </option>))}
+            </select>
           </div>
           <div className="col-12">
             {columns.map((column) => (<div key={column.accessor}
