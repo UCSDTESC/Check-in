@@ -7,9 +7,9 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
 
-import {addColumn, updateUser, removeColumn} from './actions';
+import {addColumn, updateUser, removeColumn, addAvailableColumns} from './actions';
 
-import {loadAllUsers} from '~/data/Api';
+import {loadAllUsers, loadColumns} from '~/data/Api';
 
 import {Column as ColumnPropTypes, Event as EventPropType} from '~/proptypes';
 
@@ -26,7 +26,11 @@ class UsersPage extends React.Component {
       }).isRequired
     }).isRequired,
 
-    columns: PropTypes.arrayOf(PropTypes.shape(
+    loadedAvailableColumns: PropTypes.bool.isRequired,
+    availableColumns: PropTypes.arrayOf(PropTypes.shape(
+      ColumnPropTypes
+    ).isRequired).isRequired,
+    activeColumns: PropTypes.arrayOf(PropTypes.shape(
       ColumnPropTypes
     ).isRequired).isRequired,
     event: PropTypes.shape(EventPropType),
@@ -35,6 +39,7 @@ class UsersPage extends React.Component {
     hideLoading: PropTypes.func.isRequired,
     addColumn: PropTypes.func.isRequired,
     removeColumn: PropTypes.func.isRequired,
+    addAvailableColumns: PropTypes.func.isRequired,
     loadAllAdminEvents: PropTypes.func.isRequired,
     updateUser: PropTypes.func.isRequired
   };
@@ -47,8 +52,8 @@ class UsersPage extends React.Component {
     };
   }
 
-  componentWillMount() {
-    let {event} = this.props;
+  componentDidMount() {
+    let {event, loadedAvailableColumns} = this.props;
 
     if (!event) {
       showLoading();
@@ -61,6 +66,28 @@ class UsersPage extends React.Component {
     if (!this.state.users.length) {
       this.loadUsers();
     }
+
+    if (!loadedAvailableColumns) {
+      this.loadAvailableColumns();
+    }
+  }
+
+  /**
+   * Loads the column definitions from the server.
+   */
+  loadAvailableColumns() {
+    loadColumns()
+      .then(columns => {
+        let newColumns = Object.entries(columns)
+          .reduce((acc, [key, value]) => {
+            acc.push({
+              Header: value,
+              accessor: key
+            });
+            return acc;
+          }, []);
+        this.props.addAvailableColumns(newColumns);
+      });
   }
 
   /**
@@ -96,14 +123,14 @@ class UsersPage extends React.Component {
       });
   }
 
-  onAddColumn = (columnName) =>
-    this.props.addColumn(columnName)
+  onAddColumn = (column) =>
+    this.props.addColumn(column)
 
-  onRemoveColumn = (columnName) =>
-    this.props.removeColumn(columnName)
+  onRemoveColumn = (column) =>
+    this.props.removeColumn(column)
 
   render() {
-    let {event, columns} = this.props;
+    let {event, activeColumns, availableColumns} = this.props;
     let {users} = this.state;
 
     if (!event) {
@@ -122,7 +149,7 @@ class UsersPage extends React.Component {
               </Link> Users</h1>
           </div>
           <div className="col-md-6">
-            <ColumnEditor columns={columns}
+            <ColumnEditor available={availableColumns} columns={activeColumns}
               onAddColumn={this.onAddColumn}
               onDeleteColumn={this.onRemoveColumn} />
           </div>
@@ -134,7 +161,7 @@ class UsersPage extends React.Component {
             </button>
           </div>
         </div>
-        <UserList users={users} columns={columns}
+        <UserList users={users} columns={activeColumns}
           onUserUpdate={this.onUserUpdate} />
       </div>
     );
@@ -142,7 +169,9 @@ class UsersPage extends React.Component {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-  columns: state.admin.userColumns,
+  availableColumns: state.admin.userColumns.available,
+  activeColumns: state.admin.userColumns.active,
+  loadedAvailableColumns: state.admin.userColumns.loadedAvailable,
   event: state.admin.events[ownProps.match.params.eventAlias]
 });
 
@@ -150,7 +179,8 @@ function mapDispatchToProps(dispatch) {
   return {
     updateUser: bindActionCreators(updateUser, dispatch),
     addColumn: bindActionCreators(addColumn, dispatch),
-    removeColumn: bindActionCreators(removeColumn,dispatch),
+    removeColumn: bindActionCreators(removeColumn, dispatch),
+    addAvailableColumns: bindActionCreators(addAvailableColumns, dispatch),
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
     loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)

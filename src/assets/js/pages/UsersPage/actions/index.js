@@ -30,3 +30,8 @@ export const removeColumn = (columnName) => ({
   type: Types.REMOVE_COLUMN,
   columnName
 });
+
+export const addAvailableColumns = (columns) => ({
+  type: Types.ADD_AVAILABLE_COLUMNS,
+  columns
+});

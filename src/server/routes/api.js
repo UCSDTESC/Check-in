@@ -170,6 +170,21 @@ module.exports = function(app) {
         .then(() => res.json({success : true}));
     });
 
+  api.get('/admin/columns', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    (_, res) => {
+      let columns = Object.entries(User.schema.paths)
+        .reduce((acc, [key, value]) => {
+          if (!('displayName' in value.options)) {
+            return acc;
+          }
+
+          acc[key] = value.options.displayName;
+          return acc;
+        }, {});
+
+      return res.json(columns);
+    });
+
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
