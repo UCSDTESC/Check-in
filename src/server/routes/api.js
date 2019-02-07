@@ -210,7 +210,6 @@ module.exports = function(app) {
 
   api.post('/admin/events', requireAuth, 
     roleAuth(roles.ROLE_ADMIN), upload.single('logo'), (req, res) => {
-
       let event = new Event;
       const {closeTimeDay, closeTimeMonth, closeTimeYear} = req.body;
 
@@ -222,6 +221,11 @@ module.exports = function(app) {
       + 'T00:00:00.000Z';
 
       Object.entries(req.body).forEach(([k, v]) => event[k] = v);
+
+      if (['Admin', 'Member'].includes(req.user.role)) {
+        event.organisers = [req.user._id]
+      }
+
       event.attach('logo', {path: req.file.path})
         .then(() => {
           event.save()
