@@ -5,7 +5,8 @@ import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import createValidator from './validate';
 import {registerNewEvent} from '~/data/Api'
-import NewEventForm from './components/NewEventForm'
+import NewEventForm from './components/NewEventForm';
+import {UncontrolledAlert} from 'reactstrap';
 
 class NewEventPage extends React.Component {
   static propTypes = {
@@ -34,9 +35,8 @@ class NewEventPage extends React.Component {
         });
       })
       .catch((err) => {
-        console.error(err);
         this.setState({
-          error: err,
+          error: err.message,
           event: null
         })
       });
@@ -45,11 +45,13 @@ class NewEventPage extends React.Component {
   renderAlert() {
     if (this.state.event) {
       return (
-        <h3 className="text-success">Created The {this.state.event.name} Event!</h3>
+        <UncontrolledAlert color="success">
+          Successfully Created The <b>{this.state.event.name}</b> Event
+        </UncontrolledAlert>
       )
     }
     else if (this.state.error) {
-      <h3 className="text-danger">Something Went Wrong: {this.state.error.message}</h3>
+      return <UncontrolledAlert color="danger">{this.state.error}</UncontrolledAlert>
     }
   }
 
@@ -57,9 +59,11 @@ class NewEventPage extends React.Component {
     let validator = createValidator();
     return (
       <div className="page page--admin">
+        <div className="event-page__above">
+          {this.renderAlert()}
+        </div>
         <div className="sd-form__header-text text-center mt-3 mb-5">
           <h1>Create A New Event</h1>
-          {this.renderAlert()}
         </div>
         
         <div className="sd-form__wrapper">
@@ -72,12 +76,6 @@ class NewEventPage extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
-  return {
-
-  };
-};
-
 function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
@@ -85,4 +83,4 @@ function mapDispatchToProps(dispatch) {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NewEventPage);
+export default connect(null, mapDispatchToProps)(NewEventPage);
