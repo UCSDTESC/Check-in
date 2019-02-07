@@ -224,35 +224,44 @@ class EventPage extends React.Component {
         </div>
         <div className="container-fluid">
           <div className="row event-page__header">
-            <div className={'col-lg-auto d-flex flex-column flex-lg-row align-items-center ' +
-              ' '}>
+            <div className={`col-6 col-xl-auto d-flex flex-column flex-xl-row
+              align-items-center justify-content-center`}>
               <img className="event-page__logo" src={event.logo} />
-              <a target="_blank" href={event.homepage}>
+              <a target="_blank" rel="noopener noreferrer"
+                href={event.homepage}>
                 <h1 className="event-page__title">{event.name}</h1>
               </a>
             </div>
-            <div className="col-lg-auto ml-auto d-flex flex-column flex-lg-row align-items-center">
-              <Link to={`/admin/users/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
+            <div className={`col-6 col-xl-auto ml-auto d-flex flex-column
+              flex-xl-row align-items-center justify-content-center`}>
+              <Link to={`/admin/users/${event.alias}`} className={`btn
+                event-page__btn rounded-button rounded-button--small
+                d-none d-md-block`}>
                 View All Users
               </Link>
-              <CheckinStatistics event={event} statistics={statistics} />
-              <ResumeStatistics event={event} statistics={statistics} />
 
-              <Link to={`/register/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
-                Go To Form&nbsp;<FA name='arrow-right' />
+              <CheckinStatistics event={event} statistics={statistics}/>
+              <ResumeStatistics event={event} statistics={statistics}
+                className="d-none d-md-block" />
+
+              <Link to={`/register/${event.alias}`} className={`btn
+                event-page__btn rounded-button rounded-button--small
+                rounded-button--arrow`}>
+                Go To Form
               </Link>
             </div>
           </div>
 
           <div className="row event-tab__container">
             <div className="col">
-              <Nav tabs>
+              <Nav tabs className="event-tab__tabs">
                 {this.tabPages.map((page) => (
                   <NavItem key={page.anchor} className="event-tab__nav">
                     <NavLink href={`#${page.anchor}`}
                       className="event-tab__link"
                       active={page === activeTab}>
-                      <FA name={page.icon} /> {page.name}
+                      <FA name={page.icon}
+                        className="event-tab__icon" /> {page.name}
                     </NavLink>
                   </NavItem>
                 ))}
