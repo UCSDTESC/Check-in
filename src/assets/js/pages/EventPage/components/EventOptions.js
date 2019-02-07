@@ -65,7 +65,7 @@ export default class EventOptions extends React.Component {
       <div className="event-options">
       <div className="d-flex flex-row">
         <h2 className="align-self-start">Registration Options</h2>         
-        <button className="btn rounded-button rounded-button--small align-self-end my-auto"
+        <button className="btn rounded-button w-50 rounded-button--small align-self-end my-auto"
           onClick={() => onOptionsUpdate(this.state.options)}>
           Update
         </button>

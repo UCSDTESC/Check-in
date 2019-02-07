@@ -8,7 +8,7 @@ class CustomQuestions extends Component {
                 <div className="event-options">
                     <div className="d-flex flex-row">
                         <h2 className="align-self-start">Custom Questions</h2>         
-                        <button className="btn rounded-button rounded-button--small align-self-end my-auto"
+                        <button className="btn rounded-button rounded-button--small w-50 align-self-end my-auto"
                         onClick={() => onOptionsUpdate(this.state.options)}>
                         Update
                         </button>
