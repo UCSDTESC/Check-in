@@ -7,7 +7,8 @@ import FA from 'react-fontawesome';
 export default class ResumeStatistics extends React.Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
-    statistics: PropTypes.object
+    statistics: PropTypes.object,
+    className: PropTypes.string
   };
 
   /**
@@ -26,14 +27,17 @@ export default class ResumeStatistics extends React.Component {
   }
 
   render() {
-    let {event, statistics} = this.props;
+    let {event, statistics, className} = this.props;
     let resumes = statistics.resumes;
 
     return (
-      <Link to={`/admin/resumes/${event.alias}`} 
-        className="btn event-page__btn rounded-button rounded-button--small">
+      <Link to={`/admin/resumes/${event.alias}`}
+        className={`btn event-page__btn rounded-button
+          rounded-button--small pr-xl-4 ${className}`}>
         {resumes} Available Resume{resumes === 1 ? ' ' : 's '}
-        {this.renderHelpTooltip()}
+        <span className="rounded-button__right">
+          {this.renderHelpTooltip()}
+        </span>
       </Link>
     );
   }
