@@ -184,6 +184,55 @@ module.exports = function(app) {
       return res.json(columns);
     });
 
+  api.get('/admin/sponsors', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    (_, res) => {
+      Admin.find({role: roles.ROLE_SPONSOR})
+        .select('username')
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(sponsors => res.json(sponsors));
+    });
+
+  api.post('/admin/addSponsor/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
+      if (!req.body.sponsor) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      return Admin.findById(req.body.sponsor)
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(sponsor => {
+          req.event.sponsors.push(sponsor);
+          return req.event
+            .save()
+            .catch(err => {
+              return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+            })
+            .then(() => res.json({success : true}));;
+        });
+    });
+
+  api.post('/admin/addOrganiser/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
+      if (!req.body.admin) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      return Admin.findById(req.body.admin)
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(admin => {
+          req.event.organisers.push(admin);
+          return req.event
+            .save()
+            .catch(err => {
+              return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+            })
+            .then(() => res.json({success : true}));;
+        });
+    });
+
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
@@ -271,9 +320,11 @@ module.exports = function(app) {
         });
     });
 
-  api.get('/admins', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
+  api.get('/admins', requireAuth, roleAuth(roles.ROLE_ADMIN),
     (req, res) =>
-      Admin.find({deleted: {$ne: true}}).sort({createdAt: -1})
+      Admin.find({deleted: {$ne: true}})
+        .select('username role')
+        .sort({createdAt: -1})
         .exec()
         .then((response) => res.json(response))
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
