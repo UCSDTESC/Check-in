@@ -59,10 +59,10 @@ class PersonalSection extends React.Component {
    */
   createInstitutionCard(value, id, label) {
     return (
-      <div className="sd-form__institution-card">
+      <div className="sd-form__radio-card">
         <Field component="input" type="radio" value={value} name='institution'
           id={id} className="sd-form__input-radio sd-form__institution-radio" />
-        {fields.createLabel(label, false, 'sd-form__institution-label', id)}
+        {fields.createLabel(label, false, 'sd-form__radio-card-label', id)}
       </div>
     );
   }
@@ -135,25 +135,25 @@ class PersonalSection extends React.Component {
   }
 
   createGPAFields(requireGPA, requireMajorGPA) {
-    
+
     let gpaFields = [];
 
     if (requireGPA) {
       gpaFields.push(fields.createColumn('col-lg-6',
         fields.createLabel('Grade Point Average (GPA)', true),
         fields.createInput('gpa', '4.00')
-      ))
+      ));
     }
 
     if (requireMajorGPA) {
       gpaFields.push(fields.createColumn('col-lg-6',
         fields.createLabel('Major GPA', true),
         fields.createInput('majorGPA', '4.00')
-      ))
+      ));
     }
 
 
-    return fields.createRow(...gpaFields)
+    return fields.createRow(...gpaFields);
   }
 
   /**

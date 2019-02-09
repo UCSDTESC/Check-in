@@ -330,13 +330,19 @@ module.exports = function(app) {
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
   );
 
-  api.post('/admins/register', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
-    (req, res) =>
-      Admin.create(req.body)
-        .then(() =>
-          res.json({success: true})
+  api.post('/admins/register', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    (req, res) => {
+      if (getRole(req.body.role) > getRole(roles.ROLE_ADMIN) &&
+        getRole(req.user.role) <= getRole(roles.ROLE_ADMIN)) {
+        return Errors.respondUserError(res, Errors.PERMISSION_ERROR);
+      }
+
+      return Admin.create(req.body)
+        .then((admin) =>
+          res.json(admin)
         )
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+    }
   );
 
   api.get('/sponsors/applicants/:eventAlias', requireAuth,

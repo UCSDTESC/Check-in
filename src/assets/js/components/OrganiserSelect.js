@@ -54,7 +54,8 @@ export default class OrganiserSelect extends StyledSelect {
             excludeIds.indexOf(option.value) === -1)}
         isLoading={admins.length === 0}
         onChange={onChange}
-        value={value}>
+        value={value}
+        placeholder="Add Organiser...">
       </StyledSelect>
     );
   }

@@ -50,7 +50,8 @@ export default class SponsorSelect extends StyledSelect {
             excludeIds.indexOf(option.value) === -1)}
         isLoading={sponsors.length === 0}
         onChange={onChange}
-        value={value}>
+        value={value}
+        placeholder="Add Sponsor...">
       </StyledSelect>
     );
   }
