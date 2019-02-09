@@ -7,7 +7,8 @@ import {Button} from 'reactstrap';
 
 import {replaceAdmins} from './actions';
 import AdminList from './components/AdminList';
-import RegisterModal from './components/RegisterModal';
+
+import NewAdminModal from '~/components/NewAdminModal';
 
 import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
 
@@ -34,16 +35,14 @@ class AdminsPage extends React.Component {
 
   loadAdmins = () =>
     loadAllAdmins()
-      .then(res => {
-        this.props.hideLoading();
-        return this.props.replaceAdmins(res);
-      })
+      .then(res => this.props.replaceAdmins(res))
       .catch(console.error);
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.showLoading();
 
-    this.loadAdmins();
+    this.loadAdmins()
+      .then(() => this.props.hideLoading());
   }
 
   toggleRegisterModal = () => this.setState({
@@ -53,6 +52,7 @@ class AdminsPage extends React.Component {
   registerNewAdmin = (newAdmin) =>
     registerAdmin(newAdmin)
       .then(this.loadAdmins)
+      .then(this.toggleRegisterModal)
       .catch(console.error);
 
   onDeleteAdmin = (adminId) =>
@@ -65,7 +65,7 @@ class AdminsPage extends React.Component {
 
     return (
       <div>
-        <RegisterModal toggle={this.toggleRegisterModal}
+        <NewAdminModal toggle={this.toggleRegisterModal}
           open={this.state.isRegisterModalOpen}
           onSubmit={this.registerNewAdmin} />
         <AdminList admins={admins}
