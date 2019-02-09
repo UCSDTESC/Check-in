@@ -100,6 +100,7 @@ class NewAdminModal extends React.Component {
 
 function mapStateToProps(_, ownProps) {
   return {
+    form: ownProps.formName ? ownProps.formName : 'newAdminModal',
     initialValues: {
       role: ownProps.lockRole ? ownProps.lockRole : Roles.ROLE_MEMBER
     }
