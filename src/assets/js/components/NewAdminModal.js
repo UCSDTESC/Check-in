@@ -66,14 +66,18 @@ class NewAdminModal extends React.Component {
                     <label className="sd-form__label">Role</label>
                     <div className="row">
                       {Object.values(Roles).map((role) =>
-                        (<div className="col" key={role}>
-                          <div className="sd-form__institution-card">
+                        (<div className="col-6 col-lg" key={role}>
+                          <div className={`sd-form__radio-card
+                            sd-form__radio-card--short`}>
                             <Field name="role" component="input" type="radio"
                               value={role}
                               className={`sd-form__input-radio
-                                sd-form__institution-radio`}
+                                sd-form__institution-radio
+                                sd-form__institution-radio--short`}
                               disabled={lockRole} />
-                            <label className="sd-form__institution-label">
+                            <label className={`sd-form__label
+                              sd-form__radio-card-label
+                              sd-form__radio-card-label--top`}>
                               {role}
                             </label>
                           </div>
@@ -108,7 +112,6 @@ function mapStateToProps(_, ownProps) {
 };
 
 NewAdminModal = reduxForm({
-  form: 'newAdminModal',
   destroyOnUnmount: true,
   initialValues
 })(NewAdminModal);
