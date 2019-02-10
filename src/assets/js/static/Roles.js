@@ -7,6 +7,13 @@ const Roles = {
   ROLE_MEMBER: 'Member'
 };
 
+const RolesColors = {
+  [Roles.ROLE_DEVELOPER]: 'success',
+  [Roles.ROLE_ADMIN]: 'primary',
+  [Roles.ROLE_SPONSOR]: 'danger',
+  [Roles.ROLE_MEMBER]: 'secondary'
+};
+
 /**
  * Gets the integer associated with the given role.
  * @param  {Roles} checkRole The role to check - must be an enum value of
@@ -29,5 +36,6 @@ function getRole(checkRole) {
 
 module.exports = {
   Roles,
+  RolesColors,
   getRole
 };

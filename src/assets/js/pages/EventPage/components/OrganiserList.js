@@ -8,7 +8,7 @@ import OrganiserSelect from '~/components/OrganiserSelect';
 
 import NewAdminModal from '~/components/NewAdminModal';
 
-import {Roles} from '~/static/Roles';
+import {Roles, RolesColors} from '~/static/Roles';
 
 export default class OrganiserList extends React.Component {
   static propTypes = {
@@ -60,9 +60,18 @@ export default class OrganiserList extends React.Component {
         <h2>Organisers</h2>
         <ul className="list-group mb-1">
           {organisers.map(organiser => (
-            <li className="list-group-item organiser-list__username"
+            <li className={`list-group-item organiser-list__username d-flex
+              justify-content-between align-items-center`}
               key={organiser.username}>
               {organiser.username}
+              <div>
+                {organiser.checkin && <span className="badge badge-pill">
+                  Checkin Account
+                </span>}
+                <span className={`badge badge-${RolesColors[organiser.role]}`}>
+                  {organiser.role}
+                </span>
+              </div>
             </li>
           ))}
         </ul>
