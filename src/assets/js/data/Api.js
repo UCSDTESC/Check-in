@@ -193,9 +193,6 @@ export const registerNewEvent = (event) =>
     .use(apiPrefix)
     .use(nocache));
 
-
-
-
 /**
  * Request to register a new admin.
  * @param {Object} admin The admin fields to register.

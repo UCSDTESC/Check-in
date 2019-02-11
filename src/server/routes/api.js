@@ -237,7 +237,7 @@ module.exports = function(app) {
 
       Object.entries(req.body).forEach(([k, v]) => event[k] = v);
 
-      if (['Admin', 'Member'].includes(req.user.role)) {
+      if (req.user.role === 'Admin') {
         event.organisers = [req.user._id]
       }
 

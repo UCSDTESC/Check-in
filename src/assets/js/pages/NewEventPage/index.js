@@ -21,14 +21,11 @@ class NewEventPage extends React.Component {
       error: null,
       event: null
     }
-
-    this.createNewEvent = this.createNewEvent.bind(this);
   }
 
-  createNewEvent(event) {
+  createNewEvent = (event) => {
     registerNewEvent(event)
       .then((res) => {
-        console.log("res");
         this.setState({
           error: null,
           event: res
@@ -46,7 +43,7 @@ class NewEventPage extends React.Component {
     if (this.state.event) {
       return (
         <UncontrolledAlert color="success">
-          Successfully Created The <b>{this.state.event.name}</b> Event
+          Successfully Created <b>{this.state.event.name}</b>!
         </UncontrolledAlert>
       )
     }

@@ -47,11 +47,14 @@ class DashboardPage extends React.Component {
             <SponsorDashboard events={Object.values(events)} />}
         </div>
         {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
-        <h2 className="event dashboard-page__btn">
-          <Link to="/admin/new" className="text-white">
-            +
-          </Link>
-        </h2>}
+          <div className="dashboard-page__fixed-bottom">
+            <h2 className="dashboard-page__btn">
+              <Link to="/admin/new" className="text-white">
+                +
+              </Link>
+            </h2>
+          </div>
+        }
       </div>
     );
   }

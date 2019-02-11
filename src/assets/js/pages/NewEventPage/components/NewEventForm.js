@@ -26,20 +26,20 @@ class NewEventForm extends Component {
                 )}
                 {fields.createRow(
                     fields.createColumn('col-sm-12',
-                    fields.createLabel('Event Close Date'),
-                    <div className="row">
-                        {fields.createColumn('col-sm-4',
-                        fields.createMonthPicker('closeTimeMonth')
-                        )}
-                        {fields.createColumn('col-sm-4',
-                        fields.createInput('closeTimeDay', 'Day', 'number',
-                            'sd-form__input-text mb-1 mb-md-0')
-                        )}
-                        {fields.createColumn('col-sm-4',
-                        fields.createInput('closeTimeYear', 'Year', 'number',
-                            'sd-form__input-text')
-                        )}
-                    </div>
+                        fields.createLabel('Application Close Date'),
+                        <div className="row">
+                            {fields.createColumn('col-sm-4',
+                            fields.createMonthPicker('closeTimeMonth')
+                            )}
+                            {fields.createColumn('col-sm-4',
+                            fields.createInput('closeTimeDay', 'Day', 'number',
+                                'sd-form__input-text mb-1 mb-md-0')
+                            )}
+                            {fields.createColumn('col-sm-4',
+                            fields.createInput('closeTimeYear', 'Year', 'number',
+                                'sd-form__input-text')
+                            )}
+                        </div>
                     )
                 )}
                 {fields.createRow(
@@ -55,7 +55,7 @@ class NewEventForm extends Component {
                 {fields.createRow(
                     fields.createColumn('col-md-12',
                     fields.createLabel('Event Description'),
-                    fields.createTextArea('description', 'SD Hacks has been one of the largest hackathons in California since its inception back in 2015. We take pride in being a fully student organized event, while partnering with numerous other student-run engineering organizations at UC San Diego.')
+                    fields.createInput('description', "SD Hacks 9001 is UC San Diego's Premier Annual Collegiate Hackathon!")
                 )
                 )}
                 {fields.createRow(
@@ -67,7 +67,9 @@ class NewEventForm extends Component {
 
                 {fields.createColumn('col-sm-12 col-md-8 text-right',
                     <button className={'btn sd-form__nav-button rounded-button ' +
-                        'success button'} type="submit" disabled={pristine || submitting}>Apply!</button>
+                        'success button'} type="submit" disabled={pristine || submitting}>
+                        Create Event!
+                    </button>
                 )}
             </form>
         )
