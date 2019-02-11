@@ -4,6 +4,7 @@ import React from 'react';
 import {exportUsers, bulkChange} from '~/data/Api';
 
 import BulkChange from '../components/BulkChange';
+import EventData from '../components/EventData';
 
 import {Event as EventPropType} from '~/proptypes';
 
@@ -46,16 +47,17 @@ export default class ActionsTab extends React.Component {
     return (
       <div className="event-tab">
         <div className="row">
-          <div className="col-lg-3 col-md-6">
-            <h2>User Actions</h2>
-            <a className={`btn event-page__btn rounded-button
-              rounded-button--small`} onClick={this.exportUsers}
-              href="#">Export All Users</a>
+          <div className="col-lg-4 col-md-6">
+            <EventData event={this.props.event} />
           </div>
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />
           </div>
           <div className="col-lg-4 col-md-6">
+            <h2>User Actions</h2>
+            <a className={`btn event-page__btn rounded-button
+              rounded-button--small`} onClick={this.exportUsers}
+              href="#">Export All Users</a>
           </div>
         </div>
       </div>
