@@ -1,7 +1,11 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import ReactDOM from 'react-dom';
+import {VictoryPie, VictoryTooltip} from 'victory';
+
 export default class EventStatistics extends React.Component {
+
   static propTypes = {
     event: PropTypes.object.isRequired,
     statistics: PropTypes.object,
@@ -44,6 +48,24 @@ export default class EventStatistics extends React.Component {
     return (
       <div className="event-statistics event-page__card">
         <h2>Applicant Demographics</h2>
+        <div className="row">
+          <h5>Gender Statistics</h5>
+          <VictoryPie
+            colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
+            labelComponent={<VictoryTooltip />}
+            labelRadius={130}
+            labels={p => `${p.gender}: ${p.number}`} 
+            data={[
+              { gender: 'Male', number: statistics.genders['Male'] },
+              { gender: 'Female', number: statistics.genders['Female'] },
+              { gender: 'Non-Binary', number: statistics.genders['Non-Binary'] },
+              { gender: 'I prefer not to say', number: statistics.genders['I prefer not to say'] },
+              { gender: 'Other', number: statistics.genders['Other'] }
+            ]}
+            x="gender"
+            y="number"
+          />
+        </div>
         <dl className="row">
           <dt className="col-6">Total Applicants</dt>
           <dd className="col-6">
