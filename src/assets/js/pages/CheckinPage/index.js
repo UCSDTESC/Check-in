@@ -7,15 +7,17 @@ import {bindActionCreators} from 'redux';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import Loading from '~/components/Loading';
+import {userCheckin} from './actions';
 
 import {addUsers} from '../UsersPage/actions';
 
+import Loading from '~/components/Loading';
+
 import {loadAllAdminEvents} from '~/actions';
 
-import {loadAllUsers, checkinUser} from '~/data/Api';
+import {loadAllUsers} from '~/data/Api';
 
-import {userCheckin} from './actions';
+import {parseUserQRCode} from '~/static/QRCodes';
 
 import {User as UserPropTypes, Event as EventPropType} from '~/proptypes';
 
@@ -55,7 +57,7 @@ class CheckinPage extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     let {users, event} = this.props;
 
     if (!users.length) {
@@ -86,6 +88,10 @@ class CheckinPage extends React.Component {
       });
   }
 
+  /**
+   * Ensures the loaded user is allowed to check-in.
+   * @param {Object} user The user as loaded from the database.
+   */
   validateUser = (user) =>
     Q.promise((resolve, reject) => {
       // Ensure they're eligible
@@ -108,6 +114,10 @@ class CheckinPage extends React.Component {
       return resolve(user);
     })
 
+  /**
+   * Finds and validates the user as specified by their user ID.
+   * @param {String} id The ID of the user to check in.
+   */
   checkinById = (id) =>
     Q.promise((resolve, reject) => {
       let {users, event} = this.props;
@@ -116,14 +126,13 @@ class CheckinPage extends React.Component {
       let eligibleUsers = users.filter((user) => user._id === id);
 
       if (eligibleUsers.length !== 1) {
-        return reject(id);
         return reject('User not found');
       }
 
       // Get the particular user
       const user = eligibleUsers[0];
 
-      this.validateUser(user)
+      return this.validateUser(user)
         .then(() => {
           this.props.userCheckin(user, event.alias)
             .then(() => {
@@ -134,30 +143,42 @@ class CheckinPage extends React.Component {
         .catch(reject);
     });
 
+  /**
+   * Callback for the scanner that sets the state to initialise a new check-in.
+   * @param {Object} data The raw QR reader data.
+   */
   onScan = (data) => {
     if (data === null || this.state.isProcessing) {
       return;
     }
 
-    if (data === this.state.lastUser) {
-      return this.setState({errorMessage: 'User has already checked in', wasSuccessful: false});
+    const user = parseUserQRCode(data);
+
+    if (user === this.state.lastUser) {
+      return this.setState({errorMessage: 'User has already checked in',
+        wasSuccessful: false});
     }
 
     this.setState({
       isProcessing: true,
       wasSuccessful: false,
       errorMessage: '',
-      lastUser: data,
+      lastUser: user,
       lastName: ''
     });
 
-    this.toggleModal(data);
+    this.toggleModal();
   }
 
-  nameApplicants = (event) => {
+  /**
+   * Set up the list of applicants whose name contain the substring in the input
+   * text box.
+   * @param {Object} inputEvent The onChange input event of the filter text box.
+   */
+  nameApplicants = (inputEvent) => {
     let {users} = this.props;
 
-    const name = event.target.value;
+    const name = inputEvent.target.value;
     if (name.length < 3) {
       return;
     }
@@ -170,6 +191,10 @@ class CheckinPage extends React.Component {
     });
   }
 
+  /**
+   * Manually select an applicant by their user ID.
+   * @param {String} id The ID of the user to check in.
+   */
   selectApplicant = (id) => {
     this.onScan(id);
 
@@ -178,17 +203,29 @@ class CheckinPage extends React.Component {
     });
   }
 
+  /**
+   * Toggles the state of the waiver modal.
+   */
   toggleModal = () =>
     this.setState({
       isModalShowing: !this.state.isModalShowing
     });
 
+  /**
+   * Run the checkin procedure on the user defined in the state.
+   */
   startCheckin = () => {
+    let {lastUser} = this.state;
+
+    if (!lastUser) {
+      return;
+    }
+
     this.setState({
       isModalShowing: false
     });
 
-    this.checkinById(this.state.lastUser)
+    this.checkinById(this.state.lastUser._id)
       .then((user) => {
         this.setState({
           wasSuccessful: true,

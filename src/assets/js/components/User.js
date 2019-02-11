@@ -4,10 +4,13 @@ import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {default as UUID} from 'node-uuid';
+import QRCode from 'qrcode.react';
 
-import {User as UserPropType} from '~/proptypes';
+import {User as UserPropType, Event as EventPropType} from '~/proptypes';
 
 import {getRole, Roles} from '~/static/Roles';
+
+import {generateUserQRCode, qrLevel} from '~/static/QRCodes';
 
 import CheckboxButton from './CheckboxButton';
 
@@ -15,6 +18,9 @@ class User extends React.Component {
   static propTypes = {
     user: PropTypes.shape(
       UserPropType
+    ).isRequired,
+    event: PropTypes.shape(
+      EventPropType
     ).isRequired,
     handleSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
@@ -39,7 +45,7 @@ class User extends React.Component {
       </label>,
       <div key="1" className="col-sm-3">
         <a className="btn btn-primary form-control"
-          role="button" target="_blank"
+          role="button" target="_blank" rel="noopener noreferrer"
           disabled={!this.props.resume} href={this.props.resume.url}>
           View
         </a>
@@ -94,116 +100,140 @@ class User extends React.Component {
   renderGPAFields(event) {
     return (
       <React.Fragment>
-        {event.options.requireGPA && this.renderFormField('GPA', 'gpa', 'col-sm-4')}
-        {event.options.requireMajorGPA && this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
+        {event.options.requireGPA &&
+          this.renderFormField('GPA', 'gpa', 'col-sm-4')}
+        {event.options.requireMajorGPA &&
+          this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
       </React.Fragment>
-    )
+    );
   }
 
-  render() {
+  renderUserFields() {
     const {handleSubmit, pristine, reset, submitting, event} = this.props;
+
     return (
-      <div>
-        <h3>User <small>{this.props.user._id}</small></h3>
-        <form onSubmit={handleSubmit}>
-          <div className="row">
-            <div className="col-6">
-              <h5>Login Information</h5>
-              <div className="form-group row mb-2">
-                <label key="0" className="col-sm-2 col-form-label">
-                  Email
-                </label>
-                <div key="1" className="col-sm-4 col-form-label">
-                  {this.props.user.account.email}
-                </div>
+      <form onSubmit={handleSubmit}>
+        <div className="row">
+          <div className="col-6">
+            <h5>Login Information</h5>
+            <div className="form-group row mb-2">
+              <label key="0" className="col-sm-2 col-form-label">
+                Email
+              </label>
+              <div key="1" className="col-sm-4 col-form-label">
+                {this.props.user.account.email}
               </div>
-              <h5>Portfolio</h5>
+            </div>
+            <h5>Portfolio</h5>
+            <div className="form-group row mb-2">
+              {this.renderFormField('Github', 'github')}
+              {this.renderFormField('Website', 'website')}
+            </div>
+            {this.props.resume &&
+            <span>
+              <h5>Resume</h5>
               <div className="form-group row mb-2">
-                {this.renderFormField('Github', 'github')}
-                {this.renderFormField('Website', 'website')}
-              </div>
-              {this.props.resume &&
-              <span>
-                <h5>Resume</h5>
-                <div className="form-group row mb-2">
-                  {this.renderResume()}
-                  {this.renderFormCheckbox('Share Resume', 'shareResume',
-                    'col-sm-4')}
-                </div>
-              </span>}
-              <h5>Travel</h5>
-              <div className="form-group row mb-2">
-                {this.renderFormCheckbox('Out Of State', 'travel.outOfState',
+                {this.renderResume()}
+                {this.renderFormCheckbox('Share Resume', 'shareResume',
                   'col-sm-4')}
-                {this.renderFormField('Coming From', 'travel.city')}
               </div>
-              {getRole(this.props.role) >= getRole(Roles.ROLE_ADMIN) &&
-                <span>
-                  <h5>Admin Flags</h5>
-                  <div className="form-group row mb-2">
-                    {this.renderFormCheckbox('Confirmed', 'account.confirmed',
-                      'col-sm-4')}
-                    {this.renderFormCheckbox('Checked In', 'checkedIn',
-                      'col-sm-4')}
-                    {this.renderFormCheckbox('Bussing', 'bussing', 'col-sm-4')}
-                    {this.renderFormCheckbox('Sanitized', 'sanitized',
-                      'col-sm-4')}
-                    {this.renderFormField('Status', 'status', 'col-sm-4')}
+            </span>}
+            <h5>Travel</h5>
+            <div className="form-group row mb-2">
+              {this.renderFormCheckbox('Out Of State', 'travel.outOfState',
+                'col-sm-4')}
+              {this.renderFormField('Coming From', 'travel.city')}
+            </div>
+            {getRole(this.props.role) >= getRole(Roles.ROLE_ADMIN) &&
+              <span>
+                <h5>Admin Flags</h5>
+                <div className="form-group row mb-2">
+                  {this.renderFormCheckbox('Confirmed', 'account.confirmed',
+                    'col-sm-4')}
+                  {this.renderFormCheckbox('Checked In', 'checkedIn',
+                    'col-sm-4')}
+                  {this.renderFormCheckbox('Bussing', 'bussing', 'col-sm-4')}
+                  {this.renderFormCheckbox('Sanitized', 'sanitized',
+                    'col-sm-4')}
+                  {this.renderFormField('Status', 'status', 'col-sm-4')}
+                </div>
+              </span>
+            }
+          </div>
+          <div className="col-6">
+            <h5>Personal Details</h5>
+            <div className="form-group row mb-2">
+              {this.renderFormField('First Name', 'firstName', 'col-sm-4')}
+              {this.renderFormField('Last Name', 'lastName', 'col-sm-4')}
+              {this.renderFormField('Gender', 'gender', 'col-sm-4')}
+              {this.renderFormField('Birthdate', 'birthdate', 'col-sm-4')}
+              {this.renderFormField('Year', 'year', 'col-sm-4')}
+              {this.renderFormField('Phone', 'phone', 'col-sm-4', 'tel')}
+              {this.renderInstitution(this.props.user)}
+              {this.renderFormField('Major', 'major', 'col-sm-4')}
+              {this.renderFormField('Shirt Size', 'shirtSize', 'col-sm-4')}
+              {this.renderFormField('Diet', 'diet', 'col-sm-4')}
+              {this.renderFormField('Food', 'food', 'col-sm-4')}
+              {this.renderFormField('PID', 'pid', 'col-sm-4')}
+              {this.renderGPAFields(event)}
+            </div>
+
+            {event.options.requireClassRequirement ||
+              event.options.requireExtraCurriculars ?
+                <h5 className="mt-3">Miscellaneous Questions</h5> : ''}
+            <div className="row my-2 pt-2">
+              {event.options.requireClassRequirement &&
+                <React.Fragment>
+                  <div className="col-sm-8">
+                    This user has completed Advanced Data Structures (CSE 100)
                   </div>
-                </span>
+                  <div className="col-sm-4 d-flex justify-content-center">
+                    {this.renderFormCheckbox('', 'classRequirement',
+                      'ml-auto')}
+                  </div>
+                </React.Fragment>
+              }
+              {event.options.requireExtraCurriculars &&
+                <React.Fragment>
+                  <div className="col-sm-12 mt-3">
+                    Extra Curriculars
+                    {this.renderFormField('', 'extraCurriculars', '')}
+                  </div>
+                </React.Fragment>
               }
             </div>
-            <div className="col-6">
-              <h5>Personal Details</h5>
-              <div className="form-group row mb-2">
-                {this.renderFormField('First Name', 'firstName', 'col-sm-4')}
-                {this.renderFormField('Last Name', 'lastName', 'col-sm-4')}
-                {this.renderFormField('Gender', 'gender', 'col-sm-4')}
-                {this.renderFormField('Birthdate', 'birthdate', 'col-sm-4')}
-                {this.renderFormField('Year', 'year', 'col-sm-4')}
-                {this.renderFormField('Phone', 'phone', 'col-sm-4', 'tel')}
-                {this.renderInstitution(this.props.user)}
-                {this.renderFormField('Major', 'major', 'col-sm-4')}
-                {this.renderFormField('Shirt Size', 'shirtSize', 'col-sm-4')}
-                {this.renderFormField('Diet', 'diet', 'col-sm-4')}
-                {this.renderFormField('Food', 'food', 'col-sm-4')}
-                {this.renderFormField('PID', 'pid', 'col-sm-4')}
-                {this.renderGPAFields(event)}
-              </div>
-
-              {event.options.requireClassRequirement || 
-                event.options.requireExtraCurriculars ?  
-                  <h5 className="mt-3">Miscellaneous Questions</h5> : ''}
-              <div className="row my-2 pt-2">
-                {event.options.requireClassRequirement && 
-                  <React.Fragment>
-                    <div className="col-sm-8">This user has completed Advanced Data Structures (CSE 100)</div>
-                    <div className="col-sm-4 d-flex justify-content-center">
-                      {this.renderFormCheckbox('', 'classRequirement', 'ml-auto')}
-                    </div>
-                  </React.Fragment>
-                }
-                {event.options.requireExtraCurriculars &&
-                  <React.Fragment>
-                    <div className="col-sm-12 mt-3">
-                      Extra Curriculars
-                      {this.renderFormField('', 'extraCurriculars', '')}
-                    </div>
-                  </React.Fragment>
-
-                }
-              </div>
-              <button type="submit"
-                className="btn rounded-button rounded-button--small"
-                disabled={pristine || submitting}>Apply</button>
-              <button type="button" disabled={pristine || submitting}
-                className={`btn rounded-button rounded-button--small
-                  rounded-button--secondary`} onClick={reset}>
-                Reset
-              </button>
-            </div>
+            <button type="submit"
+              className="btn rounded-button rounded-button--small"
+              disabled={pristine || submitting}>Apply</button>
+            <button type="button" disabled={pristine || submitting}
+              className={`btn rounded-button rounded-button--small
+                rounded-button--secondary`} onClick={reset}>
+              Reset
+            </button>
           </div>
-        </form>
+        </div>
+      </form>
+    );
+  };
+
+  render() {
+    let {user} = this.props;
+
+    return (
+      <div>
+        <h3>User <small>{user._id}</small></h3>
+        <div className="d-flex flex-row">
+          <div className="mr-3">
+            <QRCode value={generateUserQRCode(user)} level={qrLevel}
+              />
+            <h3>
+              {user.firstName}{' '}{user.lastName}
+            </h3>
+          </div>
+          <div className="">
+            {this.renderUserFields()}
+          </div>
+        </div>
       </div>
     );
   }
@@ -213,7 +243,6 @@ class User extends React.Component {
 const mapStateToProps = (state, ownProps) => {
   return {
     resume: ownProps.user.resume ? ownProps.user.resume : null,
-    //form: ownProps.user._id,
     event: ownProps.user.event ? ownProps.user.event : null,
     role: state.admin.auth.user.role
   };
