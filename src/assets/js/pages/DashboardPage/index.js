@@ -42,7 +42,7 @@ class DashboardPage extends React.Component {
 
           {checkinUser && <CheckinDashboard />}
           {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
-            <AdminDashboard events={Object.values(events)} />}
+            <AdminDashboard events={Object.values(events)} user={user} />}
           {getRole(user.role) === getRole(Roles.ROLE_SPONSOR) &&
             <SponsorDashboard events={Object.values(events)} />}
         </div>
@@ -72,7 +72,7 @@ function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),x
   };
 };
 

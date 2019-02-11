@@ -237,7 +237,7 @@ module.exports = function(app) {
 
       Object.entries(req.body).forEach(([k, v]) => event[k] = v);
 
-      if (req.user.role === 'Admin') {
+      if (getRole(req.user.role) === getRole(roles.ROLE_ADMIN)) {
         event.organisers = [req.user._id]
       }
 

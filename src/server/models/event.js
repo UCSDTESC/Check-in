@@ -107,7 +107,7 @@ EventSchema.plugin(crate, {
     acl: 'public-read',
     region: 'us-west-1',
     path(attachment) {
-      return `resumes/${attachment.name}`;
+      return `public/logos/${attachment.name}`;
     }
   }),
   fields: {
