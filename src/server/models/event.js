@@ -34,7 +34,7 @@ var EventSchema = new Schema({
   },
   homepage: {
     type: String,
-    require: [true, 'Your event must have an event page']
+    required: [true, 'Your event must have an event page']
   },
   description: {
     type: String,
