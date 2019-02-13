@@ -26,7 +26,7 @@ export default class CurrentEvents extends React.Component {
             <div key={event._id} className="col-md-4">
               <Link to={`/register/${event.alias}`}>
                 <div className="card mb-4 box-shadow">
-                  <img src={event.logo} className="card-img-top" />
+                  <img src={event.logo.url} className="card-img-top" />
                   <div className="card-body">
                     <h5 className="card-title">
                       {event.name}

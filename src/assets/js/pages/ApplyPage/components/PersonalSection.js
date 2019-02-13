@@ -3,7 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import UniversityField from './UniversityField';
-import fields from './Fields';
+
+import fields from '~/components/Fields';
 
 import FileField from '~/components/FileField';
 
@@ -135,25 +136,25 @@ class PersonalSection extends React.Component {
   }
 
   createGPAFields(requireGPA, requireMajorGPA) {
-    
+
     let gpaFields = [];
 
     if (requireGPA) {
       gpaFields.push(fields.createColumn('col-lg-6',
         fields.createLabel('Grade Point Average (GPA)', true),
         fields.createInput('gpa', '4.00')
-      ))
+      ));
     }
 
     if (requireMajorGPA) {
       gpaFields.push(fields.createColumn('col-lg-6',
         fields.createLabel('Major GPA', true),
         fields.createInput('majorGPA', '4.00')
-      ))
+      ));
     }
 
 
-    return fields.createRow(...gpaFields)
+    return fields.createRow(...gpaFields);
   }
 
   /**

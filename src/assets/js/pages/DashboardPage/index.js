@@ -41,7 +41,7 @@ class DashboardPage extends React.Component {
 
           {checkinUser && <CheckinDashboard />}
           {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
-            <AdminDashboard events={Object.values(events)} />}
+            <AdminDashboard events={Object.values(events)} user={user} />}
           {getRole(user.role) === getRole(Roles.ROLE_SPONSOR) &&
             <SponsorDashboard events={Object.values(events)} />}
         </div>

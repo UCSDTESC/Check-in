@@ -216,14 +216,14 @@ class UserProfile extends React.Component {
             user-profile__website`}
             placeholder="https://www.tesc.events/" />
         </div>
-        {user.event.options.requireGPA && 
-            <div className="col-lg-6 mb-3">
-              <h5>GPA:</h5>
-              <Field component="input" name="gpa" type="text"
-                className={`sd-form__input-text user-profile__input
+        {user.event.options.requireGPA &&
+        <div className="col-lg-6 mb-3">
+          <h5>GPA:</h5>
+          <Field component="input" name="gpa" type="text"
+            className={`sd-form__input-text user-profile__input
                 user-profile__github`}
-                placeholder="4.00" />
-            </div>
+            placeholder="4.00" />
+        </div>
         }
         {user.event.options.requireMajorGPA &&
           <div className="col-lg-6 mb-3">

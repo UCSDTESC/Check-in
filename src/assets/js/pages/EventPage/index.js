@@ -126,7 +126,7 @@ class EventPage extends React.Component {
   renderAlert(message, severity='danger', title, timestamp) {
     if (message) {
       return (
-        <div className="user-page__error" key={timestamp}>
+        <div className="event-page__error" key={timestamp}>
           <Alert color={severity}
             toggle={() => this.dismissAlert(timestamp)}
             key={timestamp} >
@@ -226,7 +226,7 @@ class EventPage extends React.Component {
           <div className="row event-page__header">
             <div className={`col-6 col-xl-auto d-flex flex-column flex-xl-row
               align-items-center justify-content-center`}>
-              <img className="event-page__logo" src={event.logo} />
+              <img className="event-page__logo" src={event.logo.url} />
               <a target="_blank" rel="noopener noreferrer"
                 href={event.homepage}>
                 <h1 className="event-page__title">{event.name}</h1>
