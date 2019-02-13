@@ -21,15 +21,6 @@ export default class EventList extends React.Component {
       <div className="event-list">
         <h2>Your Events</h2>
         <div className="row">
-          {canCreate && <div className="col-lg-2 col-md-6" key={0}>
-            <Link to="/admin/new" className={'card h-100 d-flex align-items-center' +
-              ' justify-content-center dashboard-page__plus'}>
-              <div>+</div>
-              <div className="dashboard-page__plus-sm">
-                  Create Event
-              </div>
-            </Link>
-          </div>}
           {events.map((event) => (
             <div className="col-lg-2 col-md-6" key={event._id}>
               <div className="card h-100">
@@ -50,6 +41,15 @@ export default class EventList extends React.Component {
               </div>
             </div>)
           )}
+          {canCreate && <div className="col-lg-2 col-md-6">
+            <Link to="/admin/new" className={`card h-100 d-flex
+            align-items-center justify-content-center dashboard-page__plus`}>
+              <div><FA name="plus" /></div>
+              <div className="dashboard-page__plus-sm">
+                  Create Event
+              </div>
+            </Link>
+          </div>}
         </div>
       </div>
     );
