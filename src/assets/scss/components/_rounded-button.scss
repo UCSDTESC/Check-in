@@ -1,4 +1,7 @@
 .rounded-button {
+  $right-item-offset: 0.8rem;
+  $right-item-padding: 2rem;
+
   font-family: $input-font-family;
   width: 100%;
   max-width: 15rem;
@@ -9,6 +12,7 @@
   padding: 0.6rem 0rem;
   cursor: pointer;
   border: none;
+  position: relative;
 
   @include media-breakpoint-down(sm) {
     max-width: none;
@@ -75,5 +79,35 @@
     &:hover, &:focus {
       background-color: darken($default-red, 3%);
     }
+  }
+
+  &--arrow {
+    position: relative;
+    
+    @include media-breakpoint-up(xl) {
+      padding-right: 1.7rem;
+    }
+
+    &:before {
+      content: "\f061";
+      font: normal normal normal 14px/1 'FontAwesome';
+      position: absolute;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      font-size: inherit;
+      top: 0;
+      right: $right-item-offset;
+    }
+  }
+
+  &__right {
+    position: absolute;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: inherit;
+    top: 0;
+    right: $right-item-offset;
   }
 }

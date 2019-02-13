@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
+import moment from 'moment';
 
 import {Event as EventPropTypes} from '~/proptypes';
 
@@ -48,8 +49,7 @@ export default class EventList extends React.Component {
                   </p>
                 </div>
               </div>
-            </div>)
-          )}
+            </div>))}
         </div>
       </div>
     );

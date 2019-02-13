@@ -13,8 +13,10 @@ export default class CheckinStatistics extends React.Component {
     let {event, statistics} = this.props;
 
     return (
-      <Link to={`/admin/checkin/${event.alias}`} className="btn event-page__btn rounded-button rounded-button--small">
-        {statistics.checkedIn} Checked In <FA name='arrow-right' />
+      <Link to={`/admin/checkin/${event.alias}`}
+        className={`btn event-page__btn rounded-button
+          rounded-button--small rounded-button--arrow`}>
+        {statistics.checkedIn} Checked In
       </Link>
     );
   }
