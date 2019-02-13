@@ -55,7 +55,7 @@ class NewEventForm extends Component {
         {fields.createRow(
             fields.createColumn('col-md-6',
               fields.createLabel('Event Homepage URL'),
-              fields.createInput('homepage', 'sdhacks.io')
+              fields.createInput('homepage', 'https://sdhacks.io')
             ),
             fields.createColumn('col-md-6',
               fields.createLabel('Event Contact Email'),
