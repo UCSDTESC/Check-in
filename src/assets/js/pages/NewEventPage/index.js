@@ -1,55 +1,48 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
+import {withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
-import createValidator from './validate';
-import {registerNewEvent} from '~/data/Api'
-import NewEventForm from './components/NewEventForm';
 import {UncontrolledAlert} from 'reactstrap';
+
+import {addEventAlert} from '../EventPage/actions';
+
+import createValidator from './validate';
+
+import {registerNewEvent} from '~/data/Api';
+
+import NewEventForm from './components/NewEventForm';
 
 class NewEventPage extends React.Component {
   static propTypes = {
     showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired
+    hideLoading: PropTypes.func.isRequired,
+    addEventAlert: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired,
+    location: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      error: null,
-      event: null
-    }
+      err: null
+    };
   }
 
   createNewEvent = (event) => {
     registerNewEvent(event)
       .then((res) => {
-        this.setState({
-          error: null,
-          event: res
-        });
+        this.setState({err: null});
+        this.props.addEventAlert(res.alias, `Successfully Created ${res.name}`,
+          'success', 'Create Event');
+        this.props.history.push('/admin/events/' + res.alias);
       })
       .catch((err) => {
-        this.setState({
-          error: err.message,
-          event: null
-        })
+        this.setState({err: err.message});
       });
-  }
-
-  renderAlert() {
-    if (this.state.event) {
-      return (
-        <UncontrolledAlert color="success">
-          Successfully Created <b>{this.state.event.name}</b>!
-        </UncontrolledAlert>
-      )
-    }
-    else if (this.state.error) {
-      return <UncontrolledAlert color="danger">{this.state.error}</UncontrolledAlert>
-    }
   }
 
   render() {
@@ -57,12 +50,12 @@ class NewEventPage extends React.Component {
     return (
       <div className="page page--admin">
         <div className="event-page__above">
-          {this.renderAlert()}
+          {this.state.err && <UncontrolledAlert color="danger">{this.state.err}</UncontrolledAlert>}
         </div>
         <div className="sd-form__header-text text-center mt-3 mb-5">
           <h1>Create A New Event</h1>
         </div>
-        
+
         <div className="sd-form__wrapper">
           <div className="sd-form">
             <NewEventForm validate={validator} onSubmit={this.createNewEvent} />
@@ -77,7 +70,8 @@ function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
+    addEventAlert: bindActionCreators(addEventAlert, dispatch)
   };
 };
 
-export default connect(null, mapDispatchToProps)(NewEventPage);
+export default withRouter(connect(null, mapDispatchToProps)(NewEventPage));

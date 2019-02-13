@@ -184,7 +184,7 @@ export const registerUser = (eventAlias, user) => {
   return promisify(baseReq);
 };
 
-export const registerNewEvent = (event) => 
+export const registerNewEvent = (event) =>
   promisify(request
     .post('/admin/events')
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))

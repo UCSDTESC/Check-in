@@ -29,19 +29,19 @@ const createValidator = (options) => (values) => {
   }
 
   if (options.requireExtraCurriculars) {
-    required.push('extraCurriculars')
+    required.push('extraCurriculars');
   }
 
   if (options.requireClassRequirement) {
-    required.push('classRequirement')
+    required.push('classRequirement');
   }
 
   if (options.requireGPA) {
-    required.push('gpa')
+    required.push('gpa');
   }
 
   if (options.requireMajorGPA) {
-    required.push('majorGPA')
+    required.push('majorGPA');
   }
 
   if (values.institution === 'ucsd') {

@@ -1,13 +1,15 @@
 const createValidator = (options) => (values) => {
-    const errors = {};
+  const errors = {};
 
-    let required = ['name', 'alias', 'closeTimeMonth', 'closeTimeDay',
+  let required = ['name', 'alias', 'closeTimeMonth', 'closeTimeDay',
     'closeTimeYear', 'email', 'url', 'description', 'logo'];
 
-    const notValid = required.filter(name => !(name in values));
-    notValid.forEach(name => errors[name] = 'Required');
+  const notValid = required.filter(name => !(name in values));
+  notValid.forEach(name => errors[name] = 'Required');
 
-    return errors;
-}
+
+
+  return errors;
+};
 
 export default createValidator;

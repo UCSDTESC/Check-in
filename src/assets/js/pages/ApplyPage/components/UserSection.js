@@ -63,7 +63,7 @@ class UserSection extends React.Component {
           this.createAcceptBox(),
           <span>I have read and agree to the&nbsp;
             <a className="sd-link__underline sd-link__hover-purple"
-              href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf" 
+              href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
               rel="noopener noreferrer" target="_blank">
               MLH Code of Conduct
             </a>

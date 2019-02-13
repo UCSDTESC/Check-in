@@ -156,8 +156,8 @@ module.exports = function(app) {
         .then((event) => {
           return User.findOneAndUpdate({account: user, event: event},
             {$set: updateDelta}, {new: true})
-              .populate('account')
-              .populate('event');
+            .populate('account')
+            .populate('event');
         })
         .then((user) => {
           if (!user) {

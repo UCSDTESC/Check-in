@@ -5,7 +5,8 @@ import {default as UUID} from 'node-uuid';
 class ToggleSwitch extends React.Component {
   static propTypes = {
     checked: PropTypes.bool.isRequired,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    className: PropTypes.string
   };
 
   componentWillMount() {

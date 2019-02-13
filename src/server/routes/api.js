@@ -5,8 +5,8 @@ const json2CSVParser = require('json2csv').Parser;
 const S3Archiver = require('s3-archiver');
 const moment = require('moment');
 const generatePassword = require('password-generator');
-const upload = require('../config/uploads')();
 
+const upload = require('../config/uploads')();
 const logging = require('../config/logging');
 
 const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo,
@@ -223,7 +223,7 @@ module.exports = function(app) {
 
     });
 
-  api.post('/admin/events', requireAuth, 
+  api.post('/admin/events', requireAuth,
     roleAuth(roles.ROLE_ADMIN), upload.single('logo'), (req, res) => {
       let event = new Event;
       const {closeTimeDay, closeTimeMonth, closeTimeYear} = req.body;
@@ -238,7 +238,7 @@ module.exports = function(app) {
       Object.entries(req.body).forEach(([k, v]) => event[k] = v);
 
       if (getRole(req.user.role) === getRole(roles.ROLE_ADMIN)) {
-        event.organisers = [req.user._id]
+        event.organisers = [req.user._id];
       }
 
       event.attach('logo', {path: req.file.path})
@@ -252,10 +252,10 @@ module.exports = function(app) {
                 }
               }
               return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-            })
-        })
-            
-  });
+            });
+        });
+
+    });
 
   api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,

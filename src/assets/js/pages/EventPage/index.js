@@ -227,7 +227,7 @@ class EventPage extends React.Component {
             <div className={'col-lg-auto d-flex flex-column flex-lg-row align-items-center ' +
               ' '}>
               <img className="event-page__logo" src={event.logo.url} />
-              <a target="_blank" href={event.homepage}>
+              <a target="_blank" href={event.homepage} rel="noopener noreferrer">
                 <h1 className="event-page__title">{event.name}</h1>
               </a>
             </div>

@@ -2,7 +2,6 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Link} from 'react-router-dom';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
@@ -46,15 +45,6 @@ class DashboardPage extends React.Component {
           {getRole(user.role) === getRole(Roles.ROLE_SPONSOR) &&
             <SponsorDashboard events={Object.values(events)} />}
         </div>
-        {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
-          <div className="dashboard-page__fixed-bottom">
-            <h2 className="dashboard-page__btn">
-              <Link to="/admin/new" className="text-white">
-                +
-              </Link>
-            </h2>
-          </div>
-        }
       </div>
     );
   }
@@ -72,7 +62,7 @@ function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),x
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
   };
 };
 
