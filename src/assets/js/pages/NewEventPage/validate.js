@@ -23,6 +23,12 @@ const createValidator = () => (values) => {
     errors.closeTimeYear = 'Invalid Year';
   }
 
+  if (values.homepage && 
+      (!values.homepage.startsWith('http://') &&
+      !values.homepage.startsWith('https://'))) {
+        errors.homepage = 'URL must begin with http:// or https://'
+  }
+
   return errors;
 };
 
