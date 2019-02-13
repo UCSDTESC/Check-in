@@ -126,7 +126,7 @@ class EventPage extends React.Component {
   renderAlert(message, severity='danger', title, timestamp) {
     if (message) {
       return (
-        <div className="user-page__error" key={timestamp}>
+        <div className="event-page__error" key={timestamp}>
           <Alert color={severity}
             toggle={() => this.dismissAlert(timestamp)}
             key={timestamp} >

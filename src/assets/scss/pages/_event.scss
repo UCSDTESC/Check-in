@@ -34,4 +34,10 @@
       }
     }
   }
+
+  &__error {
+    .alert {
+      margin-bottom: 0;
+    }
+  }
 }
