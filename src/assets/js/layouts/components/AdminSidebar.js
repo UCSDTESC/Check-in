@@ -44,7 +44,9 @@ class AdminSidebar extends React.Component {
 
   eventTools = (events, resumeLink) =>
     (<Section name='Your Events'>
-      {Object.keys(events).map((eventAlias) => (
+      {Object.keys(events)
+      .sort()
+      .map((eventAlias) => (
         <Link key={eventAlias} dest={resumeLink ? `/resumes/${eventAlias}` :
           `/events/${eventAlias}`}>
           {events[eventAlias].name}
@@ -67,8 +69,10 @@ class AdminSidebar extends React.Component {
     if (checkinAdmin) {
       return (<div>
         {auth && <Section name='Check In'>
-          {Object.values(this.props.events).map((event, i) => {
-            let alias = Object.keys(this.props.events)[i];
+          {Object.keys(this.props.events)
+          .sort()
+          .map(alias => {
+            let event = this.props.events[alias];
             return (<Link key={alias}
               dest={`/checkin/${alias}`}>{event.name}</Link>);
           })}

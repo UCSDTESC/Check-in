@@ -22,7 +22,9 @@ export default class EventList extends React.Component {
       <div className="event-list">
         <h2>Your Events</h2>
         <div className="row">
-          {events.map((event) => (
+          {events
+          .sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1)
+          .map((event) => (
             <div className="col-lg-2 col-md-6" key={event._id}>
               <div className="card h-100">
                 <img className="card__image card-img-top event-list__image"
