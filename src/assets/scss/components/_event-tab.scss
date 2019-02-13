@@ -11,6 +11,14 @@
     margin-bottom: -2px !important;
   }
 
+  &__tabs {
+    border: none;
+
+    @include media-breakpoint-down(sm) {
+      margin-bottom: 0.3rem;
+    }
+  }
+
   &__link {
     $active-color: $admin-blue;
     $tab-radius: 0.2rem;
@@ -23,10 +31,20 @@
     border: 1px solid transparent !important;
     border-top: 3px solid transparent !important;
 
+    @include media-breakpoint-down(sm) {
+      border-radius: $tab-radius !important;
+      padding: 0.25rem 0.5rem;
+      font-size: 0.9rem;
+    }
+
     &.active {
       background: $body-background !important;
       color: $black !important;
       border-color: $active-color $medium-gray transparent !important;
+      
+      @include media-breakpoint-down(sm) {
+        border-color: $active-color $medium-gray $medium-gray !important;
+      }
 
       .fa {
         color: $black;
@@ -35,6 +53,12 @@
 
     .fa {
       color: $medium-gray;
+    }
+  }
+
+  &__icon {
+    @include media-breakpoint-down(sm) {
+      display: none !important;
     }
   }
 }
