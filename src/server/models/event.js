@@ -53,7 +53,6 @@ var EventSchema = new Schema({
   },
   thirdPartyText: {
     type: String,
-    default: '',
     trim: true
   },
   organisedBy: {
