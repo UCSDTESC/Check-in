@@ -6,7 +6,7 @@ const thirdPartyText = 'Operated By The Triton Engineering Student Council.'
 const organisedBy = 'TESC'
 module.exports.up = function (done) {
     var events = this.db.collection('events');
-    events.updateMany({}, {$set: {thirdPartyText, organisedBy}}, done);
+    events.updateMany({}, {$set: {organisedBy}}, done);
 };
 
 module.exports.down = function(done) {

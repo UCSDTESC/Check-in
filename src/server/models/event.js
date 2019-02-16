@@ -59,6 +59,7 @@ var EventSchema = new Schema({
   organisedBy: {
     type: String,
     default: 'TESC',
+    required: true,
     trim: true
   },
   options: {
