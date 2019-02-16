@@ -10,17 +10,8 @@
     position: relative;
     background-color: $white;
 
-    @include media-breakpoint-down(md) {
-      height: 4rem;
-      margin-bottom: -0.6rem;
-    }
-
     &:hover {
       cursor: pointer;
-    }
-
-    &--short {
-      height: 5rem;
     }
 
     &-input {
@@ -41,7 +32,6 @@
       }
 
       &:checked {
-        background-color: $white;
         border: 2px solid $tesc-blue;
         opacity: 1;
       }
@@ -237,6 +227,12 @@
   // Special radio buttons
   &__institution {
     @include extended-radio;
+    height: 15rem;
+
+    @include media-breakpoint-down(md) {
+      height: 4rem;
+      margin-bottom: -0.6rem;
+    }
 
     #institution-ucsd {
       background: url('../img/site/featurette-ucsd.png') no-repeat center center;
@@ -397,12 +393,28 @@
 
   &__pricing {
     @include extended-radio;
+    height: auto;
+    min-height: 2.5rem;
 
     &-body {
+      position: relative;
       list-style: none;
       padding-left: 0;
-      padding: 1rem 0.5rem 0.5rem 1rem;
+      padding: 1.8rem 0.3rem 0.3rem 0.3rem;
       width: 100%;
+      z-index: 10;
+      margin: 0;
+      font-size: 0.9rem;
+      pointer-events: none;
+    }
+
+    &-feature {
+      padding: 0.2rem 0.5rem;
+      text-align: center;
+
+      &:not(:last-child) {
+        border-bottom: 1px solid $light-gray; 
+      }
     }
   }
 }

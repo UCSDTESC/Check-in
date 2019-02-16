@@ -84,13 +84,13 @@ export default class SponsorList extends React.Component {
           ))}
         </ul>
         <div className="row no-gutters align-items-center">
-          <div className="col-10 pr-1">
+          <div className="col pr-1">
             <SponsorSelect value={newSponsor} onChange={this.changeNewSponsor}
               exclude={sponsors} />
           </div>
-          <div className="col-2">
+          <div className="col-auto">
             <button className={`rounded-button rounded-button--small
-              rounded-button--full`} onClick={this.onAddNewSponsor}
+              rounded-button--short`} onClick={this.onAddNewSponsor}
               disabled={newSponsor === null} title={newSponsor ?
                 `Add ${newSponsor.label}` : ''}>
               <FA name="plus" />
