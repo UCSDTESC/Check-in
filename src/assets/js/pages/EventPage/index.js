@@ -208,7 +208,7 @@ class EventPage extends React.Component {
       );
     }
 
-    const isThirdParty = !!event.thirdPartyText.length;
+    const isThirdParty = !!event.thirdPartyText;
 
     return (
       <div className="page page--admin event-page d-flex flex-column h-100">
