@@ -51,6 +51,16 @@ var EventSchema = new Schema({
     trim: true,
     required: false
   },
+  thirdPartyText: {
+    type: String,
+    default: '',
+    trim: true
+  },
+  organisedBy: {
+    type: String,
+    default: 'TESC',
+    trim: true
+  },
   options: {
     allowHighSchool: {
       type: Boolean,

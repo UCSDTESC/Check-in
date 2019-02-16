@@ -16,7 +16,7 @@ const roles = {
 const ADMIN_JWT_TIMEOUT = 3 * 60 * 60;
 const USER_JWT_TIMEOUT = 7 * 24 * 60 * 60;
 
-const PUBLIC_EVENT_FIELDS = 'name alias logo closeTime homepage';
+const PUBLIC_EVENT_FIELDS = 'name alias logo closeTime homepage organisedBy';
 
 // Conditions that must be met for sponsors to see resumes
 const getResumeConditions = (req) => ({

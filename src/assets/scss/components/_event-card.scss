@@ -1,0 +1,13 @@
+.event-card {
+
+    &__header {
+        background: $tesc-blue;
+
+        font-weight: bold;
+        color: white;
+
+        &--third-party {
+            background: $medium-gray;
+        }
+    }
+}

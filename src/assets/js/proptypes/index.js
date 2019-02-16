@@ -25,6 +25,8 @@ export const Event = {
   logo: PropTypes.shape({
     url: PropTypes.string.isRequired
   }).isRequired,
+  thirdPartyText: PropTypes.string.isRequired,
+  organisedBy: PropTypes.string.isRequired,
   users: PropTypes.number.isRequired,
   closeTime: PropTypes.string.isRequired,
   homepage: PropTypes.string.isRequired,

@@ -34,7 +34,8 @@ class ToggleSwitch extends React.Component {
         <input id={this.state.id}
           className="toggle-switch toggle-switch-round-flat"
           type="checkbox" onChange={this.toggle}
-          checked={checked} />
+          checked={checked} 
+          />
         <label htmlFor={this.state.id}></label>
       </div>
     );

@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
-import {Alert, Nav, NavItem, NavLink} from 'reactstrap';
+import {Alert, Nav, NavItem, NavLink, UncontrolledTooltip} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadEventStatistics} from '~/data/Api';
@@ -209,12 +209,13 @@ class EventPage extends React.Component {
   render() {
     let {event, statistics, alerts} = this.props;
     let {activeTab} = this.state;
-
     if (!event) {
       return (
         <Loading />
       );
     }
+
+    const isThirdParty = event.thirdPartyText.length > 0
 
     return (
       <div className="page page--admin event-page d-flex flex-column h-100">
@@ -265,6 +266,16 @@ class EventPage extends React.Component {
                     </NavLink>
                   </NavItem>
                 ))}
+                {isThirdParty && 
+                  <NavItem className="ml-auto event-tab__alert my-auto">
+                    Third Party Event
+                    <span className="m-2">
+                      <FA name="question-circle" id={'ThirdPartyTooltip'}></FA>
+                      <UncontrolledTooltip placement="right" target={'ThirdPartyTooltip'}>
+                        This Event Is Not Run By TESC. 
+                      </UncontrolledTooltip>
+                    </span>
+                </NavItem>}
               </Nav>
             </div>
           </div>
