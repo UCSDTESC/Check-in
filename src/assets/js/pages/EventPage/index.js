@@ -57,13 +57,6 @@ class EventPage extends React.Component {
         anchor: 'actions',
         render: this.renderActions
       },
-      // Left blank until content is added.
-      // {
-      //   icon: 'pie-chart',
-      //   name: 'Insights',
-      //   anchor: 'insights',
-      //   render: this.renderInsights
-      // },
       {
         icon: 'bar-chart',
         name: 'Statistics',
