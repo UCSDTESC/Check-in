@@ -1,4 +1,6 @@
 var mongoose = require('mongoose');
+var crate = require('mongoose-crate');
+var S3 = require('mongoose-crate-s3');
 mongoose.Promise = require('q').Promise;
 var mongooseDelete = require('mongoose-delete');
 
@@ -26,18 +28,13 @@ var EventSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Admin'
   }],
-  logo: {
-    type: String,
-    trim: true,
-    required: [true, 'Your event must have a logo']
-  },
   closeTime: {
     type: Date,
     required: [true, 'Your event must close registrations by a given date']
   },
   homepage: {
     type: String,
-    require: [true, 'Your event must have an event page']
+    required: [true, 'Your event must have an event page']
   },
   description: {
     type: String,
@@ -101,6 +98,22 @@ var EventSchema = new Schema({
     }
   }
 }, {timestamps: true});
+
+EventSchema.plugin(crate, {
+  storage: new S3({
+    key: process.env.S3_KEY,
+    secret: process.env.S3_SECRET,
+    bucket: process.env.S3_BUCKET,
+    acl: 'public-read',
+    region: 'us-west-1',
+    path(attachment) {
+      return `public/logos/${attachment.name}`;
+    }
+  }),
+  fields: {
+    logo: {}
+  }
+});
 
 EventSchema.plugin(mongooseDelete);
 

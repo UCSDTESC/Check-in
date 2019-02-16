@@ -5,7 +5,7 @@ import AutoSuggest from '~/components/AutoSuggest';
 
 import {getSuggestions} from '~/static/Universities';
 
-import fields from './Fields';
+import fields from '~/components/Fields';
 
 export default class UniversityField extends React.Component {
   static propTypes = {

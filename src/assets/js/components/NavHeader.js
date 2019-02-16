@@ -86,7 +86,7 @@ class NavHeader extends React.Component {
 
   render() {
     const {isHidden, isBackgroundActive} = this.state;
-    const {authenticated, title} = this.props;
+    const {authenticated} = this.props;
     const activeBackground = (isBackgroundActive ?
       'sd-nav__background-active' : '');
 

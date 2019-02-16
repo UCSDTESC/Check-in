@@ -184,6 +184,15 @@ export const registerUser = (eventAlias, user) => {
   return promisify(baseReq);
 };
 
+export const registerNewEvent = (event) =>
+  promisify(request
+    .post('/admin/events')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .field(event)
+    .attach('logo', event.logo[0])
+    .use(apiPrefix)
+    .use(nocache));
+
 /**
  * Request to register a new admin.
  * @param {Object} admin The admin fields to register.
