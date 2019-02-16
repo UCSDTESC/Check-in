@@ -33,7 +33,7 @@ export default class OrganiserList extends React.Component {
       newOrganiser
     });
 
-  onAddNewSponsor = () => {
+  onAddNewOrganiser = () => {
     let {newOrganiser} = this.state;
 
     this.props.addNewOrganiser(newOrganiser);
@@ -57,7 +57,18 @@ export default class OrganiserList extends React.Component {
 
     return (
       <div className="organiser-list">
-        <h2>Organisers</h2>
+        <div className="row">
+          <div className="col">
+            <h2>Organisers</h2>
+          </div>
+          <div className="col-auto">
+            <button className={`rounded-button rounded-button--small
+              rounded-button--secondary px-2`}
+              onClick={this.toggleRegisterModal}>
+              <FA name="plus" /> New
+            </button>
+          </div>
+        </div>
         <ul className="list-group mb-1">
           {organisers.map(organiser => (
             <li className={`list-group-item organiser-list__username d-flex
@@ -83,16 +94,13 @@ export default class OrganiserList extends React.Component {
           </div>
           <div className="col-2">
             <button className={`rounded-button rounded-button--small
-              rounded-button--full`} onClick={this.toggleRegisterModal}>
+              rounded-button--full`} onClick={this.onAddNewOrganiser}
+              disabled={newOrganiser === null} title={newOrganiser ?
+                `Add ${newOrganiser.label}` : ''}>
               <FA name="plus" />
             </button>
           </div>
         </div>
-        {newOrganiser !== null && <button className={`btn event-page__btn
-          rounded-button rounded-button--small mt-1`}
-          onClick={this.onAddNewSponsor}>
-            Add {newOrganiser.label}
-          </button>}
 
         <NewAdminModal toggle={this.toggleRegisterModal}
           open={this.state.isRegisterModalOpen}

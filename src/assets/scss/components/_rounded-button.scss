@@ -28,6 +28,14 @@
     border: none;
   }
 
+  &:disabled {
+    background-color: $medium-gray;
+
+    &:hover {
+      background-color: darken($medium-gray, 3%);
+    }
+  }
+
   &--small {
     font-size: 1.0rem;
   }

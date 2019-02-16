@@ -57,7 +57,18 @@ export default class SponsorList extends React.Component {
 
     return (
       <div className="sponsor-list">
-        <h2>Sponsors</h2>
+        <div className="row">
+          <div className="col">
+            <h2>Sponsors</h2>
+          </div>
+          <div className="col-auto">
+            <button className={`rounded-button rounded-button--small
+              rounded-button--secondary px-2`}
+              onClick={this.toggleRegisterModal}>
+              <FA name="plus" /> New
+            </button>
+          </div>
+        </div>
         <ul className="list-group mb-1">
           {sponsors.map(sponsor => (
             <li className="list-group-item sponsor-list__username"
@@ -73,16 +84,13 @@ export default class SponsorList extends React.Component {
           </div>
           <div className="col-2">
             <button className={`rounded-button rounded-button--small
-              rounded-button--full`} onClick={this.toggleRegisterModal}>
+              rounded-button--full`} onClick={this.onAddNewSponsor}
+              disabled={newSponsor === null} title={newSponsor ?
+                `Add ${newSponsor.label}` : ''}>
               <FA name="plus" />
             </button>
           </div>
         </div>
-        {newSponsor !== null && <button className={`btn event-page__btn
-          rounded-button rounded-button--small mt-1`}
-          onClick={this.onAddNewSponsor}>
-            Add {newSponsor.label}
-          </button>}
 
         <NewAdminModal toggle={this.toggleRegisterModal}
           open={this.state.isRegisterModalOpen}
