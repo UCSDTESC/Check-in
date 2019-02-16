@@ -67,19 +67,22 @@ class NewAdminModal extends React.Component {
                     <div className="row">
                       {Object.values(Roles).map((role) =>
                         (<div className="col-6 col-lg" key={role}>
-                          <div className={`sd-form__radio-card
-                            sd-form__radio-card--short`}>
+                          <div className={`sd-form__pricing
+                            sd-form__pricing--short`}>
                             <Field name="role" component="input" type="radio"
                               value={role}
-                              className={`sd-form__input-radio
-                                sd-form__institution-radio
-                                sd-form__institution-radio--short`}
-                              disabled={lockRole} />
+                              className={`sd-form__pricing-input
+                                sd-form__pricing-input--short`}
+                              disabled={lockRole ? role !== lockRole : false} />
                             <label className={`sd-form__label
-                              sd-form__radio-card-label
-                              sd-form__radio-card-label--top`}>
+                              sd-form__pricing-label`}>
                               {role}
                             </label>
+                            <ul className="sd-form__radio-card-body sd-form__pricing-body">
+                              <li>Text 1</li>
+                              <li>Text 2</li>
+                              <li>Text 3</li>
+                            </ul>
                           </div>
                         </div>)
                       )}

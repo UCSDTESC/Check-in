@@ -59,10 +59,10 @@ class PersonalSection extends React.Component {
    */
   createInstitutionCard(value, id, label) {
     return (
-      <div className="sd-form__radio-card">
+      <div className="sd-form__institution">
         <Field component="input" type="radio" value={value} name='institution'
-          id={id} className="sd-form__input-radio sd-form__institution-radio" />
-        {fields.createLabel(label, false, 'sd-form__radio-card-label', id)}
+          id={id} className="sd-form__institution-input" />
+        {fields.createLabel(label, false, 'sd-form__institution-label', id)}
       </div>
     );
   }
@@ -170,16 +170,16 @@ class PersonalSection extends React.Component {
           fields.createLabel('Institution')
         ),
         fields.createColumn('col-md',
-          this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
+          this.createInstitutionCard('ucsd', 'institution-ucsd',
             'UCSD')
         ),
         fields.createColumn('col-md',
-          this.createInstitutionCard('uni', 'institution-radio-uni',
+          this.createInstitutionCard('uni', 'institution-uni',
             'Other University')
         ),
         allowHighSchool ? fields.createColumn('col-md',
           this.createInstitutionCard('hs',
-            'institution-radio-hs', 'High School')
+            'institution-hs', 'High School')
         ) : '',
         fields.createColumn('col-sm-12',
           <Fields names={['institution']}

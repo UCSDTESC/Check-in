@@ -8,7 +8,7 @@ import {Admin as AdminPropTypes} from '~/proptypes';
 
 import NewAdminModal from '~/components/NewAdminModal';
 
-import {Roles} from '~/static/Roles';
+import {Roles, RolesColors} from '~/static/Roles';
 
 export default class SponsorList extends React.Component {
   static propTypes = {
@@ -71,9 +71,15 @@ export default class SponsorList extends React.Component {
         </div>
         <ul className="list-group mb-1">
           {sponsors.map(sponsor => (
-            <li className="list-group-item sponsor-list__username"
+            <li className={`list-group-item sponsor-list__username d-flex
+            justify-content-between align-items-center`}
               key={sponsor.username}>
               {sponsor.username}
+              <div>
+                <span className={`badge badge-${RolesColors[sponsor.role]}`}>
+                  {sponsor.role}
+                </span>
+              </div>
             </li>
           ))}
         </ul>
