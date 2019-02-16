@@ -265,7 +265,7 @@ class EventPage extends React.Component {
                     <span className="m-2">
                       <FA name="question-circle" id={'ThirdPartyTooltip'}></FA>
                       <UncontrolledTooltip placement="right" target={'ThirdPartyTooltip'}>
-                        This Event Is Not Run By TESC. 
+                        This event is not run by TESC. 
                       </UncontrolledTooltip>
                     </span>
                 </NavItem>}
