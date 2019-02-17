@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import ReactDOM from 'react-dom';
 import {VictoryPie, VictoryTooltip} from 'victory';
 
 export default class EventStatistics extends React.Component {
@@ -17,17 +16,6 @@ export default class EventStatistics extends React.Component {
       <dd key="universityValue" className="col-6">
         {statistics.universities}
       </dd>,
-      <dt key="genderTag" className="col-12">Gender Distribution</dt>,
-      ...Object.keys(statistics.genders).map(gender =>
-        ([
-          <dt key={gender + 'Tag'} className="col-5 offset-1">
-            {gender}
-          </dt>,
-          <dd key={gender + 'Value'} className="col-5">
-            {statistics.genders[gender]}
-          </dd>
-        ])
-      ),
       <dt key="statusTag" className="col-12">Status Breakdown</dt>,
       ...Object.keys(statistics.status).map(key =>
         ([
@@ -45,27 +33,18 @@ export default class EventStatistics extends React.Component {
   render() {
     let {event, statistics} = this.props;
 
+    // Create the data array needed to make the pie chart
+    var statusData = []
+    for (const [key, value] of Object.entries(statistics.status)) {
+      if (key === 'null') {
+        statusData.push({status: 'No Status', number: value});
+      } else {
+        statusData.push({status: key, number: value});
+      }
+    }
+
     return (
       <div className="event-statistics event-page__card">
-        <h2>Applicant Demographics</h2>
-        <div className="row">
-          <h5>Gender Statistics</h5>
-          <VictoryPie
-            colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
-            labelComponent={<VictoryTooltip />}
-            labelRadius={130}
-            labels={p => `${p.gender}: ${p.number}`} 
-            data={[
-              { gender: 'Male', number: statistics.genders['Male'] },
-              { gender: 'Female', number: statistics.genders['Female'] },
-              { gender: 'Non-Binary', number: statistics.genders['Non-Binary'] },
-              { gender: 'I prefer not to say', number: statistics.genders['I prefer not to say'] },
-              { gender: 'Other', number: statistics.genders['Other'] }
-            ]}
-            x="gender"
-            y="number"
-          />
-        </div>
         <dl className="row">
           <dt className="col-6">Total Applicants</dt>
           <dd className="col-6">
@@ -73,6 +52,16 @@ export default class EventStatistics extends React.Component {
           </dd>
 
           {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
+
+          <VictoryPie
+            colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
+            labelComponent={<VictoryTooltip />}
+            labelRadius={130}
+            labels={p => `${p.status}: ${p.number}`} 
+            data={statusData}
+            x="status"
+            y="number"
+          />
         </dl>
       </div>
     );

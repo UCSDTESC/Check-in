@@ -110,6 +110,7 @@
     "superagent-prefix": "0.0.2",
     "throng": "^4.0.0",
     "universal-cookie": "^2.1.0",
+    "victory": "^31.2.0",
     "webpack": "^3.8.1",
     "webpack-combine-loaders": "^2.0.3",
     "webpack-dev-middleware": "^1.12.0",
