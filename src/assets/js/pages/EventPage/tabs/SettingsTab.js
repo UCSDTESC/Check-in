@@ -42,9 +42,10 @@ export default class ActionsTab extends React.Component {
             <EventOptions options={event.options}
               onOptionsUpdate={this.onOptionsUpdate} />
           </div>
-          <div className="col-lg-5 col-md-5 offset-md-2 offset-lg-1">
+          <div className="col-lg-6 col-md-6 offset-md-1 offset-lg-1">
             <CustomQuestions options={event.options}
-              onOptionsUpdate={this.onOptionsUpdate} />
+              onOptionsUpdate={this.onOptionsUpdate}
+              customQuestions={event.customQuestions} />
           </div>
         </div>
       </div>

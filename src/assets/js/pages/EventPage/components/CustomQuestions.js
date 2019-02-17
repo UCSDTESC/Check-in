@@ -1,36 +1,75 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 
+import QuestionInput from './QuestionInput';
+import CustomQuestion from './CustomQuestion';
+  
 class CustomQuestions extends Component {
 
-    render() {
-        return(
-            <div>
-                <div className="event-options">
-                    <div className="d-flex flex-row">
-                        <h2 className="align-self-start">Custom Questions</h2>         
-                        <button className="btn rounded-button rounded-button--small w-50 align-self-end my-auto"
-                        onClick={() => onOptionsUpdate(this.state.options)}>
-                        Update
-                        </button>
-                    </div>
-                    <div className="mt-2 d-flex">
-                       <h4>Long Questions</h4> 
-                       <span className="btn rounded-button px-2 py-0 rounded-circle w-auto ml-auto"> + </span>
-                    </div>
-                    <div className="mt-2 d-flex">
-                       <h4>Short Questions</h4> 
-                       <span className="btn rounded-button px-2 py-0 rounded-circle w-auto ml-auto"> + </span>
+  constructor(props) {
+    super(props);
 
-                    </div>
-                    <div className="mt-2 d-flex">
-                       <h4>Checkbox Questions</h4> 
-                       <span className="btn rounded-button px-2 py-0 rounded-circle w-auto ml-auto"> + </span>
-
-                    </div>
-                </div>
-            </div>
-        )
+    this.state = {
+      ...props.customQuestions
     }
+  }
+
+  onAddQuestion = (type, newQuestion) => {
+    const {[type]: oldQuestions} = this.state;
+
+    this.setState({
+      [type]: [
+        ...oldQuestions,
+        newQuestion
+      ]
+    })
+  }
+
+  renderQuestions = (type) => {
+    const {[type]: questions} = this.state;
+    return questions.map(q => <CustomQuestion {...q} />)
+  }
+
+  render() {
+      return(
+          <div>
+              <div className="event-options container no-gutters">
+                  <div className="d-flex row flex-row">
+                      <h2 className="align-self-start">Custom Questions</h2>         
+                      <button className={`btn rounded-button rounded-button--small 
+                          ml-auto my-auto rounded-button--short
+                          rounded-button--secondary`}
+                          onClick={() => onOptionsUpdate(this.state.options)}>
+                      Update
+                      </button>
+                  </div>
+
+                  <Fragment>
+                      <div className="mt-2 row d-flex">
+                          <h4>Long Questions</h4> 
+                      </div>
+                      {this.renderQuestions('longText')}
+                      <QuestionInput type="longText" onAddQuestion={this.onAddQuestion}/>
+                  </Fragment>
+
+                  <Fragment>
+                      <div className="mt-2 row d-flex">
+                          <h4>Short Questions</h4> 
+                      </div>
+                      {this.renderQuestions('shortText')}
+                      <QuestionInput type="shortText" onAddQuestion={this.onAddQuestion}/>
+                  </Fragment>
+                  
+                  <Fragment>
+                      <div className="mt-2 row d-flex">
+                          <h4>Checkbox Questions</h4> 
+                      </div>
+                      {this.renderQuestions('checkBox')}
+                      <QuestionInput type="checkBox" onAddQuestion={this.onAddQuestion}/>
+                  </Fragment>
+              </div>
+          </div>
+      )
+  }
 }
 
 export default CustomQuestions;
