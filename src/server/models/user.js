@@ -191,7 +191,18 @@ var UserSchema = new Schema({
     type: String,
     required: false,
     displayName: 'Major GPA'
-  }
+  },
+  // Declares the user's answers to the event's custom questions
+  customQuestionAnswers: [{
+    question: {
+      type: Schema.Types.ObjectId,
+      ref: 'Question'
+    },
+    answer: {
+      type: String,
+      trim: true
+    }
+  }]
 }, {timestamps: true});
 
 UserSchema.plugin(require('mongoose-sanitizer'));

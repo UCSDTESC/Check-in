@@ -217,6 +217,13 @@ export const deleteAdmin = (adminId) =>
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
+export const updateCustomQuestions = (customQuestions, eventAlias) =>
+  promisify(request
+    .post('/admin/customQuestions/' + eventAlias)
+    .send({customQuestions})
+    .use(apiPrefix)
+    .use(nocache))
+
 /**
  * Request to download a given set of resumes.
  * @param {String[]} applicants An array of User IDs to download

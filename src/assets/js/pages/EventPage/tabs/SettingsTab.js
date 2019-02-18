@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {updateOptions} from '~/data/Api';
+import {updateOptions, updateCustomQuestions} from '~/data/Api';
 
 import EventOptions from '../components/EventOptions';
 import CustomQuestions from '../components/CustomQuestions';
@@ -32,6 +32,10 @@ export default class ActionsTab extends React.Component {
       });
   };
 
+  onUpdateCustomQuestions = () => {
+    updateCustomQuestions({haha: 'hi'})
+  }
+
   render() {
     let {event} = this.props;
 
@@ -44,7 +48,7 @@ export default class ActionsTab extends React.Component {
           </div>
           <div className="col-lg-6 col-md-6 offset-md-1 offset-lg-1">
             <CustomQuestions options={event.options}
-              onOptionsUpdate={this.onOptionsUpdate}
+              onUpdateCustomQuestions={this.onUpdateCustomQuestions}
               customQuestions={event.customQuestions} />
           </div>
         </div>

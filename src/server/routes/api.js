@@ -87,11 +87,19 @@ module.exports = function(app) {
       return query
         .populate('organisers')
         .populate('sponsors')
+        .populate('customQuestions.longText')
+        .populate('customQuestions.shortText')
+        .populate('customQuestions.checkBox')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(addEventStatistics)
         .then(events => res.json(events));
     });
+
+  api.post('/admin/customQuestions/:eventAlias', 
+    requireAuth, roleAuth(roles.ROLE_ADMIN), (req, res) => {
+      console.log(req.body);
+    })
 
   api.get('/admin/events/:eventAlias',
     (req, res) => {
@@ -103,18 +111,7 @@ module.exports = function(app) {
             return Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
           }
 
-          return res.json({
-            _id: event._id,
-            name: event.name,
-            logo: event.logo,
-            alias: event.alias,
-            homepage: event.homepage,
-            description: event.description,
-            email: event.email,
-            closeTime: event.closeTime,
-            checkinWaiver: event.checkinWaiver,
-            options: event.options
-          });
+          return res.json(event);
         });
     });
 
