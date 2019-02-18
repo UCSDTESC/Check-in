@@ -21,7 +21,6 @@ export default class StatisticsTab extends React.Component {
 
     return (
       <div className="event-tab">
-        <h2>Applicant Demographics</h2>
         <div className="row">
           <div className="col-lg-4 col-md-6">
             <EventStatistics event={event} statistics={statistics} />

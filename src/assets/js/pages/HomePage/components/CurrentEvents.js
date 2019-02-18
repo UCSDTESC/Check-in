@@ -9,7 +9,9 @@ export default class CurrentEvents extends React.Component {
 
   render() {
     let {events} = this.props;
-
+    const eventHeaderClass = (o) => (o !== 'TESC') 
+      ? 'event-card__header event-card__header--third-party' 
+      : 'event-card__header';
     return (<div className="about">
       <div className="container">
         <div className="row row-eq-height">
@@ -25,8 +27,11 @@ export default class CurrentEvents extends React.Component {
           {events.length !== 0 && events.map(event => (
             <div key={event._id} className="col-md-4">
               <Link to={`/register/${event.alias}`}>
-                <div className="card mb-4 box-shadow">
-                  <img src={event.logo} className="card-img-top" />
+                <div className="card mb-4 box-shadow event-card">
+                  <div className={`card-header ${eventHeaderClass(event.organisedBy)}`}>
+                    Organised By {event.organisedBy}
+                  </div>
+                  <img src={event.logo.url} className="card-img-top bg-white" />
                   <div className="card-body">
                     <h5 className="card-title">
                       {event.name}

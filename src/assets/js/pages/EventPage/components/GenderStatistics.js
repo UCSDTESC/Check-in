@@ -30,15 +30,15 @@ export default class GenderStatistics extends React.Component {
     let {event, statistics} = this.props;
     
     // Create the data array needed to make the pie chart
-    var genderData = []
+    var genderData = [];
     for (const [key, value] of Object.entries(statistics.genders)) {
       genderData.push({gender: key, number: value});
     }
 
     return (
     <div className="event-statistics event-page__card">
+      <h2>Gender Breakdown</h2>
       <dl className="row">
-        {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
 
         <VictoryPie
           colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
@@ -49,6 +49,7 @@ export default class GenderStatistics extends React.Component {
           x="gender"
           y="number"
         />
+        {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
       </dl>
     </div>
     );

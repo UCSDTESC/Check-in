@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
-import {Alert, Nav, NavItem, NavLink} from 'reactstrap';
+import {Alert, Nav, NavItem, NavLink, UncontrolledTooltip} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadEventStatistics} from '~/data/Api';
@@ -57,13 +57,6 @@ class EventPage extends React.Component {
         anchor: 'actions',
         render: this.renderActions
       },
-      // Left blank until content is added.
-      // {
-      //   icon: 'pie-chart',
-      //   name: 'Insights',
-      //   anchor: 'insights',
-      //   render: this.renderInsights
-      // },
       {
         icon: 'bar-chart',
         name: 'Statistics',
@@ -126,7 +119,7 @@ class EventPage extends React.Component {
   renderAlert(message, severity='danger', title, timestamp) {
     if (message) {
       return (
-        <div className="user-page__error" key={timestamp}>
+        <div className="event-page__error" key={timestamp}>
           <Alert color={severity}
             toggle={() => this.dismissAlert(timestamp)}
             key={timestamp} >
@@ -209,12 +202,13 @@ class EventPage extends React.Component {
   render() {
     let {event, statistics, alerts} = this.props;
     let {activeTab} = this.state;
-
     if (!event) {
       return (
         <Loading />
       );
     }
+
+    const isThirdParty = !!event.thirdPartyText;
 
     return (
       <div className="page page--admin event-page d-flex flex-column h-100">
@@ -226,7 +220,7 @@ class EventPage extends React.Component {
           <div className="row event-page__header">
             <div className={`col-6 col-xl-auto d-flex flex-column flex-xl-row
               align-items-center justify-content-center`}>
-              <img className="event-page__logo" src={event.logo} />
+              <img className="event-page__logo" src={event.logo.url} />
               <a target="_blank" rel="noopener noreferrer"
                 href={event.homepage}>
                 <h1 className="event-page__title">{event.name}</h1>
@@ -265,6 +259,16 @@ class EventPage extends React.Component {
                     </NavLink>
                   </NavItem>
                 ))}
+                {isThirdParty && 
+                  <NavItem className="ml-auto event-tab__alert my-auto">
+                    Third Party Event
+                    <span className="m-2">
+                      <FA name="question-circle" id={'ThirdPartyTooltip'}></FA>
+                      <UncontrolledTooltip placement="right" target={'ThirdPartyTooltip'}>
+                        This event is not run by TESC. 
+                      </UncontrolledTooltip>
+                    </span>
+                </NavItem>}
               </Nav>
             </div>
           </div>

@@ -22,7 +22,11 @@ export const Event = {
   name: PropTypes.string.isRequired,
   alias: PropTypes.string.isRequired,
   organisers: PropTypes.arrayOf(PropTypes.shape(Admin)),
-  logo: PropTypes.string.isRequired,
+  logo: PropTypes.shape({
+    url: PropTypes.string.isRequired
+  }).isRequired,
+  thirdPartyText: PropTypes.string,
+  organisedBy: PropTypes.string.isRequired,
   users: PropTypes.number.isRequired,
   closeTime: PropTypes.string.isRequired,
   homepage: PropTypes.string.isRequired,

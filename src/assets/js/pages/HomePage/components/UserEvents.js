@@ -24,7 +24,7 @@ export default class UserEvents extends React.Component {
                 <div className="card mb-4 box-shadow container">
                   <div className="row">
                     <div className="col-4">
-                      <img src={event.logo} className="card-img-top" />
+                      <img src={event.logo.url} className="card-img-top" />
                     </div>
                     <div className="col-8 d-flex align-items-center">
                       <h4 className="mb-0">{event.name}</h4>

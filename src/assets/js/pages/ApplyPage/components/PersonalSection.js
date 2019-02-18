@@ -3,7 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import UniversityField from './UniversityField';
-import fields from './Fields';
+
+import fields from '~/components/Fields';
 
 import FileField from '~/components/FileField';
 
@@ -59,9 +60,9 @@ class PersonalSection extends React.Component {
    */
   createInstitutionCard(value, id, label) {
     return (
-      <div className="sd-form__institution-card">
+      <div className="sd-form__institution">
         <Field component="input" type="radio" value={value} name='institution'
-          id={id} className="sd-form__input-radio sd-form__institution-radio" />
+          id={id} className="sd-form__institution-input" />
         {fields.createLabel(label, false, 'sd-form__institution-label', id)}
       </div>
     );
@@ -135,25 +136,25 @@ class PersonalSection extends React.Component {
   }
 
   createGPAFields(requireGPA, requireMajorGPA) {
-    
+
     let gpaFields = [];
 
     if (requireGPA) {
       gpaFields.push(fields.createColumn('col-lg-6',
         fields.createLabel('Grade Point Average (GPA)', true),
         fields.createInput('gpa', '4.00')
-      ))
+      ));
     }
 
     if (requireMajorGPA) {
       gpaFields.push(fields.createColumn('col-lg-6',
         fields.createLabel('Major GPA', true),
         fields.createInput('majorGPA', '4.00')
-      ))
+      ));
     }
 
 
-    return fields.createRow(...gpaFields)
+    return fields.createRow(...gpaFields);
   }
 
   /**
@@ -170,16 +171,16 @@ class PersonalSection extends React.Component {
           fields.createLabel('Institution')
         ),
         fields.createColumn('col-md',
-          this.createInstitutionCard('ucsd', 'institution-radio-ucsd',
+          this.createInstitutionCard('ucsd', 'institution-ucsd',
             'UCSD')
         ),
         fields.createColumn('col-md',
-          this.createInstitutionCard('uni', 'institution-radio-uni',
+          this.createInstitutionCard('uni', 'institution-uni',
             'Other University')
         ),
         allowHighSchool ? fields.createColumn('col-md',
           this.createInstitutionCard('hs',
-            'institution-radio-hs', 'High School')
+            'institution-hs', 'High School')
         ) : '',
         fields.createColumn('col-sm-12',
           <Fields names={['institution']}

@@ -216,14 +216,14 @@ class UserProfile extends React.Component {
             user-profile__website`}
             placeholder="https://www.tesc.events/" />
         </div>
-        {user.event.options.requireGPA && 
-            <div className="col-lg-6 mb-3">
-              <h5>GPA:</h5>
-              <Field component="input" name="gpa" type="text"
-                className={`sd-form__input-text user-profile__input
+        {user.event.options.requireGPA &&
+        <div className="col-lg-6 mb-3">
+          <h5>GPA:</h5>
+          <Field component="input" name="gpa" type="text"
+            className={`sd-form__input-text user-profile__input
                 user-profile__github`}
-                placeholder="4.00" />
-            </div>
+            placeholder="4.00" />
+        </div>
         }
         {user.event.options.requireMajorGPA &&
           <div className="col-lg-6 mb-3">
@@ -270,14 +270,16 @@ class UserProfile extends React.Component {
               {this.renderUserStatus(user.status)}
             </div>
 
-            <h1 className="order-2 order-md-1 col-md-10 col-lg-8">
-              Your {' '}
+            <div className="order-2 order-md-1 col-md-10 col-lg-8">
+              <h1>Your {' '}
               <a href={user.event.homepage} className="sd-link__underline"
                 target="_blank">
                 {user.event.name}
               </a>
-              {' '} Application
-            </h1>
+              {' '} Application</h1>
+              <h5 className="pt-3">{user.event.thirdPartyText}</h5>
+            </div>
+
           </div>
           <div className={`user-profile__apply ${pristine ?
             'user-profile__apply--hidden' : ''}`}>

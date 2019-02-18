@@ -5,7 +5,8 @@ import {default as UUID} from 'node-uuid';
 class ToggleSwitch extends React.Component {
   static propTypes = {
     checked: PropTypes.bool.isRequired,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    className: PropTypes.string
   };
 
   componentWillMount() {
@@ -33,7 +34,8 @@ class ToggleSwitch extends React.Component {
         <input id={this.state.id}
           className="toggle-switch toggle-switch-round-flat"
           type="checkbox" onChange={this.toggle}
-          checked={checked} />
+          checked={checked} 
+          />
         <label htmlFor={this.state.id}></label>
       </div>
     );

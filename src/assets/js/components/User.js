@@ -5,7 +5,10 @@ import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {default as UUID} from 'node-uuid';
 
-import {User as UserPropType} from '~/proptypes';
+import {
+  User as UserPropType,
+  Event as EventPropType
+} from '~/proptypes';
 
 import {getRole, Roles} from '~/static/Roles';
 
@@ -21,7 +24,8 @@ class User extends React.Component {
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     resume: PropTypes.object,
-    role: PropTypes.string.isRequired
+    role: PropTypes.string.isRequired,
+    event: PropTypes.shape(EventPropType).isRequired
   };
 
   handleFormSubmit(formProps) {
@@ -40,7 +44,8 @@ class User extends React.Component {
       <div key="1" className="col-sm-3">
         <a className="btn btn-primary form-control"
           role="button" target="_blank"
-          disabled={!this.props.resume} href={this.props.resume.url}>
+          disabled={!this.props.resume}
+          href={this.props.resume.url} rel="noopener noreferrer">
           View
         </a>
       </div>
@@ -97,7 +102,7 @@ class User extends React.Component {
         {event.options.requireGPA && this.renderFormField('GPA', 'gpa', 'col-sm-4')}
         {event.options.requireMajorGPA && this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
       </React.Fragment>
-    )
+    );
   }
 
   render() {
@@ -171,11 +176,11 @@ class User extends React.Component {
                 {this.renderGPAFields(event)}
               </div>
 
-              {event.options.requireClassRequirement || 
-                event.options.requireExtraCurriculars ?  
+              {event.options.requireClassRequirement ||
+                event.options.requireExtraCurriculars ?
                   <h5 className="mt-3">Miscellaneous Questions</h5> : ''}
               <div className="row my-2 pt-2">
-                {event.options.requireClassRequirement && 
+                {event.options.requireClassRequirement &&
                   <React.Fragment>
                     <div className="col-sm-8">This user has completed Advanced Data Structures (CSE 100)</div>
                     <div className="col-sm-4 d-flex justify-content-center">

@@ -6,6 +6,7 @@ const S3Archiver = require('s3-archiver');
 const moment = require('moment');
 const generatePassword = require('password-generator');
 
+const upload = require('../config/uploads')();
 const logging = require('../config/logging');
 
 const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo,
@@ -184,6 +185,55 @@ module.exports = function(app) {
       return res.json(columns);
     });
 
+  api.get('/admin/sponsors', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    (_, res) => {
+      Admin.find({role: roles.ROLE_SPONSOR})
+        .select('username')
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(sponsors => res.json(sponsors));
+    });
+
+  api.post('/admin/addSponsor/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
+      if (!req.body.sponsor) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      return Admin.findById(req.body.sponsor)
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(sponsor => {
+          req.event.sponsors.push(sponsor);
+          return req.event
+            .save()
+            .catch(err => {
+              return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+            })
+            .then(() => res.json({success : true}));;
+        });
+    });
+
+  api.post('/admin/addOrganiser/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
+      if (!req.body.admin) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      return Admin.findById(req.body.admin)
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(admin => {
+          req.event.organisers.push(admin);
+          return req.event
+            .save()
+            .catch(err => {
+              return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+            })
+            .then(() => res.json({success : true}));;
+        });
+    });
+
   api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser,
     (req, res) => {
@@ -219,6 +269,40 @@ module.exports = function(app) {
           return Errors.respondError(res, err, Errors.DATABASE_ERROR);
         })
         .then(() => res.json({success : true}));
+
+    });
+
+  api.post('/admin/events', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), upload.single('logo'), (req, res) => {
+      let event = new Event;
+      const {closeTimeDay, closeTimeMonth, closeTimeYear} = req.body;
+
+      ['closeTimeDay', 'closeTimeMonth', 'closeTimeYear', 'logo'].forEach(k => delete req.body[k]);
+
+      req.body.closeTime = closeTimeYear + '-' +
+      closeTimeMonth.padStart(2, '0') + '-' +
+      closeTimeDay.padStart(2, '0')
+      + 'T00:00:00.000Z';
+
+      Object.entries(req.body).forEach(([k, v]) => event[k] = v);
+
+      if (getRole(req.user.role) === getRole(roles.ROLE_ADMIN)) {
+        event.organisers = [req.user._id];
+      }
+
+      event.attach('logo', {path: req.file.path})
+        .then(() => {
+          event.save()
+            .then(() => res.json(event))
+            .catch(err => {
+              if (err.name === 'ValidationError') {
+                for (var field in err.errors) {
+                  return Errors.respondUserError(res, err.errors[field].message);
+                }
+              }
+              return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+            });
+        });
 
     });
 
@@ -271,21 +355,29 @@ module.exports = function(app) {
         });
     });
 
-  api.get('/admins', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
+  api.get('/admins', requireAuth, roleAuth(roles.ROLE_ADMIN),
     (req, res) =>
-      Admin.find({deleted: {$ne: true}}).sort({createdAt: -1})
+      Admin.find({deleted: {$ne: true}})
+        .select('username role')
+        .sort({createdAt: -1})
         .exec()
         .then((response) => res.json(response))
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
   );
 
-  api.post('/admins/register', requireAuth, roleAuth(roles.ROLE_DEVELOPER),
-    (req, res) =>
-      Admin.create(req.body)
-        .then(() =>
-          res.json({success: true})
+  api.post('/admins/register', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    (req, res) => {
+      if (getRole(req.body.role) > getRole(roles.ROLE_ADMIN) &&
+        getRole(req.user.role) <= getRole(roles.ROLE_ADMIN)) {
+        return Errors.respondUserError(res, Errors.PERMISSION_ERROR);
+      }
+
+      return Admin.create(req.body)
+        .then((admin) =>
+          res.json(admin)
         )
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+    }
   );
 
   api.get('/sponsors/applicants/:eventAlias', requireAuth,

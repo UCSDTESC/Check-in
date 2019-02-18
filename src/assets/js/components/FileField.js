@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 
-import fields from '../pages/ApplyPage/components/Fields';
+import fields from './Fields';
 
 export default class FileField extends React.Component {
   static propTypes = {

@@ -45,13 +45,8 @@ export default class EventStatistics extends React.Component {
 
     return (
       <div className="event-statistics event-page__card">
+        <h2>Status Breakdown</h2>
         <dl className="row">
-          <dt className="col-6">Total Applicants</dt>
-          <dd className="col-6">
-            {event.users}
-          </dd>
-
-          {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
 
           <VictoryPie
             colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
@@ -62,6 +57,12 @@ export default class EventStatistics extends React.Component {
             x="status"
             y="number"
           />
+          <dt className="col-6">Total Applicants</dt>
+          <dd className="col-6">
+            {event.users}
+          </dd>
+          {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
+
         </dl>
       </div>
     );

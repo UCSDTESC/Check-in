@@ -184,6 +184,15 @@ export const registerUser = (eventAlias, user) => {
   return promisify(baseReq);
 };
 
+export const registerNewEvent = (event) =>
+  promisify(request
+    .post('/admin/events')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .field(event)
+    .attach('logo', event.logo[0])
+    .use(apiPrefix)
+    .use(nocache));
+
 /**
  * Request to register a new admin.
  * @param {Object} admin The admin fields to register.
@@ -275,6 +284,41 @@ export const updateOptions = (eventAlias, options) =>
 export const loadColumns = () =>
   promisify(request
     .get('/admin/columns')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
+ * Request a list of sponsors.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadSponsors = () =>
+  promisify(request
+    .get('/admin/sponsors')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
+ * Request to add a new sponsor to an event.
+ * @returns {Promise} A promise of the request.
+ */
+export const addNewSponsor = (eventAlias, sponsorId) =>
+  promisify(request
+    .post('/admin/addSponsor/' + eventAlias)
+    .send({sponsor: sponsorId})
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(apiPrefix)
+    .use(nocache));
+
+/**
+ * Request to add a new organiser to an event.
+ * @returns {Promise} A promise of the request.
+ */
+export const addNewOrganiser = (eventAlias, adminId) =>
+  promisify(request
+    .post('/admin/addOrganiser/' + eventAlias)
+    .send({admin: adminId})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
