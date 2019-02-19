@@ -251,6 +251,13 @@ export const exportUsers = (eventAlias) =>
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix);
 
+
+export const generateTeams = (eventAlias) =>
+  request
+    .get('admin/generateTeams/' + eventAlias)
+    .set('Authorization', cookies.get(CookieTyeps.admin.toke, {path: '/'}))
+    .use(apiPrefix);
+
 /**
  * Bulk updates a list of users to all have the same status.
  * @param {String} users A newline-delimited list of User IDs.

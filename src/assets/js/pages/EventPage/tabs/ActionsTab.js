@@ -28,6 +28,21 @@ export default class ActionsTab extends React.Component {
       });
   }
 
+  generateTeams = () => {
+    let eventAlias = this.props.event.alias;
+    exportUsers(eventAlias)
+      .end((err, res) => {
+        var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
+        var url = URL.createObjectURL(blob);
+        var link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'teams.csv');
+        document.body.appendChild(link);
+
+        link.click();
+      })
+  }
+
   onBulkChange = (values) => {
     let {users, status} = values;
 
@@ -51,6 +66,10 @@ export default class ActionsTab extends React.Component {
             <a className={`btn event-page__btn rounded-button
               rounded-button--small`} onClick={this.exportUsers}
               href="#">Export All Users</a>
+            <br /> <br />
+            <a className={`btn event-page__btn rounded-button
+              rounded-button--small`} onClick={this.generateTeams}
+              href="#">Generate Teams</a>
           </div>
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />

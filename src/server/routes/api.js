@@ -10,7 +10,9 @@ const upload = require('../config/uploads')();
 const logging = require('../config/logging');
 
 const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo,
-  getResumeConditions, PUBLIC_EVENT_FIELDS} = require('./helper');
+  writeToCSV, bfs, buildVertices, cherryPick, getResumeConditions,
+  PUBLIC_EVENT_FIELDS} 
+  = require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
@@ -135,6 +137,17 @@ module.exports = function(app) {
           res.setHeader('Content-disposition', 'attachment; filename=data.csv');
           res.set('Content-Type', 'text/csv');
           return res.send(csv);
+        });
+    });
+
+  api.get('/admin/generateTeams/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
+    isOrganiser, (req, res) => {
+      return User.find({event: req.event, deleted: false, sanitized: true})
+        .populate('account')
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then((users) => {
+          return res.send(buildVertices(users));
         });
     });
 
