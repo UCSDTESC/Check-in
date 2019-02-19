@@ -19,7 +19,6 @@ const Event = mongoose.model('Event');
 const User = mongoose.model('User');
 
 const requireAuth = passport.authenticate('adminJwt', {session: false});
-}
 
 module.exports = function(app) {
   const api = express.Router();
