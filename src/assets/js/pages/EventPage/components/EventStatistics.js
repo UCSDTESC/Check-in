@@ -35,12 +35,14 @@ export default class EventStatistics extends React.Component {
 
     // Create the data array needed to make the pie chart
     var statusData = []
+    var totalNum = 0;
     for (const [key, value] of Object.entries(statistics.status)) {
       if (key === 'null') {
         statusData.push({status: 'No Status', number: value});
       } else {
         statusData.push({status: key, number: value});
       }
+      totalNum += value;
     }
 
     return (
@@ -52,7 +54,7 @@ export default class EventStatistics extends React.Component {
             colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
             labelComponent={<VictoryTooltip />}
             labelRadius={130}
-            labels={p => `${p.status}: ${p.number}`} 
+            labels={p => `${p.status}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`} 
             data={statusData}
             x="status"
             y="number"
