@@ -15,6 +15,7 @@ export default class QuestionInput extends Component {
 
     addQuestion = () => {
       this.props.onAddQuestion(this.props.type, this.state);
+      this.setState({question: '', isRequired: false});
     }
   
     render() {
@@ -23,7 +24,7 @@ export default class QuestionInput extends Component {
       return (
         <div className="row flex-row">
             <div className="col px-0">
-                <input className="form-control" 
+                <input className="form-control" placeholder="Your Question Here..."
                   onChange={e => this.setState({question: e.target.value})}/>
             </div>
             <div className={`col-auto ml-auto flex-column custom-question__checkbox

@@ -32,8 +32,9 @@ export default class ActionsTab extends React.Component {
       });
   };
 
-  onUpdateCustomQuestions = () => {
-    updateCustomQuestions({haha: 'hi'})
+  onUpdateCustomQuestions = (questions) => {
+    let {event} = this.props;
+    updateCustomQuestions(questions, event.alias)
   }
 
   render() {

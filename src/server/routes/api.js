@@ -19,6 +19,7 @@ const Event = mongoose.model('Event');
 const User = mongoose.model('User');
 
 const requireAuth = passport.authenticate('adminJwt', {session: false});
+}
 
 module.exports = function(app) {
   const api = express.Router();
@@ -96,9 +97,21 @@ module.exports = function(app) {
         .then(events => res.json(events));
     });
 
-  api.post('/admin/customQuestions/:eventAlias', 
-    requireAuth, roleAuth(roles.ROLE_ADMIN), (req, res) => {
+  api.post('/admin/customQuestions/:eventAlias', requireAuth, 
+    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
+      if (!req.body.customQuestions) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
       console.log(req.body);
+      const {customQuestions} = req.body;
+      req.event.customQuestions = customQuestions;
+
+      return req.event
+        .save()
+        .catch(err => {
+          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        })
+        .then(() => res.json({success : true}));
     })
 
   api.get('/admin/events/:eventAlias',

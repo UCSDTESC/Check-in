@@ -40,6 +40,8 @@ class CustomQuestions extends Component {
   }
 
   render() {
+
+    const {onUpdateCustomQuestions} = this.props;    
       return(
           <div>
               <div className="event-options container no-gutters">
@@ -48,7 +50,7 @@ class CustomQuestions extends Component {
                       <button className={`btn rounded-button rounded-button--small 
                           ml-auto my-auto rounded-button--short
                           rounded-button--secondary`}
-                          onClick={() => onOptionsUpdate(this.state.options)}>
+                          onClick={() => onUpdateCustomQuestions(this.state)}>
                       Update
                       </button>
                   </div>

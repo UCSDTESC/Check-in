@@ -220,9 +220,9 @@ export const deleteAdmin = (adminId) =>
 export const updateCustomQuestions = (customQuestions, eventAlias) =>
   promisify(request
     .post('/admin/customQuestions/' + eventAlias)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .send({customQuestions})
-    .use(apiPrefix)
-    .use(nocache))
+    .use(apiPrefix))
 
 /**
  * Request to download a given set of resumes.
