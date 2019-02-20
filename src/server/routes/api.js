@@ -9,14 +9,15 @@ const generatePassword = require('password-generator');
 const upload = require('../config/uploads')();
 const logging = require('../config/logging');
 
-const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo,
-  getResumeConditions, PUBLIC_EVENT_FIELDS} = require('./helper');
+const {roleAuth, roles, questionTypes, getRole, isOrganiser, isSponsor,
+  exportApplicantInfo, getResumeConditions, PUBLIC_EVENT_FIELDS} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
 const Download = mongoose.model('Download');
 const Event = mongoose.model('Event');
 const User = mongoose.model('User');
+const Question = mongoose.model('Question');
 
 const requireAuth = passport.authenticate('adminJwt', {session: false});
 
@@ -96,22 +97,86 @@ module.exports = function(app) {
         .then(events => res.json(events));
     });
 
-  api.post('/admin/customQuestions/:eventAlias', requireAuth, 
+  api.post('/admin/customQuestion/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.customQuestions) {
+      if (!req.body.question || !req.body.type) {
         return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
       }
-      console.log(req.body);
-      const {customQuestions} = req.body;
-      req.event.customQuestions = customQuestions;
 
-      return req.event
+      const {question, type} = req.body;
+
+      return new Question(question)
         .save()
-        .catch(err => {
-          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
+        .then(newQuestion => {
+          const {customQuestions} = req.event;
+
+          switch (type) {
+          case questionTypes.QUESTION_LONG:
+            customQuestions.longText.push(newQuestion);
+            break;
+          case questionTypes.QUESTION_SHORT:
+            customQuestions.shortText.push(newQuestion);
+            break;
+          case questionTypes.QUESTION_CHECKBOX:
+            customQuestions.checkBox.push(newQuestion);
+            break;
+          default:
+            return Errors.respondUserError(res, Errors.INVALID_QUESTION_TYPE);
+          }
+
+          return req.event.save();
         })
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(() => res.json({success : true}));
-    })
+    });
+
+  api.put('/admin/customQuestion/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
+      if (!req.body.question) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      const {question} = req.body;
+
+      return Question
+        .findByIdAndUpdate(question._id, question)
+        .exec()
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(() => res.json({success : true}));
+    });
+
+  api.delete('/admin/customQuestion/:eventAlias', requireAuth,
+    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
+      if (!req.body.question || !req.body.type) {
+        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
+      }
+
+      const {question, type} = req.body;
+
+      return Question
+        .deleteById(question._id)
+        .exec()
+        .then(delQuestion => {
+          const {customQuestions} = req.event;
+
+          switch (type) {
+          case questionTypes.QUESTION_LONG:
+            customQuestions.longText.pull(delQuestion);
+            break;
+          case questionTypes.QUESTION_SHORT:
+            customQuestions.shortText.pull(delQuestion);
+            break;
+          case questionTypes.QUESTION_CHECKBOX:
+            customQuestions.checkBox.pull(delQuestion);
+            break;
+          default:
+            return Errors.respondUserError(res, Errors.INVALID_QUESTION_TYPE);
+          }
+
+          return req.event.save();
+        })
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+    });
 
   api.get('/admin/events/:eventAlias',
     (req, res) => {
@@ -365,7 +430,7 @@ module.exports = function(app) {
     });
 
   api.get('/admins', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    (req, res) =>
+    (_, res) =>
       Admin.find({deleted: {$ne: true}})
         .select('username role')
         .sort({createdAt: -1})
