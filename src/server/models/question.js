@@ -7,7 +7,7 @@ var QuestionSchema = new Schema({
   question: {
     type: String,
     trim: true,
-    required: [true, 'Your Question Must Have A Question Text']
+    required: [true, 'You must specify a question']
   },
   isRequired: {
     type: Boolean,
