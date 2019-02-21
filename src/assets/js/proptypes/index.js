@@ -17,6 +17,12 @@ export const Admin = {
   role: PropTypes.string.isRequired
 };
 
+export const Question = {
+  _id: PropTypes.string.isRequired,
+  question: PropTypes.string.isRequired,
+  isRequired: PropTypes.bool.isRequired
+};
+
 export const Event = {
   _id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
@@ -31,5 +37,10 @@ export const Event = {
   closeTime: PropTypes.string.isRequired,
   homepage: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  email: PropTypes.string.isRequired
+  email: PropTypes.string.isRequired,
+  customQuestions: PropTypes.shape({
+    longText: PropTypes.arrayOf(PropTypes.shape(Question)),
+    shortText: PropTypes.arrayOf(PropTypes.shape(Question)),
+    checkBox: PropTypes.arrayOf(PropTypes.shape(Question))
+  })
 };
