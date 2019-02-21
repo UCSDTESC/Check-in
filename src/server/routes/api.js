@@ -319,7 +319,18 @@ module.exports = function(app) {
 
       return query
         .populate('account')
-        .populate('event')
+        .populate({
+          path: 'event',
+          populate: [{
+            path: 'customQuestions.longText'
+          },
+          {
+            path: 'customQuestions.shortText'
+          },
+          {
+            path: 'customQuestions.checkBox'
+          }]
+        })
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(users => res.json(users));

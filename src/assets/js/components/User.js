@@ -105,6 +105,14 @@ class User extends React.Component {
     );
   }
 
+  renderCustomQuestions(questions) {
+    return (
+      questions.map(q => (
+          this.renderFormField(q.question, `customQuestionResponses${q._id}]`, 'col-12')
+      ))
+    )
+  }
+
   render() {
     const {handleSubmit, pristine, reset, submitting, event} = this.props;
     return (
@@ -198,6 +206,18 @@ class User extends React.Component {
 
                 }
               </div>
+            </div>
+          </div>
+          <div className="row">
+            {event.customQuestions.longText && 
+              <div className="col-auto">
+                <h5>Long Text Questions</h5>
+                {this.renderCustomQuestions(event.customQuestions.longText)}
+              </div>
+            }
+          </div>
+          <div className="row">
+            <div className="col-12">
               <button type="submit"
                 className="btn rounded-button rounded-button--small"
                 disabled={pristine || submitting}>Apply</button>

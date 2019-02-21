@@ -35,6 +35,7 @@ class UserList extends React.Component {
     </div>);
 
   render() {
+    console.log(this.props.users);
     return (
       <ReactTable
         data={this.props.users}

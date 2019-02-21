@@ -70,7 +70,6 @@ module.exports = function(app) {
     }
 
     user.customQuestionResponses = JSON.parse(values.customQuestionResponses)
-    console.log(user.customQuestionResponses);
     return values;
   };
 
