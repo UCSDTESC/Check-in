@@ -31,7 +31,7 @@ class CustomQuestions extends Component {
     const {[type]: questions} = this.props.customQuestions;
 
     return questions.map((q, idx) => (<CustomQuestion
-      key={idx} {...q}
+      key={idx} question={q}
       onChangeRequired = {() => this.onChangeRequired(q)}
       onDelete={() => onDeleteCustomQuestion(type, q)} />));
   }
