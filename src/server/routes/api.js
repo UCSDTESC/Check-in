@@ -154,20 +154,20 @@ module.exports = function(app) {
       const {question, type} = req.body;
 
       return Question
-        .deleteById(question._id)
+        .delete(question)
         .exec()
-        .then(delQuestion => {
+        .then(() => {
           const {customQuestions} = req.event;
 
           switch (type) {
           case questionTypes.QUESTION_LONG:
-            customQuestions.longText.pull(delQuestion);
+            customQuestions.longText.pull(question._id);
             break;
           case questionTypes.QUESTION_SHORT:
-            customQuestions.shortText.pull(delQuestion);
+            customQuestions.shortText.pull(question._id);
             break;
           case questionTypes.QUESTION_CHECKBOX:
-            customQuestions.checkBox.pull(delQuestion);
+            customQuestions.checkBox.pull(question._id);
             break;
           default:
             return Errors.respondUserError(res, Errors.INVALID_QUESTION_TYPE);
@@ -175,7 +175,8 @@ module.exports = function(app) {
 
           return req.event.save();
         })
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
+        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
+        .then(() => res.json({success: true}));
     });
 
   api.get('/admin/events/:eventAlias',

@@ -217,13 +217,6 @@ export const deleteAdmin = (adminId) =>
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
-export const updateCustomQuestions = (customQuestions, eventAlias) =>
-  promisify(request
-    .post('/admin/customQuestions/' + eventAlias)
-    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .send({customQuestions})
-    .use(apiPrefix));
-
 /**
  * Request to download a given set of resumes.
  * @param {String[]} applicants An array of User IDs to download
@@ -365,7 +358,7 @@ export const updateCustomQuestion = (eventAlias, question) =>
  */
 export const deleteCustomQuestion = (eventAlias, question, type) =>
   promisify(request
-    .put('/admin/customQuestion/' + eventAlias)
+    .delete('/admin/customQuestion/' + eventAlias)
     .send({question, type})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
