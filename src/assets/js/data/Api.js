@@ -174,11 +174,14 @@ export const checkinUser = (id, eventAlias) =>
  * @returns {Promise} A promise of the request.
  */
 export const registerUser = (eventAlias, user) => {
-  console.log(user);
+  const {customQuestionResponses} = user;
+  user.customQuestionResponses = JSON.stringify(customQuestionResponses);
+  console.log(user)
   let baseReq = request
     .post('/register/' + eventAlias)
     .use(apiPrefix)
     .field(user);
+
   if (user.resume && user.resume.length > 0) {
     baseReq = baseReq.attach('resume', user.resume[0]);
   }

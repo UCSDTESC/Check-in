@@ -14,7 +14,7 @@ const autoPopulateFields = [
   'firstName', 'lastName', 'gender', 'phone',
   'university', 'major', 'year', 'github', 'website', 'shareResume', 'food',
   'diet', 'shirtSize', 'pid', 'race', 'highSchool', 'classRequirement',
-  'extraCurriculars', 'gpa', 'majorGPA', 'customQuestionResponses'
+  'extraCurriculars', 'gpa', 'majorGPA',
 ];
 
 module.exports = function(app) {
@@ -69,6 +69,8 @@ module.exports = function(app) {
       user.teammates.push(values.team3.toLowerCase());
     }
 
+    user.customQuestionResponses = JSON.parse(values.customQuestionResponses)
+    console.log(user.customQuestionResponses);
     return values;
   };
 
