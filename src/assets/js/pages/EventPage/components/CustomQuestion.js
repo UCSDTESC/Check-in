@@ -2,28 +2,30 @@ import React, {Component} from 'react';
 import FA from 'react-fontawesome';
 import PropTypes from 'prop-types';
 
+import {Question as QuestionPropType} from '~/proptypes';
+
 import ToggleSwitch from '~/components/ToggleSwitch';
 
 class CustomQuestion extends Component {
   static propTypes = {
-    question: PropTypes.string.isRequired,
-    isRequired: PropTypes.bool.isRequired,
+    question: PropTypes.shape(QuestionPropType),
     onDelete: PropTypes.func.isRequired,
     onChangeRequired: PropTypes.func.isRequired
   };
 
   render() {
-    const {isRequired, question, onDelete, onChangeRequired} = this.props;
+    const {question, onDelete, onChangeRequired} = this.props;
 
     return (
       <div className="row my-2">
         <div className="col px-0 d-flex align-items-center">
-          {question}
+          {question.question}
         </div>
         <div className={`col-auto ml-auto flex-column custom-question__checkbox
           d-flex align-items-center justify-content-center`}>
           Required
-          <ToggleSwitch checked={isRequired} onChange={onChangeRequired} />
+          <ToggleSwitch checked={question.isRequired}
+            onChange={onChangeRequired} />
         </div>
         <button className={`btn w-auto
           rounded-button px-2 py-0 bg-danger
