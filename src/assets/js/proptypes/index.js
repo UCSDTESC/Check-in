@@ -33,3 +33,9 @@ export const Event = {
   description: PropTypes.string.isRequired,
   email: PropTypes.string.isRequired
 };
+
+export const Question = {
+  _id: PropTypes.string.isRequired,
+  question: PropTypes.string.isRequired,
+  isRequired: PropTypes.bool.isRequired
+};
