@@ -133,7 +133,7 @@ class ApplyPage extends React.Component {
     });
 
 
-    values.customQuestionResponses = JSON.stringify(values.customQuestionResponses);
+    //values.customQuestionResponses = JSON.stringify(values.customQuestionResponses);
     console.log(values);
     // Clean up values
     // values = this.sanitiseValues(values);

@@ -182,6 +182,9 @@ module.exports = function(app) {
   api.get('/admin/events/:eventAlias',
     (req, res) => {
       return Event.findOne({'alias': req.params.eventAlias})
+        .populate('customQuestions.longText')
+        .populate('customQuestions.shortText')
+        .populate('customQuestions.checkBox')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(event => {

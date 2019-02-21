@@ -36,10 +36,28 @@ class ResponseSection extends React.Component {
   }
 
   renderCustomQuestions(customQuestions, type) {
+
+    let inputField = null;
+
+    switch(type) {
+      case 'longText':
+        inputField = fields.createTextArea
+        break;
+      case 'shortText':
+        inputField = fields.createInput
+        break;
+      case 'checkBox':
+        inputField = (name) => [
+          fields.createRadio(name, true, 'Yes'),
+          fields.createRadio(name, false, 'No')
+        ]
+        break;
+    }
+
     return customQuestions[type].map(x => (
       fields.createColumn('col-sm-12',
         fields.createLabel(x.question, x.isRequired),
-        fields.createTextArea(`customQuestionResponses.${x._id}`, 
+          inputField(`customQuestionResponses.${x._id}`, 
           'Your Response...')
       )
     ))
@@ -73,20 +91,8 @@ class ResponseSection extends React.Component {
         )
       )}
 
-      {options.allowOutOfState && fields.createRow(
-        fields.createColumn('col-lg-12',
-          fields.createLabel('I will be travelling from outside the '+
-              'San Diego county'),
-          fields.createRadio('outOfState', true, 'Yes'),
-          fields.createRadio('outOfState', false, 'No')
-        )
-      )}
-
       {customQuestions && fields.createRow(
         this.renderCustomQuestions(customQuestions, 'longText'))}
-
-      {options.allowOutOfState &&
-        <Fields names={['outOfState']} component={this.showCity} />}
 
       {options.requireClassRequirement && fields.createRow(
         fields.createColumn('col-lg-12',
@@ -97,12 +103,31 @@ class ResponseSection extends React.Component {
         )
       )}
 
+      {customQuestions && fields.createRow(
+        this.renderCustomQuestions(customQuestions, 'shortText'))}
+
+      {customQuestions && fields.createRow(
+        this.renderCustomQuestions(customQuestions, 'checkBox'))}
+
+      {options.allowOutOfState && fields.createRow(
+        fields.createColumn('col-lg-12',
+          fields.createLabel('I will be travelling from outside the '+
+              'San Diego county'),
+          fields.createRadio('outOfState', true, 'Yes'),
+          fields.createRadio('outOfState', false, 'No')
+        ) 
+      )}
+
+      {options.allowOutOfState &&
+        <Fields names={['outOfState']} component={this.showCity} />}
+
       {fields.createRow(
         fields.createColumn('col-12',
           fields.createLabel('T-Shirt Size (Unisex)'),
           fields.createTShirtSizePicker()
         )
       )}
+  
 
       {options.allowTeammates && fields.createRow(
         fields.createColumn('col-sm-12',

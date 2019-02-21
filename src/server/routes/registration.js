@@ -89,7 +89,6 @@ module.exports = function(app) {
 
         event = found;
         values = req.body;
-        console.dir(req.body.customQuestionResponses)
         return req.body;
       }, err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then((values) => Account.findOne({email: {

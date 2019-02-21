@@ -174,6 +174,7 @@ export const checkinUser = (id, eventAlias) =>
  * @returns {Promise} A promise of the request.
  */
 export const registerUser = (eventAlias, user) => {
+  console.log(user);
   let baseReq = request
     .post('/register/' + eventAlias)
     .use(apiPrefix)
