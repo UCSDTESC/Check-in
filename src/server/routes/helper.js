@@ -14,9 +14,9 @@ const roles = {
 };
 
 const questionTypes = {
-  QUESTION_LONG: 'Long',
-  QUESTION_SHORT: 'Short',
-  QUESTION_CHECKBOX: 'Checkbox'
+  QUESTION_LONG: 'longText',
+  QUESTION_SHORT: 'shortText',
+  QUESTION_CHECKBOX: 'checkBox'
 };
 
 const ADMIN_JWT_TIMEOUT = 3 * 60 * 60;
