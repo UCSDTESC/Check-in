@@ -192,16 +192,10 @@ var UserSchema = new Schema({
     required: false,
     displayName: 'Major GPA'
   },
-  // Declares the user's answers to the event's custom questions
-  customQuestionAnswers: [{
-    question: {
-      type: Schema.Types.ObjectId,
-      ref: 'Question'
-    },
-    answer: {
-      type: String,
-      trim: true
-    }
+  // Declares the user's responses to the event's custom questions
+  customQuestionResponses: [{
+    type: Map,
+    of: 'String'
   }]
 }, {timestamps: true});
 

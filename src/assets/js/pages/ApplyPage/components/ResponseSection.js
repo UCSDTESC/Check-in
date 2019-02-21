@@ -11,7 +11,8 @@ class ResponseSection extends React.Component {
     pristine: PropTypes.bool.isRequired,
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    options: PropTypes.object.isRequired
+    options: PropTypes.object.isRequired,
+    customQuestions: PropTypes.object.isRequired
   }
 
   /**
@@ -34,9 +35,19 @@ class ResponseSection extends React.Component {
     return <span></span>;
   }
 
+  renderCustomQuestions(customQuestions, type) {
+    return customQuestions[type].map(x => (
+      fields.createColumn('col-sm-12',
+        fields.createLabel(x.question, x.isRequired),
+        fields.createTextArea(`customQuestionResponses.${x._id}`, 
+          'Your Response...')
+      )
+    ))
+  }
+
   render() {
-    const {previousPage, handleSubmit, pristine, submitting, options}
-      = this.props;
+    const {previousPage, handleSubmit, pristine, submitting, 
+      options, customQuestions} = this.props;
 
     return (<form onSubmit={handleSubmit}>
       {options.foodOption && fields.createRow(
@@ -54,6 +65,14 @@ class ResponseSection extends React.Component {
         )
       )}
 
+      {options.requireExtraCurriculars && fields.createRow(
+        fields.createColumn('col-sm-12',
+          fields.createLabel('Please put down any extra curriculars or Student' +
+            ' Organizations you are affiliated with', true),
+          fields.createTextArea('extraCurriculars', 'Extra Curriculars')
+        )
+      )}
+
       {options.allowOutOfState && fields.createRow(
         fields.createColumn('col-lg-12',
           fields.createLabel('I will be travelling from outside the '+
@@ -63,17 +82,11 @@ class ResponseSection extends React.Component {
         )
       )}
 
+      {customQuestions && fields.createRow(
+        this.renderCustomQuestions(customQuestions, 'longText'))}
 
       {options.allowOutOfState &&
         <Fields names={['outOfState']} component={this.showCity} />}
-
-      {options.requireExtraCurriculars && fields.createRow(
-        fields.createColumn('col-sm-12',
-          fields.createLabel('Please put down any extra curriculars or Student' +
-            ' Organizations you are affiliated with', true),
-          fields.createTextArea('extraCurriculars', 'Extra Curriculars')
-        )
-      )}
 
       {options.requireClassRequirement && fields.createRow(
         fields.createColumn('col-lg-12',

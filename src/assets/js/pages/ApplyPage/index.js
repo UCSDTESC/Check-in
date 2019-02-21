@@ -132,6 +132,9 @@ class ApplyPage extends React.Component {
       isSubmitting: true
     });
 
+
+    values.customQuestionResponses = JSON.stringify(values.customQuestionResponses);
+    console.log(values);
     // Clean up values
     // values = this.sanitiseValues(values);
 
@@ -200,7 +203,7 @@ class ApplyPage extends React.Component {
     }
 
     let options = event.options;
-    let validator = createValidator(options);
+    let validator = createValidator(options, event.customQuestions);
 
     // Check for closed
     if (new Date(event.closeTime) < Date.now()) {
@@ -238,7 +241,8 @@ class ApplyPage extends React.Component {
               onEmailChange={this.lookupEmail} />}
             {page === 2 && <ResponseSection onSubmit={this.nextPage}
               previousPage={this.previousPage}
-              validate={validator} options={options} />}
+              validate={validator} options={options} 
+              customQuestions={event.customQuestions}/>}
             {page === 3 && <UserSection onSubmit={this.onFinalSubmit}
               previousPage={this.previousPage} submitError={this.state.error}
               isSubmitting={this.state.isSubmitting}
