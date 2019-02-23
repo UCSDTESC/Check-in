@@ -247,7 +247,7 @@ class EventPage extends React.Component {
           </div>
 
           <div className="row event-tab__container">
-            <div className="col">
+            <div className="col-12 col-lg">
               <Nav tabs className="event-tab__tabs">
                 {this.tabPages.map((page) => (
                   <NavItem key={page.anchor} className="event-tab__nav">
@@ -270,6 +270,19 @@ class EventPage extends React.Component {
                     </span>
                   </NavItem>}
               </Nav>
+            </div>
+            <div className="order-first order-lg-last col-auto">
+              {isThirdParty &&
+              <div className="ml-auto event-tab__alert my-auto">
+                    Third Party Event
+                <span className="m-2">
+                  <FA name="question-circle" id={'ThirdPartyTooltip'}></FA>
+                  <UncontrolledTooltip placement="right"
+                    target={'ThirdPartyTooltip'}>
+                    This event is not run by TESC.
+                  </UncontrolledTooltip>
+                </span>
+              </div>}
             </div>
           </div>
 
