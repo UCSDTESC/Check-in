@@ -58,7 +58,8 @@ class NewEventPage extends React.Component {
 
         <div className="sd-form__wrapper">
           <div className="sd-form">
-            <NewEventForm validate={validator} onSubmit={this.createNewEvent} />
+            <NewEventForm validate={validator} onSubmit={this.createNewEvent}
+              initialValues={{organisedBy: 'TESC'}}/>
           </div>
         </div>
       </div>
