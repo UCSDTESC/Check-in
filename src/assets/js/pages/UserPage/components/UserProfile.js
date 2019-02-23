@@ -272,11 +272,11 @@ class UserProfile extends React.Component {
 
             <div className="order-2 order-md-1 col-md-10 col-lg-8">
               <h1>Your {' '}
-              <a href={user.event.homepage} className="sd-link__underline"
-                target="_blank">
-                {user.event.name}
-              </a>
-              {' '} Application</h1>
+                <a href={user.event.homepage} className="sd-link__underline"
+                  target="_blank">
+                  {user.event.name}
+                </a>
+                {' '} Application</h1>
               <h5 className="pt-3">{user.event.thirdPartyText}</h5>
             </div>
 

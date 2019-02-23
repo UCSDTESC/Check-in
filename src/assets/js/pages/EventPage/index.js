@@ -259,16 +259,16 @@ class EventPage extends React.Component {
                     </NavLink>
                   </NavItem>
                 ))}
-                {isThirdParty && 
+                {isThirdParty &&
                   <NavItem className="ml-auto event-tab__alert my-auto">
                     Third Party Event
                     <span className="m-2">
                       <FA name="question-circle" id={'ThirdPartyTooltip'}></FA>
                       <UncontrolledTooltip placement="right" target={'ThirdPartyTooltip'}>
-                        This event is not run by TESC. 
+                        This event is not run by TESC.
                       </UncontrolledTooltip>
                     </span>
-                </NavItem>}
+                  </NavItem>}
               </Nav>
             </div>
           </div>

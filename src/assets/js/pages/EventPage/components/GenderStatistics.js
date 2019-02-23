@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
 import {VictoryPie, VictoryTooltip} from 'victory';
 
 export default class GenderStatistics extends React.Component {
@@ -28,7 +27,7 @@ export default class GenderStatistics extends React.Component {
 
   render() {
     let {event, statistics} = this.props;
-    
+
     // Create the data array needed to make the pie chart
     var genderData = [];
     var totalNum = 0;
@@ -38,22 +37,22 @@ export default class GenderStatistics extends React.Component {
     }
 
     return (
-    <div className="event-statistics event-page__card">
-      <h2>Gender Breakdown</h2>
-      <dl className="row">
+      <div className="event-statistics event-page__card">
+        <h2>Gender Breakdown</h2>
+        <dl className="row">
 
-        <VictoryPie
-          colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
-          labelComponent={<VictoryTooltip />}
-          labelRadius={130}
-          labels={p => `${p.gender}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`} 
-          data={genderData}
-          x="gender"
-          y="number"
+          <VictoryPie
+            colorScale={['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC']}
+            labelComponent={<VictoryTooltip />}
+            labelRadius={130}
+            labels={p => `${p.gender}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`}
+            data={genderData}
+            x="gender"
+            y="number"
         />
-        {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
-      </dl>
-    </div>
+          {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
+        </dl>
+      </div>
     );
   }
 }

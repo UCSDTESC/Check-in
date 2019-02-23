@@ -9,8 +9,8 @@ export default class CurrentEvents extends React.Component {
 
   render() {
     let {events} = this.props;
-    const eventHeaderClass = (o) => (o !== 'TESC') 
-      ? 'event-card__header event-card__header--third-party' 
+    const eventHeaderClass = (o) => (o !== 'TESC')
+      ? 'event-card__header event-card__header--third-party'
       : 'event-card__header';
     return (<div className="about">
       <div className="container">

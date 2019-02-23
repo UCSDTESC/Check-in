@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
 import {VictoryPie, VictoryTooltip} from 'victory';
 
 export default class EventStatistics extends React.Component {
@@ -34,7 +33,7 @@ export default class EventStatistics extends React.Component {
     let {event, statistics} = this.props;
 
     // Create the data array needed to make the pie chart
-    var statusData = []
+    var statusData = [];
     var totalNum = 0;
     for (const [key, value] of Object.entries(statistics.status)) {
       if (key === 'null') {
@@ -51,10 +50,10 @@ export default class EventStatistics extends React.Component {
         <dl className="row">
 
           <VictoryPie
-            colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
+            colorScale={['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC']}
             labelComponent={<VictoryTooltip />}
             labelRadius={130}
-            labels={p => `${p.status}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`} 
+            labels={p => `${p.status}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`}
             data={statusData}
             x="status"
             y="number"
