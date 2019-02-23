@@ -1,10 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-<<<<<<< HEAD
-import {VictoryPie, VictoryTooltip} from 'victory';
-=======
 import {VictoryPie, VictoryTooltip, VictoryTheme} from 'victory';
->>>>>>> 14f47c5b30928d4ed5fde42e8979a5bc9f47cfcb
 
 export default class GenderStatistics extends React.Component {
 
@@ -30,11 +26,7 @@ export default class GenderStatistics extends React.Component {
   }
 
   render() {
-<<<<<<< HEAD
-    let {event, statistics} = this.props;
-=======
     let {statistics} = this.props;
->>>>>>> 14f47c5b30928d4ed5fde42e8979a5bc9f47cfcb
 
     // Create the data array needed to make the pie chart
     var genderData = [];
@@ -48,18 +40,6 @@ export default class GenderStatistics extends React.Component {
       <div className="event-statistics event-page__card">
         <h2>Gender Breakdown</h2>
         <dl className="row">
-<<<<<<< HEAD
-
-          <VictoryPie
-            colorScale={['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC']}
-            labelComponent={<VictoryTooltip />}
-            labelRadius={130}
-            labels={p => `${p.gender}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`}
-            data={genderData}
-            x="gender"
-            y="number"
-        />
-=======
           <div className="col-12 event-page__pie">
 
             <VictoryPie
@@ -75,7 +55,6 @@ export default class GenderStatistics extends React.Component {
               theme={VictoryTheme.material}
           />
           </div>
->>>>>>> 14f47c5b30928d4ed5fde42e8979a5bc9f47cfcb
           {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
         </dl>
       </div>
