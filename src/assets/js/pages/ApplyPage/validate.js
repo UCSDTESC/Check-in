@@ -32,6 +32,10 @@ const createValidator = (options) => (values) => {
     required.push('extraCurriculars');
   }
 
+  if (options.requireWhyThisEvent) {
+    required.push('whyEventResponse');
+  }
+
   if (options.requireClassRequirement) {
     required.push('classRequirement');
   }
