@@ -191,6 +191,12 @@ var UserSchema = new Schema({
     type: String,
     required: false,
     displayName: 'Major GPA'
+  },
+
+  whyEventResponse: {
+    type: String,
+    required: false,
+    displayName: 'Why This Event?'
   }
 }, {timestamps: true});
 

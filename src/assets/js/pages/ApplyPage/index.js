@@ -237,7 +237,7 @@ class ApplyPage extends React.Component {
               validate={validator} event={event} options={options}
               onEmailChange={this.lookupEmail} />}
             {page === 2 && <ResponseSection onSubmit={this.nextPage}
-              previousPage={this.previousPage}
+              previousPage={this.previousPage} event={event}
               validate={validator} options={options} />}
             {page === 3 && <UserSection onSubmit={this.onFinalSubmit}
               previousPage={this.previousPage} submitError={this.state.error}

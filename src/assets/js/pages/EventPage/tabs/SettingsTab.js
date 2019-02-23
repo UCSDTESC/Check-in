@@ -37,8 +37,9 @@ export default class ActionsTab extends React.Component {
     return (
       <div className="event-tab">
         <div className="row">
-          <div className="col-lg-4 col-md-6">
+          <div className="col-lg-5 col-md-6">
             <EventOptions options={event.options}
+              event={event}
               onOptionsUpdate={this.onOptionsUpdate} />
           </div>
         </div>

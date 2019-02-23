@@ -14,7 +14,7 @@ const autoPopulateFields = [
   'firstName', 'lastName', 'gender', 'phone',
   'university', 'major', 'year', 'github', 'website', 'shareResume', 'food',
   'diet', 'shirtSize', 'pid', 'race', 'highSchool', 'classRequirement',
-  'extraCurriculars', 'gpa', 'majorGPA'
+  'extraCurriculars', 'gpa', 'majorGPA', 'whyEventResponse'
 ];
 
 module.exports = function(app) {
