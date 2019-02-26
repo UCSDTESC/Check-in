@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Field, reduxForm} from 'redux-form';
+import {Field, Fields, reduxForm} from 'redux-form';
 
 import fields from '~/components/Fields';
 
@@ -18,6 +18,20 @@ class NewEventForm extends Component {
   createLogoUpload() {
     return (<Field component={FileField} name="logo"
       placeholder="Resume" text="Drop Your Logo" />);
+  }
+
+  showThirdPartyText(values) {
+    if (values.organisedBy && values.organisedBy.input.value!== 'TESC') {
+      return (
+        fields.createRow(
+          fields.createColumn('col-sm-12',
+            fields.createLabel('Third Party Text', false),
+            fields.createInput('thirdPartyText', 'This Event is Organised By Your Org..')
+          )
+        )
+      );
+    }
+    return <span></span>;
   }
 
   render() {
@@ -63,11 +77,19 @@ class NewEventForm extends Component {
             )
         )}
         {fields.createRow(
-            fields.createColumn('col-md-12',
-              fields.createLabel('Event Description'),
-              fields.createInput('description', "SD Hacks 9001 is UC San Diego's Premier Annual Collegiate Hackathon!")
+          fields.createColumn('col-md-12',
+            fields.createLabel('Event Description'),
+            fields.createInput('description', "SD Hacks 9001 is UC San Diego's Premier Annual Collegiate Hackathon!")
           )
         )}
+        {fields.createRow(
+          fields.createColumn('col-md-12',
+            fields.createLabel('Organised By'),
+            fields.createInput('organisedBy', 'Your Organisation Here'),
+        ))}
+
+        <Fields names={['organisedBy']} component={this.showThirdPartyText} />
+
         {fields.createRow(
           fields.createColumn('col-md-4 col-md-offset-4',
             fields.createLabel('Logo Upload (5MB Max)'),

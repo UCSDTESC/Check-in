@@ -35,4 +35,13 @@
       margin-bottom: 0;
     }
   }
+
+  &__pie {
+    max-height: 20rem;
+
+    @include media-breakpoint-down(sm) {
+      padding-left: 5rem;
+      padding-right: 5rem;
+    }
+  }
 }

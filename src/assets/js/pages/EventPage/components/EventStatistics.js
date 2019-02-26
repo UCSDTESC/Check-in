@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-
-import {VictoryPie, VictoryTooltip} from 'victory';
+import {VictoryPie, VictoryTooltip, VictoryTheme} from 'victory';
 
 export default class EventStatistics extends React.Component {
 
@@ -34,7 +33,7 @@ export default class EventStatistics extends React.Component {
     let {event, statistics} = this.props;
 
     // Create the data array needed to make the pie chart
-    var statusData = []
+    var statusData = [];
     var totalNum = 0;
     for (const [key, value] of Object.entries(statistics.status)) {
       if (key === 'null') {
@@ -48,24 +47,28 @@ export default class EventStatistics extends React.Component {
     return (
       <div className="event-statistics event-page__card">
         <h2>Status Breakdown</h2>
-        <dl className="row">
-
-          <VictoryPie
-            colorScale={["#8E44AD", "#43D2F0", "#AEF9D6", "#EF767A", "#7D7ABC" ]}
-            labelComponent={<VictoryTooltip />}
-            labelRadius={130}
-            labels={p => `${p.status}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`} 
-            data={statusData}
-            x="status"
-            y="number"
-          />
+        <div className="row">
+          <div className="col-12 event-page__pie">
+            <VictoryPie
+              colorScale={['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC']}
+              labelComponent={<VictoryTooltip />}
+              labelRadius={130}
+              innerRadius={100}
+              padAngle={3}
+              labels={p => `${p.status}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`}
+              data={statusData}
+              x="status"
+              y="number"
+              theme={VictoryTheme.material}
+            />
+          </div>
           <dt className="col-6">Total Applicants</dt>
           <dd className="col-6">
             {event.users}
           </dd>
           {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
 
-        </dl>
+        </div>
       </div>
     );
   }

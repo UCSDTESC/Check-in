@@ -2,6 +2,8 @@ import {Fields, reduxForm} from 'redux-form';
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import {Event as EventPropTypes} from '~/proptypes';
+
 import fields from '~/components/Fields';
 
 class ResponseSection extends React.Component {
@@ -11,7 +13,8 @@ class ResponseSection extends React.Component {
     pristine: PropTypes.bool.isRequired,
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
-    options: PropTypes.object.isRequired
+    options: PropTypes.object.isRequired,
+    event: PropTypes.shape(EventPropTypes).isRequired
   }
 
   /**
@@ -35,8 +38,8 @@ class ResponseSection extends React.Component {
   }
 
   render() {
-    const {previousPage, handleSubmit, pristine, submitting, options}
-      = this.props;
+    const {previousPage, handleSubmit, pristine, submitting,
+      options, event}= this.props;
 
     return (<form onSubmit={handleSubmit}>
       {options.foodOption && fields.createRow(
@@ -53,6 +56,13 @@ class ResponseSection extends React.Component {
           fields.createTextArea('diet', 'Dietary Restrictions')
         )
       )}
+
+      {options.requireWhyThisEvent &&
+        fields.createColumn('col-sm-12',
+          fields.createLabel(`Why Do You Want To Attend ${event.name}?`, true),
+          fields.createTextArea('whyEventResponse', 'Your Response...')
+        )
+      }
 
       {options.allowOutOfState && fields.createRow(
         fields.createColumn('col-lg-12',

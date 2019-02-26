@@ -195,7 +195,15 @@ class User extends React.Component {
                       {this.renderFormField('', 'extraCurriculars', '')}
                     </div>
                   </React.Fragment>
+                }
 
+                {event.options.requireWhyThisEvent &&
+                  <React.Fragment>
+                    <div className="col-sm-12">
+                      Why This Event?
+                      {this.renderFormField('', 'whyEventResponse', '')}
+                    </div>
+                  </React.Fragment>
                 }
               </div>
               <button type="submit"

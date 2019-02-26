@@ -3,12 +3,15 @@ import React from 'react';
 import {UncontrolledTooltip} from 'reactstrap';
 import FA from 'react-fontawesome';
 
+import {Event as EventProptype} from '~/proptypes';
+
 import ToggleSwitch from '~/components/ToggleSwitch';
 
 export default class EventOptions extends React.Component {
   static propTypes = {
     options: PropTypes.object.isRequired,
-    onOptionsUpdate: PropTypes.func.isRequired
+    onOptionsUpdate: PropTypes.func.isRequired,
+    event: PropTypes.shape(EventProptype).isRequired
   };
 
   constructor(props) {
@@ -34,7 +37,7 @@ export default class EventOptions extends React.Component {
     </span>);
 
   render() {
-    let {onOptionsUpdate} = this.props;
+    let {onOptionsUpdate, event} = this.props;
     let {options} = this.state;
 
     const optionNames = {
@@ -48,7 +51,8 @@ export default class EventOptions extends React.Component {
       requireClassRequirement: 'Require Applicant To Have Completed CSE 100',
       requireExtraCurriculars: 'Require Extra Curriculars',
       requireGPA: 'Require GPA In Application',
-      requireMajorGPA: 'Require Major GPA In Application'
+      requireMajorGPA: 'Require Major GPA In Application',
+      requireWhyThisEvent: `Require 'Why ${event.name}?' In Application`
     };
 
     const optionDescriptions = {
@@ -63,14 +67,23 @@ export default class EventOptions extends React.Component {
 
     return (
       <div className="event-options">
-        <h2>Registration Options</h2>
+        <div className="d-flex flex-row">
+          <h2 className="align-self-start">Registration Options</h2>
+          <button className={`btn rounded-button rounded-button--small 
+          ml-auto my-auto rounded-button--short
+          rounded-button--secondary`}
+            onClick={() => onOptionsUpdate(this.state.options)}>
+          Update
+          </button>
+        </div>
+
         {Object.keys(options).map((option) => {
           let checkId = option + 'Check';
           let optionName = optionNames[option];
           let optionDescription = optionDescriptions[option];
 
           return (<div className="form-check pl-0" key={option}>
-            <label className="form-check-label w-75 d-flex align-items-center flex-row my-3" htmlFor={checkId}>
+            <label className="form-check-label w-100 d-flex align-items-center flex-row my-3" htmlFor={checkId}>
               <span>{optionName}&nbsp;</span> {optionDescription ?
                 this.renderDescriptionTag(option, optionDescription) : ''}
               <ToggleSwitch className="d-inline-block ml-auto" type="checkbox" name={option}
@@ -79,11 +92,6 @@ export default class EventOptions extends React.Component {
             </label>
           </div>);
         })}
-
-        <button className="btn rounded-button rounded-button--small"
-          onClick={() => onOptionsUpdate(this.state.options)}>
-          Update
-        </button>
       </div>
     );
   }
