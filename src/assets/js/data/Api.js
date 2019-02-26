@@ -252,11 +252,16 @@ export const exportUsers = (eventAlias) =>
     .use(apiPrefix);
 
 
-export const generateTeams = (eventAlias) =>
+/**
+ * Requests the download of all teams as a CSV file.
+ * @param {String} eventAlias The alias associated with the event.
+ * @returns {Promise} A promise of the request.
+ */
+export const exportTeams = (eventAlias) =>
   request
-    .get('admin/generateTeams/' + eventAlias)
-    .set('Authorization', cookies.get(CookieTyeps.admin.toke, {path: '/'}))
-    .use(apiPrefix);
+      .get('/admin/exportTeams/' + eventAlias)
+      .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+      .use(apiPrefix);
 
 /**
  * Bulk updates a list of users to all have the same status.

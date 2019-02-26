@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 
-import {exportUsers, bulkChange} from '~/data/Api';
+import {exportUsers, bulkChange, exportTeams} from '~/data/Api';
 
 import BulkChange from '../components/BulkChange';
 
@@ -20,7 +20,7 @@ export default class ActionsTab extends React.Component {
         var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
         var url = URL.createObjectURL(blob);
         var link = document.createElement('a');
-        link.href=url;
+        link.href = url;
         link.setAttribute('download', `${eventAlias}-${Date.now()}.csv`);
         document.body.appendChild(link);
 
@@ -28,19 +28,21 @@ export default class ActionsTab extends React.Component {
       });
   }
 
-  generateTeams = () => {
+  exportTeams = () => {
     let eventAlias = this.props.event.alias;
-    exportUsers(eventAlias)
+    exportTeams(eventAlias)
       .end((err, res) => {
+        // Download as file
         var blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
         var url = URL.createObjectURL(blob);
         var link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', 'teams.csv');
+        // need to put admin username into the teams filename - "teams-${eventAlias}-${admin}"
+        link.setAttribute('download', `teams-${eventAlias}-${Date.now()}.csv`);
         document.body.appendChild(link);
 
         link.click();
-      })
+      });
   }
 
   onBulkChange = (values) => {
@@ -68,8 +70,8 @@ export default class ActionsTab extends React.Component {
               href="#">Export All Users</a>
             <br /> <br />
             <a className={`btn event-page__btn rounded-button
-              rounded-button--small`} onClick={this.generateTeams}
-              href="#">Generate Teams</a>
+              rounded-button--small`} onClick={this.exportTeams}
+              href="#">Export Teams</a>
           </div>
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />
