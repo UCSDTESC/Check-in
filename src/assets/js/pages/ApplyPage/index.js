@@ -209,7 +209,7 @@ class ApplyPage extends React.Component {
         <div className="container">
           <div className="row">
             <div className="col-md-4 text-md-right text-center">
-              <img className="apply-page__logo" src={event.logo} />
+              <img className="apply-page__logo" src={event.logo.url} />
             </div>
             <div className="col-md-8 text-md-left text-center">
               <h2>Applications for {event.name} are now closed</h2>
