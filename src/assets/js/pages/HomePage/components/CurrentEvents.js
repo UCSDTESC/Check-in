@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
+
+import EventCard from '~/components/EventCard';
 
 export default class CurrentEvents extends React.Component {
   static propTypes = {
@@ -9,9 +10,8 @@ export default class CurrentEvents extends React.Component {
 
   render() {
     let {events} = this.props;
-    const eventHeaderClass = (o) => (o !== 'TESC')
-      ? 'event-card__header event-card__header--third-party'
-      : 'event-card__header';
+    const highlightEvent = (o) => (o !== 'TESC');
+
     return (<div className="about">
       <div className="container">
         <div className="row row-eq-height">
@@ -26,23 +26,14 @@ export default class CurrentEvents extends React.Component {
 
           {events.length !== 0 && events.map(event => (
             <div key={event._id} className="col-md-4">
-              <Link to={`/register/${event.alias}`}>
-                <div className="card mb-4 box-shadow event-card">
-                  <div className={`card-header ${eventHeaderClass(event.organisedBy)}`}>
-                    Organised By {event.organisedBy}
-                  </div>
-                  <img src={event.logo.url} className="card-img-top bg-white" />
-                  <div className="card-body">
-                    <h5 className="card-title">
-                      {event.name}
-                    </h5>
-                    <p className="card-text">
-                      Registration Closes{' '}
-                      {new Date(event.closeTime).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-              </Link>
+              <EventCard to={`/register/${event.alias}`}
+                highlighted={highlightEvent(event.organisedBy)}
+                header={`Organised By ${event.organisedBy}`}
+                image={event.logo.url}
+                title={event.name}
+                subtext={`Registration Closes ${new Date(event.closeTime)
+                  .toLocaleDateString()}`}
+                />
             </div>
           ))}
         </div>
