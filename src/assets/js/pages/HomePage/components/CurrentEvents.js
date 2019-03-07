@@ -28,7 +28,7 @@ export default class CurrentEvents extends React.Component {
             <div key={event._id} className="col-md-4">
               <EventCard to={`/register/${event.alias}`}
                 highlighted={highlightEvent(event.organisedBy)}
-                header={`Organised By ${event.organisedBy}`}
+                header={`Organized By ${event.organisedBy}`}
                 image={event.logo.url}
                 title={event.name}
                 subtext={`Registration Closes ${new Date(event.closeTime)
