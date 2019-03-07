@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import fields from '~/components/Fields';
 
+import {QuestionTypes} from '~/static/Questions';
+
 class ResponseSection extends React.Component {
   static propTypes = {
     previousPage: PropTypes.func.isRequired,
@@ -39,32 +41,32 @@ class ResponseSection extends React.Component {
 
     let inputField = null;
 
-    switch(type) {
-      case 'longText':
-        inputField = fields.createTextArea
-        break;
-      case 'shortText':
-        inputField = fields.createInput
-        break;
-      case 'checkBox':
-        inputField = (name) => [
-          fields.createRadio(name, true, 'Yes'),
-          fields.createRadio(name, false, 'No')
-        ]
-        break;
+    switch (type) {
+    case QuestionTypes.QUESTION_LONG:
+      inputField = fields.createTextArea;
+      break;
+    case QuestionTypes.QUESTION_SHORT:
+      inputField = fields.createInput;
+      break;
+    case QuestionTypes.QUESTION_CHECKBOX:
+      inputField = (name) => [
+        fields.createRadio(name, true, 'Yes'),
+        fields.createRadio(name, false, 'No')
+      ];
+      break;
     }
 
     return customQuestions[type].map(x => (
       fields.createColumn('col-sm-12',
         fields.createLabel(x.question, x.isRequired),
-          inputField(`customQuestionResponses.${x._id}`, 
+        inputField(`customQuestionResponses.${x._id}`,
           'Your Response...')
       )
-    ))
+    ));
   }
 
   render() {
-    const {previousPage, handleSubmit, pristine, submitting, 
+    const {previousPage, handleSubmit, pristine, submitting,
       options, customQuestions} = this.props;
 
     return (<form onSubmit={handleSubmit}>
@@ -92,7 +94,8 @@ class ResponseSection extends React.Component {
       )}
 
       {customQuestions && fields.createRow(
-        this.renderCustomQuestions(customQuestions, 'longText'))}
+        this.renderCustomQuestions(customQuestions,
+          QuestionTypes.QUESTION_LONG))}
 
       {options.requireClassRequirement && fields.createRow(
         fields.createColumn('col-lg-12',
@@ -104,10 +107,12 @@ class ResponseSection extends React.Component {
       )}
 
       {customQuestions && fields.createRow(
-        this.renderCustomQuestions(customQuestions, 'shortText'))}
+        this.renderCustomQuestions(customQuestions,
+          QuestionTypes.QUESTION_SHORT))}
 
       {customQuestions && fields.createRow(
-        this.renderCustomQuestions(customQuestions, 'checkBox'))}
+        this.renderCustomQuestions(customQuestions,
+          QuestionTypes.QUESTION_CHECKBOX))}
 
       {options.allowOutOfState && fields.createRow(
         fields.createColumn('col-lg-12',
@@ -115,7 +120,7 @@ class ResponseSection extends React.Component {
               'San Diego county'),
           fields.createRadio('outOfState', true, 'Yes'),
           fields.createRadio('outOfState', false, 'No')
-        ) 
+        )
       )}
 
       {options.allowOutOfState &&
@@ -127,7 +132,6 @@ class ResponseSection extends React.Component {
           fields.createTShirtSizePicker()
         )
       )}
-  
 
       {options.allowTeammates && fields.createRow(
         fields.createColumn('col-sm-12',

@@ -193,10 +193,10 @@ var UserSchema = new Schema({
     displayName: 'Major GPA'
   },
   // Declares the user's responses to the event's custom questions
-  customQuestionResponses: [{
+  customQuestionResponses: {
     type: Map,
     of: 'String'
-  }]
+  }
 }, {timestamps: true});
 
 UserSchema.plugin(require('mongoose-sanitizer'));

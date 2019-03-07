@@ -9,4 +9,3 @@ module.exports.up = function (done) {
 module.exports.down = function (done) {
   this.db.dropCollection('questions', done);
 };
-  

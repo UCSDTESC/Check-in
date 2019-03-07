@@ -53,20 +53,23 @@ const createValidator = (options, customQuestions) => (values) => {
   //for all question types
   for (let questionType in customQuestions) {
 
-    //if there is a question for this type
-    if(customQuestions[questionType]) {
+    //Check any questions exist
+    if (!customQuestions[questionType]) {
+      continue;
+    }
 
-      //get all required questions
-      const requiredQuestions = customQuestions[questionType].filter(x => x.isRequired);
+    //get all required questions
+    const requiredQuestions = customQuestions[questionType]
+      .filter(x => x.isRequired);
 
-      //iterate through required questions
-      for (let idx in requiredQuestions) {
-        const question = requiredQuestions[idx];
+    //iterate through required questions
+    for (let idx in requiredQuestions) {
+      const question = requiredQuestions[idx];
 
-        if (!values.customQuestionResponses || !(question._id in values.customQuestionResponses)) {
-          errors.customQuestionResponses = errors.customQuestionResponses || {};
-          errors.customQuestionResponses[question._id] = 'Required';
-        }
+      if (!values.customQuestionResponses
+        || !(question._id in values.customQuestionResponses)) {
+        errors.customQuestionResponses = errors.customQuestionResponses || {};
+        errors.customQuestionResponses[question._id] = 'Required';
       }
     }
   }
@@ -80,7 +83,8 @@ const createValidator = (options, customQuestions) => (values) => {
   if (values.birthdateDay < 1 || values.birthdateDay > 31) {
     errors.birthdateDay = 'Invalid Day';
   }
-  if (values.birthdateMonth === 'Month' || values.birthdateMonth < 1 || values.birthdateMonth > 12) {
+  if (values.birthdateMonth === 'Month' || values.birthdateMonth < 1 ||
+    values.birthdateMonth > 12) {
     errors.birthdateMonth = 'Invalid Month';
   }
   if (values.birthdateYear < 1900) {

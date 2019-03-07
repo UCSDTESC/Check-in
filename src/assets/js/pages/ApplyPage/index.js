@@ -30,9 +30,6 @@ class ApplyPage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.onFinalSubmit = this.onFinalSubmit.bind(this);
-    this.nextPage = this.nextPage.bind(this);
-    this.previousPage = this.previousPage.bind(this);
     this.state = {
       page: 1,
       error: null,
@@ -45,7 +42,7 @@ class ApplyPage extends React.Component {
   /**
    * Loads information about the event given its event alias.
    */
-  loadEventInformation() {
+  loadEventInformation = () => {
     let {eventAlias} = this.props.match.params;
     loadEventByAlias(eventAlias)
       .then((res) => {
@@ -60,7 +57,7 @@ class ApplyPage extends React.Component {
   /**
    * Check for a URL hash and change pages.
    */
-  loadPageFromHash() {
+  loadPageFromHash = () => {
     const {history} = this.props;
     if (!history.location.hash) {
       if (this.state.page !== 1) {
@@ -127,14 +124,12 @@ class ApplyPage extends React.Component {
    * Modifies then submits the validated data to register the user.
    * @param {Object} values The validated form data.
    */
-  onFinalSubmit(values) {
+  onFinalSubmit = (values) => {
     this.setState({
       isSubmitting: true
     });
 
 
-    //values.customQuestionResponses = JSON.stringify(values.customQuestionResponses);
-    console.log(values);
     // Clean up values
     // values = this.sanitiseValues(values);
 
@@ -177,7 +172,7 @@ class ApplyPage extends React.Component {
   /**
    * Navigate to the next application page.
    */
-  nextPage() {
+  nextPage = () => {
     const newPage = this.state.page + 1;
     this.setState({page: newPage});
     this.updateHash(newPage);
@@ -186,7 +181,7 @@ class ApplyPage extends React.Component {
   /**
    * Navigate to the previous application page.
    */
-  previousPage() {
+  previousPage = () => {
     const newPage = this.state.page - 1;
     this.setState({page: newPage});
     this.updateHash(newPage);
@@ -241,7 +236,7 @@ class ApplyPage extends React.Component {
               onEmailChange={this.lookupEmail} />}
             {page === 2 && <ResponseSection onSubmit={this.nextPage}
               previousPage={this.previousPage}
-              validate={validator} options={options} 
+              validate={validator} options={options}
               customQuestions={event.customQuestions}/>}
             {page === 3 && <UserSection onSubmit={this.onFinalSubmit}
               previousPage={this.previousPage} submitError={this.state.error}

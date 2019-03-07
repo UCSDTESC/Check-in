@@ -12,6 +12,8 @@ import {
 
 import {getRole, Roles} from '~/static/Roles';
 
+import {QuestionTypes} from '~/static/Questions';
+
 import CheckboxButton from './CheckboxButton';
 
 class User extends React.Component {
@@ -108,9 +110,9 @@ class User extends React.Component {
   renderCustomQuestions(questions) {
     return (
       questions.map(q => (
-          this.renderFormField(q.question, `customQuestionResponses${q._id}]`, 'col-12')
+        this.renderFormField(q.question, `customQuestionResponses[${q._id}]`, 'col-12')
       ))
-    )
+    );
   }
 
   render() {
@@ -209,10 +211,25 @@ class User extends React.Component {
             </div>
           </div>
           <div className="row">
-            {event.customQuestions.longText && 
-              <div className="col-auto">
+            {event.customQuestions[QuestionTypes.QUESTION_LONG] &&
+              <div className="col-12 col-lg">
                 <h5>Long Text Questions</h5>
-                {this.renderCustomQuestions(event.customQuestions.longText)}
+                {this.renderCustomQuestions(event.customQuestions
+                  [QuestionTypes.QUESTION_LONG])}
+              </div>
+            }
+            {event.customQuestions[QuestionTypes.QUESTION_SHORT] &&
+              <div className="col-12 col-lg">
+                <h5>Short Text Questions</h5>
+                {this.renderCustomQuestions(event.customQuestions
+                  [QuestionTypes.QUESTION_SHORT])}
+              </div>
+            }
+            {event.customQuestions[QuestionTypes.QUESTION_CHECKBOX] &&
+              <div className="col-12 col-lg">
+                <h5>Check Box Questions</h5>
+                {this.renderCustomQuestions(event.customQuestions
+                  [QuestionTypes.QUESTION_CHECKBOX])}
               </div>
             }
           </div>
