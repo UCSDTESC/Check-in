@@ -2,6 +2,8 @@ import {Fields, reduxForm} from 'redux-form';
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import {Event as EventPropTypes} from '~/proptypes';
+
 import fields from '~/components/Fields';
 
 import {QuestionTypes} from '~/static/Questions';
@@ -14,7 +16,8 @@ class ResponseSection extends React.Component {
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     options: PropTypes.object.isRequired,
-    customQuestions: PropTypes.object.isRequired
+    customQuestions: PropTypes.object.isRequired,
+    event: PropTypes.shape(EventPropTypes).isRequired
   }
 
   /**
@@ -67,7 +70,7 @@ class ResponseSection extends React.Component {
 
   render() {
     const {previousPage, handleSubmit, pristine, submitting,
-      options, customQuestions} = this.props;
+      options, customQuestions, event} = this.props;
 
     return (<form onSubmit={handleSubmit}>
       {options.foodOption && fields.createRow(
@@ -84,6 +87,26 @@ class ResponseSection extends React.Component {
           fields.createTextArea('diet', 'Dietary Restrictions')
         )
       )}
+
+      {options.requireWhyThisEvent &&
+        fields.createColumn('col-sm-12',
+          fields.createLabel(`Why Do You Want To Attend ${event.name}?`, true),
+          fields.createTextArea('whyEventResponse', 'Your Response...')
+        )
+      }
+
+      {options.allowOutOfState && fields.createRow(
+        fields.createColumn('col-lg-12',
+          fields.createLabel('I will be travelling from outside the '+
+              'San Diego county'),
+          fields.createRadio('outOfState', true, 'Yes'),
+          fields.createRadio('outOfState', false, 'No')
+        )
+      )}
+
+
+      {options.allowOutOfState &&
+        <Fields names={['outOfState']} component={this.showCity} />}
 
       {options.requireExtraCurriculars && fields.createRow(
         fields.createColumn('col-sm-12',

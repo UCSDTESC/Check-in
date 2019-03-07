@@ -108,6 +108,7 @@ export default class ActionsTab extends React.Component {
         <div className="row">
           <div className="col-lg-5 col-md-5">
             <EventOptions options={event.options}
+              event={event}
               onOptionsUpdate={this.onOptionsUpdate} />
           </div>
           <div className="col-lg-6 col-md-6 offset-md-1 offset-lg-1">

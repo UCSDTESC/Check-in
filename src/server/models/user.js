@@ -196,6 +196,12 @@ var UserSchema = new Schema({
   customQuestionResponses: {
     type: Map,
     of: 'String'
+  },
+
+  whyEventResponse: {
+    type: String,
+    required: false,
+    displayName: 'Why This Event?'
   }
 }, {timestamps: true});
 

@@ -107,6 +107,10 @@ var EventSchema = new Schema({
     requireMajorGPA: {
       type: Boolean,
       default: false
+    },
+    requireWhyThisEvent: {
+      type: Boolean,
+      default: false
     }
   },
   customQuestions: {
