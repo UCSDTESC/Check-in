@@ -4,7 +4,7 @@
  * @returns {(Object|undefined)} An error object where the key represents the
  * name of the form property, and the value its error.
  */
-const createValidator = (options) => (values) => {
+const createValidator = (options, customQuestions) => (values) => {
   const errors = {};
 
   let required = ['firstName', 'lastName', 'email', 'birthdateDay',
@@ -53,6 +53,31 @@ const createValidator = (options) => (values) => {
   }
 
   const notValid = required.filter(name => !(name in values));
+
+  //for all question types
+  for (let questionType in customQuestions) {
+
+    //Check any questions exist
+    if (!customQuestions[questionType]) {
+      continue;
+    }
+
+    //get all required questions
+    const requiredQuestions = customQuestions[questionType]
+      .filter(x => x.isRequired);
+
+    //iterate through required questions
+    for (let idx in requiredQuestions) {
+      const question = requiredQuestions[idx];
+
+      if (!values.customQuestionResponses
+        || !(question._id in values.customQuestionResponses)) {
+        errors.customQuestionResponses = errors.customQuestionResponses || {};
+        errors.customQuestionResponses[question._id] = 'Required';
+      }
+    }
+  }
+
   notValid.forEach(name => errors[name] = 'Required');
 
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -62,7 +87,8 @@ const createValidator = (options) => (values) => {
   if (values.birthdateDay < 1 || values.birthdateDay > 31) {
     errors.birthdateDay = 'Invalid Day';
   }
-  if (values.birthdateMonth === 'Month' || values.birthdateMonth < 1 || values.birthdateMonth > 12) {
+  if (values.birthdateMonth === 'Month' || values.birthdateMonth < 1 ||
+    values.birthdateMonth > 12) {
     errors.birthdateMonth = 'Invalid Month';
   }
   if (values.birthdateYear < 1900) {

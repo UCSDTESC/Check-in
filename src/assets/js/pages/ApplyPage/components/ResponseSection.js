@@ -6,6 +6,8 @@ import {Event as EventPropTypes} from '~/proptypes';
 
 import fields from '~/components/Fields';
 
+import {QuestionTypes} from '~/static/Questions';
+
 class ResponseSection extends React.Component {
   static propTypes = {
     previousPage: PropTypes.func.isRequired,
@@ -14,6 +16,7 @@ class ResponseSection extends React.Component {
     reset: PropTypes.func.isRequired,
     submitting: PropTypes.bool.isRequired,
     options: PropTypes.object.isRequired,
+    customQuestions: PropTypes.object.isRequired,
     event: PropTypes.shape(EventPropTypes).isRequired
   }
 
@@ -37,9 +40,37 @@ class ResponseSection extends React.Component {
     return <span></span>;
   }
 
+  renderCustomQuestions(customQuestions, type) {
+
+    let inputField = null;
+
+    switch (type) {
+    case QuestionTypes.QUESTION_LONG:
+      inputField = fields.createTextArea;
+      break;
+    case QuestionTypes.QUESTION_SHORT:
+      inputField = fields.createInput;
+      break;
+    case QuestionTypes.QUESTION_CHECKBOX:
+      inputField = (name) => [
+        fields.createRadio(name, true, 'Yes'),
+        fields.createRadio(name, false, 'No')
+      ];
+      break;
+    }
+
+    return customQuestions[type].map(x => (
+      fields.createColumn('col-sm-12',
+        fields.createLabel(x.question, x.isRequired),
+        inputField(`customQuestionResponses.${x._id}`,
+          'Your Response...')
+      )
+    ));
+  }
+
   render() {
     const {previousPage, handleSubmit, pristine, submitting,
-      options, event}= this.props;
+      options, customQuestions, event} = this.props;
 
     return (<form onSubmit={handleSubmit}>
       {options.foodOption && fields.createRow(
@@ -85,6 +116,10 @@ class ResponseSection extends React.Component {
         )
       )}
 
+      {customQuestions && fields.createRow(
+        this.renderCustomQuestions(customQuestions,
+          QuestionTypes.QUESTION_LONG))}
+
       {options.requireClassRequirement && fields.createRow(
         fields.createColumn('col-lg-12',
           fields.createLabel('Have you taken an Advanced Data Structures (CSE 100)' +
@@ -93,6 +128,26 @@ class ResponseSection extends React.Component {
           fields.createRadio('classRequirement', false, 'No')
         )
       )}
+
+      {customQuestions && fields.createRow(
+        this.renderCustomQuestions(customQuestions,
+          QuestionTypes.QUESTION_SHORT))}
+
+      {customQuestions && fields.createRow(
+        this.renderCustomQuestions(customQuestions,
+          QuestionTypes.QUESTION_CHECKBOX))}
+
+      {options.allowOutOfState && fields.createRow(
+        fields.createColumn('col-lg-12',
+          fields.createLabel('I will be travelling from outside the '+
+              'San Diego county'),
+          fields.createRadio('outOfState', true, 'Yes'),
+          fields.createRadio('outOfState', false, 'No')
+        )
+      )}
+
+      {options.allowOutOfState &&
+        <Fields names={['outOfState']} component={this.showCity} />}
 
       {fields.createRow(
         fields.createColumn('col-12',

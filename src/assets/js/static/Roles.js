@@ -1,13 +1,13 @@
 // Administrator Roles
 
-const Roles = {
+export const Roles = {
   ROLE_DEVELOPER: 'Developer',
   ROLE_ADMIN: 'Admin',
   ROLE_SPONSOR: 'Sponsor',
   ROLE_MEMBER: 'Member'
 };
 
-const RolesColors = {
+export const RolesColors = {
   [Roles.ROLE_DEVELOPER]: 'success',
   [Roles.ROLE_ADMIN]: 'primary',
   [Roles.ROLE_SPONSOR]: 'danger',
@@ -20,7 +20,7 @@ const RolesColors = {
  * {@link Roles}.
  * @returns {Integer} The integer for the given role.
  */
-function getRole(checkRole) {
+export function getRole(checkRole) {
   var role;
 
   switch (checkRole) {
@@ -32,10 +32,4 @@ function getRole(checkRole) {
   }
 
   return role;
-};
-
-module.exports = {
-  Roles,
-  RolesColors,
-  getRole
 };
