@@ -28,7 +28,7 @@ class CheckboxButton extends React.Component {
 
   render() {
     const {value} = this.state;
-    const isChecked = value === 'true';
+    const isChecked = value || value === 'true';
 
     let active = isChecked ? 'active' : '';
     let text = isChecked ? 'True' : 'False';
