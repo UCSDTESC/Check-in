@@ -17,7 +17,7 @@ The system allows organisers of events to create, update and manage their events
 4. Enter all of the information into the ```.env``` file
 5. Run Mongo in a Docker container - ```docker run --rm -it --name tesc-checkin -p 32678:27017 mongo:latest```
 6. Run ```npm run migrate``` to migrate and seed the database
-7. If you ever need to "restart" with new data, run ```nom run rollback``` to remove data and migrate again
+7. If you ever need to "restart" with new data, run ```npm run rollback``` to remove data and migrate again
 
 ## Development
 #### All pushes should be made to a feature branch
