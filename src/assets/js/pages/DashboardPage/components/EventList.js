@@ -31,7 +31,7 @@ export default class EventList extends React.Component {
               <EventCard to={`/admin/${resumeLink ? 'resumes' :
                   'events'}/${event.alias}`}
                 highlighted={highlightEvent(event.organisedBy)}
-                header={`Organised By ${event.organisedBy}`}
+                header={`Organized By ${event.organisedBy}`}
                 image={event.logo.url}
                 title={event.name}
                 subtext={`${event.users} Registered ${event.users === 1 ?
