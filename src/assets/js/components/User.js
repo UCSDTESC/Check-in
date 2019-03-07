@@ -101,8 +101,10 @@ class User extends React.Component {
   renderGPAFields(event) {
     return (
       <React.Fragment>
-        {event.options.requireGPA && this.renderFormField('GPA', 'gpa', 'col-sm-4')}
-        {event.options.requireMajorGPA && this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
+        {event.options.requireGPA &&
+          this.renderFormField('GPA', 'gpa', 'col-sm-4')}
+        {event.options.requireMajorGPA &&
+          this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
       </React.Fragment>
     );
   }
@@ -110,10 +112,20 @@ class User extends React.Component {
   renderCustomQuestions(questions) {
     return (
       questions.map(q => (
-        this.renderFormField(q.question, `customQuestionResponses[${q._id}]`, 'col-12')
+        this.renderFormField(q.question,
+          `customQuestionResponses[${q._id}]`, 'col-12', 'text', 'col-12')
       ))
     );
   }
+
+  renderCustomCheckboxes(questions) {
+    return (
+      questions.map(q => (
+        this.renderFormCheckbox(q.question,
+          `customQuestionResponses[${q._id}]`, 'col-12', 'col-12')
+      ))
+    );
+  };
 
   render() {
     const {handleSubmit, pristine, reset, submitting, event} = this.props;
@@ -236,7 +248,7 @@ class User extends React.Component {
             {event.customQuestions[QuestionTypes.QUESTION_CHECKBOX] &&
               <div className="col-12 col-lg">
                 <h5>Check Box Questions</h5>
-                {this.renderCustomQuestions(event.customQuestions
+                {this.renderCustomCheckboxes(event.customQuestions
                   [QuestionTypes.QUESTION_CHECKBOX])}
               </div>
             }
