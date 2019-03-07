@@ -176,7 +176,6 @@ export const checkinUser = (id, eventAlias) =>
 export const registerUser = (eventAlias, user) => {
   const {customQuestionResponses} = user;
   user.customQuestionResponses = JSON.stringify(customQuestionResponses);
-  console.log(user)
   let baseReq = request
     .post('/register/' + eventAlias)
     .use(apiPrefix)
