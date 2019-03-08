@@ -192,11 +192,6 @@ var UserSchema = new Schema({
     required: false,
     displayName: 'Major GPA'
   },
-  // Declares the user's responses to the event's custom questions
-  customQuestionResponses: {
-    type: Map,
-    of: 'String'
-  },
 
   whyEventResponse: {
     type: String,

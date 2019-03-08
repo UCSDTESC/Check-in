@@ -9,15 +9,14 @@ const generatePassword = require('password-generator');
 const upload = require('../config/uploads')();
 const logging = require('../config/logging');
 
-const {roleAuth, roles, questionTypes, getRole, isOrganiser, isSponsor,
-  exportApplicantInfo, getResumeConditions, PUBLIC_EVENT_FIELDS} = require('./helper');
+const {roleAuth, roles, getRole, isOrganiser, isSponsor, exportApplicantInfo,
+  getResumeConditions, PUBLIC_EVENT_FIELDS} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
 const Download = mongoose.model('Download');
 const Event = mongoose.model('Event');
 const User = mongoose.model('User');
-const Question = mongoose.model('Question');
 
 const requireAuth = passport.authenticate('adminJwt', {session: false});
 
@@ -88,103 +87,15 @@ module.exports = function(app) {
       return query
         .populate('organisers')
         .populate('sponsors')
-        .populate('customQuestions.longText')
-        .populate('customQuestions.shortText')
-        .populate('customQuestions.checkBox')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(addEventStatistics)
         .then(events => res.json(events));
     });
 
-  api.post('/admin/customQuestion/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.question || !req.body.type) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      const {question, type} = req.body;
-
-      return new Question(question)
-        .save()
-        .then(newQuestion => {
-          const {customQuestions} = req.event;
-
-          switch (type) {
-          case questionTypes.QUESTION_LONG:
-            customQuestions.longText.push(newQuestion);
-            break;
-          case questionTypes.QUESTION_SHORT:
-            customQuestions.shortText.push(newQuestion);
-            break;
-          case questionTypes.QUESTION_CHECKBOX:
-            customQuestions.checkBox.push(newQuestion);
-            break;
-          default:
-            return Errors.respondUserError(res, Errors.INVALID_QUESTION_TYPE);
-          }
-
-          return req.event.save();
-        })
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(() => res.json({success : true}));
-    });
-
-  api.put('/admin/customQuestion/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.question) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      const {question} = req.body;
-
-      return Question
-        .findByIdAndUpdate(question._id, question)
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(() => res.json({success : true}));
-    });
-
-  api.delete('/admin/customQuestion/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.question || !req.body.type) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      const {question, type} = req.body;
-
-      return Question
-        .delete(question)
-        .exec()
-        .then(() => {
-          const {customQuestions} = req.event;
-
-          switch (type) {
-          case questionTypes.QUESTION_LONG:
-            customQuestions.longText.pull(question._id);
-            break;
-          case questionTypes.QUESTION_SHORT:
-            customQuestions.shortText.pull(question._id);
-            break;
-          case questionTypes.QUESTION_CHECKBOX:
-            customQuestions.checkBox.pull(question._id);
-            break;
-          default:
-            return Errors.respondUserError(res, Errors.INVALID_QUESTION_TYPE);
-          }
-
-          return req.event.save();
-        })
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(() => res.json({success: true}));
-    });
-
   api.get('/admin/events/:eventAlias',
     (req, res) => {
       return Event.findOne({'alias': req.params.eventAlias})
-        .populate('customQuestions.longText')
-        .populate('customQuestions.shortText')
-        .populate('customQuestions.checkBox')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(event => {
@@ -192,7 +103,18 @@ module.exports = function(app) {
             return Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
           }
 
-          return res.json(event);
+          return res.json({
+            _id: event._id,
+            name: event.name,
+            logo: event.logo,
+            alias: event.alias,
+            homepage: event.homepage,
+            description: event.description,
+            email: event.email,
+            closeTime: event.closeTime,
+            checkinWaiver: event.checkinWaiver,
+            options: event.options
+          });
         });
     });
 
@@ -319,18 +241,7 @@ module.exports = function(app) {
 
       return query
         .populate('account')
-        .populate({
-          path: 'event',
-          populate: [{
-            path: 'customQuestions.longText'
-          },
-          {
-            path: 'customQuestions.shortText'
-          },
-          {
-            path: 'customQuestions.checkBox'
-          }]
-        })
+        .populate('event')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(users => res.json(users));
@@ -445,7 +356,7 @@ module.exports = function(app) {
     });
 
   api.get('/admins', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    (_, res) =>
+    (req, res) =>
       Admin.find({deleted: {$ne: true}})
         .select('username role')
         .sort({createdAt: -1})

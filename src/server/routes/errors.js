@@ -31,7 +31,6 @@ module.exports = (logging) => {
       'event',
     RESUME_UPDATE_ERROR: 'There was an error updating your resume',
     NO_STATUS_SENT: 'There was no status sent in the request',
-    INSTITUTION_NOT_PROVIDED: 'You must provide a University or High School',
-    INVALID_QUESTION_TYPE: 'The question type you provided is not supported'
+    INSTITUTION_NOT_PROVIDED: 'You must provide a University or High School'
   };
 };

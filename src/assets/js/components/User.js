@@ -12,8 +12,6 @@ import {
 
 import {getRole, Roles} from '~/static/Roles';
 
-import {QuestionTypes} from '~/static/Questions';
-
 import CheckboxButton from './CheckboxButton';
 
 class User extends React.Component {
@@ -101,31 +99,11 @@ class User extends React.Component {
   renderGPAFields(event) {
     return (
       <React.Fragment>
-        {event.options.requireGPA &&
-          this.renderFormField('GPA', 'gpa', 'col-sm-4')}
-        {event.options.requireMajorGPA &&
-          this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
+        {event.options.requireGPA && this.renderFormField('GPA', 'gpa', 'col-sm-4')}
+        {event.options.requireMajorGPA && this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
       </React.Fragment>
     );
   }
-
-  renderCustomQuestions(questions) {
-    return (
-      questions.map(q => (
-        this.renderFormField(q.question,
-          `customQuestionResponses[${q._id}]`, 'col-12', 'text', 'col-12')
-      ))
-    );
-  }
-
-  renderCustomCheckboxes(questions) {
-    return (
-      questions.map(q => (
-        this.renderFormCheckbox(q.question,
-          `customQuestionResponses[${q._id}]`, 'col-12', 'col-12')
-      ))
-    );
-  };
 
   render() {
     const {handleSubmit, pristine, reset, submitting, event} = this.props;
@@ -228,33 +206,6 @@ class User extends React.Component {
                   </React.Fragment>
                 }
               </div>
-            </div>
-          </div>
-          <div className="row">
-            {event.customQuestions[QuestionTypes.QUESTION_LONG] &&
-              <div className="col-12 col-lg">
-                <h5>Long Text Questions</h5>
-                {this.renderCustomQuestions(event.customQuestions
-                  [QuestionTypes.QUESTION_LONG])}
-              </div>
-            }
-            {event.customQuestions[QuestionTypes.QUESTION_SHORT] &&
-              <div className="col-12 col-lg">
-                <h5>Short Text Questions</h5>
-                {this.renderCustomQuestions(event.customQuestions
-                  [QuestionTypes.QUESTION_SHORT])}
-              </div>
-            }
-            {event.customQuestions[QuestionTypes.QUESTION_CHECKBOX] &&
-              <div className="col-12 col-lg">
-                <h5>Check Box Questions</h5>
-                {this.renderCustomCheckboxes(event.customQuestions
-                  [QuestionTypes.QUESTION_CHECKBOX])}
-              </div>
-            }
-          </div>
-          <div className="row">
-            <div className="col-12">
               <button type="submit"
                 className="btn rounded-button rounded-button--small"
                 disabled={pristine || submitting}>Apply</button>

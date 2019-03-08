@@ -174,13 +174,10 @@ export const checkinUser = (id, eventAlias) =>
  * @returns {Promise} A promise of the request.
  */
 export const registerUser = (eventAlias, user) => {
-  const {customQuestionResponses} = user;
-  user.customQuestionResponses = JSON.stringify(customQuestionResponses);
   let baseReq = request
     .post('/register/' + eventAlias)
     .use(apiPrefix)
     .field(user);
-
   if (user.resume && user.resume.length > 0) {
     baseReq = baseReq.attach('resume', user.resume[0]);
   }
@@ -322,47 +319,6 @@ export const addNewOrganiser = (eventAlias, adminId) =>
   promisify(request
     .post('/admin/addOrganiser/' + eventAlias)
     .send({admin: adminId})
-    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .use(apiPrefix)
-    .use(nocache));
-
-/**
- * Add a new custom question to a given event.
- * @param {String} eventAlias The alias for the event.
- * @param {Object} question The question object to post.
- * @param {String} type The question type.
- */
-export const addCustomQuestion = (eventAlias, question, type) =>
-  promisify(request
-    .post('/admin/customQuestion/' + eventAlias)
-    .send({question, type})
-    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .use(apiPrefix)
-    .use(nocache));
-
-/**
- * Update a custom question for a given event.
- * @param {String} eventAlias The alias for the event.
- * @param {Object} question The updated question object.
- */
-export const updateCustomQuestion = (eventAlias, question) =>
-  promisify(request
-    .put('/admin/customQuestion/' + eventAlias)
-    .send({question})
-    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
-    .use(apiPrefix)
-    .use(nocache));
-
-/**
- * Delet a custom question from a given event.
- * @param {String} eventAlias The alias for the event.
- * @param {Object} question The existing question to delete.
- * @param {String} type The question type.
- */
-export const deleteCustomQuestion = (eventAlias, question, type) =>
-  promisify(request
-    .delete('/admin/customQuestion/' + eventAlias)
-    .send({question, type})
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));

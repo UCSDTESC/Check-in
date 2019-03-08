@@ -28,16 +28,14 @@ class CheckboxButton extends React.Component {
 
   render() {
     const {value} = this.state;
-    const isChecked = value || value === 'true';
 
-    let active = isChecked ? 'active' : '';
-    let text = isChecked ? 'True' : 'False';
+    let active = value ? 'active' : '';
+    let text = value ? 'True' : 'False';
     return (
       <div className="btn-group-toggle" data-toggle="buttons">
         <label className={`btn btn-outline-primary ${active}`}
           onClick={() => this.updateValue()}>
-          <input type="checkbox" checked={isChecked}
-            autoComplete="off" /> {text}
+          <input type="checkbox" checked={value} autoComplete="off" /> {text}
         </label>
       </div>
     );

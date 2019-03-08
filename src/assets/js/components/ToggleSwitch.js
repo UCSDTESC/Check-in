@@ -6,8 +6,7 @@ class ToggleSwitch extends React.Component {
   static propTypes = {
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func,
-    className: PropTypes.string,
-    disabled: PropTypes.bool 
+    className: PropTypes.string
   };
 
   componentWillMount() {
@@ -28,15 +27,14 @@ class ToggleSwitch extends React.Component {
   }
 
   render() {
-    let {checked, disabled} = this.props;
+    let {checked} = this.props;
 
     return (
       <div className={`switch ${this.props.className}`} >
         <input id={this.state.id}
           className="toggle-switch toggle-switch-round-flat"
           type="checkbox" onChange={this.toggle}
-          checked={checked} 
-          disabled={disabled}
+          checked={checked}
           />
         <label htmlFor={this.state.id}></label>
       </div>

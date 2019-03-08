@@ -4,8 +4,6 @@ var S3 = require('mongoose-crate-s3');
 mongoose.Promise = require('q').Promise;
 var mongooseDelete = require('mongoose-delete');
 
-var {questionTypes} = require('../routes/helper');
-
 var Schema = mongoose.Schema;
 
 var EventSchema = new Schema({
@@ -112,20 +110,6 @@ var EventSchema = new Schema({
       type: Boolean,
       default: false
     }
-  },
-  customQuestions: {
-    [questionTypes.QUESTION_LONG]: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Question'
-    }],
-    [questionTypes.QUESTION_SHORT]: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Question'
-    }],
-    [questionTypes.QUESTION_CHECKBOX]: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Question'
-    }]
   }
 }, {timestamps: true});
 

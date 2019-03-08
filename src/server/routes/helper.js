@@ -13,12 +13,6 @@ const roles = {
   ROLE_MEMBER: 'Member'
 };
 
-const questionTypes = {
-  QUESTION_LONG: 'longText',
-  QUESTION_SHORT: 'shortText',
-  QUESTION_CHECKBOX: 'checkBox'
-};
-
 const ADMIN_JWT_TIMEOUT = 3 * 60 * 60;
 const USER_JWT_TIMEOUT = 7 * 24 * 60 * 60;
 
@@ -209,7 +203,6 @@ function exportApplicantInfo(users, archive, finalize) {
 
 module.exports = {
   roles,
-  questionTypes,
   setUserInfo,
   getRole,
   roleAuth,

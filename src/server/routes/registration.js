@@ -69,7 +69,6 @@ module.exports = function(app) {
       user.teammates.push(values.team3.toLowerCase());
     }
 
-    user.customQuestionResponses = JSON.parse(values.customQuestionResponses)
     return values;
   };
 
@@ -90,6 +89,7 @@ module.exports = function(app) {
 
         event = found;
         values = req.body;
+
         return req.body;
       }, err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then((values) => Account.findOne({email: {
