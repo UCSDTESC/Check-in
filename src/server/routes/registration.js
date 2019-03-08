@@ -69,7 +69,8 @@ module.exports = function(app) {
       user.teammates.push(values.team3.toLowerCase());
     }
 
-    user.customQuestionResponses = JSON.parse(values.customQuestionResponses)
+    user.customQuestionResponses = !!values.customQuestionResponses ?
+      JSON.parse(values.customQuestionResponses) : {};
     return values;
   };
 
