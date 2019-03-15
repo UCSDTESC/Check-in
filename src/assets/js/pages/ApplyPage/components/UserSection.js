@@ -42,9 +42,12 @@ class UserSection extends React.Component {
     return (<span>
       {fields.createRow(
         fields.createColumn('col-sm-12',
-          fields.createLabel(`I authorize you to share my application/registration information for event administration, ranking,
-            MLH administration, pre- and post-event informational e-mails, and occasional messages about hackathons in-line
-            with the MLH Privacy Policy. I further I agree to the terms of both the MLH Contest Terms and Conditions and the MLH Privacy Policy.`)
+          fields.createLabel(`I authorize you to share my
+            application/registration information for event administration,
+            ranking, MLH administration, pre- and post-event informational
+            e-mails, and occasional messages about hackathons in-line with the
+            MLH Privacy Policy. I further I agree to the terms of both the MLH
+            Contest Terms and Conditions and the MLH Privacy Policy.`)
         )
       )}
 
@@ -54,7 +57,8 @@ class UserSection extends React.Component {
           <span>
             I agree to the&nbsp;
             <a className="sd-link__underline sd-link__hover-purple"
-              href="https://git.io/v7bCA" target="_blank" rel="noopener noreferrer">
+              href="https://git.io/v7bCA" target="_blank"
+              rel="noopener noreferrer">
                 MLH Data Sharing Policy
             </a>.
           </span>
@@ -128,7 +132,8 @@ class UserSection extends React.Component {
 
       {submitError && fields.createRow(
         fields.createColumn('col-sm-12',
-          fields.createError(submitError.message + ' (Your Resume Upload Might Be Too Big)')
+          fields.createError(submitError.message +
+            ' (Your Resume Upload Might Be Too Big)')
         )
       )}
     </form>);

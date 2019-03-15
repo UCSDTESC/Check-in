@@ -2,8 +2,10 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {VictoryPie, VictoryTooltip, VictoryTheme} from 'victory';
 
-export default class GenderStatistics extends React.Component {
+const PIE_CHART_COLOURS =
+  ['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC'];
 
+export default class GenderStatistics extends React.Component {
   static propTypes = {
     event: PropTypes.object.isRequired,
     statistics: PropTypes.object,
@@ -43,12 +45,13 @@ export default class GenderStatistics extends React.Component {
           <div className="col-12 event-page__pie">
 
             <VictoryPie
-              colorScale={['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC']}
+              colorScale={PIE_CHART_COLOURS}
               labelComponent={<VictoryTooltip />}
               labelRadius={130}
               innerRadius={100}
               padAngle={3}
-              labels={p => `${p.gender}: ${p.number} | ${(p.number / totalNum * 100).toFixed(2)}%`}
+              labels={p => `${p.gender}: ${p.number} | ${(p.number /
+                totalNum * 100).toFixed(2)}%`}
               data={genderData}
               x="gender"
               y="number"

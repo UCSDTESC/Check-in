@@ -73,12 +73,12 @@ class ApplyPage extends React.Component {
     this.setState({page: page});
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.loadEventInformation();
     this.loadPageFromHash();
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     this.loadPageFromHash();
   }
 

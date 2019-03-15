@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import FA from 'react-fontawesome';
 import {Link} from 'react-router-dom';
 
 export default class CheckinStatistics extends React.Component {
