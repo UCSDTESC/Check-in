@@ -116,6 +116,14 @@ class ResponseSection extends React.Component {
         )
       )}
 
+      {fields.createRow(
+        fields.createColumn('col-12',
+          fields.createLabel('T-Shirt Size (Unisex)'),
+          fields.createTShirtSizePicker()
+        )
+      )}
+
+
       {customQuestions && fields.createRow(
         this.renderCustomQuestions(customQuestions,
           QuestionTypes.QUESTION_LONG))}
@@ -136,25 +144,6 @@ class ResponseSection extends React.Component {
       {customQuestions && fields.createRow(
         this.renderCustomQuestions(customQuestions,
           QuestionTypes.QUESTION_CHECKBOX))}
-
-      {options.allowOutOfState && fields.createRow(
-        fields.createColumn('col-lg-12',
-          fields.createLabel('I will be travelling from outside the '+
-              'San Diego county'),
-          fields.createRadio('outOfState', true, 'Yes'),
-          fields.createRadio('outOfState', false, 'No')
-        )
-      )}
-
-      {options.allowOutOfState &&
-        <Fields names={['outOfState']} component={this.showCity} />}
-
-      {fields.createRow(
-        fields.createColumn('col-12',
-          fields.createLabel('T-Shirt Size (Unisex)'),
-          fields.createTShirtSizePicker()
-        )
-      )}
 
       {options.allowTeammates && fields.createRow(
         fields.createColumn('col-sm-12',

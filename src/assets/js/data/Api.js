@@ -175,7 +175,9 @@ export const checkinUser = (id, eventAlias) =>
  */
 export const registerUser = (eventAlias, user) => {
   const {customQuestionResponses} = user;
-  user.customQuestionResponses = JSON.stringify(customQuestionResponses);
+  // Ensure it doesn't push an undefined field
+  user.customQuestionResponses = customQuestionResponses
+    ? JSON.stringify(customQuestionResponses) : '';
   let baseReq = request
     .post('/register/' + eventAlias)
     .use(apiPrefix)

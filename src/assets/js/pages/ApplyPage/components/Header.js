@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default class Header extends React.Component {
   static propTypes = {
     name: PropTypes.string.isRequired,
-    logo: PropTypes.string.isRequired,
+    logo: PropTypes.object.isRequired,
     description: PropTypes.string.isRequired
   };
 
