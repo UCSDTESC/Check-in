@@ -110,8 +110,8 @@ class ResponseSection extends React.Component {
 
       {options.requireExtraCurriculars && fields.createRow(
         fields.createColumn('col-sm-12',
-          fields.createLabel('Please put down any extra curriculars or Student' +
-            ' Organizations you are affiliated with', true),
+          fields.createLabel('Please put down any extra curriculars or Student'
+            +' Organizations you are affiliated with', true),
           fields.createTextArea('extraCurriculars', 'Extra Curriculars')
         )
       )}
@@ -130,8 +130,8 @@ class ResponseSection extends React.Component {
 
       {options.requireClassRequirement && fields.createRow(
         fields.createColumn('col-lg-12',
-          fields.createLabel('Have you taken an Advanced Data Structures (CSE 100)' +
-            ' or equivalent class?'),
+          fields.createLabel('Have you taken an Advanced Data Structures ' +
+            '(CSE 100) or equivalent class?'),
           fields.createRadio('classRequirement', true, 'Yes'),
           fields.createRadio('classRequirement', false, 'No')
         )

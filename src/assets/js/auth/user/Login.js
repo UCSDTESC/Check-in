@@ -33,7 +33,7 @@ class Login extends React.Component {
     };
   }
 
-  componentWillReceiveProps(newProps) {
+  componentDidReceiveProps(newProps) {
     // Show error message if new one appears
     if (newProps.errorMessage) {
       this.setState({

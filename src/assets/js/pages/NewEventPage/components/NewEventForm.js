@@ -26,7 +26,8 @@ class NewEventForm extends Component {
         fields.createRow(
           fields.createColumn('col-sm-12',
             fields.createLabel('Third Party Text', false),
-            fields.createInput('thirdPartyText', 'This Event is Organised By Your Org..')
+            fields.createInput('thirdPartyText',
+              'This Event is Organised By Your Org..')
           )
         )
       );
@@ -79,7 +80,9 @@ class NewEventForm extends Component {
         {fields.createRow(
           fields.createColumn('col-md-12',
             fields.createLabel('Event Description'),
-            fields.createInput('description', "SD Hacks 9001 is UC San Diego's Premier Annual Collegiate Hackathon!")
+            fields.createInput('description',
+              `SD Hacks 9001 is UC San Diego's Premier Annual
+              Collegiate Hackathon!`)
           )
         )}
         {fields.createRow(

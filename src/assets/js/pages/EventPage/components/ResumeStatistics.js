@@ -17,7 +17,8 @@ export default class ResumeStatistics extends React.Component {
   renderHelpTooltip() {
     return (<span>
       <span href="#" id="resumesHelp">
-        <FA name="question-circle" className="text-white" style={{fontSize: '1em'}} />
+        <FA name="question-circle" className="text-white"
+          style={{fontSize: '1em'}} />
       </span>
       <UncontrolledTooltip target="resumesHelp" placement="bottom">
         This only accounts for users that have been sanitised and agree to share

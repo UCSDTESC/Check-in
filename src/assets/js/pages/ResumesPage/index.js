@@ -41,7 +41,7 @@ class ResumesPage extends React.Component {
 
   toggleCompacted = () => this.setState({isCompacted: !this.state.isCompacted});
 
-  componentWillMount() {
+  componentDidMount() {
     let {showLoading, hideLoading, replaceApplicants} = this.props;
 
     showLoading();

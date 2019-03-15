@@ -79,7 +79,8 @@ class NewAdminModal extends React.Component {
 
     return (
       <div>
-        <Modal isOpen={open} toggle={toggle} size="lg" onOpened={this.regeneratePassword}>
+        <Modal isOpen={open} toggle={toggle} size="lg"
+          onOpened={this.regeneratePassword}>
           <form onSubmit={handleSubmit}>
             <ModalHeader toggle={toggle}>
               New {lockRole ? lockRole : 'Admin'}

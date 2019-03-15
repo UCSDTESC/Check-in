@@ -40,7 +40,7 @@ class UserPage extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     document.body.classList.add('user-page__body');
 
     let {showLoading, hideLoading, getCurrentUser} = this.props;
