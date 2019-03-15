@@ -50,9 +50,7 @@ class NewEventPage extends React.Component {
     return (
       <div className="page page--admin">
         <div className="event-page__above">
-          {this.state.err && <UncontrolledAlert color="danger">
-            {this.state.err}
-          </UncontrolledAlert>}
+          {this.state.err && <UncontrolledAlert color="danger">{this.state.err}</UncontrolledAlert>}
         </div>
         <div className="sd-form__header-text text-center mt-3 mb-5">
           <h1>Create A New Event</h1>

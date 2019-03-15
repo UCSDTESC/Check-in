@@ -10,8 +10,7 @@ const upload = require('../config/uploads')();
 const logging = require('../config/logging');
 
 const {roleAuth, roles, questionTypes, getRole, isOrganiser, isSponsor,
-  exportApplicantInfo, getResumeConditions, PUBLIC_EVENT_FIELDS}
-  = require('./helper');
+  exportApplicantInfo, getResumeConditions, PUBLIC_EVENT_FIELDS} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const Admin = mongoose.model('Admin');
@@ -367,9 +366,7 @@ module.exports = function(app) {
       let event = new Event;
       const {closeTimeDay, closeTimeMonth, closeTimeYear} = req.body;
 
-      ['closeTimeDay', 'closeTimeMonth', 'closeTimeYear', 'logo'].forEach(k =>
-        delete req.body[k]
-      );
+      ['closeTimeDay', 'closeTimeMonth', 'closeTimeYear', 'logo'].forEach(k => delete req.body[k]);
 
       req.body.closeTime = closeTimeYear + '-' +
       closeTimeMonth.padStart(2, '0') + '-' +
@@ -389,8 +386,7 @@ module.exports = function(app) {
             .catch(err => {
               if (err.name === 'ValidationError') {
                 for (var field in err.errors) {
-                  return Errors.respondUserError(res,
-                    err.errors[field].message);
+                  return Errors.respondUserError(res, err.errors[field].message);
                 }
               }
               return Errors.respondError(res, err, Errors.DATABASE_ERROR);
@@ -476,8 +472,7 @@ module.exports = function(app) {
   api.get('/sponsors/applicants/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_SPONSOR), isSponsor, (req, res) =>
       User.find(getResumeConditions(req),
-        'firstName lastName university year gender major' +
-        ' resume.url status account')
+        'firstName lastName university year gender major resume.url status account')
         .populate('account')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))

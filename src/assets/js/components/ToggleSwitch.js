@@ -7,10 +7,10 @@ class ToggleSwitch extends React.Component {
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func,
     className: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool 
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({
       id: UUID.v4()
     });
@@ -35,7 +35,7 @@ class ToggleSwitch extends React.Component {
         <input id={this.state.id}
           className="toggle-switch toggle-switch-round-flat"
           type="checkbox" onChange={this.toggle}
-          checked={checked}
+          checked={checked} 
           disabled={disabled}
           />
         <label htmlFor={this.state.id}></label>

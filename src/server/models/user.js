@@ -168,8 +168,7 @@ var UserSchema = new Schema({
     required: false,
     displayName: 'Race'
   },
-  // Declares whether or not the user has taken the class specified in the
-  // application
+  // Declares whether or not the user has taken the class specified in the application
   classRequirement: {
     type: Boolean,
     default: false,
@@ -225,7 +224,7 @@ UserSchema.plugin(crate, {
   }
 });
 
-UserSchema.methods.csvFlatten = function() {
+UserSchema.methods.csvFlatten = function(cb) {
   const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
     'gender', 'phone', 'university', 'pid', 'major', 'year', 'github',
     'website', 'shareResume', 'food', 'diet', 'shirtSize', 'availableBus',

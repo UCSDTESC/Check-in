@@ -13,7 +13,7 @@ class CheckboxButton extends React.Component {
     };
   }
 
-  componentDidReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {
     this.setState({value: nextProps.input.value});
   }
 

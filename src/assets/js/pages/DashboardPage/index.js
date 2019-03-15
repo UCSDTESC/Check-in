@@ -22,7 +22,7 @@ class DashboardPage extends React.Component {
     user: PropTypes.object.isRequired
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.showLoading();
 
     this.props.loadAllAdminEvents()

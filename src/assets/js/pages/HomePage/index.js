@@ -22,9 +22,11 @@ class HomePage extends React.Component {
     authenticated: PropTypes.bool
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.showLoading();
+  }
 
+  componentDidMount() {
     this.props.loadAllPublicEvents()
       .then(this.optionalLoadUserEvents)
       .catch(console.error)

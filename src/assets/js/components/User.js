@@ -204,11 +204,9 @@ class User extends React.Component {
               <div className="row my-2 pt-2">
                 {event.options.requireClassRequirement &&
                   <React.Fragment>
-                    <div className="col-sm-8">This user has completed Advanced
-                      Data Structures (CSE 100)</div>
+                    <div className="col-sm-8">This user has completed Advanced Data Structures (CSE 100)</div>
                     <div className="col-sm-4 d-flex justify-content-center">
-                      {this.renderFormCheckbox('', 'classRequirement',
-                        'ml-auto')}
+                      {this.renderFormCheckbox('', 'classRequirement', 'ml-auto')}
                     </div>
                   </React.Fragment>
                 }

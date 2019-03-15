@@ -7,8 +7,7 @@ const logging = require('../config/logging');
 const upload = require('../config/uploads')();
 var {createTESCEmail} = require('../config/mailer')();
 
-const {setUserInfo, PUBLIC_EVENT_FIELDS, USER_JWT_TIMEOUT} =
-  require('./helper');
+const {setUserInfo, PUBLIC_EVENT_FIELDS, USER_JWT_TIMEOUT} = require('./helper');
 const Errors = require('./errors')(logging);
 
 const User = mongoose.model('User');

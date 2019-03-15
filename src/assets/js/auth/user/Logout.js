@@ -14,7 +14,7 @@ class LogoutPage extends React.Component {
     dispatch: PropTypes.func.isRequired
   };
 
-  componentDidMount() {
+  componentWillMount() {
     this.props.dispatch(logoutUser());
   }
 

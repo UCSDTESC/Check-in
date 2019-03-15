@@ -13,7 +13,7 @@ import {addUsers} from '../UsersPage/actions';
 
 import {loadAllAdminEvents} from '~/actions';
 
-import {loadAllUsers} from '~/data/Api';
+import {loadAllUsers, checkinUser} from '~/data/Api';
 
 import {userCheckin} from './actions';
 
@@ -55,7 +55,7 @@ class CheckinPage extends React.Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     let {users, event} = this.props;
 
     if (!users.length) {
@@ -140,10 +140,7 @@ class CheckinPage extends React.Component {
     }
 
     if (data === this.state.lastUser) {
-      return this.setState({
-        errorMessage: 'User has already checked in',
-        wasSuccessful: false
-      });
+      return this.setState({errorMessage: 'User has already checked in', wasSuccessful: false});
     }
 
     this.setState({

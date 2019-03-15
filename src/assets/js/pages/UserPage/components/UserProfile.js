@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {Field, reduxForm} from 'redux-form';
 
+import Loading from '~/components/Loading';
+
 import FileField from '~/components/FileField';
 
 import {Event as EventPropType} from '~/proptypes';
@@ -271,7 +273,7 @@ class UserProfile extends React.Component {
             <div className="order-2 order-md-1 col-md-10 col-lg-8">
               <h1>Your {' '}
                 <a href={user.event.homepage} className="sd-link__underline"
-                  target="_blank" rel="noopener noreferrer">
+                  target="_blank">
                   {user.event.name}
                 </a>
                 {' '} Application</h1>

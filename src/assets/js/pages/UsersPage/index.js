@@ -7,8 +7,7 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
 
-import {addColumn, updateUser, removeColumn, addAvailableColumns}
-  from './actions';
+import {addColumn, updateUser, removeColumn, addAvailableColumns} from './actions';
 
 import {loadAllUsers, loadColumns} from '~/data/Api';
 
