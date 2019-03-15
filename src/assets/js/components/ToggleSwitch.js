@@ -10,10 +10,12 @@ class ToggleSwitch extends React.Component {
     disabled: PropTypes.bool
   };
 
-  componentDidMount() {
-    this.setState({
+  constructor(props) {
+    super(props);
+
+    this.state = {
       id: UUID.v4()
-    });
+    };
   }
 
   /**
