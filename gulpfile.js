@@ -60,7 +60,8 @@ gulp.task('eslint', function() {
   return gulp.src(paths.js)
     .pipe(plumber(plumberOptions))
     .pipe(eslint())
-    .pipe(eslint.format());
+    .pipe(eslint.format())
+    .pipe(eslint.failAfterError());
 });
 
 gulp.task('nodemon', ['css'], function(cb) {
