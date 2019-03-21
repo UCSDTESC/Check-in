@@ -142,7 +142,7 @@ module.exports = function(app) {
 
   api.get('/admin/exportTeams/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser, (req, res) => {
-      return User.find({event: req.event, deleted: false, sanitized: true})
+      return User.find({event: req.event, deleted: false})
         .populate('account')
         .exec()
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))

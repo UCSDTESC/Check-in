@@ -1,14 +1,17 @@
 function convertToCSV(masterList) {
     // members 2-4 are optional
-    let csv = `"team","member1",["member2",["member3",["member4"]]]\n`;
+    let csv = `"member1", "member2", "member3", "member4"\n`;
   
     // for each team, append all of its members onto a single line
+    let i = 0;
     masterList.forEach((group) => {
-      group.team.forEach((member, i) => {
+      i = 0;
+      group.team.forEach((member) => {
         csv += `"${member}"`;
         if(i !== group.team.size - 1) {
           csv += ",";
         }
+        i++;
       });
       csv += "\n";
     });
@@ -99,7 +102,6 @@ function bfs(vertices) {
 function buildVertices(users) {
   console.log('Building Graph Vertices');
   let vertices = {};
-
   users.forEach((user, i) => {
     let currNodeChildren = [];
     if (user.teammates && user.teammates.length > 0) {

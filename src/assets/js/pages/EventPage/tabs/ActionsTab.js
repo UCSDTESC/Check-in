@@ -37,7 +37,6 @@ export default class ActionsTab extends React.Component {
         var url = URL.createObjectURL(blob);
         var link = document.createElement('a');
         link.href = url;
-        // need to put admin username into the teams filename - "teams-${eventAlias}-${admin}"
         link.setAttribute('download', `teams-${eventAlias}-${Date.now()}.csv`);
         document.body.appendChild(link);
 
@@ -63,13 +62,12 @@ export default class ActionsTab extends React.Component {
     return (
       <div className="event-tab">
         <div className="row">
-          <div className="col-lg-3 col-md-6">
+          <div className="col-lg-4 col-md-6">
             <h2>User Actions</h2>
-            <a className={`btn event-page__btn rounded-button
-              rounded-button--small`} onClick={this.exportUsers}
-              href="#">Export All Users</a>
-            <br /> <br />
-            <a className={`btn event-page__btn rounded-button
+              <a className={`btn event-page__btn rounded-button
+                rounded-button--small`} onClick={this.exportUsers}
+                href="#">Export All Users</a>
+              <a className={`btn event-page__btn rounded-button
               rounded-button--small`} onClick={this.exportTeams}
               href="#">Export Teams</a>
           </div>
