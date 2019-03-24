@@ -368,3 +368,11 @@ export const deleteCustomQuestion = (eventAlias, question, type) =>
     .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
+
+export const sendAcceptanceEmail = (forEvent, toEmail) =>
+  promisify(request
+    .post('/mail/acceptance')
+    .use(apiPrefix)
+    .send({forEvent, toEmail})
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
+    .use(nocache));

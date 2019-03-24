@@ -4,15 +4,20 @@ import PropTypes from 'prop-types';
 import {compose} from 'redux';
 import {connect} from 'react-redux';
 import {default as UUID} from 'node-uuid';
+import FA from 'react-fontawesome';
 
 import {
   User as UserPropType,
   Event as EventPropType
 } from '~/proptypes';
 
+import {sendAcceptanceEmail} from '~/data/Api';
+
 import {getRole, Roles} from '~/static/Roles';
 
 import {QuestionTypes} from '~/static/Questions';
+
+import {isAcceptable} from '~/static/ApplicationStatus';
 
 import CheckboxButton from './CheckboxButton';
 
@@ -127,11 +132,33 @@ class User extends React.Component {
     );
   };
 
+  onSendAcceptance = (user, event) => {
+
+    //TODO show a success and error state
+    sendAcceptanceEmail(event._id, user.account.email);
+  }
+
   render() {
-    const {handleSubmit, pristine, reset, submitting, event} = this.props;
+    const {handleSubmit, pristine, reset,
+      submitting, event, user} = this.props;
+
     return (
       <div>
-        <h3>User <small>{this.props.user._id}</small></h3>
+        <div className="row">
+          <div className="col-md-6">
+            <h3>User <small>{user._id}</small></h3>
+          </div>
+          <div className="col-md-6 d-flex flex-row-reverse">
+            {isAcceptable(user.status) && <button className={`btn px-2 w-auto 
+                rounded-button rounded-button--small`}
+              onClick={() => this.onSendAcceptance(user, event)}
+              >
+              <FA name="envelope" className="mr-2" />
+                Send Acceptance
+              </button>}
+          </div>
+        </div>
+
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-6">
@@ -141,7 +168,7 @@ class User extends React.Component {
                   Email
                 </label>
                 <div key="1" className="col-sm-4 col-form-label">
-                  {this.props.user.account.email}
+                  {user.account.email}
                 </div>
               </div>
               <h5>Portfolio</h5>
@@ -189,7 +216,7 @@ class User extends React.Component {
                 {this.renderFormField('Birthdate', 'birthdate', 'col-sm-4')}
                 {this.renderFormField('Year', 'year', 'col-sm-4')}
                 {this.renderFormField('Phone', 'phone', 'col-sm-4', 'tel')}
-                {this.renderInstitution(this.props.user)}
+                {this.renderInstitution(user)}
                 {this.renderFormField('Major', 'major', 'col-sm-4')}
                 {this.renderFormField('Shirt Size', 'shirtSize', 'col-sm-4')}
                 {this.renderFormField('Diet', 'diet', 'col-sm-4')}

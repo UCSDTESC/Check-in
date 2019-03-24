@@ -29,6 +29,7 @@ module.exports = function(app) {
   require('./user')(api);
   require('./auth')(api);
   require('./registration')(api);
+  require('./mail')(api);
 
   var zipper = new S3Archiver({
     accessKeyId: process.env.S3_KEY,

@@ -24,6 +24,7 @@
   },
   "homepage": "https://github.com/UCSDTESC/Check-in#readme",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.2.1",
     "babel-loader": "^7.1.2",
