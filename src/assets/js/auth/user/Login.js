@@ -33,9 +33,9 @@ class Login extends React.Component {
     };
   }
 
-  componentDidReceiveProps(newProps) {
+  componentDidUpdate(oldProps) {
     // Show error message if new one appears
-    if (newProps.errorMessage) {
+    if (oldProps.errorMessage !== this.props.errorMessage) {
       this.setState({
         isErrorVisible: true
       });
