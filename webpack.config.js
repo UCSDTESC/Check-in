@@ -10,7 +10,11 @@ module.exports = {
     vendor: [
       '@babel/polyfill'
     ],
-    main: [path.join(__dirname, 'src/assets/js/main.js')]
+    main: [
+      'react-hot-loader/patch',
+      'webpack-hot-middleware/client?timeout=2000&path=/__webpack_hmr',
+      path.join(__dirname, 'src/assets/js/main.tsx')
+    ]
   },
   output: {
     path: path.join(__dirname, 'src/assets/public/js'),
@@ -21,10 +25,10 @@ module.exports = {
   },
   watch: true,
   plugins: [
-    new ForkTsCheckerWebpackPlugin(),
-    new webpack.NamedModulesPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('development')
@@ -38,11 +42,18 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
-      '~': path.join(__dirname, '/src/assets/js')
+      '~': path.join(__dirname, '/src/assets/js'),
+      'Root': path.join(__dirname, '/src/assets/js')
     }
   },
   module: {
     rules: [
+      {
+        enforce: "pre",                
+        test: /\.(ts|tsx)?$/, 
+        loader: 'tslint-loader',
+        exclude: /node_modules/
+      }, 
       {
         test: /\.(j|t)sx?$/,
         exclude: /node_modules/,

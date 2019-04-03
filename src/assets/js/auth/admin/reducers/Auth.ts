@@ -1,11 +1,13 @@
+import {Reducer} from 'redux';
 import {
   AUTH_ERROR,
   AUTH_USER,
   UNAUTH_USER,
   FINISH_AUTH
 } from '../actions/types';
+import { AdminAuthState } from './types';
 
-const INITIAL_STATE = {
+const INITIAL_STATE:AdminAuthState = {
   error: '',
   message: '',
   authenticated: false,
@@ -13,7 +15,7 @@ const INITIAL_STATE = {
   authFinished: false
 };
 
-export default function (state = INITIAL_STATE, action) {
+const adminAuth: Reducer<AdminAuthState> = (state:AdminAuthState = INITIAL_STATE, action) => {
   switch (action.type) {
   case AUTH_USER:
     return {...state, error: '', message: '', authenticated: true,
@@ -28,3 +30,5 @@ export default function (state = INITIAL_STATE, action) {
 
   return state;
 };
+
+export default adminAuth;

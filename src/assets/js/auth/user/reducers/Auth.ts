@@ -1,3 +1,4 @@
+import {Reducer} from 'redux';
 import {
   AUTH_ERROR,
   AUTH_USER,
@@ -5,8 +6,9 @@ import {
   REMOVE_ERROR,
   FINISH_AUTH
 } from '../actions/types';
+import { UserAuthState } from './types';
 
-const INITIAL_STATE = {
+const INITIAL_STATE:UserAuthState = {
   error: '',
   message: '',
   authenticated: false,
@@ -14,7 +16,7 @@ const INITIAL_STATE = {
   authFinished: false
 };
 
-export default function (state = INITIAL_STATE, action) {
+const userAuth: Reducer<UserAuthState> = (state:UserAuthState = INITIAL_STATE, action) => {
   switch (action.type) {
   case AUTH_USER:
     return {...state, error: '', message: '', authenticated: true,
@@ -31,3 +33,5 @@ export default function (state = INITIAL_STATE, action) {
 
   return state;
 };
+
+export default userAuth;

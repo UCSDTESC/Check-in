@@ -1,10 +1,12 @@
+import {Reducer} from 'redux';
 import * as Types from '~/actions/types';
+import { GeneralState } from './types';
 
-const INITIAL_STATE = {
+const INITIAL_STATE: GeneralState = {
   editing: false
 };
 
-export default function (state = INITIAL_STATE, action) {
+const general: Reducer<GeneralState> = (state: GeneralState = INITIAL_STATE, action) => {
   switch (action.type) {
   case Types.ENABLE_EDITING:
     return {...state, editing: true};
@@ -16,3 +18,5 @@ export default function (state = INITIAL_STATE, action) {
 
   return state;
 };
+
+export default general;

@@ -1,16 +1,20 @@
 import {Route, Redirect} from 'react-router-dom';
 import React from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-class PrivateRoute extends React.Component {
-  static propTypes = {
-    authenticated: PropTypes.bool.isRequired,
-    authFinished: PropTypes.bool.isRequired,
-    component: PropTypes.func.isRequired,
-    path: PropTypes.string.isRequired
-  };
+interface StateProps {
+  authenticated: boolean,
+  authFinished: boolean
+};
 
+interface PrivateRouteProps {
+  component: Function,
+  path: string
+};
+
+type Props = StateProps & PrivateRouteProps;
+
+class PrivateRoute extends React.Component<Props> {
   render() {
     return (
       <Route path={this.props.path} render={props => {
@@ -28,11 +32,11 @@ class PrivateRoute extends React.Component {
   }
 };
 
-function mapStateToProps(state) {
+function mapStateToProps(state: StateProps) {
   return {
     authenticated: state.admin.auth.authenticated,
     authFinished: state.admin.auth.authFinished
   };
 }
 
-export default connect(mapStateToProps)(PrivateRoute);
+export default connect<StateProps>(mapStateToProps)(PrivateRoute);

@@ -1,21 +1,23 @@
+import {Reducer} from 'redux';
 import * as ActionTypes from '~/actions/types';
+import { EventsState } from './types';
 
-const initialState = {};
+const initialState: EventsState = {};
 
-const events = (state = initialState, action) => {
+const events: Reducer<EventsState> = (state: EventsState = initialState, action) => {
   switch (action.type) {
-  case ActionTypes.ADD_EVENT:
+  case ActionTypes.ADD_ADMIN_EVENT:
     return {
       ...state,
       [action.event.alias]: action.event
     };
-  case ActionTypes.ADD_EVENTS:
+  case ActionTypes.ADD_ADMIN_EVENTS:
     return action.events
       .reduce((result, current) => {
         result[current.alias] = current;
         return result;
       }, state);
-  case ActionTypes.REPLACE_EVENTS:
+  case ActionTypes.REPLACE_ADMIN_EVENTS:
     return action.events
       .reduce((result, current) => {
         result[current.alias] = current;

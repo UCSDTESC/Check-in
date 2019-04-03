@@ -1,6 +1,8 @@
+import {Reducer} from 'redux';
 import * as ActionTypes from '../actions/types';
+import { ColumnsState } from './types';
 
-const initialState = {
+const initialState:ColumnsState = {
   loadedAvailable: false,
   available: [
     {
@@ -31,7 +33,7 @@ const initialState = {
     }
   ]};
 
-const userColumns = (state = initialState, action) => {
+const userColumns: Reducer<ColumnsState> = (state:ColumnsState = initialState, action) => {
   switch (action.type) {
   case (ActionTypes.ADD_AVAILABLE_COLUMNS):
     return {

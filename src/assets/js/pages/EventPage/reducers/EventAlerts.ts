@@ -1,8 +1,10 @@
+import {Reducer} from 'redux';
 import * as ActionTypes from '../actions/types';
+import { EventAlertsState } from './types';
 
-const initialState = {};
+const initialState:EventAlertsState = {};
 
-export default (state = initialState, action) => {
+const eventAlerts: Reducer<EventAlertsState> = (state:EventAlertsState = initialState, action) => {
   switch (action.type) {
   case ActionTypes.ADD_EVENT_ALERT: {
     let newState = Object.assign({}, state);
@@ -41,3 +43,5 @@ export default (state = initialState, action) => {
     return state;
   }
 };
+
+export default eventAlerts;

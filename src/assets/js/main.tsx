@@ -1,12 +1,12 @@
 import {applyMiddleware, compose, createStore} from 'redux';
 import {CookiesProvider} from 'react-cookie';
 import {Provider} from 'react-redux';
-import React from 'react';
+import * as React from 'react';
 import {BrowserRouter as Router} from 'react-router-dom';
 import reduxThunk from 'redux-thunk';
 import {render} from 'react-dom';
 import LoadingBar from 'react-redux-loading-bar';
-import ReactGA from 'react-ga';
+import * as ReactGA from 'react-ga';
 
 import Routes from './routes';
 import reducer from './reducers';
@@ -26,12 +26,12 @@ let store = createStore(reducer,
 render(
   <CookiesProvider>
     <Provider store={store}>
-      <content>
+      <div>
         <LoadingBar updateTime={100} className="loading-bar" />
         <Router>
           <Routes />
         </Router>
-      </content>
+      </div>
     </Provider>
   </CookiesProvider>,
   document.getElementById('root')

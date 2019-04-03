@@ -1,11 +1,21 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "outDir": "./src/assets/public/js/",
     "sourceMap": true,
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "paths": {
+      "~/*": ["./src/assets/js/*"]
+    },
+    "typeRoots" : [
+      "node_modules/@types/",
+      "./src/assets/js/typings/root.d.ts"
+    ],
+    "allowSyntheticDefaultImports": true
   },
-  "include": ["./src/assets/js/**/*"]
+  "include": ["./src/assets/js/**/*"],
+  "exclude": ["node_modules"]
 }

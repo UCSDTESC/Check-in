@@ -5,6 +5,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import ReactGA from 'react-ga';
+import {hot} from 'react-hot-loader/root';
 
 import PrivateRoute from './PrivateRoute';
 import PrivateUserRoute from './PrivateUserRoute';
@@ -36,6 +37,7 @@ import {authorised as AdminAuthorised} from '~/data/Api';
 import {authorised as UserAuthorised} from '~/data/User';
 
 import CookieTypes from '~/static/Cookies';
+import { ApplicationState } from './reducers';
 
 class Routes extends React.Component {
   static propTypes = {
@@ -177,10 +179,10 @@ class Routes extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: ApplicationState) {
   return {
     authenticated: state.user.auth.authenticated
   };
 }
 
-export default withRouter(connect(mapStateToProps)(withCookies(Routes)));
+export default hot(withRouter(connect(mapStateToProps)(withCookies(Routes))));

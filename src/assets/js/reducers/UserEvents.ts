@@ -1,8 +1,10 @@
+import {Reducer} from 'redux';
 import * as ActionTypes from '~/actions/types';
+import { UserEventsState } from './types';
 
-const initialState = {};
+const initialState: UserEventsState = {};
 
-const events = (state = initialState, action) => {
+const events: Reducer<UserEventsState> = (state: UserEventsState = initialState, action) => {
   switch (action.type) {
   case ActionTypes.REPLACE_USER_EVENTS:
     return action.events

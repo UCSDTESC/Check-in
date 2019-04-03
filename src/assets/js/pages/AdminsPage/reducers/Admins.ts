@@ -1,8 +1,10 @@
+import {Reducer} from 'redux';
 import * as ActionTypes from '../actions/types';
+import { Admin } from '~/static/types';
 
-const initialState = [];
+const initialState:Admin[] = [];
 
-const admins = (state = initialState, action) => {
+const admins: Reducer<Admin[]> = (state:Admin[] = initialState, action) => {
   switch (action.type) {
   case ActionTypes.ADD_ADMINS:
     return [

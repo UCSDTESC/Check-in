@@ -1,8 +1,10 @@
+import {Reducer} from 'redux';
 import * as ActionTypes from '../actions/types';
+import { TESCUser } from '~/static/types';
 
-const initialState = [];
+const initialState: TESCUser[] = [];
 
-const user = (state, action) => {
+const user = (state: TESCUser[], action) => {
   switch (action.type) {
   case ActionTypes.ADD_USERS:
     return action.users;
@@ -13,7 +15,7 @@ const user = (state, action) => {
   }
 };
 
-const users = (state = initialState, action) => {
+const users: Reducer<TESCUser[]> = (state: TESCUser[] = initialState, action) => {
   switch (action.type) {
   case ActionTypes.ADD_USERS:
     return [
