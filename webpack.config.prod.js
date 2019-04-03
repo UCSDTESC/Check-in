@@ -5,18 +5,26 @@ var path = require('path');
 var webpack = require('webpack');
 var combineLoaders = require('webpack-combine-loaders');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
-  entry: [
-    path.join(__dirname, 'src/assets/js/main.js'),
-  ],
+  entry: {
+    vendor: [
+      '@babel/polyfill'
+    ],
+    main: [
+      path.join(__dirname, 'src/assets/js/main.tsx')
+    ],
+  },
   output: {
     path: path.join(__dirname, 'src/public/js'),
     filename: '[name].js',
     publicPath: '/src/assets/public/'
   },
   plugins:[
+    new webpack.NamedModulesPlugin(),
+    new ForkTsCheckerWebpackPlugin(),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
@@ -47,20 +55,21 @@ module.exports = {
     })
   ],
   resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       '~': path.join(__dirname, '/src/assets/js')
     }
   },
   module: {
     loaders: [{
-      test: /\.jsx?$/,
+      test: /\.(j|t)s?(x)?$/,
       exclude: /node_modules/,
-      use: [{
+      use: {
         loader: 'babel-loader',
         options: {
-          'presets': ['react', 'es2015', 'stage-0']
+          cacheDirectory: true
         }
-      }]
+      },
     }, {
       test: /\.json?$/,
       loader: 'json-loader'
