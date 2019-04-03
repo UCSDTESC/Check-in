@@ -3,7 +3,7 @@ import * as Types from '~/actions/types';
 import { GeneralState } from './types';
 
 const INITIAL_STATE: GeneralState = {
-  editing: false
+  editing: false,
 };
 
 const general: Reducer<GeneralState> = (state: GeneralState = INITIAL_STATE, action) => {

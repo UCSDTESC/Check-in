@@ -9,7 +9,7 @@ const checkin: Reducer<TESCUser[]> = (state: TESCUser[] = initialState, action) 
   case ActionTypes.CHECKIN_USER:
     return [...state.filter(x => x._id !== action.user._id), {
       ...action.user,
-      checkedIn: true
+      checkedIn: true,
     }];
   default:
     return state;

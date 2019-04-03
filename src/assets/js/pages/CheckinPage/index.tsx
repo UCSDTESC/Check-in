@@ -61,7 +61,7 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     isModalShowing: false,
     lastUser: '',
     lastName: '',
-    nameApplicants: []
+    nameApplicants: [],
   };
 
   componentDidMount() {
@@ -119,10 +119,10 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
 
   checkinById = (id: string) =>
     Q.promise((resolve, reject) => {
-      let {users, event} = this.props;
+      const {users, event} = this.props;
 
       // Filter by given ID
-      let eligibleUsers = users.filter((user) => user._id === id);
+      const eligibleUsers = users.filter((user) => user._id === id);
 
       if (eligibleUsers.length !== 1) {
         return reject(id);
@@ -315,22 +315,22 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
   }
 }
 
-function mapStateToProps(state: ApplicationState, ownProps: Props) {
+const mapStateToProps = (state: ApplicationState, ownProps: Props) => {
   return {
     auth: state.admin.auth,
     user: state.admin.auth.user,
     users: state.admin.users,
     event: state.admin.events[ownProps.match.params.eventAlias],
   };
-}
+};
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
     addUsers: bindActionCreators(addUsers, dispatch),
     loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
-    userCheckin: bindActionCreators(userCheckin, dispatch)
+    userCheckin: bindActionCreators(userCheckin, dispatch),
   };
 };
 

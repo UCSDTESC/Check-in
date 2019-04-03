@@ -10,18 +10,30 @@ import Hero from '~/components/Hero';
 
 import CurrentEvents from './components/CurrentEvents';
 import UserEvents from './components/UserEvents';
+import { ApplicationState } from '~/reducers';
+import { EventsState } from '~/reducers/Admin/types';
+import { UserEventsState } from '~/reducers/types';
+import { TESCEvent } from '~/static/types';
 
-class HomePage extends React.Component {
-  static propTypes = {
-    events: PropTypes.object,
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    loadAllPublicEvents: PropTypes.func.isRequired,
-    loadUserEvents: PropTypes.func.isRequired,
-    userEvents: PropTypes.object,
-    authenticated: PropTypes.bool
-  };
+interface StateProps {
+  events: EventsState;
+  userEvents: UserEventsState;
+  authenticated: boolean;
+}
 
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
+  loadAllPublicEvents: () => Promise<any>;
+  loadUserEvents: () => Promise<any>;
+}
+
+interface HomePageProps {
+}
+
+type Props = StateProps & DispatchProps & HomePageProps;
+
+class HomePage extends React.Component<Props> {
   componentDidMount() {
     this.props.showLoading();
 
@@ -41,7 +53,7 @@ class HomePage extends React.Component {
     return true;
   }
 
-  userEvents(events) {
+  userEvents(events: TESCEvent[]) {
     return (
       <div className="col-md-4">
         <UserEvents events={events} />
@@ -49,20 +61,22 @@ class HomePage extends React.Component {
     );
   }
 
-  currentEvents(events, small=false) {
-    return (<div className={small ? 'col-md-8' : 'col-12'}>
-      <CurrentEvents small events={events} />
-    </div>);
+  currentEvents(events: TESCEvent[], small: boolean = false) {
+    return (
+    <div className={small ? 'col-md-8' : 'col-12'}>
+      <CurrentEvents small={true} events={events} />
+    </div>
+    );
   }
 
   render() {
-    let {events, userEvents} = this.props;
+    const {events, userEvents} = this.props;
 
-    let showSidebar = Object.values(userEvents).length > 0;
+    const showSidebar = Object.values(userEvents).length > 0;
 
-    let currentEvents = [];
+    let currentEvents: TESCEvent[] = [];
     if (events) {
-      let userEventNames = Object.values(userEvents).map(event => event.name);
+      const userEventNames = Object.values(userEvents).map(event => event.name);
       currentEvents = Object.values(events).filter(event =>
         new Date(event.closeTime) > new Date() &&
         userEventNames.indexOf(event.name) === -1
@@ -78,24 +92,25 @@ class HomePage extends React.Component {
             {this.currentEvents(currentEvents, showSidebar)}
           </div>
         </div>
-      </div>);
+      </div>
+    );
   }
 }
 
-function mapStateToProps(state) {
+const mapStateToProps = (state: ApplicationState) => {
   return {
     events: state.events,
     userEvents: state.user.events,
-    authenticated: state.user.auth.authenticated
+    authenticated: state.user.auth.authenticated,
   };
 };
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
     loadAllPublicEvents: bindActionCreators(loadAllPublicEvents, dispatch),
-    loadUserEvents: bindActionCreators(loadUserEvents, dispatch)
+    loadUserEvents: bindActionCreators(loadUserEvents, dispatch),
   };
 };
 

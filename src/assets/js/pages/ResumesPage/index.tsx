@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -10,44 +9,48 @@ import {applyResumeFilter} from '~/static/ResumeFilter';
 
 import {loadAllApplicants} from '~/data/Api';
 
-import {Applicants as ApplicantPropType} from '~/proptypes';
-
 import ResumeList from './components/ResumeList';
+import { RouteComponentProps } from 'react-router';
+import { ApplicationState } from '~/reducers';
+import { TESCUser } from '~/static/types';
 
-class ResumesPage extends React.Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        eventAlias: PropTypes.string.isRequired
-      }).isRequired
-    }).isRequired,
+interface StateProps {
+  applicants: TESCUser[];
+  totalApplicants: number;
+}
 
-    replaceApplicants: PropTypes.func.isRequired,
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    updateFiltered: PropTypes.func.isRequired,
-    applicants: PropTypes.arrayOf(PropTypes.shape(
-      ApplicantPropType
-    ).isRequired).isRequired
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
+  replaceApplicants: (arg0: any) => Promise<any>;
+  updateFiltered: (arg0: any) => Promise<any>;
+}
+
+interface ResumesPageProps {
+}
+
+type Props = RouteComponentProps<{
+  eventAlias: string;
+}> & StateProps & DispatchProps & ResumesPageProps;
+
+interface ResumesPageState {
+  isCompacted: boolean;
+}
+
+class ResumesPage extends React.Component<Props, ResumesPageState> {
+  state: Readonly<ResumesPageState> = {
+    isCompacted: false,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isCompacted: false
-    };
-  }
 
   toggleCompacted = () => this.setState({isCompacted: !this.state.isCompacted});
 
   componentDidMount() {
-    let {showLoading, hideLoading, replaceApplicants} = this.props;
+    const {showLoading, hideLoading, replaceApplicants} = this.props;
 
     showLoading();
 
     loadAllApplicants(this.props.match.params.eventAlias)
-      .then(res => {
+      .then((res: TESCUser[]) => {
         res = res.map(x => {
           if (!x.status) {
             x.status = 'No Status';
@@ -60,24 +63,27 @@ class ResumesPage extends React.Component {
       .catch(console.error);
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     if (prevProps.applicants.length !== this.props.applicants.length) {
       this.props.updateFiltered(this.props.applicants.length);
     }
   }
 
   render() {
-    let {applicants} = this.props;
-    let {isCompacted} = this.state;
+    const {applicants} = this.props;
+    const {isCompacted} = this.state;
 
     return (
       <div className="resume-body">
         <div className="d-none d-md-block">
-          <ResumeList isCompacted={isCompacted}
-            onCompactChange={this.toggleCompacted} applicants={applicants} />
+          <ResumeList
+            isCompacted={isCompacted}
+            onCompactChange={this.toggleCompacted}
+            applicants={applicants}
+          />
         </div>
         <div className="resume-body__mobile d-block d-md-none p-4">
-          <h4><i className="fa fa-ban"></i>&nbsp;Unavailable on Mobile</h4>
+          <h4><i className="fa fa-ban" />&nbsp;Unavailable on Mobile</h4>
           <h5>We recommend that you view this page from a computer</h5>
         </div>
       </div>
@@ -85,17 +91,17 @@ class ResumesPage extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  applicants: applyResumeFilter(state.admin.filters,
+const mapStateToProps = (state: ApplicationState) => ({
+  applicants: applyResumeFilter(Object.values(state.admin.filters),
     state.admin.resumes.applicants),
-  totalApplicants: state.admin.resumes.applicants.length
+  totalApplicants: state.admin.resumes.applicants.length,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   replaceApplicants: bindActionCreators(replaceApplicants, dispatch),
   showLoading: bindActionCreators(showLoading, dispatch),
   hideLoading: bindActionCreators(hideLoading, dispatch),
-  updateFiltered: bindActionCreators(replaceFiltered, dispatch)
+  updateFiltered: bindActionCreators(replaceFiltered, dispatch),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResumesPage);

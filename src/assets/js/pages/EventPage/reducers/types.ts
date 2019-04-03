@@ -1,8 +1,8 @@
-import { EventStatistics } from "~/static/types";
+import { EventStatistics } from '~/static/types';
 
 export interface EventStatisticsState {
   [EventName: string]: EventStatistics;
-};
+}
 
 export interface EventAlert {
   message: string;
@@ -13,4 +13,4 @@ export interface EventAlert {
 
 export interface EventAlertsState {
   [EventName: string]: EventAlert;
-};
+}

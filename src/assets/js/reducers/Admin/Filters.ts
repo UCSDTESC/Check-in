@@ -3,25 +3,25 @@ import * as Types from '~/actions/types';
 import { FiltersState } from './types';
 import { FilterOptions, Filter } from '~/static/types';
 
-const INITIAL_STATE:FiltersState = {
-  'university': {
+const INITIAL_STATE: FiltersState = {
+  university: {
     displayName: 'University',
     enabled: false,
     editable: true,
     options: {
-      'The University of California, San Diego': true
-    }
+      'The University of California, San Diego': true,
+    },
   },
-  'major': {
+  major: {
     displayName: 'Major',
     enabled: false,
     editable: true,
     options: {
       'Computer Engineering': false,
       'Computer Science': false,
-    }
+    },
   },
-  'year': {
+  year: {
     displayName: 'Year',
     enabled: false,
     editable: false,
@@ -31,10 +31,10 @@ const INITIAL_STATE:FiltersState = {
       '3': false,
       '4': false,
       '5+': false,
-      'Graduate': false
-    }
+      'Graduate': false,
+    },
   },
-  'gender': {
+  gender: {
     displayName: 'Gender',
     enabled: false,
     editable: false,
@@ -44,8 +44,8 @@ const INITIAL_STATE:FiltersState = {
       'Non-Binary': false,
       'Transgender' : false,
       'I prefer not to say': false,
-      'Other': false
-    }
+      'Other': false,
+    },
   },
 };
 
@@ -63,7 +63,7 @@ function addFilter(state: FiltersState, action) {
   return {...state, [action.name]: {
     displayName: action.displayName,
     enabled: true,
-    options: {}
+    options: {},
   }};
 }
 
@@ -81,7 +81,6 @@ function removeFilter(state: FiltersState, action) {
       return result;
     }, {});
 }
-
 
 /**
  * Enables or disables a given filter.
@@ -223,7 +222,7 @@ function option(options: FilterOptions, action) {
   }
 
   return options;
-};
+}
 
 /**
  * Passes an existing filter onto modifying reducer actions.
@@ -235,7 +234,7 @@ function selectFilter(state: FiltersState, action) {
     return state;
   }
 
-  let filter = state[action.name];
+  const filter = state[action.name];
 
   switch (action.type) {
   case Types.ENABLE_FILTER:
@@ -254,14 +253,14 @@ function selectFilter(state: FiltersState, action) {
   case Types.SELECT_NONE_FILTER_OPTIONS:
     return {...state, [action.name]: {
       ...filter,
-      options: option(filter.options, action)
+      options: option(filter.options, action),
     }};
   }
 
   return {...state, [action.name]: filter};
 }
 
-const filters: Reducer<FiltersState> = (state:FiltersState = INITIAL_STATE, action) => {
+const filters: Reducer<FiltersState> = (state: FiltersState = INITIAL_STATE, action) => {
   switch (action.type) {
   case Types.ADD_FILTER:
     return addFilter(state, action);

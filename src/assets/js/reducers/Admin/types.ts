@@ -1,13 +1,13 @@
-import { TESCEvent, Filter } from "~/static/types";
+import { TESCEvent, Filter } from '~/static/types';
 
 export interface EventsState {
-  [EventName: string]: TESCEvent
-};
+  [EventName: string]: TESCEvent;
+}
 
 export interface FiltersState {
-  [FilterName: string]: Filter
-};
+  [FilterName: string]: Filter;
+}
 
 export interface GeneralState {
-  editing: boolean
-};
+  editing: boolean;
+}

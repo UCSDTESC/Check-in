@@ -19,13 +19,13 @@ const users: Reducer<TESCUser[]> = (state: TESCUser[] = initialState, action) =>
   switch (action.type) {
   case ActionTypes.ADD_USERS:
     return [
-      ...user(undefined, action)
+      ...user(undefined, action),
     ];
   case ActionTypes.UPDATE_USER:
-    let oldUsers = user(state, action);
+    const oldUsers = user(state, action);
     return [
       ...oldUsers,
-      action.user
+      action.user,
     ];
   default:
     return state;

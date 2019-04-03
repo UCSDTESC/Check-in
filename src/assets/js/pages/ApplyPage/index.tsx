@@ -113,7 +113,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
   lookupEmail = (email: string) => {
     if (email.length === 0) {
       this.setState({
-        emailExists: false
+        emailExists: false,
       });
       return;
     }
@@ -132,7 +132,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
    */
   onFinalSubmit = (values) => {
     this.setState({
-      isSubmitting: true
+      isSubmitting: true,
     });
 
     // Clean up values
@@ -154,7 +154,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
       })
       .finally(() => {
         this.setState({
-          isSubmitting: false
+          isSubmitting: false,
         });
       });
   }

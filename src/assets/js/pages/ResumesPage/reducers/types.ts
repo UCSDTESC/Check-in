@@ -1,6 +1,6 @@
-import { TESCUser } from "~/static/types";
+import { TESCUser } from '~/static/types';
 
 export interface ResumesState {
-  filtered: number,
-  applicants: TESCUser[]
-};
+  filtered: number;
+  applicants: TESCUser[];
+}

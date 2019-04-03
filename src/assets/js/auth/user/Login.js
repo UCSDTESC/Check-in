@@ -57,14 +57,14 @@ class Login extends React.Component {
   /**
    * Creates a new alert at the top of the page.
    * @param {String} type The type of alert to display.
-   * @param {String} text The text of the alert.
+   * @param {String} message The text of the alert.
    * @return {Component}
    */
-  renderAlert(type, text) {
+  renderAlert(type, message) {
     return (
-      <div key={text} className="user-login__alert">
+      <div key={message} className="user-login__alert">
         <UncontrolledAlert color={type}>
-          {text}
+          {message}
         </UncontrolledAlert>
       </div>
     );

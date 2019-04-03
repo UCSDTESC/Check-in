@@ -24,6 +24,7 @@ const store = createStore(reducer,
   ));
 
 render(
+  (
   <CookiesProvider>
     <Provider store={store}>
       <div>
@@ -33,6 +34,7 @@ render(
         </Router>
       </div>
     </Provider>
-  </CookiesProvider>,
+  </CookiesProvider>
+  ),
   document.getElementById('root')
 );

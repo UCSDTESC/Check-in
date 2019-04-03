@@ -2,59 +2,57 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Link} from 'react-router-dom';
+import {Link, RouteComponentProps} from 'react-router-dom';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadAllAdminEvents} from '~/actions';
 
-import {addColumn, updateUser, removeColumn, addAvailableColumns}
-  from './actions';
+import {addColumn, updateUser, removeColumn, addAvailableColumns} from './actions';
 
 import {loadAllUsers, loadColumns} from '~/data/Api';
-
-import {Column as ColumnPropTypes, Event as EventPropType} from '~/proptypes';
 
 import Loading from '~/components/Loading';
 
 import ColumnEditor from './components/ColumnEditor';
 import UserList from './components/UserList';
+import { ApplicationState } from '~/reducers';
+import { Column, TESCEvent, TESCUser } from '~/static/types';
 
-class UsersPage extends React.Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        eventAlias: PropTypes.string.isRequired
-      }).isRequired
-    }).isRequired,
+interface StateProps {
+  availableColumns: Column[];
+  activeColumns: Column[];
+  loadedAvailableColumns: boolean;
+  event: TESCEvent;
+}
 
-    loadedAvailableColumns: PropTypes.bool.isRequired,
-    availableColumns: PropTypes.arrayOf(PropTypes.shape(
-      ColumnPropTypes
-    ).isRequired).isRequired,
-    activeColumns: PropTypes.arrayOf(PropTypes.shape(
-      ColumnPropTypes
-    ).isRequired).isRequired,
-    event: PropTypes.shape(EventPropType),
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
+  updateUser: (...args: any) => Promise<any>;
+  addColumn: (...args: any) => Promise<any>;
+  removeColumn: (...args: any) => Promise<any>;
+  addAvailableColumns: (...args: any) => Promise<any>;
+  loadAllAdminEvents: (...args: any) => Promise<any>;
+}
 
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    addColumn: PropTypes.func.isRequired,
-    removeColumn: PropTypes.func.isRequired,
-    addAvailableColumns: PropTypes.func.isRequired,
-    loadAllAdminEvents: PropTypes.func.isRequired,
-    updateUser: PropTypes.func.isRequired
+interface UsersPageProps {
+}
+
+type Props = RouteComponentProps<{
+  eventAlias: string;
+}> & StateProps & DispatchProps & UsersPageProps;
+
+interface UsersPageState {
+  users: TESCUser[];
+}
+
+class UsersPage extends React.Component<Props, UsersPageState> {
+  state: Readonly<UsersPageState> = {
+    users: [],
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      users: []
-    };
-  }
-
   componentDidMount() {
-    let {event, loadedAvailableColumns} = this.props;
+    const {event, loadedAvailableColumns} = this.props;
 
     if (!event) {
       showLoading();
@@ -79,11 +77,11 @@ class UsersPage extends React.Component {
   loadAvailableColumns() {
     loadColumns()
       .then(columns => {
-        let newColumns = Object.entries(columns)
+        const newColumns = Object.entries(columns)
           .reduce((acc, [key, value]) => {
             acc.push({
               Header: value,
-              accessor: key
+              accessor: key,
             });
             return acc;
           }, []);
@@ -95,12 +93,12 @@ class UsersPage extends React.Component {
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    let {showLoading, hideLoading} = this.props;
-    let eventAlias = this.props.match.params.eventAlias;
+    const {showLoading, hideLoading} = this.props;
+    const eventAlias = this.props.match.params.eventAlias;
 
     showLoading();
     loadAllUsers(eventAlias)
-      .then(res => {
+      .then((res: TESCUser[]) => {
         hideLoading();
         return this.setState({users: res});
       });
@@ -110,29 +108,29 @@ class UsersPage extends React.Component {
    * Handles an updated user.
    * @param {Object} user The updated user.
    */
-  onUserUpdate = (user) =>{
+  onUserUpdate = (user: TESCUser) => {
     this.props.updateUser(user)
       .then(() => {
-        let {users} = this.state;
+        const {users} = this.state;
 
         this.setState({
           users: [
             ...users.filter((curr) => curr._id !== user._id),
-            user
-          ]
+            user,
+          ],
         });
       });
   }
 
-  onAddColumn = (column) =>
+  onAddColumn = (column: Column) =>
     this.props.addColumn(column)
 
-  onRemoveColumn = (column) =>
+  onRemoveColumn = (column: Column) =>
     this.props.removeColumn(column)
 
   render() {
-    let {event, activeColumns, availableColumns} = this.props;
-    let {users} = this.state;
+    const {event, activeColumns, availableColumns} = this.props;
+    const {users} = this.state;
 
     if (!event) {
       return (
@@ -150,33 +148,41 @@ class UsersPage extends React.Component {
               </Link> Users</h1>
           </div>
           <div className="col-md-6">
-            <ColumnEditor available={availableColumns} columns={activeColumns}
+            <ColumnEditor
+              available={availableColumns}
+              columns={activeColumns}
               onAddColumn={this.onAddColumn}
-              onDeleteColumn={this.onRemoveColumn} />
+              onDeleteColumn={this.onRemoveColumn}
+            />
           </div>
           <div className="col-md-6">
             <h4>Tools</h4>
-            <button className="btn rounded-button rounded-button--small"
-              onClick={this.loadUsers}>
-              <i className="fa fa-refresh"></i>&nbsp;Refresh
+            <button
+              className="btn rounded-button rounded-button--small"
+              onClick={this.loadUsers}
+            >
+              <i className="fa fa-refresh" />&nbsp;Refresh
             </button>
           </div>
         </div>
-        <UserList users={users} columns={activeColumns}
-          onUserUpdate={this.onUserUpdate} />
+        <UserList
+          users={users}
+          columns={activeColumns}
+          onUserUpdate={this.onUserUpdate}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state: ApplicationState, ownProps: Props) => ({
   availableColumns: state.admin.userColumns.available,
   activeColumns: state.admin.userColumns.active,
   loadedAvailableColumns: state.admin.userColumns.loadedAvailable,
-  event: state.admin.events[ownProps.match.params.eventAlias]
+  event: state.admin.events[ownProps.match.params.eventAlias],
 });
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     updateUser: bindActionCreators(updateUser, dispatch),
     addColumn: bindActionCreators(addColumn, dispatch),
@@ -184,7 +190,7 @@ function mapDispatchToProps(dispatch) {
     addAvailableColumns: bindActionCreators(addAvailableColumns, dispatch),
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch)
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
   };
 };
 

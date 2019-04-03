@@ -93,16 +93,16 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
   }
 }
 
-function mapStateToProps(state: ApplicationState) {
+const mapStateToProps = (state: ApplicationState) => {
   return {
     admins: state.admin.admins,
     editing: state.admin.general.editing,
   };
 };
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
-    replaceAdmins: bindActionCreators(replaceAdmins,dispatch),
+    replaceAdmins: bindActionCreators(replaceAdmins, dispatch),
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
   };

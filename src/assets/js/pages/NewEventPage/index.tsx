@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import {withRouter} from 'react-router';
+import {withRouter, RouteComponentProps} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import {UncontrolledAlert} from 'reactstrap';
@@ -13,28 +13,31 @@ import createValidator from './validate';
 import {registerNewEvent} from '~/data/Api';
 
 import NewEventForm from './components/NewEventForm';
+import { TESCEvent } from '~/static/types';
 
-class NewEventPage extends React.Component {
-  static propTypes = {
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    addEventAlert: PropTypes.func.isRequired,
-    history: PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    match: PropTypes.object.isRequired
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
+  addEventAlert: (...args: any) => Promise<any>;
+}
+
+interface NewEventPageProps {
+}
+
+type Props = RouteComponentProps & DispatchProps & NewEventPageProps;
+
+interface NewEventPageState {
+  err: Error;
+}
+
+class NewEventPage extends React.Component<Props, NewEventPageState> {
+  state: Readonly<NewEventPageState> = {
+    err: null,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      err: null
-    };
-  }
-
-  createNewEvent = (event) => {
+  createNewEvent = (event: TESCEvent) => {
     registerNewEvent(event)
-      .then((res) => {
+      .then((res: TESCEvent) => {
         this.setState({err: null});
         this.props.addEventAlert(res.alias, `Successfully Created ${res.name}`,
           'success', 'Create Event');
@@ -46,7 +49,7 @@ class NewEventPage extends React.Component {
   }
 
   render() {
-    let validator = createValidator();
+    const validator = createValidator();
     return (
       <div className="page page--admin">
         <div className="event-page__above">
@@ -60,8 +63,11 @@ class NewEventPage extends React.Component {
 
         <div className="sd-form__wrapper">
           <div className="sd-form">
-            <NewEventForm validate={validator} onSubmit={this.createNewEvent}
-              initialValues={{organisedBy: 'TESC'}}/>
+            <NewEventForm
+              validate={validator}
+              onSubmit={this.createNewEvent}
+              initialValues={{organisedBy: 'TESC'}}
+            />
           </div>
         </div>
       </div>
@@ -73,8 +79,8 @@ function mapDispatchToProps(dispatch) {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
-    addEventAlert: bindActionCreators(addEventAlert, dispatch)
+    addEventAlert: bindActionCreators(addEventAlert, dispatch),
   };
-};
+}
 
 export default withRouter(connect(null, mapDispatchToProps)(NewEventPage));

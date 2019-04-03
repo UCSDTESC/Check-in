@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {Link} from 'react-router-dom';
+import {Link, RouteComponentProps} from 'react-router-dom';
 import FA from 'react-fontawesome';
 import {Alert, Nav, NavItem, NavLink, UncontrolledTooltip} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
@@ -24,67 +24,78 @@ import StatisticsTab from './tabs/StatisticsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 
-import {Event as EventPropType} from '~/proptypes';
+import { TESCEvent, TESCUser, Admin } from '~/static/types';
+import { ApplicationState } from '~/reducers';
+import { EventAlert, EventStatisticsState, EventAlertsState } from './reducers/types';
 
-class EventPage extends React.Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        eventAlias: PropTypes.string.isRequired
-      }).isRequired
-    }).isRequired,
+interface StateProps {
+  event: TESCEvent;
+  statistics: EventStatisticsState;
+  alerts: EventAlert[];
+}
 
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    loadAllAdminEvents: PropTypes.func.isRequired,
-    updateEventStatistics: PropTypes.func.isRequired,
-    addEventAlert: PropTypes.func.isRequired,
-    removeEventAlert: PropTypes.func.isRequired,
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
+  loadAllAdminEvents: () => Promise<any>;
+  updateEventStatistics: (arg0: any, arg1: any) => Promise<any>;
+  addEventAlert: () => Promise<any>;
+  removeEventAlert: (arg0: any, arg1: any) => Promise<any>;
+}
 
-    event: PropTypes.shape(EventPropType),
-    statistics: PropTypes.object,
-    alerts: PropTypes.array
+interface EventPageProps {
+}
+
+type Props = RouteComponentProps<{
+  eventAlias: string;
+}> & StateProps & DispatchProps & EventPageProps;
+
+interface TabPage {
+  icon: string;
+  name: string;
+  anchor: string;
+  render: (props: Props) => JSX.Element;
+}
+
+interface EventPageState {
+  activeTab: TabPage;
+}
+
+class EventPage extends React.Component<Props, EventPageState> {
+  tabPages: Readonly<TabPage[]> = [
+    {
+      icon: 'wrench',
+      name: 'Actions',
+      anchor: 'actions',
+      render: this.renderActions,
+    } as TabPage,
+    {
+      icon: 'bar-chart',
+      name: 'Statistics',
+      anchor: 'statistics',
+      render: this.renderStatistics,
+    } as TabPage,
+    {
+      icon: 'star',
+      name: 'Administrators',
+      anchor: 'administrators',
+      render: this.renderAdministrators,
+    } as TabPage,
+    {
+      icon: 'cog',
+      name: 'Settings',
+      anchor: 'settings',
+      render: this.renderSettings,
+    } as TabPage,
+  ];
+
+  state: Readonly<EventPageState> = {
+    activeTab: this.tabPages[0],
   };
-
-  constructor(props) {
-    super(props);
-
-    // List of possible tabs
-    this.tabPages = [
-      {
-        icon: 'wrench',
-        name: 'Actions',
-        anchor: 'actions',
-        render: this.renderActions
-      },
-      {
-        icon: 'bar-chart',
-        name: 'Statistics',
-        anchor: 'statistics',
-        render: this.renderStatistics
-      },
-      {
-        icon: 'star',
-        name: 'Administrators',
-        anchor: 'administrators',
-        render: this.renderAdministrators
-      },
-      {
-        icon: 'cog',
-        name: 'Settings',
-        anchor: 'settings',
-        render: this.renderSettings
-      }
-    ];
-
-    this.state = {
-      activeTab: this.tabPages[0]
-    };
-  }
 
   componentDidUpdate() {
     this.changeTab();
-  };
+  }
 
   /**
    * Changes the tab based on the URL hash.
@@ -100,7 +111,7 @@ class EventPage extends React.Component {
     hash = hash.substring(1);
 
     if (hash !== activeTab.anchor) {
-      let matchingTab = this.tabPages.find((page) => page.anchor === hash);
+      const matchingTab = this.tabPages.find((page) => page.anchor === hash);
       if (matchingTab === undefined) {
         return;
       }
@@ -110,19 +121,19 @@ class EventPage extends React.Component {
 
   /**
    * Renders the alerts for the current event.
-   * @param {String} message The message to display in the alert.
-   * @param {String} severity The severity of alert to show.
-   * @param {String} title The title of the alert.
-   * @param {String} timestamp The given timestamp for this alert.
+   * @param {EventAlert} alert The alert to render.
    * @returns {Component}
    */
-  renderAlert(message, severity='danger', title, timestamp) {
+  renderAlert(alert: EventAlert) {
+    const {message, severity, title, timestamp} = alert;
     if (message) {
       return (
-        <div className="event-page__error" key={timestamp}>
-          <Alert color={severity}
+        <div className="event-page__error" key={timestamp.toString()}>
+          <Alert
+            color={severity}
             toggle={() => this.dismissAlert(timestamp)}
-            key={timestamp} >
+            key={timestamp}
+          >
             <div className="container">
               <strong>{title}</strong> {message}
             </div>
@@ -134,10 +145,10 @@ class EventPage extends React.Component {
 
   /**
    * Dismisses a visible alert and removes from redux store.
-   * @param {Integer} timestamp The timestamp key associated with the alert.
+   * @param {Date} timestamp The timestamp key associated with the alert.
    */
-  dismissAlert = (timestamp) => {
-    let {event, removeEventAlert} = this.props;
+  dismissAlert = (timestamp: Date) => {
+    const {event, removeEventAlert} = this.props;
     removeEventAlert(event.alias, timestamp);
   };
 
@@ -157,13 +168,13 @@ class EventPage extends React.Component {
         .catch(console.error)
         .finally(hideLoading);
     }
-  };
+  }
 
   /**
    * Renders the event tab for actions.
    * @returns {Component} The action tab.
    */
-  renderActions(props) {
+  renderActions(props: Props) {
     return (<ActionsTab {...props} />);
   }
 
@@ -171,7 +182,7 @@ class EventPage extends React.Component {
    * Renders the event tab for insights.
    * @returns {Component} The insights tab.
    */
-  renderInsights(props) {
+  renderInsights(props: Props) {
     return (<InsightsTab {...props} />);
   }
 
@@ -179,7 +190,7 @@ class EventPage extends React.Component {
    * Renders the event tab for statistics.
    * @returns {Component} The statistics tab.
    */
-  renderStatistics(props) {
+  renderStatistics(props: Props) {
     return (<StatisticsTab {...props} />);
   }
 
@@ -187,7 +198,7 @@ class EventPage extends React.Component {
    * Renders the event tab for administrators.
    * @returns {Component} The administrators tab.
    */
-  renderAdministrators(props) {
+  renderAdministrators(props: Props) {
     return (<AdministratorsTab {...props} />);
   }
 
@@ -195,13 +206,13 @@ class EventPage extends React.Component {
    * Renders the event tab for settings.
    * @returns {Component} The settings tab.
    */
-  renderSettings(props) {
+  renderSettings(props: Props) {
     return (<SettingsTab {...props} />);
   }
 
   render() {
-    let {event, statistics, alerts} = this.props;
-    let {activeTab} = this.state;
+    const {event, statistics, alerts} = this.props;
+    const {activeTab} = this.state;
     if (!event) {
       return (
         <Loading />
@@ -213,34 +224,47 @@ class EventPage extends React.Component {
     return (
       <div className="page page--admin event-page d-flex flex-column h-100">
         <div className="event-page__above">
-          {alerts.map(({message, severity, title, timestamp}) =>
-            this.renderAlert(message, severity, title, timestamp))}
+          {alerts.map(this.renderAlert)}
         </div>
         <div className="container-fluid">
           <div className="row event-page__header">
-            <div className={`col-6 col-xl-auto d-flex flex-column flex-xl-row
-              align-items-center justify-content-center`}>
+            <div
+              className={`col-6 col-xl-auto d-flex flex-column flex-xl-row
+              align-items-center justify-content-center`}
+            >
               <img className="event-page__logo" src={event.logo.url} />
-              <a target="_blank" rel="noopener noreferrer"
-                href={event.homepage}>
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={event.homepage}
+              >
                 <h1 className="event-page__title">{event.name}</h1>
               </a>
             </div>
-            <div className={`col-6 col-xl-auto ml-auto d-flex flex-column
-              flex-xl-row align-items-center justify-content-center`}>
-              <Link to={`/admin/users/${event.alias}`} className={`btn
-                event-page__btn rounded-button rounded-button--small
-                d-none d-md-block`}>
+            <div
+              className={`col-6 col-xl-auto ml-auto d-flex flex-column
+              flex-xl-row align-items-center justify-content-center`}
+            >
+              <Link
+                to={`/admin/users/${event.alias}`}
+                className={`btn event-page__btn rounded-button
+                rounded-button--small d-none d-md-block`}
+              >
                 View All Users
               </Link>
 
               <CheckinStatistics event={event} statistics={statistics}/>
-              <ResumeStatistics event={event} statistics={statistics}
-                className="d-none d-md-block" />
+              <ResumeStatistics
+                event={event}
+                statistics={statistics}
+                className="d-none d-md-block"
+              />
 
-              <Link to={`/register/${event.alias}`} className={`btn
-                event-page__btn rounded-button rounded-button--small
-                rounded-button--arrow`}>
+              <Link
+                to={`/register/${event.alias}`}
+                className={`btn event-page__btn rounded-button
+                rounded-button--small rounded-button--arrow`}
+              >
                 Go To Form
               </Link>
             </div>
@@ -248,14 +272,18 @@ class EventPage extends React.Component {
 
           <div className="row event-tab__container">
             <div className="col-12 col-lg">
-              <Nav tabs className="event-tab__tabs">
+              <Nav tabs={true} className="event-tab__tabs">
                 {this.tabPages.map((page) => (
                   <NavItem key={page.anchor} className="event-tab__nav">
-                    <NavLink href={`#${page.anchor}`}
+                    <NavLink
+                      href={`#${page.anchor}`}
                       className="event-tab__link"
-                      active={page === activeTab}>
-                      <FA name={page.icon}
-                        className="event-tab__icon" /> {page.name}
+                      active={page === activeTab}
+                    >
+                      <FA
+                        name={page.icon}
+                        className="event-tab__icon"
+                      /> {page.name}
                     </NavLink>
                   </NavItem>
                 ))}
@@ -266,9 +294,11 @@ class EventPage extends React.Component {
               <div className="ml-auto event-tab__alert my-auto">
                     Third Party Event
                 <span className="m-2">
-                  <FA name="question-circle" id={'ThirdPartyTooltip'}></FA>
-                  <UncontrolledTooltip placement="right"
-                    target={'ThirdPartyTooltip'}>
+                  <FA name="question-circle" id={'ThirdPartyTooltip'} />
+                  <UncontrolledTooltip
+                    placement="right"
+                    target={'ThirdPartyTooltip'}
+                  >
                     This event is not run by TESC.
                   </UncontrolledTooltip>
                 </span>
@@ -283,25 +313,25 @@ class EventPage extends React.Component {
   }
 }
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state: ApplicationState, ownProps: Props) => {
   const eventAlias = ownProps.match.params.eventAlias;
   return {
     event: state.admin.events[eventAlias],
     statistics: eventAlias in state.admin.eventStatistics ?
       state.admin.eventStatistics[eventAlias] : {},
     alerts: eventAlias in state.admin.eventAlerts ?
-      state.admin.eventAlerts[eventAlias] : []
+      state.admin.eventAlerts[eventAlias] : [] as EventAlert[],
   };
 };
 
-function mapDispatchToProps(dispatch) {
+const mapDispatchToProps = (dispatch) => {
   return {
     showLoading: bindActionCreators(showLoading, dispatch),
     hideLoading: bindActionCreators(hideLoading, dispatch),
     loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
     updateEventStatistics: bindActionCreators(updateEventStatistics, dispatch),
     addEventAlert: bindActionCreators(addEventAlert, dispatch),
-    removeEventAlert: bindActionCreators(removeEventAlert, dispatch)
+    removeEventAlert: bindActionCreators(removeEventAlert, dispatch),
   };
 };
 

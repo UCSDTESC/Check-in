@@ -2,57 +2,57 @@ import {Reducer} from 'redux';
 import * as ActionTypes from '../actions/types';
 import { ColumnsState } from './types';
 
-const initialState:ColumnsState = {
+const initialState: ColumnsState = {
   loadedAvailable: false,
   available: [
     {
       Header: 'Email',
-      accessor: 'account.email'
-    }
+      accessor: 'account.email',
+    },
   ],
   active: [
     {
       Header: 'First Name',
-      accessor: 'firstName'
+      accessor: 'firstName',
     },
     {
       Header: 'Last Name',
-      accessor: 'lastName'
+      accessor: 'lastName',
     },
     {
       Header: 'Github',
-      accessor: 'github'
+      accessor: 'github',
     },
     {
       Header: 'Email',
-      accessor: 'account.email'
+      accessor: 'account.email',
     },
     {
       Header: 'Major',
-      accessor: 'major'
-    }
+      accessor: 'major',
+    },
   ]};
 
-const userColumns: Reducer<ColumnsState> = (state:ColumnsState = initialState, action) => {
+const userColumns: Reducer<ColumnsState> = (state: ColumnsState = initialState, action) => {
   switch (action.type) {
   case (ActionTypes.ADD_AVAILABLE_COLUMNS):
     return {
       ...state,
       available: [...state.available, ...action.columns],
-      loadedAvailable: true
+      loadedAvailable: true,
     };
   case (ActionTypes.ADD_COLUMN):
     return {
       ...state,
       active: [
         ...state.active,
-        action.column
+        action.column,
       ]};
   case (ActionTypes.REMOVE_COLUMN):
     return {
       ...state,
       active: Object.values(state.active)
-        .filter(key => key.accessor !== action.columnName)
+        .filter(key => key.accessor !== action.columnName),
     };
   }
   return state;

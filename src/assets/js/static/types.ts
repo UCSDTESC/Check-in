@@ -1,3 +1,5 @@
+import { Roles } from './Roles';
+
 export interface EventStatistics {
   count: number;
   universities: number;
@@ -30,7 +32,8 @@ export interface Filter {
 export interface Admin {
   _id: string;
   username: string;
-  role: string;
+  role: Roles;
+  checkin: boolean;
 }
 
 export interface Question {

@@ -8,15 +8,15 @@ import {
 } from '../actions/types';
 import { UserAuthState } from './types';
 
-const INITIAL_STATE:UserAuthState = {
+const INITIAL_STATE: UserAuthState = {
   error: '',
   message: '',
   authenticated: false,
   user: {},
-  authFinished: false
+  authFinished: false,
 };
 
-const userAuth: Reducer<UserAuthState> = (state:UserAuthState = INITIAL_STATE, action) => {
+const userAuth: Reducer<UserAuthState> = (state: UserAuthState = INITIAL_STATE, action) => {
   switch (action.type) {
   case AUTH_USER:
     return {...state, error: '', message: '', authenticated: true,
