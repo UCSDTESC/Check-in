@@ -1,5 +1,4 @@
-import PropTypes from 'prop-types';
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import QrReader from 'react-qr-reader';
 import Q from 'q';
 import {connect} from 'react-redux';
@@ -17,46 +16,56 @@ import {loadAllUsers} from '~/data/Api';
 
 import {userCheckin} from './actions';
 
-import {User as UserPropTypes, Event as EventPropType} from '~/proptypes';
+import { RouteComponentProps } from 'react-router-dom';
+import { TESCUser, Admin, TESCEvent } from '~/static/types';
+import { ApplicationState } from '~/reducers';
+import { AdminAuthState } from '~/auth/admin/reducers/types';
 
-class CheckinPage extends React.Component {
-  static propTypes = {
-    match: PropTypes.shape({
-      params: PropTypes.shape({
-        eventAlias: PropTypes.string.isRequired
-      }).isRequired
-    }).isRequired,
+interface StateProps {
+  auth: AdminAuthState;
+  user: {} | Admin;
+  users: TESCUser[];
+  event: TESCEvent;
+}
 
-    auth: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    users: PropTypes.arrayOf(PropTypes.shape(
-      UserPropTypes
-    ).isRequired).isRequired,
-    event : PropTypes.shape(EventPropType),
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
+  addUsers: (arg0: any) => Promise<any>;
+  loadAllAdminEvents: () => Promise<any>;
+  userCheckin: (arg0: any, arg1: any) => Promise<any>;
+}
 
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    addUsers: PropTypes.func.isRequired,
-    loadAllAdminEvents: PropTypes.func.isRequired,
-    userCheckin: PropTypes.func.isRequired
+interface CheckinPageProps {
+}
+
+type Props = RouteComponentProps<{
+  eventAlias: string;
+}> & StateProps & DispatchProps & CheckinPageProps;
+
+interface CheckinPageState {
+  isProcessing: boolean;
+  wasSuccessful: boolean;
+  errorMessage: string;
+  isModalShowing: boolean;
+  lastUser: string;
+  lastName: string;
+  nameApplicants: TESCUser[];
+}
+
+class CheckinPage extends React.Component<Props, CheckinPageState> {
+  state: Readonly<CheckinPageState> = {
+    isProcessing: false,
+    wasSuccessful: false,
+    errorMessage: '',
+    isModalShowing: false,
+    lastUser: '',
+    lastName: '',
+    nameApplicants: []
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isProcessing: false,
-      wasSuccessful: false,
-      errorMessage: '',
-      isModalShowing: false,
-      lastUser: '',
-      lastName: '',
-      nameApplicants: []
-    };
-  }
-
   componentDidMount() {
-    let {users, event} = this.props;
+    const {users, event} = this.props;
 
     if (!users.length) {
       this.loadUsers();
@@ -75,7 +84,7 @@ class CheckinPage extends React.Component {
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    let {showLoading, hideLoading, addUsers} = this.props;
+    const {showLoading, hideLoading, addUsers} = this.props;
 
     showLoading();
 
@@ -86,7 +95,7 @@ class CheckinPage extends React.Component {
       });
   }
 
-  validateUser = (user) =>
+  validateUser = (user: TESCUser) =>
     Q.promise((resolve, reject) => {
       // Ensure they're eligible
       if (user.status !== 'Confirmed') {
@@ -108,7 +117,7 @@ class CheckinPage extends React.Component {
       return resolve(user);
     })
 
-  checkinById = (id) =>
+  checkinById = (id: string) =>
     Q.promise((resolve, reject) => {
       let {users, event} = this.props;
 
@@ -134,7 +143,7 @@ class CheckinPage extends React.Component {
         .catch(reject);
     });
 
-  onScan = (data) => {
+  onScan = (data: string) => {
     if (data === null || this.state.isProcessing) {
       return;
     }
@@ -142,7 +151,7 @@ class CheckinPage extends React.Component {
     if (data === this.state.lastUser) {
       return this.setState({
         errorMessage: 'User has already checked in',
-        wasSuccessful: false
+        wasSuccessful: false,
       });
     }
 
@@ -151,14 +160,14 @@ class CheckinPage extends React.Component {
       wasSuccessful: false,
       errorMessage: '',
       lastUser: data,
-      lastName: ''
+      lastName: '',
     });
 
-    this.toggleModal(data);
+    this.toggleModal();
   }
 
-  nameApplicants = (event) => {
-    let {users} = this.props;
+  nameApplicants = (event: {target: HTMLInputElement}) => {
+    const {users} = this.props;
 
     const name = event.target.value;
     if (name.length < 3) {
@@ -166,64 +175,64 @@ class CheckinPage extends React.Component {
     }
 
     // Filter by given name
-    let eligibleUsers = users.filter((user) =>
-      (user.firstName + ' ' + user.lastName).indexOf(name) !== -1);
+    const eligibleUsers = users.filter((user) =>
+      (`${user.firstName} ${user.lastName}`).indexOf(name) !== -1);
     this.setState({
-      nameApplicants: eligibleUsers
+      nameApplicants: eligibleUsers,
     });
   }
 
-  selectApplicant = (id) => {
+  selectApplicant = (id: string) => {
     this.onScan(id);
 
     this.setState({
-      nameApplicants: []
+      nameApplicants: [],
     });
   }
 
   toggleModal = () =>
     this.setState({
-      isModalShowing: !this.state.isModalShowing
+      isModalShowing: !this.state.isModalShowing,
     });
 
   startCheckin = () => {
     this.setState({
-      isModalShowing: false
+      isModalShowing: false,
     });
 
     this.checkinById(this.state.lastUser)
       .then((user) => {
         this.setState({
           wasSuccessful: true,
-          lastName: user.firstName + ' ' + user.lastName
+          lastName: `${user.firstName} ${user.lastName}`,
         });
       })
-      .catch((err) => {
+      .catch((err: string) => {
         this.setState({
           wasSuccessful: false,
-          errorMessage: err
+          errorMessage: err,
         });
       })
       .finally(() => this.setState({
-        isProcessing: false
+        isProcessing: false,
       }))
-      .catch((err) => {
+      .catch((err: string) => {
         this.setState({
           wasSuccessful : false,
-          errorMessage : err
+          errorMessage : err,
         });
       });
   }
 
   render() {
-    let {users, event} = this.props;
-    let {errorMessage, wasSuccessful, lastName, nameApplicants, isModalShowing}
+    const {users, event} = this.props;
+    const {errorMessage, wasSuccessful, lastName, nameApplicants, isModalShowing}
       = this.state;
 
     const previewStyle = {
       maxWidth: '100%',
       maxHeight: '50vh',
-      display: 'inline'
+      display: 'inline',
     };
 
     if (!users.length) {
@@ -235,12 +244,18 @@ class CheckinPage extends React.Component {
     return (
 
       <div className="full-height">
-        <Modal isOpen={isModalShowing} toggle={this.toggleModal}
-          className="modal-lg">
+        <Modal
+          isOpen={isModalShowing}
+          toggle={this.toggleModal}
+          className="modal-lg"
+        >
           <ModalHeader toggle={this.toggleModal}>Liability Waiver</ModalHeader>
           <ModalBody>
-            <object width="100%" height="500px"
-              data={event.checkinWaiver}></object>
+            <object
+              width="100%"
+              height="500px"
+              data={event.checkinWaiver}
+            />
           </ModalBody>t
           <ModalFooter>
             <Button color="primary" onClick={this.startCheckin}>I agree</Button>
@@ -273,13 +288,19 @@ class CheckinPage extends React.Component {
           <div className="row">
             <div className="col-12 text-center">
               <h2>Manual Checkin</h2>
-              <input type="text" placeholder="Name" className="rounded-input"
-                onChange={this.nameApplicants} />
+              <input
+                type="text"
+                placeholder="Name"
+                className="rounded-input"
+                onChange={this.nameApplicants}
+              />
               <ul className="checkin__list">
                 {nameApplicants.map((app) => (
                   <li className="checkin__list-user" key={app._id}>
-                    <button className="rounded-button rounded-button--small"
-                      onClick={() => this.selectApplicant(app._id)}>
+                    <button
+                      className="rounded-button rounded-button--small"
+                      onClick={() => this.selectApplicant(app._id)}
+                    >
                       {app.firstName} {app.lastName}<br/>
                       <small>{app.account.email}</small>
                     </button>
@@ -294,12 +315,12 @@ class CheckinPage extends React.Component {
   }
 }
 
-function mapStateToProps(state, ownProps) {
+function mapStateToProps(state: ApplicationState, ownProps: Props) {
   return {
     auth: state.admin.auth,
     user: state.admin.auth.user,
     users: state.admin.users,
-    event: state.admin.events[ownProps.match.params.eventAlias]
+    event: state.admin.events[ownProps.match.params.eventAlias],
   };
 }
 

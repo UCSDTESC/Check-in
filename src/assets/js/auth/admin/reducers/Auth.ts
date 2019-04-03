@@ -7,15 +7,15 @@ import {
 } from '../actions/types';
 import { AdminAuthState } from './types';
 
-const INITIAL_STATE:AdminAuthState = {
+const INITIAL_STATE: AdminAuthState = {
   error: '',
   message: '',
   authenticated: false,
   user: {},
-  authFinished: false
+  authFinished: false,
 };
 
-const adminAuth: Reducer<AdminAuthState> = (state:AdminAuthState = INITIAL_STATE, action) => {
+const adminAuth: Reducer<AdminAuthState> = (state: AdminAuthState = INITIAL_STATE, action) => {
   switch (action.type) {
   case AUTH_USER:
     return {...state, error: '', message: '', authenticated: true,

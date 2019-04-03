@@ -111,11 +111,11 @@ class Routes extends React.Component<Props> {
    * layout.
    * @returns {Component}
    */
-  renderAdmin = (component: JSX.IntrinsicElements) => {
+  renderAdmin = (RenderComponent: any) => {
     return (props: RouteComponentProps) =>
       (
         <AdminLayout>
-          <component match={props.match} />
+          <RenderComponent match={props.match} />
         </AdminLayout>
       );
   }
@@ -126,20 +126,20 @@ class Routes extends React.Component<Props> {
    * layout.
    * @returns {Component}
    */
-  renderSponsor = (component: JSX.IntrinsicElements) => {
+  renderSponsor = (RenderComponent: any) => {
     return (props: RouteComponentProps) =>
       (
         <SponsorLayout>
-          <component match={props.match} />
+          <RenderComponent match={props.match} />
         </SponsorLayout>
       );
   }
 
-  renderUser = (component: JSX.IntrinsicElements) => {
+  renderUser = (RenderComponent: any) => {
     return (props: RouteComponentProps) =>
       (
         <UserLayout>
-          <component match={props.match} />
+          <RenderComponent match={props.match} />
         </UserLayout>
       );
   }

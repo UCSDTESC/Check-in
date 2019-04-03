@@ -52,29 +52,49 @@ interface Logo {
   url: string;
 }
 
+export interface TESCEventOptions {
+  allowHighSchool: boolean;
+  mlhProvisions: boolean;
+  allowOutOfState: boolean;
+  foodOption: boolean;
+  requireResume: boolean;
+  allowTeammates: boolean;
+  requireDiversityOption: boolean;
+  requireClassRequirement: boolean;
+  requireExtraCurriculars: boolean;
+  requireGPA: boolean;
+  requireMajorGPA: boolean;
+  requireWhyThisEvent: boolean;
+}
+
 export interface TESCEvent {
   _id: string;
   name: string;
   alias: string;
   organisers: Admin[];
-  logo: Logo;
-  thirdPartyText?: string;
-  organisedBy: string;
-  users: number;
+  sponsors: Admin[];
   closeTime: string;
   homepage: string;
   description: string;
   email: string;
+  checkinWaiver?: string;
+  thirdPartyText?: string;
+  organisedBy: string;
+  logo: Logo;
+  users?: number;
   customQuestions: CustomQuestions;
+  options: TESCEventOptions;
 }
 
 export interface TESCAccount {
+  _id: string;
   email: string;
   password: string;
   confirmed: boolean;
 }
 
 export interface TESCUser {
+  _id: string;
   event?: TESCEvent;
   account?: TESCAccount;
   firstName: string;

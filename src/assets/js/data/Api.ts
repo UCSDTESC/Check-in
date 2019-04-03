@@ -1,13 +1,13 @@
-import Cookies from "universal-cookie";
-import nocache from "superagent-no-cache";
-import pref from "superagent-prefix";
-import request from "superagent";
+import Cookies from 'universal-cookie';
+import nocache from 'superagent-no-cache';
+import pref from 'superagent-prefix';
+import request from 'superagent';
 
-import {promisify} from "./helpers";
+import {promisify} from './helpers';
 
-import CookieTypes from "~/static/Cookies";
+import CookieTypes from '~/static/Cookies';
 
-const API_URL_PREFIX = "/api";
+const API_URL_PREFIX = '/api';
 
 const apiPrefix = pref(API_URL_PREFIX);
 const cookies = new Cookies();
@@ -18,8 +18,8 @@ const cookies = new Cookies();
  */
 export const authorised = () =>
   promisify(request
-    .get("/auth/authorised")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get('/auth/authorised')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -30,8 +30,8 @@ export const authorised = () =>
  */
 export const loadAllUsers = (alias) =>
   promisify(request
-    .get("/users/" + alias)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get(`/users/${alias}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -41,8 +41,8 @@ export const loadAllUsers = (alias) =>
  */
 export const loadEventStatistics = (alias) =>
   promisify(request
-    .get("/statistics/" + alias)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get(`/statistics/${alias}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -51,8 +51,8 @@ export const loadEventStatistics = (alias) =>
  */
 export const loadAllAdmins = () =>
   promisify(request
-    .get("/admins")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get('/admins')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -63,7 +63,7 @@ export const loadAllAdmins = () =>
  */
 export const checkUserExists = (email) =>
   promisify(request
-    .get("/verify/" + email)
+    .get(`/verify/${email}`)
     .use(apiPrefix));
 
 /**
@@ -72,7 +72,7 @@ export const checkUserExists = (email) =>
  */
 export const loadAllPublicEvents = () =>
   promisify(request
-    .get("/events")
+    .get('/events')
     .use(apiPrefix)
     .use(nocache));
 
@@ -82,8 +82,8 @@ export const loadAllPublicEvents = () =>
  */
 export const loadAllEvents = () =>
   promisify(request
-    .get("/admin/events")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get('/admin/events')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -93,7 +93,7 @@ export const loadAllEvents = () =>
  */
 export const loadEventByAlias = (eventAlias) =>
   promisify(request
-    .get("/admin/events/" + eventAlias)
+    .get(`/admin/events/${eventAlias}`)
     .use(apiPrefix)
     .use(nocache));
 
@@ -104,8 +104,8 @@ export const loadEventByAlias = (eventAlias) =>
  */
 export const loadAllApplicants = (eventAlias) =>
   promisify(request
-    .get("/sponsors/applicants/" + eventAlias)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get(`/sponsors/applicants/${eventAlias}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -115,8 +115,8 @@ export const loadAllApplicants = (eventAlias) =>
  */
 export const loadUserStats = () =>
   promisify(request
-    .get("/stats/users")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get('/stats/users')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -125,8 +125,8 @@ export const loadUserStats = () =>
  */
 export const loadUniversityStats = () =>
   promisify(request
-    .get("/stats/university")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get('/stats/university')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -136,8 +136,8 @@ export const loadUniversityStats = () =>
  */
 export const loadUser = (id) =>
   promisify(request
-    .get("/users/" + id)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get(`/users/${id}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -148,9 +148,9 @@ export const loadUser = (id) =>
  */
 export const updateUser = (id, eventAlias, user) =>
   promisify(request
-    .post("/users/" + eventAlias + "/" + id)
+    .post(`/users/${eventAlias}/${id}`)
     .send(user)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -161,9 +161,9 @@ export const updateUser = (id, eventAlias, user) =>
  */
 export const checkinUser = (id, eventAlias) =>
   promisify(request
-    .post("/users/checkin/" + eventAlias)
+    .post(`/users/checkin/${eventAlias}`)
     .send({id})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -176,24 +176,24 @@ export const registerUser = (eventAlias, user) => {
   const {customQuestionResponses} = user;
   // Ensure it doesn't push an undefined field
   user.customQuestionResponses = customQuestionResponses
-    ? JSON.stringify(customQuestionResponses) : "";
+    ? JSON.stringify(customQuestionResponses) : '';
   let baseReq = request
-    .post("/register/" + eventAlias)
+    .post(`/register/${eventAlias}`)
     .use(apiPrefix)
     .field(user);
 
   if (user.resume && user.resume.length > 0) {
-    baseReq = baseReq.attach("resume", user.resume[0]);
+    baseReq = baseReq.attach('resume', user.resume[0]);
   }
   return promisify(baseReq);
 };
 
 export const registerNewEvent = (event) =>
   promisify(request
-    .post("/admin/events")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .post('/admin/events')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .field(event)
-    .attach("logo", event.logo[0])
+    .attach('logo', event.logo[0])
     .use(apiPrefix)
     .use(nocache));
 
@@ -204,9 +204,9 @@ export const registerNewEvent = (event) =>
  */
 export const registerAdmin = (admin) =>
   promisify(request
-    .post("/admins/register")
+    .post('/admins/register')
     .send(admin)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -216,9 +216,9 @@ export const registerAdmin = (admin) =>
  */
 export const deleteAdmin = (adminId) =>
   promisify(request
-    .post("/admins/delete")
+    .post('/admins/delete')
     .send({id: adminId})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -228,9 +228,9 @@ export const deleteAdmin = (adminId) =>
  */
 export const downloadResumes = (applicants) =>
   promisify(request
-    .post("/sponsors/download")
+    .post('/sponsors/download')
     .send({applicants})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -240,8 +240,8 @@ export const downloadResumes = (applicants) =>
  */
 export const pollDownload = (downloadId) =>
   promisify(request
-    .get("/sponsors/downloads/" + downloadId)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get(`/sponsors/downloads/${downloadId}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -251,8 +251,8 @@ export const pollDownload = (downloadId) =>
  */
 export const exportUsers = (eventAlias) =>
   request
-    .get("/admin/export/" + eventAlias)
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get(`/admin/export/${eventAlias}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix);
 
 /**
@@ -263,9 +263,9 @@ export const exportUsers = (eventAlias) =>
  */
 export const bulkChange = (users, status) =>
   promisify(request
-    .post("/admin/bulkChange")
+    .post('/admin/bulkChange')
     .send({users, status})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -276,9 +276,9 @@ export const bulkChange = (users, status) =>
  */
 export const updateOptions = (eventAlias, options) =>
   promisify(request
-    .post("/admin/update/" + eventAlias)
+    .post(`/admin/update/${eventAlias}`)
     .send({options})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix));
 
 /**
@@ -287,8 +287,8 @@ export const updateOptions = (eventAlias, options) =>
  */
 export const loadColumns = () =>
   promisify(request
-    .get("/admin/columns")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get('/admin/columns')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -298,8 +298,8 @@ export const loadColumns = () =>
  */
 export const loadSponsors = () =>
   promisify(request
-    .get("/admin/sponsors")
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .get('/admin/sponsors')
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -309,9 +309,9 @@ export const loadSponsors = () =>
  */
 export const addNewSponsor = (eventAlias, sponsorId) =>
   promisify(request
-    .post("/admin/addSponsor/" + eventAlias)
+    .post(`/admin/addSponsor/${eventAlias}`)
     .send({sponsor: sponsorId})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -321,9 +321,9 @@ export const addNewSponsor = (eventAlias, sponsorId) =>
  */
 export const addNewOrganiser = (eventAlias, adminId) =>
   promisify(request
-    .post("/admin/addOrganiser/" + eventAlias)
+    .post(`/admin/addOrganiser/${eventAlias}`)
     .send({admin: adminId})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -335,9 +335,9 @@ export const addNewOrganiser = (eventAlias, adminId) =>
  */
 export const addCustomQuestion = (eventAlias, question, type) =>
   promisify(request
-    .post("/admin/customQuestion/" + eventAlias)
+    .post(`/admin/customQuestion/${eventAlias}`)
     .send({question, type})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -348,9 +348,9 @@ export const addCustomQuestion = (eventAlias, question, type) =>
  */
 export const updateCustomQuestion = (eventAlias, question) =>
   promisify(request
-    .put("/admin/customQuestion/" + eventAlias)
+    .put(`/admin/customQuestion/${eventAlias}`)
     .send({question})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));
 
@@ -362,8 +362,8 @@ export const updateCustomQuestion = (eventAlias, question) =>
  */
 export const deleteCustomQuestion = (eventAlias, question, type) =>
   promisify(request
-    .delete("/admin/customQuestion/" + eventAlias)
+    .delete(`/admin/customQuestion/${eventAlias}`)
     .send({question, type})
-    .set("Authorization", cookies.get(CookieTypes.admin.token, {path: "/"}))
+    .set('Authorization', cookies.get(CookieTypes.admin.token, {path: '/'}))
     .use(apiPrefix)
     .use(nocache));

@@ -1,8 +1,8 @@
-import nocache from "superagent-no-cache";
-import pref from "superagent-prefix";
-import request from "superagent";
+import nocache from 'superagent-no-cache';
+import pref from 'superagent-prefix';
+import request from 'superagent';
 
-const URL_PREFIX = "/api/auth";
+const URL_PREFIX = '/api/auth';
 
 const prefix = pref(URL_PREFIX);
 
@@ -14,8 +14,8 @@ const prefix = pref(URL_PREFIX);
  */
 export const login = (username, password) => {
   return request
-    .post("/login")
-    .set("Content-Type", "application/json")
+    .post('/login')
+    .set('Content-Type', 'application/json')
     .send({username, password})
     .use(prefix)
     .use(nocache);
@@ -29,8 +29,8 @@ export const login = (username, password) => {
  */
 export const register = (username, password) => {
   return request
-    .post("/register")
-    .set("Content-Type", "application/json")
+    .post('/register')
+    .set('Content-Type', 'application/json')
     .send({username, password})
     .use(prefix)
     .use(nocache);

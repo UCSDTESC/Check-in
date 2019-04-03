@@ -1,13 +1,13 @@
-import Cookies from "universal-cookie";
-import nocache from "superagent-no-cache";
-import pref from "superagent-prefix";
-import request from "superagent";
+import Cookies from 'universal-cookie';
+import nocache from 'superagent-no-cache';
+import pref from 'superagent-prefix';
+import request from 'superagent';
 
-import {promisify} from "./helpers";
+import {promisify} from './helpers';
 
-import CookieTypes from "~/static/Cookies";
+import CookieTypes from '~/static/Cookies';
 
-const URL_PREFIX = "/api/user";
+const URL_PREFIX = '/api/user';
 
 const prefix = pref(URL_PREFIX);
 const cookies = new Cookies();
@@ -18,8 +18,8 @@ const cookies = new Cookies();
  */
 export const authorised = () => {
   return promisify(request
-    .get("/authorised")
-    .set("Authorization", cookies.get(CookieTypes.user.token, {path: "/"}))
+    .get('/authorised')
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .use(prefix)
     .use(nocache));
 };
@@ -32,8 +32,8 @@ export const authorised = () => {
  */
 export const login = (email, password) => {
   return promisify(request
-    .post("/login")
-    .set("Content-Type", "application/json")
+    .post('/login')
+    .set('Content-Type', 'application/json')
     .send({email, password})
     .use(prefix)
     .use(nocache));
@@ -46,8 +46,8 @@ export const login = (email, password) => {
  */
 export const forgotPassword = (email) => {
   return promisify(request
-    .post("/forgot")
-    .set("Content-Type", "application/json")
+    .post('/forgot')
+    .set('Content-Type', 'application/json')
     .send({email})
     .use(prefix)
     .use(nocache));
@@ -61,8 +61,8 @@ export const forgotPassword = (email) => {
  */
 export const resetPassword = (id, newPassword) => {
   return promisify(request
-    .post("/reset")
-    .set("Content-Type", "application/json")
+    .post('/reset')
+    .set('Content-Type', 'application/json')
     .send({id, newPassword})
     .use(prefix)
     .use(nocache));
@@ -75,9 +75,9 @@ export const resetPassword = (id, newPassword) => {
  */
 export const getCurrentUser = (eventAlias) => {
   return promisify(request
-    .get("/current/" + eventAlias)
-    .set("Content-Type", "application/json")
-    .set("Authorization", cookies.get(CookieTypes.user.token, {path: "/"}))
+    .get(`/current/${eventAlias}`)
+    .set('Content-Type', 'application/json')
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .use(prefix)
     .use(nocache));
 };
@@ -88,9 +88,9 @@ export const getCurrentUser = (eventAlias) => {
  */
 export const getUserEvents = () => {
   return promisify(request
-    .get("/events")
-    .set("Content-Type", "application/json")
-    .set("Authorization", cookies.get(CookieTypes.user.token, {path: "/"}))
+    .get('/events')
+    .set('Content-Type', 'application/json')
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .use(prefix));
 };
 
@@ -100,10 +100,10 @@ export const getUserEvents = () => {
  */
 export const updateUserField = (user, eventAlias) => {
   return promisify(request
-    .post("/update/" + eventAlias)
+    .post(`/update/${eventAlias}`)
     .field(user)
-    .attach("resume", user.resume ? user.resume[0] : null)
-    .set("Authorization", cookies.get(CookieTypes.user.token, {path: "/"}))
+    .attach('resume', user.resume ? user.resume[0] : null)
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .use(prefix)
     .use(nocache));
 };
@@ -118,9 +118,9 @@ export const updateUserField = (user, eventAlias) => {
  */
 export const rsvpUser = (eventAlias, status, bussing) => {
   return promisify(request
-    .post("/rsvp/" + eventAlias)
-    .set("Content-Type", "application/json")
-    .set("Authorization", cookies.get(CookieTypes.user.token, {path: "/"}))
+    .post(`/rsvp/${eventAlias}`)
+    .set('Content-Type', 'application/json')
+    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
     .send({status, bussing})
     .use(prefix)
     .use(nocache));

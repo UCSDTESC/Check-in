@@ -1,9 +1,9 @@
-import { TESCUser } from "~/static/types";
+import { Admin } from '~/static/types';
 
 export interface AdminAuthState {
-  error: string,
-  message: string,
-  authenticated: boolean,
-  user: TESCUser | {},
-  authFinished: boolean
-};
+  error: string;
+  message: string;
+  authenticated: boolean;
+  user: Admin | {};
+  authFinished: boolean;
+}

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -12,26 +11,33 @@ import NewAdminModal from '~/components/NewAdminModal';
 
 import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
 
-import {Admin as AdminPropTypes} from '~/proptypes';
+import { Admin } from '~/static/types';
+import { ApplicationState } from '~/reducers';
 
-class AdminsPage extends React.Component {
-  static propTypes = {
-    admins: PropTypes.arrayOf(PropTypes.shape(
-      AdminPropTypes
-    ).isRequired).isRequired,
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    replaceAdmins: PropTypes.func.isRequired,
-    editing: PropTypes.bool.isRequired
+interface StateProps {
+  admins: Admin[];
+  editing: boolean;
+}
+
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
+  replaceAdmins: (arg0: any) => void;
+}
+
+interface AdminsPageProps {
+}
+
+type Props = StateProps & DispatchProps & AdminsPageProps;
+
+interface AdminsPageState {
+  isRegisterModalOpen: boolean;
+}
+
+class AdminsPage extends React.Component<Props, AdminsPageState> {
+  state: Readonly<AdminsPageState> = {
+    isRegisterModalOpen: false,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isRegisterModalOpen: false
-    };
-  }
 
   loadAdmins = () =>
     loadAllAdmins()
@@ -46,33 +52,40 @@ class AdminsPage extends React.Component {
   }
 
   toggleRegisterModal = () => this.setState({
-    isRegisterModalOpen: !this.state.isRegisterModalOpen
+    isRegisterModalOpen: !this.state.isRegisterModalOpen,
   });
 
-  registerNewAdmin = (newAdmin) =>
+  registerNewAdmin = (newAdmin: Admin) =>
     registerAdmin(newAdmin)
       .then(this.loadAdmins)
       .then(this.toggleRegisterModal)
       .catch(console.error);
 
-  onDeleteAdmin = (adminId) =>
+  onDeleteAdmin = (adminId: string) =>
     deleteAdmin(adminId)
       .then(this.loadAdmins)
       .catch(console.error);
 
   render() {
-    let {editing, admins} = this.props;
+    const {editing, admins} = this.props;
 
     return (
       <div>
-        <NewAdminModal toggle={this.toggleRegisterModal}
+        <NewAdminModal
+          toggle={this.toggleRegisterModal}
           open={this.state.isRegisterModalOpen}
-          onSubmit={this.registerNewAdmin} />
-        <AdminList admins={admins}
+          onSubmit={this.registerNewAdmin}
+        />
+        <AdminList
+          admins={admins}
           onDeleteAdmin={this.onDeleteAdmin}
-          editing={editing} />
-        {editing && <Button className="ml-2" color="primary"
-          onClick={this.toggleRegisterModal}>
+          editing={editing}
+        />
+        {editing && <Button
+          className="ml-2"
+          color="primary"
+          onClick={this.toggleRegisterModal}
+        >
           Register New Admin
         </Button>}
       </div>
@@ -80,10 +93,10 @@ class AdminsPage extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: ApplicationState) {
   return {
     admins: state.admin.admins,
-    editing: state.admin.general.editing
+    editing: state.admin.general.editing,
   };
 };
 
