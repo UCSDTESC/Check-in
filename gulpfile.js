@@ -8,7 +8,6 @@ var gulp = require('gulp'),
   webpackStream = require('webpack-stream'),
   webpack = require('webpack'),
   eslint = require('gulp-eslint'),
-  plumber = require('gulp-plumber'),
   gutil = require('gulp-util'),
   gulpif = require('gulp-if');
 let browserSync = gutil.env.production ?
@@ -23,19 +22,6 @@ const paths = {
     'src/server/**/*.js',
     'src/assets/js/**/*.js'
   ]
-};
-
-// Handle Errors
-function handleError(err) {
-  gutil.log(err);
-  this.emit('end');
-  if (gutil.env.production) {
-    process.exit(1);
-  }
-}
-
-var plumberOptions = {
-  errorHandler: handleError
 };
 
 gulp.task('css', function () {

@@ -1,16 +1,17 @@
-'use strict';
+/* eslint-disable */
 
-var path = require('path');
-
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   devtool: 'eval-source-map',
-  entry: [
-    'react-hot-loader/patch',
-    'webpack-hot-middleware/client?timeout=2000&path=/__webpack_hmr',
-    path.join(__dirname, 'src/assets/js/main.js'),
-  ],
+  entry: {
+    vendor: [
+      '@babel/polyfill'
+    ],
+    main: [path.join(__dirname, 'src/assets/js/main.js')]
+  },
   output: {
     path: path.join(__dirname, 'src/assets/public/js'),
     filename: '[name].js',
@@ -20,6 +21,8 @@ module.exports = {
   },
   watch: true,
   plugins: [
+    new ForkTsCheckerWebpackPlugin(),
+    new webpack.NamedModulesPlugin(),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),
@@ -33,26 +36,45 @@ module.exports = {
     })
   ],
   resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       '~': path.join(__dirname, '/src/assets/js')
     }
   },
   module: {
-    loaders: [{
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      use: [{
-        loader: 'babel-loader',
-        options: {
-          'presets': ['react', 'es2015', 'stage-0', 'react-hmre']
-        }
-      }]
-    }, {
-      test: /\.json?$/,
-      loader: 'json-loader'
-    }, {
-      test: /\.css$/,
-      loader: 'style-loader!css-loader'
-    }]
+    rules: [
+      {
+        test: /\.(j|t)sx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            babelrc: false,
+            presets: [
+              [
+                '@babel/preset-env',
+                { targets: { browsers: 'last 2 versions' } }, // or whatever your project requires
+              ],
+              '@babel/preset-typescript',
+              '@babel/preset-react',
+            ],
+            plugins: [
+              // plugin-proposal-decorators is only needed if you're using experimental decorators in TypeScript
+              ['@babel/plugin-proposal-decorators', { legacy: true }],
+              ['@babel/plugin-proposal-class-properties', { loose: true }],
+              'react-hot-loader/babel',
+            ],
+          },
+        },
+      },
+      {
+        test: /\.json?$/,
+        loader: 'json-loader'
+      }, {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
+      },
+    ]
   }
 };
