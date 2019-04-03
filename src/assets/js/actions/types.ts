@@ -1,3 +1,5 @@
+import { Action } from 'redux';
+
 // General
 export const ENABLE_EDITING = 'ENABLE_EDITING';
 export const DISABLE_EDITING = 'DISABLE_EDITING';

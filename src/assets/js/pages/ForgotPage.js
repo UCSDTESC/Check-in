@@ -1,16 +1,16 @@
-import React from 'react';
+import React from "react";
 
-import Forgot from '~/auth/user/Forgot';
+import Forgot from "~/auth/user/Forgot";
 
-import {forgotPassword} from '~/data/User';
+import {forgotPassword} from "~/data/User";
 
 class ForgotPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      error: '',
-      success: ''
+      error: "",
+      success: "",
     };
   }
 
@@ -21,9 +21,9 @@ class ForgotPage extends React.Component {
 
     return forgotPassword(values.email)
       .then(() => this.setState(
-        {success: 'Your password reset has been sent to ' + 'your email'}))
+        {success: "Your password reset has been sent to " + "your email"}))
       .catch((e) => this.setState({error: e.message}));
-  };
+  }
 
   render() {
     return (

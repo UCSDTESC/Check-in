@@ -1,12 +1,12 @@
-import PropTypes from 'prop-types';
-import React from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import {connect} from 'react-redux';
-import {Field, reduxForm} from 'redux-form';
-import generator from 'generate-password';
-import FA from 'react-fontawesome';
+import PropTypes from "prop-types";
+import React from "react";
+import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from "reactstrap";
+import {connect} from "react-redux";
+import {Field, reduxForm} from "redux-form";
+import generator from "generate-password";
+import FA from "react-fontawesome";
 
-import {Roles} from '~/static/Roles';
+import {Roles} from "~/static/Roles";
 
 const generatorSettings = {
   length: 15,
@@ -14,38 +14,38 @@ const generatorSettings = {
   symbols: true,
   uppercase: true,
   excludeSimilarCharacters: true,
-  strict: true
+  strict: true,
 };
 
 const initialValues = {
-  username: '',
-  password: '',
-  role: Roles.ROLE_MEMBER
+  username: "",
+  password: "",
+  role: Roles.ROLE_MEMBER,
 };
 
 const roleDescriptions = {
   [Roles.ROLE_DEVELOPER]: [
-    'Access all events',
-    'Full event read/write access',
-    'Full resume access',
-    'Create/Delete admins/sponsors'
+    "Access all events",
+    "Full event read/write access",
+    "Full resume access",
+    "Create/Delete admins/sponsors",
   ],
   [Roles.ROLE_ADMIN]: [
-    'Access all organising events',
-    'Full event read/write access',
-    'Full resume access',
-    'Create admins/sponsors'
+    "Access all organising events",
+    "Full event read/write access",
+    "Full resume access",
+    "Create admins/sponsors",
   ],
   [Roles.ROLE_SPONSOR]: [
-    'No event settings access',
-    'No event read/write access',
-    'Full resume access'
+    "No event settings access",
+    "No event read/write access",
+    "Full resume access",
   ],
   [Roles.ROLE_MEMBER]: [
-    'No event settings access',
-    'No event read/write access',
-    'No resume access'
-  ]
+    "No event settings access",
+    "No event read/write access",
+    "No resume access",
+  ],
 };
 
 class NewAdminModal extends React.Component {
@@ -58,7 +58,7 @@ class NewAdminModal extends React.Component {
     pristine: PropTypes.bool.isRequired,
     submitting: PropTypes.bool.isRequired,
 
-    lockRole: PropTypes.string
+    lockRole: PropTypes.string,
   };
 
   constructor(props) {
@@ -67,11 +67,11 @@ class NewAdminModal extends React.Component {
     this.state = {
       modal: (props.open ? props.open : false),
     };
-  };
+  }
 
   regeneratePassword = () => {
-    this.props.change('password', generator.generate(generatorSettings));
-  };
+    this.props.change("password", generator.generate(generatorSettings));
+  }
 
   render() {
     let {open, toggle, pristine, submitting, handleSubmit, lockRole} =
@@ -83,7 +83,7 @@ class NewAdminModal extends React.Component {
           onOpened={this.regeneratePassword}>
           <form onSubmit={handleSubmit}>
             <ModalHeader toggle={toggle}>
-              New {lockRole ? lockRole : 'Admin'}
+              New {lockRole ? lockRole : "Admin"}
             </ModalHeader>
             <ModalBody>
               <div className="container sd-form">
@@ -94,7 +94,7 @@ class NewAdminModal extends React.Component {
                       type="text" placeholder="Username" component="input" />
                   </div>
                   <div className="col-12 col-lg-6">
-                    <label className="sd-form__label">Password{' '}
+                    <label className="sd-form__label">Password{" "}
                     </label>
                     <div className="row">
                       <div className="col">
@@ -131,11 +131,11 @@ class NewAdminModal extends React.Component {
                               sd-form__pricing-body`}>
                               {roleDescriptions[role].map((desc, i) =>
                                 (<li className="sd-form__pricing-feature"
-                                  key={i}>{desc}</li>)
+                                  key={i}>{desc}</li>),
                               )}
                             </ul>
                           </div>
-                        </div>)
+                        </div>),
                       )}
                     </div>
                   </div>
@@ -159,17 +159,17 @@ class NewAdminModal extends React.Component {
 
 function mapStateToProps(_, ownProps) {
   return {
-    form: ownProps.formName ? ownProps.formName : 'newAdminModal',
+    form: ownProps.formName ? ownProps.formName : "newAdminModal",
     initialValues: Object.assign({}, initialValues, {
       role: ownProps.lockRole ? ownProps.lockRole : Roles.ROLE_MEMBER,
-      password: generator.generate(generatorSettings)
-    })
+      password: generator.generate(generatorSettings),
+    }),
   };
-};
+}
 
 NewAdminModal = reduxForm({
   destroyOnUnmount: true,
-  initialValues
+  initialValues,
 })(NewAdminModal);
 
 export default connect(mapStateToProps)(NewAdminModal);

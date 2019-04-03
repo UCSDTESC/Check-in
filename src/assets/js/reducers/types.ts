@@ -1,9 +1,9 @@
-import { TESCEvent } from "~/static/types";
+import { TESCEvent } from '~/static/types';
 
 export interface EventsState {
-  [EventName: string]: TESCEvent
-};
+  [EventName: string]: TESCEvent;
+}
 
 export interface UserEventsState {
-  [EventName: string]: TESCEvent
-};
+  [EventName: string]: TESCEvent;
+}

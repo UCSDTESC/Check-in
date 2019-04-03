@@ -1,19 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
+import React from "react";
+import PropTypes from "prop-types";
+import {bindActionCreators} from "redux";
+import {connect} from "react-redux";
+import {showLoading, hideLoading} from "react-redux-loading-bar";
 
-import {Resumes as ResumePropType} from '~/proptypes';
+import {Resumes as ResumePropType} from "~/proptypes";
 
-import {applyResumeFilter} from '~/static/ResumeFilter';
+import {applyResumeFilter} from "~/static/ResumeFilter";
 
-import {downloadResumes, pollDownload} from '~/data/Api';
+import {downloadResumes, pollDownload} from "~/data/Api";
 
 import {toggleFilter, toggleFilterOption, selectAllOptions,
-  selectNoneOptions, addFilterOption} from '../actions';
+  selectNoneOptions, addFilterOption} from "../actions";
 
-import Sidebar from './components/SponsorSidebar';
+import Sidebar from "./components/SponsorSidebar";
 
 class SponsorLayout extends React.Component {
   static propTypes = {
@@ -30,14 +30,14 @@ class SponsorLayout extends React.Component {
     toggleFilterOption: PropTypes.func.isRequired,
     selectAllOptions: PropTypes.func.isRequired,
     selectNoneOptions: PropTypes.func.isRequired,
-    addFilterOption: PropTypes.func.isRequired
+    addFilterOption: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isDownloading: false
+      isDownloading: false,
     };
   }
 
@@ -74,12 +74,12 @@ class SponsorLayout extends React.Component {
     downloadResumes(filtered)
       .then((res) => {
         this.setState({
-          isDownloading: true
+          isDownloading: true,
         });
         this.startPolling(res.downloadId);
       })
       .catch(console.error);
-  };
+  }
 
   /**
    * Polls a requested to download until it completes or errors.
@@ -94,7 +94,7 @@ class SponsorLayout extends React.Component {
         if (res.url) {
           hideLoading();
           this.setState({
-            isDownloading: false
+            isDownloading: false,
           });
           return window.open(res.url);
         }
@@ -105,7 +105,7 @@ class SponsorLayout extends React.Component {
         console.error(err);
         hideLoading();
       });
-  };
+  }
 
   render() {
     let {user, filters, resumes, filtered} = this.props;
@@ -130,7 +130,7 @@ class SponsorLayout extends React.Component {
                 addFilterOption={this.props.addFilterOption} />
             </div>
 
-            <main className={'admin-body__content'}>
+            <main className={"admin-body__content"}>
               {this.props.children}
             </main>
           </div>
@@ -138,14 +138,14 @@ class SponsorLayout extends React.Component {
       </div>
     );
   }
-};
+}
 
 function mapStateToProps(state) {
   return {
     filters: state.admin.filters,
     resumes: state.admin.resumes,
     user: state.admin.auth.user,
-    filtered: state.admin.resumes.filtered
+    filtered: state.admin.resumes.filtered,
   };
 }
 
@@ -157,7 +157,7 @@ function mapDispatchToProps(dispatch) {
     selectNoneOptions: bindActionCreators(selectNoneOptions, dispatch),
     addFilterOption: bindActionCreators(addFilterOption, dispatch),
     showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch)
+    hideLoading: bindActionCreators(hideLoading, dispatch),
   };
 }
 

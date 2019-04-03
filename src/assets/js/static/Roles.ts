@@ -1,17 +1,17 @@
 // Administrator Roles
 
-export const Roles = {
-  ROLE_DEVELOPER: 'Developer',
-  ROLE_ADMIN: 'Admin',
-  ROLE_SPONSOR: 'Sponsor',
-  ROLE_MEMBER: 'Member'
-};
+export enum Roles {
+  ROLE_DEVELOPER = 'Developer',
+  ROLE_ADMIN = 'Admin',
+  ROLE_SPONSOR = 'Sponsor',
+  ROLE_MEMBER = 'Member',
+}
 
 export const RolesColors = {
   [Roles.ROLE_DEVELOPER]: 'success',
   [Roles.ROLE_ADMIN]: 'primary',
   [Roles.ROLE_SPONSOR]: 'danger',
-  [Roles.ROLE_MEMBER]: 'secondary'
+  [Roles.ROLE_MEMBER]: 'secondary',
 };
 
 /**
@@ -20,8 +20,8 @@ export const RolesColors = {
  * {@link Roles}.
  * @returns {Integer} The integer for the given role.
  */
-export function getRole(checkRole) {
-  var role;
+export function getRole(checkRole: Roles) {
+  let role;
 
   switch (checkRole) {
   case Roles.ROLE_DEVELOPER: role = 4; break;
@@ -32,4 +32,4 @@ export function getRole(checkRole) {
   }
 
   return role;
-};
+}

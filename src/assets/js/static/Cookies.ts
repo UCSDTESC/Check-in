@@ -3,10 +3,10 @@
 export default {
   admin: {
     token: 'adminToken',
-    user: 'adminUser'
+    user: 'adminUser',
   },
   user: {
     token: 'token',
-    user: 'user'
-  }
+    user: 'user',
+  },
 };

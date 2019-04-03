@@ -1,25 +1,25 @@
-import {Field, reduxForm} from 'redux-form';
-import React from 'react';
-import PropTypes from 'prop-types';
-import {compose} from 'redux';
-import {connect} from 'react-redux';
-import {default as UUID} from 'node-uuid';
+import {Field, reduxForm} from "redux-form";
+import React from "react";
+import PropTypes from "prop-types";
+import {compose} from "redux";
+import {connect} from "react-redux";
+import {default as UUID} from "node-uuid";
 
 import {
   User as UserPropType,
-  Event as EventPropType
-} from '~/proptypes';
+  Event as EventPropType,
+} from "~/proptypes";
 
-import {getRole, Roles} from '~/static/Roles';
+import {getRole, Roles} from "~/static/Roles";
 
-import {QuestionTypes} from '~/static/Questions';
+import {QuestionTypes} from "~/static/Questions";
 
-import CheckboxButton from './CheckboxButton';
+import CheckboxButton from "./CheckboxButton";
 
 class User extends React.Component {
   static propTypes = {
     user: PropTypes.shape(
-      UserPropType
+      UserPropType,
     ).isRequired,
     handleSubmit: PropTypes.func.isRequired,
     pristine: PropTypes.bool.isRequired,
@@ -27,7 +27,7 @@ class User extends React.Component {
     submitting: PropTypes.bool.isRequired,
     resume: PropTypes.object,
     role: PropTypes.string.isRequired,
-    event: PropTypes.shape(EventPropType).isRequired
+    event: PropTypes.shape(EventPropType).isRequired,
   };
 
   handleFormSubmit(formProps) {
@@ -50,7 +50,7 @@ class User extends React.Component {
           href={this.props.resume.url} rel="noopener noreferrer">
           View
         </a>
-      </div>
+      </div>,
     ];
   }
 
@@ -62,11 +62,11 @@ class User extends React.Component {
    * @param {String} [labelSize =col-sm-4] The class name of the label.
    * @returns {Component[]} The components to render.
    */
-  renderFormCheckbox(label, value, fieldSize = 'col-sm-10',
-    labelSize='col-sm-2') {
+  renderFormCheckbox(label, value, fieldSize = "col-sm-10",
+                     labelSize= "col-sm-2") {
     return [
-      <label key="0" className={labelSize + ' col-form-label'}>{label}</label>,
-      <div key="1" className={fieldSize + ' btn-group'} data-toggle="buttons">
+      <label key="0" className={labelSize + " col-form-label"}>{label}</label>,
+      <div key="1" className={fieldSize + " btn-group"} data-toggle="buttons">
         <Field component={CheckboxButton} name={value} />
       </div>];
   }
@@ -79,10 +79,10 @@ class User extends React.Component {
    * @param {String} [fieldType=text] The input type.
    * @param {String} [labelSize=col-sm-4] The class name of the label.
    */
-  renderFormField(label, value, fieldSize = 'col-sm-4',
-    fieldType = 'text', labelSize = 'col-sm-2') {
+  renderFormField(label, value, fieldSize = "col-sm-4",
+                  fieldType = "text", labelSize = "col-sm-2") {
     return [
-      <label key="0" className={labelSize + ' col-form-label'}>{label}</label>,
+      <label key="0" className={labelSize + " col-form-label"}>{label}</label>,
       <div key="1" className={fieldSize}>
         <Field name={value} className="form-control"
           component="input" type={fieldType} />
@@ -91,9 +91,9 @@ class User extends React.Component {
 
   renderInstitution(user) {
     if (user.university) {
-      return this.renderFormField('University', 'university', 'col-sm-4');
+      return this.renderFormField("University", "university", "col-sm-4");
     } else if (user.highSchool) {
-      return this.renderFormField('High School', 'highSchool', 'col-sm-4');
+      return this.renderFormField("High School", "highSchool", "col-sm-4");
     }
     return <span></span>;
   }
@@ -102,9 +102,9 @@ class User extends React.Component {
     return (
       <React.Fragment>
         {event.options.requireGPA &&
-          this.renderFormField('GPA', 'gpa', 'col-sm-4')}
+          this.renderFormField("GPA", "gpa", "col-sm-4")}
         {event.options.requireMajorGPA &&
-          this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
+          this.renderFormField("Major GPA", "majorGPA", "col-sm-4")}
       </React.Fragment>
     );
   }
@@ -113,7 +113,7 @@ class User extends React.Component {
     return (
       questions.map(q => (
         this.renderFormField(q.question,
-          `customQuestionResponses[${q._id}]`, 'col-12', 'text', 'col-12')
+          `customQuestionResponses[${q._id}]`, "col-12", "text", "col-12")
       ))
     );
   }
@@ -122,10 +122,10 @@ class User extends React.Component {
     return (
       questions.map(q => (
         this.renderFormCheckbox(q.question,
-          `customQuestionResponses[${q._id}]`, 'col-12', 'col-12')
+          `customQuestionResponses[${q._id}]`, "col-12", "col-12")
       ))
     );
-  };
+  }
 
   render() {
     const {handleSubmit, pristine, reset, submitting, event} = this.props;
@@ -146,36 +146,36 @@ class User extends React.Component {
               </div>
               <h5>Portfolio</h5>
               <div className="form-group row mb-2">
-                {this.renderFormField('Github', 'github')}
-                {this.renderFormField('Website', 'website')}
+                {this.renderFormField("Github", "github")}
+                {this.renderFormField("Website", "website")}
               </div>
               {this.props.resume &&
               <span>
                 <h5>Resume</h5>
                 <div className="form-group row mb-2">
                   {this.renderResume()}
-                  {this.renderFormCheckbox('Share Resume', 'shareResume',
-                    'col-sm-4')}
+                  {this.renderFormCheckbox("Share Resume", "shareResume",
+                    "col-sm-4")}
                 </div>
               </span>}
               <h5>Travel</h5>
               <div className="form-group row mb-2">
-                {this.renderFormCheckbox('Out Of State', 'travel.outOfState',
-                  'col-sm-4')}
-                {this.renderFormField('Coming From', 'travel.city')}
+                {this.renderFormCheckbox("Out Of State", "travel.outOfState",
+                  "col-sm-4")}
+                {this.renderFormField("Coming From", "travel.city")}
               </div>
               {getRole(this.props.role) >= getRole(Roles.ROLE_ADMIN) &&
                 <span>
                   <h5>Admin Flags</h5>
                   <div className="form-group row mb-2">
-                    {this.renderFormCheckbox('Confirmed', 'account.confirmed',
-                      'col-sm-4')}
-                    {this.renderFormCheckbox('Checked In', 'checkedIn',
-                      'col-sm-4')}
-                    {this.renderFormCheckbox('Bussing', 'bussing', 'col-sm-4')}
-                    {this.renderFormCheckbox('Sanitized', 'sanitized',
-                      'col-sm-4')}
-                    {this.renderFormField('Status', 'status', 'col-sm-4')}
+                    {this.renderFormCheckbox("Confirmed", "account.confirmed",
+                      "col-sm-4")}
+                    {this.renderFormCheckbox("Checked In", "checkedIn",
+                      "col-sm-4")}
+                    {this.renderFormCheckbox("Bussing", "bussing", "col-sm-4")}
+                    {this.renderFormCheckbox("Sanitized", "sanitized",
+                      "col-sm-4")}
+                    {this.renderFormField("Status", "status", "col-sm-4")}
                   </div>
                 </span>
               }
@@ -183,32 +183,32 @@ class User extends React.Component {
             <div className="col-6">
               <h5>Personal Details</h5>
               <div className="form-group row mb-2">
-                {this.renderFormField('First Name', 'firstName', 'col-sm-4')}
-                {this.renderFormField('Last Name', 'lastName', 'col-sm-4')}
-                {this.renderFormField('Gender', 'gender', 'col-sm-4')}
-                {this.renderFormField('Birthdate', 'birthdate', 'col-sm-4')}
-                {this.renderFormField('Year', 'year', 'col-sm-4')}
-                {this.renderFormField('Phone', 'phone', 'col-sm-4', 'tel')}
+                {this.renderFormField("First Name", "firstName", "col-sm-4")}
+                {this.renderFormField("Last Name", "lastName", "col-sm-4")}
+                {this.renderFormField("Gender", "gender", "col-sm-4")}
+                {this.renderFormField("Birthdate", "birthdate", "col-sm-4")}
+                {this.renderFormField("Year", "year", "col-sm-4")}
+                {this.renderFormField("Phone", "phone", "col-sm-4", "tel")}
                 {this.renderInstitution(this.props.user)}
-                {this.renderFormField('Major', 'major', 'col-sm-4')}
-                {this.renderFormField('Shirt Size', 'shirtSize', 'col-sm-4')}
-                {this.renderFormField('Diet', 'diet', 'col-sm-4')}
-                {this.renderFormField('Food', 'food', 'col-sm-4')}
-                {this.renderFormField('PID', 'pid', 'col-sm-4')}
+                {this.renderFormField("Major", "major", "col-sm-4")}
+                {this.renderFormField("Shirt Size", "shirtSize", "col-sm-4")}
+                {this.renderFormField("Diet", "diet", "col-sm-4")}
+                {this.renderFormField("Food", "food", "col-sm-4")}
+                {this.renderFormField("PID", "pid", "col-sm-4")}
                 {this.renderGPAFields(event)}
               </div>
 
               {event.options.requireClassRequirement ||
                 event.options.requireExtraCurriculars ?
-                  <h5 className="mt-3">Miscellaneous Questions</h5> : ''}
+                  <h5 className="mt-3">Miscellaneous Questions</h5> : ""}
               <div className="row my-2 pt-2">
                 {event.options.requireClassRequirement &&
                   <React.Fragment>
                     <div className="col-sm-8">This user has completed Advanced
                       Data Structures (CSE 100)</div>
                     <div className="col-sm-4 d-flex justify-content-center">
-                      {this.renderFormCheckbox('', 'classRequirement',
-                        'ml-auto')}
+                      {this.renderFormCheckbox("", "classRequirement",
+                        "ml-auto")}
                     </div>
                   </React.Fragment>
                 }
@@ -216,7 +216,7 @@ class User extends React.Component {
                   <React.Fragment>
                     <div className="col-sm-12 mt-3">
                       Extra Curriculars
-                      {this.renderFormField('', 'extraCurriculars', '')}
+                      {this.renderFormField("", "extraCurriculars", "")}
                     </div>
                   </React.Fragment>
                 }
@@ -225,7 +225,7 @@ class User extends React.Component {
                   <React.Fragment>
                     <div className="col-sm-12">
                       Why This Event?
-                      {this.renderFormField('', 'whyEventResponse', '')}
+                      {this.renderFormField("", "whyEventResponse", "")}
                     </div>
                   </React.Fragment>
                 }
@@ -279,7 +279,7 @@ const mapStateToProps = (state, ownProps) => {
     resume: ownProps.user.resume ? ownProps.user.resume : null,
     //form: ownProps.user._id,
     event: ownProps.user.event ? ownProps.user.event : null,
-    role: state.admin.auth.user.role
+    role: state.admin.auth.user.role,
   };
 };
 
@@ -288,6 +288,6 @@ export default compose(
   reduxForm({
     form: UUID.v4(),
     destroyOnUnmount: true,
-    enableReinitialize: true
-  })
+    enableReinitialize: true,
+  }),
 )(User);

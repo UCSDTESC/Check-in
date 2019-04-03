@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {Link} from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import {Link} from "react-router-dom";
 
 export default class EventCard extends React.Component {
   static propTypes = {
@@ -10,7 +10,7 @@ export default class EventCard extends React.Component {
     image: PropTypes.string,
     title: PropTypes.string,
     subtext: PropTypes.string,
-    className: PropTypes.string
+    className: PropTypes.string,
   };
 
   render() {
@@ -18,8 +18,8 @@ export default class EventCard extends React.Component {
       = this.props;
 
     const eventHeaderClass = highlighted
-      ? 'event-card__header event-card__header--highlighted'
-      : 'event-card__header';
+      ? "event-card__header event-card__header--highlighted"
+      : "event-card__header";
 
     return (
       <Link to={to}>

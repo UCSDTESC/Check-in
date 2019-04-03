@@ -1,28 +1,28 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import StyledSelect from './StyledSelect';
+import StyledSelect from "./StyledSelect";
 
-import {loadAllAdmins} from '~/data/Api';
+import {loadAllAdmins} from "~/data/Api";
 
-import {Admin as AdminPropTypes} from '~/proptypes';
+import {Admin as AdminPropTypes} from "~/proptypes";
 
-import {Roles, getRole} from '~/static/Roles';
+import {Roles, getRole} from "~/static/Roles";
 
 export default class OrganiserSelect extends StyledSelect {
   static propTypes = {
     onChange: PropTypes.func,
     exclude: PropTypes.arrayOf(PropTypes.shape(
-      AdminPropTypes
+      AdminPropTypes,
     ).isRequired).isRequired,
-    value: PropTypes.object
+    value: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      admins: []
+      admins: [],
     };
   }
 
@@ -36,8 +36,8 @@ export default class OrganiserSelect extends StyledSelect {
         admins: admins
           .map(admin => ({
             value: admin._id,
-            label: admin.username
-          }))
+            label: admin.username,
+          })),
       }));
   }
 
@@ -59,4 +59,4 @@ export default class OrganiserSelect extends StyledSelect {
       </StyledSelect>
     );
   }
-};
+}

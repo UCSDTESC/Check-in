@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 export default class UserLayout extends React.Component {
   static propTypes = {
-    children: PropTypes.object.isRequired
+    children: PropTypes.object.isRequired,
   };
 
   render() {
@@ -13,4 +13,4 @@ export default class UserLayout extends React.Component {
       </div>
     );
   }
-};
+}

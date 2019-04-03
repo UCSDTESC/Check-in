@@ -8,14 +8,14 @@ interface StateProps {
   authFinished: boolean;
 }
 
-interface PrivateRouteProps {
+interface PrivateUserRouteProps {
   component: (props: any) => JSX.Element;
   path: string;
 }
 
-type Props = RouteProps & StateProps & PrivateRouteProps;
+type Props = RouteProps & StateProps & PrivateUserRouteProps;
 
-class PrivateRoute extends React.Component<Props> {
+class PrivateUserRoute extends React.Component<Props> {
   render() {
     return (
       <Route
@@ -25,7 +25,7 @@ class PrivateRoute extends React.Component<Props> {
             return (<Redirect
               to={
                 {
-                  pathname: '/admin',
+                  pathname: '/login',
                   state: {from: props.location},
                 }
               }
@@ -41,9 +41,9 @@ class PrivateRoute extends React.Component<Props> {
 
 function mapStateToProps(state: ApplicationState) {
   return {
-    authenticated: state.admin.auth.authenticated,
-    authFinished: state.admin.auth.authFinished,
+    authenticated: state.user.auth.authenticated,
+    authFinished: state.user.auth.authFinished,
   };
 }
 
-export default connect<StateProps>(mapStateToProps)(PrivateRoute);
+export default connect(mapStateToProps)(PrivateUserRoute);

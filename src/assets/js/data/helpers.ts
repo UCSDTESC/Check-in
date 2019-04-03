@@ -1,4 +1,4 @@
-import Q from 'q';
+import Q from "q";
 
 /**
  * Run a request and return a Q promise.

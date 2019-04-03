@@ -15,7 +15,7 @@ const events: Reducer<UserEventsState> = (state: UserEventsState = initialState,
   case ActionTypes.ADD_USER_EVENT:
     return {
       ...state,
-      [action.event.alias]: action.event
+      [action.event.alias]: action.event,
     };
   case ActionTypes.DELETE_USER_EVENTS:
     return {};

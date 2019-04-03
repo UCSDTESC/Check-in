@@ -1,8 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Dropzone from 'react-dropzone';
+import React from "react";
+import PropTypes from "prop-types";
+import Dropzone from "react-dropzone";
 
-import fields from './Fields';
+import fields from "./Fields";
 
 export default class FileField extends React.Component {
   static propTypes = {
@@ -14,7 +14,7 @@ export default class FileField extends React.Component {
 
     button: PropTypes.bool,
     text: PropTypes.string,
-    secondary: PropTypes.bool
+    secondary: PropTypes.bool,
   };
 
   /**
@@ -23,7 +23,7 @@ export default class FileField extends React.Component {
   handleDropOrClick = (acceptedFiles, rejectedFiles, e) => {
     let eventOrValue = e;
     let {input: {onChange, onBlur}} = this.props;
-    if (e.type === 'drop') {
+    if (e.type === "drop") {
       if (acceptedFiles.length) {
         // FileList or [File]
         eventOrValue =
@@ -40,8 +40,8 @@ export default class FileField extends React.Component {
     let {secondary} = this.props;
 
     const className = `btn rounded-button rounded-button--small
-      ${secondary ? 'rounded-button--secondary' : ''}`;
-    return (<a tabIndex='-1'
+      ${secondary ? "rounded-button--secondary" : ""}`;
+    return (<a tabIndex="-1"
       className={className}>
       {text}
     </a>);
@@ -49,8 +49,8 @@ export default class FileField extends React.Component {
 
   renderAsDropzone(text) {
     return (<div className="sd-form__dropzone text-center">
-      <div className={'sd-form__dropzone--icon d-flex ' +
-        'flex-column justify-content-end'}>
+      <div className={"sd-form__dropzone--icon d-flex " +
+        "flex-column justify-content-end"}>
         <i className="fa fa-cloud-upload"></i>
       </div>
       <div className="sd-form__dropzone--text">
@@ -67,15 +67,15 @@ export default class FileField extends React.Component {
       accept,
       multiple,
       onDrop: this.handleDropOrClick,
-      className: className
+      className: className,
     };
 
-    let text = this.props.text ? this.props.text : 'Drop Your File';
+    let text = this.props.text ? this.props.text : "Drop Your File";
 
     return (
       <div>
-        <input type='hidden' disabled {...input} />
-        {selectedFile? <span>{selectedFile.name}</span> : null}
+        <input type="hidden" disabled {...input} />
+        {selectedFile ? <span>{selectedFile.name}</span> : null}
         <Dropzone {...dropzoneProps}>
           {button ? this.renderAsButton(text) : this.renderAsDropzone(text)}
         </Dropzone>
@@ -83,4 +83,4 @@ export default class FileField extends React.Component {
       </div>
     );
   }
-};
+}

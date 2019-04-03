@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {withRouter, Redirect} from 'react-router-dom';
+import React from "react";
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {withRouter, Redirect} from "react-router-dom";
 
-import {loginUser} from '~/auth/user/actions';
+import {loginUser} from "~/auth/user/actions";
 
-import Login from '~/auth/user/Login';
+import Login from "~/auth/user/Login";
 
 class LoginPage extends React.Component {
   static propTypes = {
@@ -13,37 +13,37 @@ class LoginPage extends React.Component {
     location: PropTypes.object.isRequired,
 
     loginUser: PropTypes.func.isRequired,
-    loginError: PropTypes.string.isRequired
+    loginError: PropTypes.string.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
       alerts: [],
-      redirectToReferrer: false
+      redirectToReferrer: false,
     };
 
-    if (props.location.hash === '#confirmed') {
+    if (props.location.hash === "#confirmed") {
       this.state = {
         alerts: [...this.state.alerts, {
-          type: 'success',
-          text: 'You have successfully confirmed your account'
-        }]
+          type: "success",
+          text: "You have successfully confirmed your account",
+        }],
       };
     }
-  };
+  }
 
   loginUser = (formProps) => {
     let {loginUser, history} = this.props;
     return loginUser(formProps)
-      .then(() => history.push('/'))
+      .then(() => history.push("/"))
       .catch((e) => {
-        console.error('Could not log in', e);
+        console.error("Could not log in", e);
       });
-  };
+  }
 
   render() {
-    const {from} = this.props.location.state || {from: {pathname: '/'}};
+    const {from} = this.props.location.state || {from: {pathname: "/"}};
     const {redirectToReferrer} = this.state;
 
     if (redirectToReferrer === true) {
@@ -61,8 +61,8 @@ class LoginPage extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    loginError: state.user.auth.error
+    loginError: state.user.auth.error,
   };
-};
+}
 
 export default connect(mapStateToProps, {loginUser})(withRouter(LoginPage));

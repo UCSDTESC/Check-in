@@ -14,6 +14,7 @@
       "node_modules/@types/",
       "./src/assets/js/typings/root.d.ts"
     ],
+    "lib": ["es2017", "dom"],
     "allowSyntheticDefaultImports": true
   },
   "include": ["./src/assets/js/**/*"],

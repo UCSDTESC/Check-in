@@ -8,17 +8,17 @@ import events from './Events';
 import { EventsState } from './Admin/types';
 
 export interface ApplicationState {
-  admin: AdminState,
-  user: UserState,
-  events: EventsState
-};
+  admin: AdminState;
+  user: UserState;
+  events: EventsState;
+}
 
 const reducers: Reducer<ApplicationState> = combineReducers<ApplicationState>({
   admin: combineReducers(adminReducers),
   user: combineReducers(userReducers),
   events,
   form,
-  loadingBar
+  loadingBar,
 });
 
 export default reducers;

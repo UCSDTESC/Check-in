@@ -1,26 +1,26 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import StyledSelect from './StyledSelect';
+import StyledSelect from "./StyledSelect";
 
-import {loadSponsors} from '~/data/Api';
+import {loadSponsors} from "~/data/Api";
 
-import {Admin as AdminPropTypes} from '~/proptypes';
+import {Admin as AdminPropTypes} from "~/proptypes";
 
 export default class SponsorSelect extends StyledSelect {
   static propTypes = {
     onChange: PropTypes.func,
     exclude: PropTypes.arrayOf(PropTypes.shape(
-      AdminPropTypes
+      AdminPropTypes,
     ).isRequired).isRequired,
-    value: PropTypes.object
+    value: PropTypes.object,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      sponsors: []
+      sponsors: [],
     };
   }
 
@@ -32,8 +32,8 @@ export default class SponsorSelect extends StyledSelect {
         sponsors: sponsors
           .map(sponsor => ({
             value: sponsor._id,
-            label: sponsor.username
-          }))
+            label: sponsor.username,
+          })),
       }));
   }
 
@@ -55,4 +55,4 @@ export default class SponsorSelect extends StyledSelect {
       </StyledSelect>
     );
   }
-};
+}

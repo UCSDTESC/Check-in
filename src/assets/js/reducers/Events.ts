@@ -9,7 +9,7 @@ const events: Reducer<EventsState> = (state: EventsState = initialState, action)
   case ActionTypes.ADD_EVENT:
     return {
       ...state,
-      [action.event.alias]: action.event
+      [action.event.alias]: action.event,
     };
   case ActionTypes.ADD_EVENTS:
     return action.events

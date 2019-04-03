@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
-import {Field} from 'redux-form';
-import React from 'react';
+import {Field} from "redux-form";
+import React from "react";
 
-import majors from '~/static/Majors.json';
+import majors from "~/static/Majors.json";
 
 /**
  * Defines all of the custom fields for the application.
@@ -13,7 +13,7 @@ import majors from '~/static/Majors.json';
 let creates = {};
 
 creates.createRow = function createRow(...content) {
-  return (<div className='row sd-form__row'>
+  return (<div className="row sd-form__row">
     {content}
   </div>);
 };
@@ -33,7 +33,7 @@ creates.createError = function createError(text) {
 
 creates.errorClass = function errorClass(className, touched, error) {
   return className +
-    (touched && error ? ' ' + 'sd-form__input--error' : '');
+    (touched && error ? " " + "sd-form__input--error" : "");
 };
 
 creates.errorTextInput =
@@ -51,8 +51,8 @@ creates.errorTextInput =
 creates.errorRadio =
   function errorRadio({input, className, label, defaultVal}) {
     return (
-      <div className='form-check form-check-inline'>
-        <label className='form-check-label'>
+      <div className="form-check form-check-inline">
+        <label className="form-check-label">
           <input {...input} className={className} type="radio"
             value={defaultVal} checked={input.value === defaultVal} />
           {label}
@@ -77,8 +77,8 @@ creates.errorMonthPicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let months = [
-      'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
-      'September', 'October', 'November', 'December'
+      "January", "February", "March", "April", "May", "June", "July", "August",
+      "September", "October", "November", "December",
     ];
 
     return (
@@ -87,9 +87,9 @@ creates.errorMonthPicker =
           type={type}>
           <option key={-1}>Month</option>
           {months.map((month, i) => (
-            <option key={i} value={(i+1) < 10 ? '0' + (i+1) : (i+1)}>
+            <option key={i} value={(i + 1) < 10 ? "0" + (i + 1) : (i + 1)}>
               {month}
-            </option>)
+            </option>),
           )}
         </select>
         {touched && error && creates.createError(error)}
@@ -101,10 +101,10 @@ creates.errorTShirtSizePicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let sizes = [
-      'X-Small','Small', 'Medium', 'Large', 'X-Large', 'XX-Large'
+      "X-Small", "Small", "Medium", "Large", "X-Large", "XX-Large",
     ];
     let values = [
-      'XS', 'S', 'M', 'L', 'XL', 'XXL'
+      "XS", "S", "M", "L", "XL", "XXL",
     ];
 
     return (
@@ -124,8 +124,8 @@ creates.errorGenderPicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let genders = [
-      'Female', 'Male', 'Non-Binary', 'Transgender',
-      'I prefer not to say', 'Other'
+      "Female", "Male", "Non-Binary", "Transgender",
+      "I prefer not to say", "Other",
     ];
 
     return (
@@ -144,9 +144,9 @@ creates.errorDiversityOptions =
   function errorDiversityOptions({input, className, type,
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
-    let opts = ['American Indian or Alaskan Native', 'Asian / Pacific Islander',
-      'Black or African American', 'Hispanic', 'White / Caucasian',
-      'Multiple ethnicity / Other', 'Prefer Not To Answer'];
+    let opts = ["American Indian or Alaskan Native", "Asian / Pacific Islander",
+      "Black or African American", "Hispanic", "White / Caucasian",
+      "Multiple ethnicity / Other", "Prefer Not To Answer"];
 
     return (
       <div>
@@ -165,7 +165,7 @@ creates.errorYearPicker =
     meta: {touched, error}}) {
     let errorClass = creates.errorClass(className, touched, error);
     let years = [
-      '1', '2', '3', '4', '5+', 'Graduate'
+      "1", "2", "3", "4", "5+", "Graduate",
     ];
 
     return (
@@ -197,22 +197,22 @@ creates.errorMajorPicker =
       </div>);
   };
 
-creates.createLabel = function createLabel(text, required=true, className='',
-  forTag='') {
-  return (<label className={'sd-form__label ' + (required ?
-    'sd-form__required ' + className : className)}
+creates.createLabel = function createLabel(text, required= true, className= "",
+                                           forTag= "") {
+  return (<label className={"sd-form__label " + (required ?
+    "sd-form__required " + className : className)}
     htmlFor={forTag}>{text}</label>);
 };
 
-creates.createInput = function createInput(name, placeholder, type='text',
-  className='sd-form__input-text', normalize=null) {
+creates.createInput = function createInput(name, placeholder, type= "text",
+                                           className= "sd-form__input-text", normalize= null) {
   return (<Field className={className}
     name={name} component={creates.errorTextInput} placeholder={placeholder}
     type={type} normalize={normalize} />);
 };
 
 creates.createTextArea = function createTextArea(name, placeholder,
-  maxLength=null, className='sd-form__input-textarea') {
+                                                 maxLength= null, className= "sd-form__input-textarea") {
   return (<Field className={className} name={name} maxLength={maxLength}
     component={creates.errorTextArea} placeholder={placeholder} />);
 };
@@ -220,7 +220,7 @@ creates.createTextArea = function createTextArea(name, placeholder,
 creates.createMonthPicker = function createMonthPicker(name) {
   return (<Field component={creates.errorMonthPicker}
     className="sd-form__input-select mb-1 mb-md-0"
-    name={`${name || 'birthdateMonth'}`} />);
+    name={`${name || "birthdateMonth"}`} />);
 };
 
 creates.createGenderPicker = function createGenderPicker() {
@@ -249,7 +249,7 @@ creates.createMajorPicker = function createMajorPicker() {
 };
 
 creates.createRadio = function createRadio(name, value, label,
-  className='sd-form__input-radio form-check-input') {
+                                           className= "sd-form__input-radio form-check-input") {
   return (<Field component={creates.errorRadio} className={className}
     name={name} defaultVal={String(value)} label={label} />);
 };

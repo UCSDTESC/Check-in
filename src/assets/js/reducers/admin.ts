@@ -1,5 +1,4 @@
 import reduceReducers from 'reduce-reducers';
-import {Reducer} from 'redux';
 
 import userColumns from '~/pages/UsersPage/reducers/Columns';
 
@@ -28,17 +27,17 @@ import { ResumesState } from '~/pages/ResumesPage/reducers/types';
 import { EventAlertsState, EventStatisticsState } from '~/pages/EventPage/reducers/types';
 
 export interface AdminState {
-  auth: AdminAuthState,
-  admins: Admin[],
-  events: EventsState,
-  filters: FiltersState,
-  general: GeneralState,
-  userColumns: ColumnsState,
-  users: TESCUser[],
-  resumes: ResumesState,
-  eventAlerts: EventAlertsState,
-  eventStatistics: EventStatisticsState
-};
+  auth: AdminAuthState;
+  admins: Admin[];
+  events: EventsState;
+  filters: FiltersState;
+  general: GeneralState;
+  userColumns: ColumnsState;
+  users: TESCUser[];
+  resumes: ResumesState;
+  eventAlerts: EventAlertsState;
+  eventStatistics: EventStatisticsState;
+}
 
 export default {
   auth,
@@ -50,5 +49,5 @@ export default {
   users: reduceReducers(usersReducer, checkinReducer),
   resumes,
   eventAlerts,
-  eventStatistics
+  eventStatistics,
 };

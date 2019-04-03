@@ -1,15 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React from "react";
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
-import {toggleEditing} from '~/actions';
+import {toggleEditing} from "~/actions";
 
-import {loginUser} from '~/auth/admin/actions';
+import {loginUser} from "~/auth/admin/actions";
 
-import Login from '~/auth/admin/Login';
+import Login from "~/auth/admin/Login";
 
-import Sidebar from './components/AdminSidebar';
+import Sidebar from "./components/AdminSidebar";
 
 class AdminLayout extends React.Component {
   static propTypes = {
@@ -22,21 +22,21 @@ class AdminLayout extends React.Component {
     loginUser: PropTypes.func.isRequired,
     loginError: PropTypes.string.isRequired,
 
-    toggleEditing: PropTypes.func.isRequired
+    toggleEditing: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      isSidebarOpen: false
+      isSidebarOpen: false,
     };
   }
 
   componentDidUpdate() {
     if (this.state.isSidebarOpen) {
       this.setState({
-        isSidebarOpen: false
+        isSidebarOpen: false,
       });
     }
   }
@@ -46,18 +46,18 @@ class AdminLayout extends React.Component {
    */
   toggleSidebar() {
     this.setState({
-      isSidebarOpen: !this.state.isSidebarOpen
+      isSidebarOpen: !this.state.isSidebarOpen,
     });
   }
 
   render() {
     let {isAuthenticated, user, events, isEditing} = this.props;
 
-    let containerState = 'admin-sidebar__container--' +
-      (isAuthenticated ? 'authenticated' : 'logged-out');
+    let containerState = "admin-sidebar__container--" +
+      (isAuthenticated ? "authenticated" : "logged-out");
 
-    let contentState = 'admin-body__content--' +
-      (isAuthenticated ? 'authenticated' : 'logged-out');
+    let contentState = "admin-body__content--" +
+      (isAuthenticated ? "authenticated" : "logged-out");
 
     let login = (<Login loginUser={this.props.loginUser}
       errorMessage={this.props.loginError} />);
@@ -83,7 +83,7 @@ class AdminLayout extends React.Component {
       </div>
     );
   }
-};
+}
 
 function mapStateToProps(state) {
   return {
@@ -91,14 +91,14 @@ function mapStateToProps(state) {
     user: state.admin.auth.user,
     loginError: state.admin.auth.error,
     isEditing: state.admin.general.editing,
-    events: state.admin.events
+    events: state.admin.events,
   };
-};
+}
 
 function mapDispatchToProps(dispatch) {
   return {
     loginUser: bindActionCreators(loginUser, dispatch),
-    toggleEditing: bindActionCreators(toggleEditing, dispatch)
+    toggleEditing: bindActionCreators(toggleEditing, dispatch),
   };
 }
 

@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
-import {Link} from 'react-router-dom';
-import {Collapse} from 'reactstrap';
+import React from "react";
+import PropTypes from "prop-types";
+import {connect} from "react-redux";
+import {Link} from "react-router-dom";
+import {Collapse} from "reactstrap";
 
 class NavHeader extends React.Component {
   static propTypes = {
     authenticated: PropTypes.bool.isRequired,
-    title: PropTypes.string
+    title: PropTypes.string,
   };
 
   constructor(props) {
@@ -17,31 +17,31 @@ class NavHeader extends React.Component {
       isHidden: true,
       isBackgroundActive: false,
       isLogoUp: true,
-      scrollCutoff: 100
+      scrollCutoff: 100,
     };
   }
 
   onMobileClick = () =>
     this.setState({
-      isHidden: !this.state.isHidden
-    });
+      isHidden: !this.state.isHidden,
+    })
 
   handleScroll = () => {
     let {scrollCutoff} = this.state;
 
     this.setState({
       isBackgroundActive: $(window).scrollTop() > 0,
-      isLogoUp: $(window).scrollTop() <= scrollCutoff
+      isLogoUp: $(window).scrollTop() <= scrollCutoff,
     });
-  };
+  }
 
   componentDidMount() {
-    window.addEventListener('scroll', this.handleScroll);
+    window.addEventListener("scroll", this.handleScroll);
     this.handleScroll();
   }
 
   componentWillUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   }
 
   renderUnauthenticatedLinks() {
@@ -50,7 +50,7 @@ class NavHeader extends React.Component {
         <Link className="sd-nav__link" to="/login">
           Login
         </Link>
-      </li>
+      </li>,
     ]);
   }
 
@@ -60,7 +60,7 @@ class NavHeader extends React.Component {
         <Link className="hamburger__link" to="/login">
           Login
         </Link>
-      </li>
+      </li>,
     ]);
   }
 
@@ -70,7 +70,7 @@ class NavHeader extends React.Component {
         <Link className="sd-nav__link" to="/logout">
           Logout
         </Link>
-      </li>
+      </li>,
     ]);
   }
 
@@ -80,7 +80,7 @@ class NavHeader extends React.Component {
         <Link className="hamburger__link" to="/logout">
           Logout
         </Link>
-      </li>
+      </li>,
     ]);
   }
 
@@ -88,9 +88,9 @@ class NavHeader extends React.Component {
     const {isHidden, isBackgroundActive} = this.state;
     const {authenticated} = this.props;
     const activeBackground = (isBackgroundActive ?
-      'sd-nav__background-active' : '');
+      "sd-nav__background-active" : "");
 
-    return (<nav className={'sd-nav'}>
+    return (<nav className={"sd-nav"}>
       <div className={`sd-nav__background ${activeBackground}`}></div>
       <div className="container">
         <nav className={`nav flex-row align-items-md-center align-items-start
@@ -125,11 +125,11 @@ class NavHeader extends React.Component {
       </Collapse>
     </nav>);
   }
-};
+}
 
 function mapStateToProps(state) {
   return {
-    authenticated: state.user.auth.authenticated
+    authenticated: state.user.auth.authenticated,
   };
 }
 

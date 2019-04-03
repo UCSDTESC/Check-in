@@ -18,7 +18,7 @@ const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ||
   compose;
 
 // Create Redux store with middlewares
-let store = createStore(reducer,
+const store = createStore(reducer,
   composeEnhancers(
     applyMiddleware(reduxThunk)
   ));

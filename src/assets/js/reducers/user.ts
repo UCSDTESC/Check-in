@@ -8,13 +8,13 @@ import { TESCUser } from '~/static/types';
 import { UserEventsState } from './types';
 
 export interface UserState {
-  auth: UserAuthState,
-  current: TESCUser | {},
-  events: UserEventsState
-};
+  auth: UserAuthState;
+  current: TESCUser | {};
+  events: UserEventsState;
+}
 
 export default {
   auth,
   current,
-  events
+  events,
 };

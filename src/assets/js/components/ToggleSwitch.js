@@ -1,20 +1,20 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import {default as UUID} from 'node-uuid';
+import React from "react";
+import PropTypes from "prop-types";
+import {default as UUID} from "node-uuid";
 
 class ToggleSwitch extends React.Component {
   static propTypes = {
     checked: PropTypes.bool.isRequired,
     onChange: PropTypes.func,
     className: PropTypes.string,
-    disabled: PropTypes.bool
+    disabled: PropTypes.bool,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      id: UUID.v4()
+      id: UUID.v4(),
     };
   }
 

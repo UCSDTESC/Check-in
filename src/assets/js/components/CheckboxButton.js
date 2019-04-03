@@ -1,15 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 class CheckboxButton extends React.Component {
   static propTypes = {
-    input: PropTypes.object.isRequired
+    input: PropTypes.object.isRequired,
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      value: props.input.value
+      value: props.input.value,
     };
   }
 
@@ -28,10 +28,10 @@ class CheckboxButton extends React.Component {
 
   render() {
     const {value} = this.state;
-    const isChecked = value || value === 'true';
+    const isChecked = value || value === "true";
 
-    let active = isChecked ? 'active' : '';
-    let text = isChecked ? 'True' : 'False';
+    let active = isChecked ? "active" : "";
+    let text = isChecked ? "True" : "False";
     return (
       <div className="btn-group-toggle" data-toggle="buttons">
         <label className={`btn btn-outline-primary ${active}`}
