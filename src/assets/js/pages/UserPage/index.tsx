@@ -17,8 +17,8 @@ import Loading from '~/components/Loading';
 import {updateUserField, rsvpUser} from '~/data/User';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from '~/reducers';
-import { TESCUser, PageAlert, AlertType } from '~/static/types';
-import AlertPage, { AlertPageState } from '../AlertPage';
+import { TESCUser } from '~/static/types';
+import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
 
 interface StateProps {
   user: TESCUser;

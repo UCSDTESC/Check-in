@@ -1,6 +1,6 @@
 // Question types
-export const QuestionTypes = {
-  QUESTION_LONG: 'longText',
-  QUESTION_SHORT: 'shortText',
-  QUESTION_CHECKBOX: 'checkBox',
+export enum QuestionType {
+  QUESTION_LONG = 'longText',
+  QUESTION_SHORT = 'shortText',
+  QUESTION_CHECKBOX = 'checkBox',
 };

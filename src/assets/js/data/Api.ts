@@ -1,26 +1,32 @@
 import Cookies from 'universal-cookie';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
-import request from 'superagent';
+import request, { SuperAgentRequest } from 'superagent';
 
 import { promisify } from './helpers';
 
 import CookieTypes from '~/static/Cookies';
+import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics, TESCEvent, Column } from '~/static/types';
+import { QuestionType } from '~/static/Questions';
 
 const API_URL_PREFIX = '/api';
 
 const apiPrefix = pref(API_URL_PREFIX);
 const cookies = new Cookies();
 
+interface SuccessResponse {
+  success: boolean;
+}
+
 /**
  * Checks whether the user is still authorised.
  * @returns {Promise} A promise of the request.
  */
 export const authorised = () =>
-  promisify(
+  promisify<{}>(
     request
       .get('/auth/authorised')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -30,11 +36,11 @@ export const authorised = () =>
  * @param {String} alias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadAllUsers = alias =>
-  promisify(
+export const loadAllUsers = (alias: string) =>
+  promisify<TESCUser[]>(
     request
       .get(`/users/${alias}`)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -43,11 +49,11 @@ export const loadAllUsers = alias =>
  * @param {String} alias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadEventStatistics = alias =>
-  promisify(
+export const loadEventStatistics = (alias: string) =>
+  promisify<EventStatistics>(
     request
       .get(`/statistics/${alias}`)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -56,10 +62,10 @@ export const loadEventStatistics = alias =>
  * @returns {Promise} A promise of the request.
  */
 export const loadAllAdmins = () =>
-  promisify(
+  promisify<Admin[]>(
     request
       .get('/admins')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -69,15 +75,17 @@ export const loadAllAdmins = () =>
  * @param {String} email The user email.
  * @returns {Promise} A promise of the request.
  */
-export const checkUserExists = email =>
-  promisify(request.get(`/verify/${email}`).use(apiPrefix));
+export const checkUserExists = (email: string) =>
+  promisify<{
+    exists: boolean;
+  }>(request.get(`/verify/${email}`).use(apiPrefix));
 
 /**
  * Request a list of all events that is available to the public.
  * @returns {Promise} A promise of the request.
  */
 export const loadAllPublicEvents = () =>
-  promisify(
+  promisify<TESCEvent[]>(
     request
       .get('/events')
       .use(apiPrefix)
@@ -89,10 +97,10 @@ export const loadAllPublicEvents = () =>
  * @returns {Promise} A promise of the request.
  */
 export const loadAllEvents = () =>
-  promisify(
+  promisify<TESCEvent[]>(
     request
       .get('/admin/events')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -101,8 +109,8 @@ export const loadAllEvents = () =>
  * Requests event information based on a given event alias.
  * @param {String} eventAlias The event alias.
  */
-export const loadEventByAlias = eventAlias =>
-  promisify(
+export const loadEventByAlias = (eventAlias: string) =>
+  promisify<TESCEvent>(
     request
       .get(`/admin/events/${eventAlias}`)
       .use(apiPrefix)
@@ -114,64 +122,28 @@ export const loadEventByAlias = eventAlias =>
  * @param {String} eventAlias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadAllApplicants = eventAlias =>
-  promisify(
+export const loadAllApplicants = (eventAlias: string) =>
+  promisify<TESCUser[]>(
     request
       .get(`/sponsors/applicants/${eventAlias}`)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
 
 /**
- * Request the statistics for users.
- * @returns {Promise} A promise of the request.
- */
-export const loadUserStats = () =>
-  promisify(
-    request
-      .get('/stats/users')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
-      .use(apiPrefix)
-  );
-
-/**
- * Request the statistics for universities.
- * @returns {Promise} A promise of the request.
- */
-export const loadUniversityStats = () =>
-  promisify(
-    request
-      .get('/stats/university')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
-      .use(apiPrefix)
-  );
-
-/**
- * Request information about a given user.
- * @param  {String} id The ID of the requested user.
- * @returns {Promise} A promise of the request.
- */
-export const loadUser = id =>
-  promisify(
-    request
-      .get(`/users/${id}`)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
-      .use(apiPrefix)
-  );
-
-/**
  * Request an update for a given user.
  * @param  {String} id The ID of the user.
+ * @param  {String} eventAlias The alias of the event the user belongs to.
  * @param  {Object} user The new user object to save.
  * @returns {Promise} A promise of the request.
  */
-export const updateUser = (id, eventAlias, user) =>
-  promisify(
+export const updateUser = (id: string, eventAlias: string, user: TESCUser) =>
+  promisify<SuccessResponse>(
     request
       .post(`/users/${eventAlias}/${id}`)
       .send(user)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -181,12 +153,12 @@ export const updateUser = (id, eventAlias, user) =>
  * @param  {String} eventAlias of the event we want to check in to
  * @returns {Promise} A promise of the request.
  */
-export const checkinUser = (id, eventAlias) =>
-  promisify(
+export const checkinUser = (id: string, eventAlias: string) =>
+  promisify<SuccessResponse>(
     request
       .post(`/users/checkin/${eventAlias}`)
       .send({ id })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -196,28 +168,32 @@ export const checkinUser = (id, eventAlias) =>
  * @param  {Object} user The user fields to register.
  * @returns {Promise} A promise of the request.
  */
-export const registerUser = (eventAlias, user) => {
+export const registerUser = (eventAlias: string, user: TESCUser) => {
   const { customQuestionResponses } = user;
+  const postObject: any = Object.assign({}, user);
+
   // Ensure it doesn't push an undefined field
-  user.customQuestionResponses = customQuestionResponses
+  postObject.customQuestionResponses = customQuestionResponses
     ? JSON.stringify(customQuestionResponses)
     : '';
   let baseReq = request
     .post(`/register/${eventAlias}`)
     .use(apiPrefix)
-    .field(user);
+    .field(postObject);
 
-  if (user.resume && user.resume.length > 0) {
-    baseReq = baseReq.attach('resume', user.resume[0]);
+  if (postObject.resume && postObject.resume.length > 0) {
+    baseReq = baseReq.attach('resume', postObject.resume[0]);
   }
-  return promisify(baseReq);
+  return promisify<{
+    email: string;
+  }>(baseReq);
 };
 
-export const registerNewEvent = event =>
-  promisify(
+export const registerNewEvent = (event: any) =>
+  promisify<TESCEvent>(
     request
       .post('/admin/events')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .field(event)
       .attach('logo', event.logo[0])
       .use(apiPrefix)
@@ -229,12 +205,12 @@ export const registerNewEvent = event =>
  * @param {Object} admin The admin fields to register.
  * @returns {Promise} A promise of the request.
  */
-export const registerAdmin = admin =>
-  promisify(
+export const registerAdmin = (admin: Admin) =>
+  promisify<Admin>(
     request
       .post('/admins/register')
       .send(admin)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -243,12 +219,12 @@ export const registerAdmin = admin =>
  * @param {String} adminId The ID of the admin to delete.
  * @returns {Promise} A promise of the request.
  */
-export const deleteAdmin = adminId =>
-  promisify(
+export const deleteAdmin = (adminId: string) =>
+  promisify<SuccessResponse>(
     request
       .post('/admins/delete')
       .send({ id: adminId })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -257,12 +233,12 @@ export const deleteAdmin = adminId =>
  * @param {String[]} applicants An array of User IDs to download
  * @returns {Promise} A promise of the request.
  */
-export const downloadResumes = applicants =>
-  promisify(
+export const downloadResumes = (applicants: string[]) =>
+  promisify<Download>(
     request
       .post('/sponsors/download')
       .send({ applicants })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -271,23 +247,24 @@ export const downloadResumes = applicants =>
  * @param {String} downloadId The given ID of the download.
  * @returns {Promise} A promise of the request.
  */
-export const pollDownload = downloadId =>
-  promisify(
+export const pollDownload = (downloadId: string) =>
+  promisify<Download>(
     request
       .get(`/sponsors/downloads/${downloadId}`)
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
 /**
- * Requests the download of all users as a CSV file.
+ * Requests the download of all users as a CSV file. Returned as a request since
+ * it downloads a CSV blob.
  * @param {String} eventAlias The alias associated with the event.
  * @returns {Request} A request object not wrapped in a promise.
  */
-export const exportUsers = eventAlias =>
+export const exportUsers = (eventAlias: string): SuperAgentRequest =>
   request
     .get(`/admin/export/${eventAlias}`)
-    .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+    .set('Authorization', cookies.get(CookieTypes.admin.token))
     .use(apiPrefix);
 
 /**
@@ -296,12 +273,12 @@ export const exportUsers = eventAlias =>
  * @param {String} status The new status string for all of the users
  * @returns {Promise} A promise of the request.
  */
-export const bulkChange = (users, status) =>
-  promisify(
+export const bulkChange = (users: string, status: string) =>
+  promisify<SuccessResponse>(
     request
       .post('/admin/bulkChange')
       .send({ users, status })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -311,12 +288,12 @@ export const bulkChange = (users, status) =>
  * @param  {Object} options The new event options.
  * @returns {Promise} A promise of the request.
  */
-export const updateOptions = (eventAlias, options) =>
-  promisify(
+export const updateOptions = (eventAlias: string, options: TESCEventOptions) =>
+  promisify<SuccessResponse>(
     request
       .post(`/admin/update/${eventAlias}`)
       .send({ options })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
 
@@ -325,10 +302,10 @@ export const updateOptions = (eventAlias, options) =>
  * @returns {Promise} A promise of the request.
  */
 export const loadColumns = () =>
-  promisify(
+  promisify<Column[]>(
     request
       .get('/admin/columns')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -338,10 +315,10 @@ export const loadColumns = () =>
  * @returns {Promise} A promise of the request.
  */
 export const loadSponsors = () =>
-  promisify(
+  promisify<Admin[]>(
     request
       .get('/admin/sponsors')
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -350,12 +327,12 @@ export const loadSponsors = () =>
  * Request to add a new sponsor to an event.
  * @returns {Promise} A promise of the request.
  */
-export const addNewSponsor = (eventAlias, sponsorId) =>
-  promisify(
+export const addNewSponsor = (eventAlias: string, sponsorId: string) =>
+  promisify<SuccessResponse>(
     request
       .post(`/admin/addSponsor/${eventAlias}`)
       .send({ sponsor: sponsorId })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -364,12 +341,12 @@ export const addNewSponsor = (eventAlias, sponsorId) =>
  * Request to add a new organiser to an event.
  * @returns {Promise} A promise of the request.
  */
-export const addNewOrganiser = (eventAlias, adminId) =>
-  promisify(
+export const addNewOrganiser = (eventAlias: string, adminId: string) =>
+  promisify<SuccessResponse>(
     request
       .post(`/admin/addOrganiser/${eventAlias}`)
       .send({ admin: adminId })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -378,14 +355,14 @@ export const addNewOrganiser = (eventAlias, adminId) =>
  * Add a new custom question to a given event.
  * @param {String} eventAlias The alias for the event.
  * @param {Object} question The question object to post.
- * @param {String} type The question type.
+ * @param {QuestionType} type The question type.
  */
-export const addCustomQuestion = (eventAlias, question, type) =>
-  promisify(
+export const addCustomQuestion = (eventAlias: string, question: Question, type: QuestionType) =>
+  promisify<SuccessResponse>(
     request
       .post(`/admin/customQuestion/${eventAlias}`)
       .send({ question, type })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -395,12 +372,12 @@ export const addCustomQuestion = (eventAlias, question, type) =>
  * @param {String} eventAlias The alias for the event.
  * @param {Object} question The updated question object.
  */
-export const updateCustomQuestion = (eventAlias, question) =>
-  promisify(
+export const updateCustomQuestion = (eventAlias: string, question: Question) =>
+  promisify<SuccessResponse>(
     request
       .put(`/admin/customQuestion/${eventAlias}`)
       .send({ question })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );
@@ -409,14 +386,14 @@ export const updateCustomQuestion = (eventAlias, question) =>
  * Delet a custom question from a given event.
  * @param {String} eventAlias The alias for the event.
  * @param {Object} question The existing question to delete.
- * @param {String} type The question type.
+ * @param {QuestionType} type The question type.
  */
-export const deleteCustomQuestion = (eventAlias, question, type) =>
-  promisify(
+export const deleteCustomQuestion = (eventAlias: string, question: Question, type: QuestionType) =>
+  promisify<SuccessResponse>(
     request
       .delete(`/admin/customQuestion/${eventAlias}`)
       .send({ question, type })
-      .set('Authorization', cookies.get(CookieTypes.admin.token, { path: '/' }))
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
   );

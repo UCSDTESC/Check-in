@@ -6,6 +6,7 @@ import request from 'superagent';
 import {promisify} from './helpers';
 
 import CookieTypes from '~/static/Cookies';
+import { TESCUser } from '~/static/types';
 
 const URL_PREFIX = '/api/user';
 
@@ -19,7 +20,7 @@ const cookies = new Cookies();
 export const authorised = () => {
   return promisify(request
     .get('/authorised')
-    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix)
     .use(nocache));
 };
@@ -30,7 +31,7 @@ export const authorised = () => {
  * @param  {String} password The password of the login.
  * @returns {Promise} A promise of the request.
  */
-export const login = (email, password) => {
+export const login = (email: string, password: string) => {
   return promisify(request
     .post('/login')
     .set('Content-Type', 'application/json')
@@ -44,7 +45,7 @@ export const login = (email, password) => {
  * @param {String} email The email address of the user.
  * @returns {Promise} A promise of the request.
  */
-export const forgotPassword = (email) => {
+export const forgotPassword = (email: string) => {
   return promisify(request
     .post('/forgot')
     .set('Content-Type', 'application/json')
@@ -59,7 +60,7 @@ export const forgotPassword = (email) => {
  * @param {String} newPassword The new password to associate with the user.
  * @returns {Promise} A promise of the request.
  */
-export const resetPassword = (id, newPassword) => {
+export const resetPassword = (id: string, newPassword: string) => {
   return promisify(request
     .post('/reset')
     .set('Content-Type', 'application/json')
@@ -73,11 +74,11 @@ export const resetPassword = (id, newPassword) => {
  * @param {String} eventAlias The alias of the event for which to fetch data.
  * @returns {Promise} A promise of the request.
  */
-export const getCurrentUser = (eventAlias) => {
+export const getCurrentUser = (eventAlias: string) => {
   return promisify(request
     .get(`/current/${eventAlias}`)
     .set('Content-Type', 'application/json')
-    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix)
     .use(nocache));
 };
@@ -90,7 +91,7 @@ export const getUserEvents = () => {
   return promisify(request
     .get('/events')
     .set('Content-Type', 'application/json')
-    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix));
 };
 
@@ -98,12 +99,12 @@ export const getUserEvents = () => {
  * Updates a field for a given user.
  * @returns {Promise} A promise of the request.
  */
-export const updateUserField = (user, eventAlias) => {
+export const updateUserField = (user: any, eventAlias: string) => {
   return promisify(request
     .post(`/update/${eventAlias}`)
     .field(user)
     .attach('resume', user.resume ? user.resume[0] : null)
-    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix)
     .use(nocache));
 };
@@ -116,11 +117,11 @@ export const updateUserField = (user, eventAlias) => {
  * wasn't offered a seat.
  * @returns {Promise} A promise of the request.
  */
-export const rsvpUser = (eventAlias, status, bussing) => {
+export const rsvpUser = (eventAlias: string, status: boolean, bussing: boolean) => {
   return promisify(request
     .post(`/rsvp/${eventAlias}`)
     .set('Content-Type', 'application/json')
-    .set('Authorization', cookies.get(CookieTypes.user.token, {path: '/'}))
+    .set('Authorization', cookies.get(CookieTypes.user.token))
     .send({status, bussing})
     .use(prefix)
     .use(nocache));

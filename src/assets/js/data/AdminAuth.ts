@@ -12,7 +12,7 @@ const prefix = pref(URL_PREFIX);
  * @param  {String} password The password of the login.
  * @returns {Object} A superagent request object.
  */
-export const login = (username, password) => {
+export const login = (username: string, password: string) => {
   return request
     .post('/login')
     .set('Content-Type', 'application/json')
@@ -27,7 +27,7 @@ export const login = (username, password) => {
  * @param {String} password The password of the new user.
  * @returns {Object} A superagent request object.
  */
-export const register = (username, password) => {
+export const register = (username: string, password: string) => {
   return request
     .post('/register')
     .set('Content-Type', 'application/json')

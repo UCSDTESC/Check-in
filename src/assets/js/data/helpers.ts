@@ -1,11 +1,12 @@
 import Q from 'q';
+import { SuperAgentRequest } from 'superagent';
 
 /**
  * Run a request and return a Q promise.
  * @param  {Object} request The superagent request to run.
  */
-export const promisify = (request) => {
-  const deferred = Q.defer();
+export function promisify<T>(request: SuperAgentRequest): Q.Promise<T> {
+  const deferred = Q.defer<T>();
   request.end((err, res) => {
     if (err || (res.body && res.body.error)) {
       if (res.body) {
@@ -13,7 +14,7 @@ export const promisify = (request) => {
       }
       return deferred.reject(err);
     }
-    deferred.resolve(res.body);
+    deferred.resolve(res.body as T);
   });
   return deferred.promise;
 };

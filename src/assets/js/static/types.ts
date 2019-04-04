@@ -1,5 +1,14 @@
 import { Roles } from './Roles';
 
+export interface Download {
+  _id: string;
+  fileCount: number;
+  adminId: string;
+  accessUrl?: string;
+  error: boolean;
+  fulfilled: boolean;
+}
+
 export interface EventStatistics {
   count: number;
   universities: number;
@@ -133,4 +142,10 @@ export interface TESCUser {
   majorGPA?: string;
   customQuestionResponses?: CustomQuestionResponses;
   whyEventResponse?: string;
+  resume: {
+    name: string;
+    size: number;
+    type: string;
+    url: string;
+  };
 }

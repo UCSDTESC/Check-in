@@ -1,45 +1,53 @@
-import React from "react";
-import PropTypes from "prop-types";
-import {bindActionCreators} from "redux";
-import {connect} from "react-redux";
-import {showLoading, hideLoading} from "react-redux-loading-bar";
+import React from 'react';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {Resumes as ResumePropType} from "~/proptypes";
+import {applyResumeFilter} from '~/static/ResumeFilter';
 
-import {applyResumeFilter} from "~/static/ResumeFilter";
-
-import {downloadResumes, pollDownload} from "~/data/Api";
+import {downloadResumes, pollDownload} from '~/data/Api';
 
 import {toggleFilter, toggleFilterOption, selectAllOptions,
-  selectNoneOptions, addFilterOption} from "../actions";
+  selectNoneOptions, addFilterOption} from '../actions';
 
-import Sidebar from "./components/SponsorSidebar";
+import Sidebar from './components/SponsorSidebar';
+import { ApplicationState } from '~/reducers';
+import { FiltersState } from '~/reducers/Admin/types';
+import { ResumesState } from '~/pages/ResumesPage/reducers/types';
+import { Admin, TESCUser } from '~/static/types';
 
-class SponsorLayout extends React.Component {
-  static propTypes = {
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
+interface StateProps {
+  filters: FiltersState;
+  resumes: ResumesState;
+  user: Admin;
+  filtered: number;
+}
 
-    children: PropTypes.object.isRequired,
-    user: PropTypes.object.isRequired,
-    filters: PropTypes.object.isRequired,
-    filtered: PropTypes.number.isRequired,
-    resumes: PropTypes.shape(ResumePropType).isRequired,
+interface DispatchProps {
+  showLoading: () => void;
+  hideLoading: () => void;
 
-    toggleFilter: PropTypes.func.isRequired,
-    toggleFilterOption: PropTypes.func.isRequired,
-    selectAllOptions: PropTypes.func.isRequired,
-    selectNoneOptions: PropTypes.func.isRequired,
-    addFilterOption: PropTypes.func.isRequired,
+  toggleFilter: (...args: any) => Promise<any>;
+  toggleFilterOption: (...args: any) => Promise<any>;
+  selectAllOptions: (...args: any) => Promise<any>;
+  selectNoneOptions: (...args: any) => Promise<any>;
+  addFilterOption: (...args: any) => Promise<any>;
+}
+
+interface SponsorLayoutProps {
+
+}
+
+type Props = StateProps & DispatchProps & SponsorLayoutProps;
+
+interface SponsorLayoutState {
+  isDownloading: boolean;
+}
+
+class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
+  state: Readonly<SponsorLayoutState> = {
+    isDownloading: false,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isDownloading: false,
-    };
-  }
 
   /**
    * Creates an object which maps all properties of every applicant to a unique
@@ -48,14 +56,16 @@ class SponsorLayout extends React.Component {
    * @returns {Object} A mapping of applicant property to unique array of
    * values.
    */
-  createFilterOptions = (applicants) => {
+  createFilterOptions = (applicants: TESCUser[]) => {
     if (applicants.length < 1) {
       return {};
     }
 
-    let modelApplicant = applicants[0];
+    const modelApplicant = applicants[0];
     return Object.keys(modelApplicant)
-      .reduce((total, curr) => {
+      .reduce((total: any, curr) => {
+        // TODO: Rewrite logo
+        // @ts-ignore: Access dynamic properties of user
         total[curr] = [...new Set(applicants.map(item => item[curr]))];
         return total;
       }, {});
@@ -65,7 +75,7 @@ class SponsorLayout extends React.Component {
    * Gives the request to download the resumes that are currently selected.
    */
   downloadResumes = () => {
-    let {showLoading, filters, resumes} = this.props;
+    const {showLoading, filters, resumes} = this.props;
     showLoading();
 
     const filtered = applyResumeFilter(filters, resumes.applicants)
@@ -76,7 +86,7 @@ class SponsorLayout extends React.Component {
         this.setState({
           isDownloading: true,
         });
-        this.startPolling(res.downloadId);
+        this.startPolling(res._id);
       })
       .catch(console.error);
   }
@@ -85,18 +95,18 @@ class SponsorLayout extends React.Component {
    * Polls a requested to download until it completes or errors.
    * @param {String} downloadId The ID of the download to poll for.
    */
-  startPolling = (downloadId) => {
+  startPolling = (downloadId: string) => {
     const pollingInterval = 1000;
-    let {hideLoading} = this.props;
+    const {hideLoading} = this.props;
 
     pollDownload(downloadId)
       .then((res) => {
-        if (res.url) {
+        if (res.accessUrl) {
           hideLoading();
           this.setState({
             isDownloading: false,
           });
-          return window.open(res.url);
+          return window.open(res.accessUrl);
         }
 
         setTimeout(() => this.startPolling(downloadId), pollingInterval);
@@ -108,16 +118,19 @@ class SponsorLayout extends React.Component {
   }
 
   render() {
-    let {user, filters, resumes, filtered} = this.props;
-    let filterOptions = this.createFilterOptions(resumes.applicants);
+    const {user, filters, resumes, filtered} = this.props;
+    const filterOptions = this.createFilterOptions(resumes.applicants);
 
     return (
       <div className="admin-body d-flex flex-column">
         <div className="container-fluid p-0 w-100 max-height">
           <div className="d-flex flex-column flex-md-row h-100">
-            <div className={`admin-sidebar__container
+            <div
+              className={`admin-sidebar__container
               admin-sidebar__container--authenticated`}>
-              <Sidebar user={user} selected={filtered}
+              <Sidebar
+                user={user}
+                selected={filtered}
                 total={resumes.applicants.length}
                 toggleFilter={this.props.toggleFilter}
                 toggleFilterOption={this.props.toggleFilterOption}
@@ -130,7 +143,7 @@ class SponsorLayout extends React.Component {
                 addFilterOption={this.props.addFilterOption} />
             </div>
 
-            <main className={"admin-body__content"}>
+            <main className={'admin-body__content'}>
               {this.props.children}
             </main>
           </div>
@@ -140,7 +153,7 @@ class SponsorLayout extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state: ApplicationState) {
   return {
     filters: state.admin.filters,
     resumes: state.admin.resumes,

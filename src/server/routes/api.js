@@ -72,7 +72,7 @@ module.exports = function(app) {
       .exec()
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
-      .then(events => res.json(events));
+      .then(res.json);
   });
 
   api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_SPONSOR),
@@ -454,7 +454,7 @@ module.exports = function(app) {
         .select('username role')
         .sort({createdAt: -1})
         .exec()
-        .then((response) => res.json(response))
+        .then(res.json)
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
   );
 
@@ -520,7 +520,7 @@ module.exports = function(app) {
             if (err) {
               next(err);
             }
-            res.json({'downloadId': download._id});
+            res.json(download);
             logging.info('Zipping started for ', download.fileCount, 'files');
           });
 
@@ -553,12 +553,12 @@ module.exports = function(app) {
         if (err || download.error) {
           return res.json({'error': true});
         }
-        return res.json({url: download.accessUrl});
+        return res.json(download);
       })
   );
 
   // Use API for any API endpoints
-  api.get('/', (req, res) => {
+  api.get('/', (_, res) => {
     return res.json({success: true});
   });
 };

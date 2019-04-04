@@ -1,15 +1,16 @@
 import { Filter, TESCUser } from './types';
+import { FiltersState } from '~/reducers/Admin/types';
 
 /**
  * Applies the user defined filters to resumes.
- * @param {Array} The list of filters.
- * @param {Array} The list of applicants.
- * @return {Array} The array of filtered applicants.
+ * @param {FilterState} The list of filters.
+ * @param {TESCUser[]} The list of applicants.
+ * @return {TESCUser[]} The array of filtered applicants.
  */
-export function applyResumeFilter(filters: Filter[], applicants: TESCUser[]) {
+export function applyResumeFilter(filters: FiltersState, applicants: TESCUser[]) {
   const filterNames = Object.keys(filters);
 
-  if (filters.length === 0) {
+  if (filterNames.length === 0) {
     return applicants;
   }
 
@@ -31,6 +32,7 @@ export function applyResumeFilter(filters: Filter[], applicants: TESCUser[]) {
               return false;
             }
 
+            // @ts-ignore: Trying to access possibly undefined property
             return applicant[filterName].toLowerCase() ===
               optionNames[optionIndex].toLowerCase();
           });
