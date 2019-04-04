@@ -1,7 +1,6 @@
 import {Switch, Route} from 'react-router-dom';
 import {Cookies, withCookies} from 'react-cookie';
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
 import {withRouter} from 'react-router-dom';
 import {RouteComponentProps} from 'react-router';
 import ReactGA from 'react-ga';
@@ -38,18 +37,13 @@ import {authorised as AdminAuthorised} from '~/data/Api';
 import {authorised as UserAuthorised} from '~/data/User';
 
 import CookieTypes from '~/static/Cookies';
-import { ApplicationState } from './reducers';
-
-interface StateProps {
-  authenticated: boolean;
-}
 
 interface RoutesProps {
   dispatch: (arg0: object) => void;
   cookies: Cookies;
 }
 
-type Props = RouteComponentProps & StateProps & RoutesProps;
+type Props = RouteComponentProps & RoutesProps;
 
 class Routes extends React.Component<Props> {
   componentDidMount() {
@@ -231,10 +225,4 @@ class Routes extends React.Component<Props> {
   }
 }
 
-function mapStateToProps(state: ApplicationState) {
-  return {
-    authenticated: state.user.auth.authenticated,
-  };
-}
-
-export default hot(withRouter(connect(mapStateToProps)(withCookies(Routes))));
+export default hot(withRouter(withCookies(Routes)));

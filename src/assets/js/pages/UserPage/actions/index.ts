@@ -3,16 +3,15 @@ import * as Api from '~/data/User';
 import * as Types from './types';
 
 import Q from 'q';
+import { TESCUser } from '~/static/types';
+import { createStandardAction } from 'typesafe-actions';
 
 // User
-export const updateCurrentUser = (user) => ({
-  type: Types.UPDATE_CURRENT_USER,
-  user
-});
+export const updateCurrentUser = createStandardAction(Types.UPDATE_CURRENT_USER)<TESCUser>();
 
 // Get the current user information
-export const getCurrentUser = (eventAlias) => (dispatch) => {
-  var deferred = Q.defer();
+export const getCurrentUser = (eventAlias: string) => (dispatch: any) => {
+  const deferred = Q.defer();
   Api.getCurrentUser(eventAlias)
     .then((user) => {
       dispatch(updateCurrentUser(user));
@@ -21,4 +20,3 @@ export const getCurrentUser = (eventAlias) => (dispatch) => {
     .catch(deferred.reject);
   return deferred.promise;
 };
-

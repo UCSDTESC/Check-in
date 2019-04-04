@@ -1,8 +1,7 @@
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import QrReader from 'react-qr-reader';
 import Q from 'q';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
@@ -17,31 +16,32 @@ import {loadAllUsers} from '~/data/Api';
 import {userCheckin} from './actions';
 
 import { RouteComponentProps } from 'react-router-dom';
-import { TESCUser, Admin, TESCEvent } from '~/static/types';
+import { TESCUser } from '~/static/types';
 import { ApplicationState } from '~/reducers';
-import { AdminAuthState } from '~/auth/admin/reducers/types';
 
-interface StateProps {
-  auth: AdminAuthState;
-  user: {} | Admin;
-  users: TESCUser[];
-  event: TESCEvent;
-}
+type RouteProps = RouteComponentProps<{
+  eventAlias: string;
+}>;
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  addUsers: (arg0: any) => Promise<any>;
-  loadAllAdminEvents: () => Promise<any>;
-  userCheckin: (arg0: any, arg1: any) => Promise<any>;
-}
+const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => ({
+  auth: state.admin.auth,
+  user: state.admin.auth.user,
+  users: state.admin.users,
+  event: state.admin.events[ownProps.match.params.eventAlias],
+});
+
+const mapDispatchToProps = {
+  showLoading,
+  hideLoading,
+  addUsers,
+  loadAllAdminEvents,
+  userCheckin,
+};
 
 interface CheckinPageProps {
 }
 
-type Props = RouteComponentProps<{
-  eventAlias: string;
-}> & StateProps & DispatchProps & CheckinPageProps;
+type Props = RouteProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & CheckinPageProps;
 
 interface CheckinPageState {
   isProcessing: boolean;
@@ -96,7 +96,7 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
   }
 
   validateUser = (user: TESCUser) =>
-    Q.promise((resolve, reject) => {
+    Q.Promise((resolve, reject) => {
       // Ensure they're eligible
       if (user.status !== 'Confirmed') {
         switch (user.status) {
@@ -117,16 +117,15 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       return resolve(user);
     })
 
-  checkinById = (id: string) =>
-    Q.promise((resolve, reject) => {
+  checkinById = (id: string): Q.Promise<TESCUser> =>
+    Q.Promise((resolve, reject) => {
       const {users, event} = this.props;
 
       // Filter by given ID
       const eligibleUsers = users.filter((user) => user._id === id);
 
       if (eligibleUsers.length !== 1) {
-        return reject(id);
-        return reject('User not found');
+        return reject(`User not found with ID ${id}`);
       }
 
       // Get the particular user
@@ -314,24 +313,5 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState, ownProps: Props) => {
-  return {
-    auth: state.admin.auth,
-    user: state.admin.auth.user,
-    users: state.admin.users,
-    event: state.admin.events[ownProps.match.params.eventAlias],
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    addUsers: bindActionCreators(addUsers, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
-    userCheckin: bindActionCreators(userCheckin, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(CheckinPage);

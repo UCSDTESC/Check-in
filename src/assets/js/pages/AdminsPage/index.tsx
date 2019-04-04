@@ -1,6 +1,5 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import {Button} from 'reactstrap';
 
@@ -14,21 +13,21 @@ import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
 import { Admin } from '~/static/types';
 import { ApplicationState } from '~/reducers';
 
-interface StateProps {
-  admins: Admin[];
-  editing: boolean;
-}
+const mapStateToProps = (state: ApplicationState) => ({
+  admins: state.admin.admins,
+  editing: state.admin.general.editing,
+});
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  replaceAdmins: (arg0: any) => void;
-}
+const mapDispatchToProps = {
+  replaceAdmins,
+  showLoading,
+  hideLoading,
+};
 
 interface AdminsPageProps {
 }
 
-type Props = StateProps & DispatchProps & AdminsPageProps;
+type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & AdminsPageProps;
 
 interface AdminsPageState {
   isRegisterModalOpen: boolean;
@@ -92,20 +91,5 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    admins: state.admin.admins,
-    editing: state.admin.general.editing,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    replaceAdmins: bindActionCreators(replaceAdmins, dispatch),
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(AdminsPage);

@@ -1,6 +1,7 @@
 import {Reducer} from 'redux';
 import * as Types from '~/actions/types';
 import { GeneralState } from './types';
+import { getType } from 'typesafe-actions';
 
 const INITIAL_STATE: GeneralState = {
   editing: false,
