@@ -3,22 +3,33 @@ import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import request from 'superagent';
 
-import {promisify} from './helpers';
+import {promisify, SuccessResponse} from './helpers';
 
 import CookieTypes from '~/static/Cookies';
-import { TESCUser } from '~/static/types';
+import { TESCUser, TESCEvent } from '~/static/types';
+import { Role } from '~/static/Roles';
 
 const URL_PREFIX = '/api/user';
 
 const prefix = pref(URL_PREFIX);
 const cookies = new Cookies();
 
+interface JWTAuth {
+  token: string;
+  user: {
+    _id: string;
+    username: string;
+    role: Role;
+    checkin: boolean;
+  }
+}
+
 /**
  * Checks whether the user is still authorised.
  * @returns {Promise} A promise of the request.
  */
 export const authorised = () => {
-  return promisify(request
+  return promisify<{}>(request
     .get('/authorised')
     .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix)
@@ -32,7 +43,7 @@ export const authorised = () => {
  * @returns {Promise} A promise of the request.
  */
 export const login = (email: string, password: string) => {
-  return promisify(request
+  return promisify<JWTAuth>(request
     .post('/login')
     .set('Content-Type', 'application/json')
     .send({email, password})
@@ -46,7 +57,7 @@ export const login = (email: string, password: string) => {
  * @returns {Promise} A promise of the request.
  */
 export const forgotPassword = (email: string) => {
-  return promisify(request
+  return promisify<SuccessResponse>(request
     .post('/forgot')
     .set('Content-Type', 'application/json')
     .send({email})
@@ -61,7 +72,7 @@ export const forgotPassword = (email: string) => {
  * @returns {Promise} A promise of the request.
  */
 export const resetPassword = (id: string, newPassword: string) => {
-  return promisify(request
+  return promisify<SuccessResponse>(request
     .post('/reset')
     .set('Content-Type', 'application/json')
     .send({id, newPassword})
@@ -75,7 +86,7 @@ export const resetPassword = (id: string, newPassword: string) => {
  * @returns {Promise} A promise of the request.
  */
 export const getCurrentUser = (eventAlias: string) => {
-  return promisify(request
+  return promisify<TESCUser>(request
     .get(`/current/${eventAlias}`)
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token))
@@ -88,7 +99,7 @@ export const getCurrentUser = (eventAlias: string) => {
  * @returns {Promise} A promise of the request.
  */
 export const getUserEvents = () => {
-  return promisify(request
+  return promisify<TESCEvent[]>(request
     .get('/events')
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token))
@@ -100,7 +111,7 @@ export const getUserEvents = () => {
  * @returns {Promise} A promise of the request.
  */
 export const updateUserField = (user: any, eventAlias: string) => {
-  return promisify(request
+  return promisify<TESCUser>(request
     .post(`/update/${eventAlias}`)
     .field(user)
     .attach('resume', user.resume ? user.resume[0] : null)
@@ -118,7 +129,7 @@ export const updateUserField = (user: any, eventAlias: string) => {
  * @returns {Promise} A promise of the request.
  */
 export const rsvpUser = (eventAlias: string, status: boolean, bussing: boolean) => {
-  return promisify(request
+  return promisify<TESCUser>(request
     .post(`/rsvp/${eventAlias}`)
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token))

@@ -1,4 +1,4 @@
-import { Roles } from './Roles';
+import { Role } from './Roles';
 
 export interface Download {
   _id: string;
@@ -41,7 +41,7 @@ export interface Filter {
 export interface Admin {
   _id: string;
   username: string;
-  role: Roles;
+  role: Role;
   checkin: boolean;
 }
 

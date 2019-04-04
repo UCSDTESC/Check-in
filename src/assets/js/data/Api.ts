@@ -3,20 +3,17 @@ import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import request, { SuperAgentRequest } from 'superagent';
 
-import { promisify } from './helpers';
+import { promisify, SuccessResponse } from './helpers';
 
 import CookieTypes from '~/static/Cookies';
-import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics, TESCEvent, Column } from '~/static/types';
+import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
+    TESCEvent, Column } from '~/static/types';
 import { QuestionType } from '~/static/Questions';
 
 const API_URL_PREFIX = '/api';
 
 const apiPrefix = pref(API_URL_PREFIX);
 const cookies = new Cookies();
-
-interface SuccessResponse {
-  success: boolean;
-}
 
 /**
  * Checks whether the user is still authorised.

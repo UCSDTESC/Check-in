@@ -1,6 +1,6 @@
 // Administrator Roles
 
-export enum Roles {
+export enum Role {
   ROLE_DEVELOPER = 'Developer',
   ROLE_ADMIN = 'Admin',
   ROLE_SPONSOR = 'Sponsor',
@@ -8,10 +8,10 @@ export enum Roles {
 }
 
 export const RolesColors = {
-  [Roles.ROLE_DEVELOPER]: 'success',
-  [Roles.ROLE_ADMIN]: 'primary',
-  [Roles.ROLE_SPONSOR]: 'danger',
-  [Roles.ROLE_MEMBER]: 'secondary',
+  [Role.ROLE_DEVELOPER]: 'success',
+  [Role.ROLE_ADMIN]: 'primary',
+  [Role.ROLE_SPONSOR]: 'danger',
+  [Role.ROLE_MEMBER]: 'secondary',
 };
 
 /**
@@ -20,14 +20,14 @@ export const RolesColors = {
  * {@link Roles}.
  * @returns {Integer} The integer for the given role.
  */
-export function getRole(checkRole: Roles) {
+export function getRole(checkRole: Role) {
   let role;
 
   switch (checkRole) {
-  case Roles.ROLE_DEVELOPER: role = 4; break;
-  case Roles.ROLE_ADMIN: role = 3; break;
-  case Roles.ROLE_SPONSOR: role = 2; break;
-  case Roles.ROLE_MEMBER: role = 1; break;
+  case Role.ROLE_DEVELOPER: role = 4; break;
+  case Role.ROLE_ADMIN: role = 3; break;
+  case Role.ROLE_SPONSOR: role = 2; break;
+  case Role.ROLE_MEMBER: role = 1; break;
   default: role = 1;
   }
 
