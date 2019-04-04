@@ -12,33 +12,29 @@ import {toggleFilter, toggleFilterOption, selectAllOptions,
 
 import Sidebar from './components/SponsorSidebar';
 import { ApplicationState } from '~/reducers';
-import { FiltersState } from '~/reducers/Admin/types';
-import { ResumesState } from '~/pages/ResumesPage/reducers/types';
-import { Admin, TESCUser } from '~/static/types';
+import { TESCUser } from '~/static/types';
 
-interface StateProps {
-  filters: FiltersState;
-  resumes: ResumesState;
-  user: Admin;
-  filtered: number;
-}
+const mapStateToProps = (state: ApplicationState) => ({
+  filters: state.admin.filters,
+  resumes: state.admin.resumes,
+  user: state.admin.auth.user,
+  filtered: state.admin.resumes.filtered,
+});
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-
-  toggleFilter: (...args: any) => Promise<any>;
-  toggleFilterOption: (...args: any) => Promise<any>;
-  selectAllOptions: (...args: any) => Promise<any>;
-  selectNoneOptions: (...args: any) => Promise<any>;
-  addFilterOption: (...args: any) => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: any) => ({
+  toggleFilter,
+  toggleFilterOption,
+  selectAllOptions,
+  selectNoneOptions,
+  addFilterOption,
+  showLoading: bindActionCreators(showLoading, dispatch),
+  hideLoading: bindActionCreators(hideLoading, dispatch),
+});
 
 interface SponsorLayoutProps {
-
 }
 
-type Props = StateProps & DispatchProps & SponsorLayoutProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & SponsorLayoutProps;
 
 interface SponsorLayoutState {
   isDownloading: boolean;
@@ -140,7 +136,8 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
                 filterOptions={filterOptions}
                 onDownloadResumes={this.downloadResumes}
                 isDownloading={this.state.isDownloading}
-                addFilterOption={this.props.addFilterOption} />
+                addFilterOption={this.props.addFilterOption}
+              />
             </div>
 
             <main className={'admin-body__content'}>
@@ -151,27 +148,6 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
       </div>
     );
   }
-}
-
-function mapStateToProps(state: ApplicationState) {
-  return {
-    filters: state.admin.filters,
-    resumes: state.admin.resumes,
-    user: state.admin.auth.user,
-    filtered: state.admin.resumes.filtered,
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    toggleFilter: bindActionCreators(toggleFilter, dispatch),
-    toggleFilterOption: bindActionCreators(toggleFilterOption, dispatch),
-    selectAllOptions: bindActionCreators(selectAllOptions, dispatch),
-    selectNoneOptions: bindActionCreators(selectNoneOptions, dispatch),
-    addFilterOption: bindActionCreators(addFilterOption, dispatch),
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(SponsorLayout);

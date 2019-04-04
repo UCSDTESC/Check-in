@@ -27,8 +27,8 @@ export const deleteUserEvents = createStandardAction(Types.DELETE_USER_EVENTS)<u
 
 // Filters
 
-interface FilterOption {
-  name: string;
+export interface FilterOption {
+  filterName: string;
   option: string;
 }
 

@@ -9,7 +9,7 @@ export interface UploadedFile {
 
 export type Resume = UploadedFile;
 
-export type Logo = UploadedFile
+export type Logo = UploadedFile;
 
 export interface Download {
   _id: string;
@@ -39,7 +39,7 @@ export interface Column {
 }
 
 export interface FilterOptions {
-  [FilterDisplayName: string]: boolean;
+  [OptionName: string]: boolean;
 }
 
 export interface Filter {

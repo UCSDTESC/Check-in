@@ -3,7 +3,7 @@ import UUID from 'node-uuid';
 
 interface ToggleSwitchProps {
   checked: boolean;
-  onChange?: (value: any) => void;
+  onChange?: (value: boolean) => void;
   className?: string;
   disabled?: boolean;
 }

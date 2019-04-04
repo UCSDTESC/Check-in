@@ -4,7 +4,7 @@ import Autosuggest, { InputProps } from 'react-autosuggest';
 interface AutoSuggestProps {
   inputProps: object;
   getSuggestions: (value: string) => string[];
-  onSuggestionSelected: (suggesion: string) => void;
+  onSuggestionSelected: (suggestion: string) => void;
   minChars?: number;
 }
 
@@ -92,9 +92,9 @@ export default class AutoSuggest extends React.Component<AutoSuggestProps, AutoS
     };
 
     const inputProps = {
-      ...this.props.inputProps,
       onChange: this.onChange,
       value,
+      ...this.props.inputProps,
     } as InputProps<string>;
 
     return (

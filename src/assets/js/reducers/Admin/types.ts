@@ -1,7 +1,7 @@
 import { TESCEvent, Filter } from '~/static/types';
 
 export interface EventsState {
-  [EventName: string]: TESCEvent;
+  [EventAlias: string]: TESCEvent;
 }
 
 export interface FiltersState {
