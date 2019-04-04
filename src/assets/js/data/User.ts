@@ -21,7 +21,7 @@ interface JWTAuth {
     username: string;
     role: Role;
     checkin: boolean;
-  }
+  };
 }
 
 /**

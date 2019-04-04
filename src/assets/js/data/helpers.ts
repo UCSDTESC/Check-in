@@ -21,4 +21,4 @@ export function promisify<T>(request: SuperAgentRequest): Q.Promise<T> {
     deferred.resolve(res.body as T);
   });
   return deferred.promise;
-};
+}

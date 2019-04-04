@@ -13,12 +13,12 @@ export const updateUser = (user: TESCUser) => (dispatch: any) =>
     .then(() => {
       dispatch({
         type: Types.UPDATE_USER,
-        user
+        user,
       });
     })
     .catch(console.error);
 
-//Columns
+// Columns
 export const addColumn = createStandardAction(Types.ADD_COLUMN)<Column>();
 
 export const removeColumn = createStandardAction(Types.REMOVE_COLUMN)<Column>();

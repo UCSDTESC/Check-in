@@ -1,5 +1,16 @@
 import { Role } from './Roles';
 
+export interface UploadedFile {
+  name: string;
+  size: number;
+  type: string;
+  url: string;
+}
+
+export type Resume = UploadedFile;
+
+export type Logo = UploadedFile
+
 export interface Download {
   _id: string;
   fileCount: number;
@@ -58,10 +69,6 @@ export interface CustomQuestions {
 
 export interface CustomQuestionResponses {
   [QuestionId: string]: string;
-}
-
-interface Logo {
-  url: string;
 }
 
 export interface TESCEventOptions {
@@ -142,10 +149,5 @@ export interface TESCUser {
   majorGPA?: string;
   customQuestionResponses?: CustomQuestionResponses;
   whyEventResponse?: string;
-  resume: {
-    name: string;
-    size: number;
-    type: string;
-    url: string;
-  };
+  resume: Resume;
 }

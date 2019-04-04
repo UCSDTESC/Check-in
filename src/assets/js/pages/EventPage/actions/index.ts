@@ -42,4 +42,3 @@ export const updateEventStatistics = createStandardAction(Types.UPDATE_EVENT_STA
 //     event: eventAlias,
 //     statistics
 //   });
-

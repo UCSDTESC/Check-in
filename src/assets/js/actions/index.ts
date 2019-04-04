@@ -30,7 +30,7 @@ export const deleteUserEvents = createStandardAction(Types.DELETE_USER_EVENTS)<u
 interface FilterOption {
   name: string;
   option: string;
-};
+}
 
 export const addFilter = createStandardAction(Types.ADD_FILTER)<{
   name: string;
