@@ -21,7 +21,7 @@ export type Resume = UploadedFile;
 export type Logo = UploadedFile;
 
 export interface Download {
-  _id: string;
+  _id?: string;
   fileCount: number;
   adminId: string;
   accessUrl?: string;
@@ -59,14 +59,14 @@ export interface Filter {
 }
 
 export interface Admin {
-  _id: string;
+  _id?: string;
   username: string;
   role: Role;
   checkin: boolean;
 }
 
 export interface Question {
-  _id: string;
+  _id?: string;
   question: string;
   isRequired: boolean;
 }
@@ -96,7 +96,7 @@ export interface TESCEventOptions {
 }
 
 export interface TESCEvent {
-  _id: string;
+  _id?: string;
   name: string;
   alias: string;
   organisers: Admin[];
@@ -115,14 +115,14 @@ export interface TESCEvent {
 }
 
 export interface TESCAccount {
-  _id: string;
+  _id?: string;
   email: string;
   password: string;
   confirmed: boolean;
 }
 
 export interface TESCUser {
-  _id: string;
+  _id?: string;
   event?: TESCEvent;
   account?: TESCAccount;
   firstName: string;

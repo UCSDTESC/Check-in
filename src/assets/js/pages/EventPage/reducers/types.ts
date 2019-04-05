@@ -12,5 +12,5 @@ export interface EventAlert {
 }
 
 export interface EventAlertsState {
-  [EventName: string]: EventAlert;
+  [EventName: string]: EventAlert[];
 }

@@ -1,6 +1,6 @@
 import React from 'react';
 import { InjectedFormProps } from 'redux-form';
-import { TESCEventOptions, TESCEvent } from '~/static/types';
+import { TESCEvent } from '~/static/types';
 
 export interface ApplyPageSectionProps {
   event: TESCEvent;

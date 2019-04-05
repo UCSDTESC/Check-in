@@ -2,32 +2,77 @@ import * as Types from './types';
 import { createStandardAction } from 'typesafe-actions';
 import { EventAlert } from '../reducers/types';
 import { EventStatistics } from '~/static/types';
+import { AlertType } from '~/pages/AlertPage';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { ApplicationState } from '~/reducers';
+import { AnyAction } from 'redux';
+import { ApplicationDispatch, ApplicationAction } from '~/actions';
 
-// TODO: Requires debugging
-
-export const addEventAlert = createStandardAction(Types.ADD_EVENT_ALERT)<{
+const _addEventAlert = createStandardAction(Types.ADD_EVENT_ALERT)<{
   eventAlias: string;
   alert: EventAlert;
 }>();
 
-export const removeEventAlert = createStandardAction(Types.REMOVE_EVENT_ALERT)<{
+const _removeEventAlert = createStandardAction(Types.REMOVE_EVENT_ALERT)<{
   eventAlias: string;
   timestamp: Date;
 }>();
 
-export const updateEventStatistics = createStandardAction(Types.UPDATE_EVENT_STATISTICS)<{
+const _updateEventStatistics = createStandardAction(Types.UPDATE_EVENT_STATISTICS)<{
   eventAlias: string;
   statistics: EventStatistics;
 }>();
 
-// export const addEventAlert = (eventAlias, message, severity, title) =>
-//   (dispatch: any) => dispatch({
-//     type: Types.ADD_EVENT_ALERT,
-//     event: eventAlias,
-//     message,
-//     severity,
-//     title
-//   });
+export const addEventAlert = (eventAlias: string, message: string, severity: AlertType, title: string):
+ApplicationAction =>
+  (dispatch: ApplicationDispatch) => dispatch(
+    _addEventAlert({
+      eventAlias,
+      alert: {
+        message,
+        severity,
+        title,
+      } as EventAlert,
+    }));
+
+export const addEventSuccessAlert = (eventAlias: string, message: string, title: string): ApplicationAction =>
+  (dispatch: ApplicationDispatch) => dispatch(
+    _addEventAlert({
+      eventAlias,
+      alert: {
+        message,
+        severity: AlertType.Success,
+        title,
+      } as EventAlert,
+    }));
+
+export const addEventDangerAlert = (eventAlias: string, message: string, title: string): ApplicationAction =>
+  (dispatch: ApplicationDispatch) => dispatch(
+    _addEventAlert({
+      eventAlias,
+      alert: {
+        message,
+        severity: AlertType.Danger,
+        title,
+      } as EventAlert,
+    }));
+
+export const removeEventAlert = (eventAlias: string, timestamp: Date): ApplicationAction =>
+  (dispatch: ApplicationDispatch) => dispatch(
+    _removeEventAlert({
+      eventAlias,
+      timestamp,
+    })
+  );
+
+export const updateEventStatistics = (eventAlias: string, statistics: EventStatistics):
+  ApplicationAction =>
+    (dispatch: ApplicationDispatch) => dispatch(
+      _updateEventStatistics({
+        eventAlias,
+        statistics,
+      })
+    );
 
 // export const removeEventAlert = (eventAlias, timestamp) =>
 //   (dispatch: any) => dispatch({

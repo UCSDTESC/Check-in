@@ -155,6 +155,7 @@
     "@types/superagent-no-cache": "^0.1.1",
     "@types/superagent-prefix": "0.0.2",
     "@types/universal-cookie": "^2.1.0",
+    "@types/victory": "^31.0.14",
     "browser-sync": "^2.18.13"
   }
 }

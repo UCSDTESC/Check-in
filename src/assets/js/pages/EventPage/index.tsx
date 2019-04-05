@@ -1,7 +1,6 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, AnyAction} from 'redux';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import FA from 'react-fontawesome';
 import {Alert, Nav, NavItem, NavLink, UncontrolledTooltip} from 'reactstrap';
@@ -11,44 +10,54 @@ import {loadEventStatistics} from '~/data/Api';
 
 import {loadAllAdminEvents} from '~/actions';
 
-import {addEventAlert, removeEventAlert,
-  updateEventStatistics} from './actions';
+import {addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert, addEventDangerAlert} from './actions';
 
 import Loading from '~/components/Loading';
 
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
 import ActionsTab from './tabs/ActionsTab';
-import InsightsTab from './tabs/InsightsTab';
 import StatisticsTab from './tabs/StatisticsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 
-import { TESCEvent, TESCUser, Admin } from '~/static/types';
 import { ApplicationState } from '~/reducers';
-import { EventAlert, EventStatisticsState, EventAlertsState } from './reducers/types';
+import { EventAlert } from './reducers/types';
+import { ThunkDispatch } from 'redux-thunk';
 
-interface StateProps {
-  event: TESCEvent;
-  statistics: EventStatisticsState;
-  alerts: EventAlert[];
-}
+type RouteProps = RouteComponentProps<{
+  eventAlias: string;
+}>;
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  loadAllAdminEvents: () => Promise<any>;
-  updateEventStatistics: (arg0: any, arg1: any) => Promise<any>;
-  addEventAlert: () => Promise<any>;
-  removeEventAlert: (arg0: any, arg1: any) => Promise<any>;
-}
+const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
+  const eventAlias = ownProps.match.params.eventAlias;
+  return {
+    event: state.admin.events[eventAlias],
+    statistics: eventAlias in state.admin.eventStatistics ?
+      state.admin.eventStatistics[eventAlias] : null,
+    alerts: eventAlias in state.admin.eventAlerts ?
+      state.admin.eventAlerts[eventAlias] : [] as EventAlert[],
+  };
+};
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<ApplicationState, void, AnyAction>) => {
+  return {
+    showLoading: bindActionCreators(showLoading, dispatch),
+    hideLoading: bindActionCreators(hideLoading, dispatch),
+    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
+    updateEventStatistics: bindActionCreators(updateEventStatistics, dispatch),
+    addEventAlert: bindActionCreators(addEventAlert, dispatch),
+    removeEventAlert: bindActionCreators(removeEventAlert, dispatch),
+    addEventSuccessAlert,
+    addEventDangerAlert,
+  };
+};
 
 interface EventPageProps {
 }
 
-type Props = RouteComponentProps<{
-  eventAlias: string;
-}> & StateProps & DispatchProps & EventPageProps;
+export type Props = RouteProps & ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps> & EventPageProps;
 
 interface TabPage {
   icon: string;
@@ -132,7 +141,7 @@ class EventPage extends React.Component<Props, EventPageState> {
           <Alert
             color={severity}
             toggle={() => this.dismissAlert(timestamp)}
-            key={timestamp}
+            key={timestamp.toString()}
           >
             <div className="container">
               <strong>{title}</strong> {message}
@@ -157,8 +166,7 @@ class EventPage extends React.Component<Props, EventPageState> {
     loadEventStatistics(this.props.match.params.eventAlias)
       .catch(console.error)
       .then(res => {
-        this.props.updateEventStatistics(this.props.match.params.eventAlias,
-          res);
+        this.props.updateEventStatistics(this.props.match.params.eventAlias, res);
       });
 
     if (!this.props.event) {
@@ -176,14 +184,6 @@ class EventPage extends React.Component<Props, EventPageState> {
    */
   renderActions(props: Props) {
     return (<ActionsTab {...props} />);
-  }
-
-  /**
-   * Renders the event tab for insights.
-   * @returns {Component} The insights tab.
-   */
-  renderInsights(props: Props) {
-    return (<InsightsTab {...props} />);
   }
 
   /**
@@ -312,27 +312,5 @@ class EventPage extends React.Component<Props, EventPageState> {
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState, ownProps: Props) => {
-  const eventAlias = ownProps.match.params.eventAlias;
-  return {
-    event: state.admin.events[eventAlias],
-    statistics: eventAlias in state.admin.eventStatistics ?
-      state.admin.eventStatistics[eventAlias] : {},
-    alerts: eventAlias in state.admin.eventAlerts ?
-      state.admin.eventAlerts[eventAlias] : [] as EventAlert[],
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
-    updateEventStatistics: bindActionCreators(updateEventStatistics, dispatch),
-    addEventAlert: bindActionCreators(addEventAlert, dispatch),
-    removeEventAlert: bindActionCreators(removeEventAlert, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EventPage);

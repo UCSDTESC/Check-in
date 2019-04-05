@@ -1,38 +1,39 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import {VictoryPie, VictoryTooltip, VictoryTheme} from 'victory';
+import EventStatisticsComponent from './EventStatisticsComponent';
+import { EventStatistics } from '~/static/types';
 
 const PIE_CHART_COLOURS =
   ['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC'];
 
-export default class GenderStatistics extends React.Component {
-  static propTypes = {
-    event: PropTypes.object.isRequired,
-    statistics: PropTypes.object,
-  };
-
-  renderStats(statistics) {
+export default class GenderStatistics extends EventStatisticsComponent {
+  renderStats(statistics: EventStatistics) {
     return [
       <dt key="genderTag" className="col-12">Gender Distribution</dt>,
       ...Object.keys(statistics.genders).map(gender =>
         ([
+          (
           <dt key={gender + 'Tag'} className="col-5 offset-1">
             {gender}
-          </dt>,
+          </dt>
+          ),
+          (
           <dd key={gender + 'Value'} className="col-5">
             {statistics.genders[gender]}
           </dd>
+          ),
         ])
-      )
+      ),
     ];
   }
 
   render() {
-    let {statistics} = this.props;
+    const {statistics} = this.props;
 
     // Create the data array needed to make the pie chart
-    var genderData = [];
-    var totalNum = 0;
+    const genderData = [];
+    let totalNum = 0;
     for (const [key, value] of Object.entries(statistics.genders)) {
       genderData.push({gender: key, number: value});
       totalNum += value;
@@ -56,7 +57,7 @@ export default class GenderStatistics extends React.Component {
               x="gender"
               y="number"
               theme={VictoryTheme.material}
-          />
+            />
           </div>
           {Object.keys(statistics).length !== 0 && this.renderStats(statistics)}
         </dl>

@@ -22,14 +22,14 @@ export default class UserList extends React.Component<UserListProps, UserListSta
     newFilter: '',
   };
 
-  changeFilter = (e: any) => this.setState({newFilter: e.target.value});
+  changeFilter = (e: React.FormEvent<HTMLInputElement>) => this.setState({newFilter: e.currentTarget.value});
 
   /**
    * Add a new column to the list.
    * @param {Object} event The select onChange event.
    */
-  newColumn = (event: any) => {
-    this.props.onAddColumn(this.props.available[event.target.value]);
+  newColumn = (event: React.FormEvent<HTMLInputElement>) => {
+    this.props.onAddColumn(this.props.available[event.currentTarget.value]);
   };
 
   render() {

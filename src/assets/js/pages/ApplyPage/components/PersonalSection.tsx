@@ -26,7 +26,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       component={FormFields.errorTextInput}
       placeholder={'email@university.edu'}
       type={'email'}
-      onBlur={(e: any) => this.props.onEmailChange(e.target.value)}
+      onBlur={(e: React.FormEvent<HTMLInputElement>) => this.props.onEmailChange(e.currentTarget.value)}
     />
     );
   }

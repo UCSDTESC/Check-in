@@ -5,9 +5,9 @@ import * as Types from './types';
 import * as Api from '~/data/Api';
 import * as UserApi from '~/data/User';
 import { TESCEvent } from '~/static/types';
-import { ThunkAction } from 'redux-thunk';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { ApplicationState } from '~/reducers';
-import { Action } from 'redux';
+import { Action, AnyAction } from 'redux';
 
 // General
 
@@ -73,7 +73,8 @@ export const addAdminEvents = createStandardAction(Types.ADD_ADMIN_EVENTS)<TESCE
 
 export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENTS)<TESCEvent[]>();
 
-type ThunkResult<R> = ThunkAction<R, ApplicationState, undefined, Action>;
+export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, AnyAction>;
+export type ApplicationAction = ThunkAction<void, ApplicationState, void, AnyAction>;
 
 export const loadAllAdminEvents = () =>
   (dispatch: any) => {

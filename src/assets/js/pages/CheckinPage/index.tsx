@@ -165,10 +165,10 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     this.toggleModal();
   }
 
-  nameApplicants = (event: {target: HTMLInputElement}) => {
+  nameApplicants = (event: React.FormEvent<HTMLInputElement>) => {
     const {users} = this.props;
 
-    const name = event.target.value;
+    const name = event.currentTarget.value;
     if (name.length < 3) {
       return;
     }

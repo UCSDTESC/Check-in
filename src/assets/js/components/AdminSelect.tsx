@@ -1,20 +1,23 @@
 import StyledSelect from './StyledSelect';
 import {Admin} from '~/static/types';
 
-interface AdminSelectProps {
-  onChange?: (value: any, action: any) => void;
-  exclude: Admin[];
-  value: Admin;
+// Has to match React-Select style
+// TODO: Abstract out select type to match Admin
+export interface AdminSelectType {
+  value: string;
+  label: string;
 }
 
-// Match the React-Select style
+interface AdminSelectProps {
+  onChange?: (value: AdminSelectType, action: any) => void;
+  exclude: Admin[];
+  value: AdminSelectType;
+}
+
 interface AdminSelectState {
-  admins: Array<{
-    value: string;
-    label: string;
-  }>;
+  admins: AdminSelectType[];
 }
 
 export default class AdminSelect extends StyledSelect<AdminSelectProps, AdminSelectState> {
 
-};
+}

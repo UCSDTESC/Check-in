@@ -6,6 +6,7 @@ interface ToggleSwitchProps {
   onChange?: (value: boolean) => void;
   className?: string;
   disabled?: boolean;
+  id?: string;
 }
 
 interface ToggleSwitchState {
@@ -13,9 +14,13 @@ interface ToggleSwitchState {
 }
 
 class ToggleSwitch extends React.Component<ToggleSwitchProps, ToggleSwitchState> {
-  state: Readonly<ToggleSwitchState> = {
-    id: UUID.v4(),
-  };
+  constructor(props: ToggleSwitchProps) {
+    super(props);
+
+    this.state = {
+      id: this.props.id ? this.props.id : UUID.v4(),
+    };
+  }
 
   /**
    * Toggles the checkbox value
