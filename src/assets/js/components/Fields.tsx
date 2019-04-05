@@ -92,7 +92,7 @@ export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({input
         />
         {touched && error && createError(error)}
       </div>);
-  }
+  };
 
 export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
     meta: {touched, error}}) => {
@@ -118,7 +118,7 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({in
         {touched && error && createError(error)}
       </div>
     );
-  }
+  };
 
 export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
     meta: {touched, error}}) => {
@@ -143,7 +143,7 @@ export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> =
         {touched && error && createError(error)}
       </div>
     );
-  }
+  };
 
 export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
     meta: {touched, error}}) => {
@@ -165,7 +165,7 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({i
         </select>
         {touched && error && createError(error)}
       </div>);
-  }
+  };
 
 export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
     meta: {touched, error}}) => {
@@ -187,7 +187,7 @@ export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> =
         {touched && error && createError(error)}
       </div>
     );
-  }
+  };
 
 export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
     meta: {touched, error}}) => {
@@ -208,7 +208,7 @@ export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({inp
         </select>
         {touched && error && createError(error)}
       </div>);
-  }
+  };
 
 export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
     meta: {touched, error}}) => {
@@ -227,7 +227,7 @@ export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({in
         {touched && error && createError(error)}
       </div>
     );
-  }
+  };
 
 export function createLabel(text: string, required: boolean = true, className: string = '',
                             forTag: string = '') {

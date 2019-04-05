@@ -8,7 +8,7 @@ import {applyResumeFilter} from '~/static/ResumeFilter';
 import {downloadResumes, pollDownload} from '~/data/Api';
 
 import {toggleFilter, toggleFilterOption, selectAllOptions,
-  selectNoneOptions, addFilterOption} from '../actions';
+  selectNoneOptions, addFilterOption, ApplicationDispatch} from '../actions';
 
 import Sidebar from './components/SponsorSidebar';
 import { ApplicationState } from '~/reducers';
@@ -21,7 +21,7 @@ const mapStateToProps = (state: ApplicationState) => ({
   filtered: state.admin.resumes.filtered,
 });
 
-const mapDispatchToProps = (dispatch: any) => ({
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => ({
   toggleFilter,
   toggleFilterOption,
   selectAllOptions,

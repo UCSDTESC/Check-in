@@ -74,10 +74,10 @@ export const addAdminEvents = createStandardAction(Types.ADD_ADMIN_EVENTS)<TESCE
 export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENTS)<TESCEvent[]>();
 
 export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, AnyAction>;
-export type ApplicationAction = ThunkAction<void, ApplicationState, void, AnyAction>;
+export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
 
-export const loadAllAdminEvents = () =>
-  (dispatch: any) => {
+export const loadAllAdminEvents = (): ApplicationAction<Q.Promise<{}>> =>
+  (dispatch: ApplicationDispatch) => {
     const deferred = Q.defer();
     Api.loadAllEvents()
       .then(res => {
@@ -88,8 +88,8 @@ export const loadAllAdminEvents = () =>
     return deferred.promise;
   };
 
-export const loadAllPublicEvents = () =>
-  (dispatch: any) => {
+export const loadAllPublicEvents = (): ApplicationAction<Q.Promise<{}>> =>
+  (dispatch: ApplicationDispatch) => {
   const deferred = Q.defer();
 
   Api.loadAllPublicEvents()
@@ -102,8 +102,8 @@ export const loadAllPublicEvents = () =>
   return deferred.promise;
 };
 
-export const loadUserEvents = () =>
-  (dispatch: any) => {
+export const loadUserEvents = (): ApplicationAction<Q.Promise<{}>> =>
+  (dispatch: ApplicationDispatch) => {
   const deferred = Q.defer();
 
   UserApi.getUserEvents()

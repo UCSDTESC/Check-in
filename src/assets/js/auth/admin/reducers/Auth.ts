@@ -11,7 +11,7 @@ const INITIAL_STATE: AdminAuthState = {
   error: '',
   message: '',
   authenticated: false,
-  user: {},
+  user: null,
   authFinished: false,
 };
 

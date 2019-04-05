@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {Link, RouteComponentProps} from 'react-router-dom';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadAllAdminEvents} from '~/actions';
+import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
 
 import {addColumn, updateUser, removeColumn, addAvailableColumns} from './actions';
 
@@ -183,7 +183,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: Props) => ({
   event: state.admin.events[ownProps.match.params.eventAlias],
 });
 
-const mapDispatchToProps = (dispatch: any) => {
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => {
   return {
     updateUser: bindActionCreators(updateUser, dispatch),
     addColumn: bindActionCreators(addColumn, dispatch),

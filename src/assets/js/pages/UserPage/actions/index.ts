@@ -5,12 +5,13 @@ import * as Types from './types';
 import Q from 'q';
 import { TESCUser } from '~/static/types';
 import { createStandardAction } from 'typesafe-actions';
+import { ApplicationAction, ApplicationDispatch } from '~/actions';
 
 // User
 export const updateCurrentUser = createStandardAction(Types.UPDATE_CURRENT_USER)<TESCUser>();
 
 // Get the current user information
-export const getCurrentUser = (eventAlias: string) => (dispatch: any) => {
+export const getCurrentUser = (eventAlias: string): ApplicationAction => (dispatch: ApplicationDispatch) => {
   const deferred = Q.defer();
   Api.getCurrentUser(eventAlias)
     .then((user) => {

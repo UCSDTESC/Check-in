@@ -91,7 +91,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
       {options.allowOutOfState && FormFields.createRow(
         FormFields.createColumn('col-lg-12',
-          FormFields.createLabel('I will be travelling from outside the '+
+          FormFields.createLabel('I will be travelling from outside the ' +
               'San Diego county'),
           FormFields.createRadio('outOfState', true, 'Yes'),
           FormFields.createRadio('outOfState', false, 'No')
@@ -104,7 +104,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
       {options.requireExtraCurriculars && FormFields.createRow(
         FormFields.createColumn('col-sm-12',
           FormFields.createLabel('Please put down any extra curriculars or Student'
-            +' Organizations you are affiliated with', true),
+            + ' Organizations you are affiliated with', true),
           FormFields.createTextArea('extraCurriculars', 'Extra Curriculars')
         )
       )}
@@ -139,10 +139,10 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
       {options.allowTeammates && FormFields.createRow(
         FormFields.createColumn('col-sm-12',
-          FormFields.createLabel('Please enter the email addresses of your '+
-            'desired teammates. We will do our best to accept whole teams if '+
-            'ALL members apply and include all members’ email addresses in '+
-            'their applications. Don’t worry, you can come back and edit your '+
+          FormFields.createLabel('Please enter the email addresses of your ' +
+            'desired teammates. We will do our best to accept whole teams if ' +
+            'ALL members apply and include all members’ email addresses in ' +
+            'their applications. Don’t worry, you can come back and edit your ' +
             'application at any time.', false)
         ),
         FormFields.createColumn('col-sm-12 col-lg-4',

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter, RouteComponentProps} from 'react-router';
@@ -6,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import {UncontrolledAlert} from 'reactstrap';
 
-import {addEventAlert} from '../EventPage/actions';
+import {addEventSuccessAlert} from '../EventPage/actions';
 
 import createValidator from './validate';
 
@@ -14,17 +13,18 @@ import {registerNewEvent} from '~/data/Api';
 
 import NewEventForm from './components/NewEventForm';
 import { TESCEvent } from '~/static/types';
+import { ApplicationDispatch } from '~/actions';
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  addEventAlert: (...args: any) => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => ({
+  showLoading: bindActionCreators(showLoading, dispatch),
+  hideLoading: bindActionCreators(hideLoading, dispatch),
+  addEventSuccessAlert: bindActionCreators(addEventSuccessAlert, dispatch),
+});
 
 interface NewEventPageProps {
 }
 
-type Props = RouteComponentProps & DispatchProps & NewEventPageProps;
+type Props = RouteComponentProps & ReturnType<typeof mapDispatchToProps> & NewEventPageProps;
 
 interface NewEventPageState {
   err: Error;
@@ -39,8 +39,7 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
     registerNewEvent(event)
       .then((res: TESCEvent) => {
         this.setState({err: null});
-        this.props.addEventAlert(res.alias, `Successfully Created ${res.name}`,
-          'success', 'Create Event');
+        this.props.addEventSuccessAlert(res.alias, `Successfully Created ${res.name}`, 'Create Event');
         this.props.history.push('/admin/events/' + res.alias);
       })
       .catch((err) => {
@@ -73,14 +72,6 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
       </div>
     );
   }
-}
-
-function mapDispatchToProps(dispatch) {
-  return {
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    addEventAlert: bindActionCreators(addEventAlert, dispatch),
-  };
 }
 
 export default withRouter(connect(null, mapDispatchToProps)(NewEventPage));

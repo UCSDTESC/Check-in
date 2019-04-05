@@ -12,17 +12,19 @@ import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
 
 import { Admin } from '~/static/types';
 import { ApplicationState } from '~/reducers';
+import { ApplicationDispatch } from '~/actions';
+import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state: ApplicationState) => ({
   admins: state.admin.admins,
   editing: state.admin.general.editing,
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   replaceAdmins,
   showLoading,
   hideLoading,
-};
+}, dispatch);
 
 interface AdminsPageProps {
 }

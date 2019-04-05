@@ -3,9 +3,6 @@ import { createStandardAction } from 'typesafe-actions';
 import { EventAlert } from '../reducers/types';
 import { EventStatistics } from '~/static/types';
 import { AlertType } from '~/pages/AlertPage';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { ApplicationState } from '~/reducers';
-import { AnyAction } from 'redux';
 import { ApplicationDispatch, ApplicationAction } from '~/actions';
 
 const _addEventAlert = createStandardAction(Types.ADD_EVENT_ALERT)<{

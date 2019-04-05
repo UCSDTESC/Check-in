@@ -4,6 +4,6 @@ export interface AdminAuthState {
   error: string;
   message: string;
   authenticated: boolean;
-  user: Admin;
+  user?: Admin;
   authFinished: boolean;
 }

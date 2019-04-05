@@ -21,7 +21,7 @@ const initialValues = {
   username: '',
   password: '',
   role: Role.ROLE_MEMBER,
-};
+} as NewAdminModalFormData;
 
 interface RoleDescriptions {
   [role: string]: string[];
@@ -58,8 +58,8 @@ const mapStateToProps = (state: ApplicationState, ownProps: NewAdminModalProps) 
     initialValues: Object.assign({}, initialValues, {
       role: ownProps.lockRole ? ownProps.lockRole : Role.ROLE_MEMBER,
       password: generator.generate(generatorSettings),
-    }),
-  };
+    }) as NewAdminModalFormData,
+  } as Partial<Props>;
 };
 
 interface NewAdminModalProps {
@@ -69,7 +69,13 @@ interface NewAdminModalProps {
   formName?: string;
 }
 
-type Props = InjectedFormProps & NewAdminModalProps;
+interface NewAdminModalFormData {
+  username: string;
+  password: string;
+  role: Role;
+}
+
+type Props = InjectedFormProps<NewAdminModalFormData, NewAdminModalProps> & NewAdminModalProps;
 
 interface NewAdminModalState {
   modal: boolean;
@@ -154,8 +160,7 @@ class NewAdminModal extends React.Component<Props, NewAdminModalState> {
                               className="sd-form__pricing-input sd-form__pricing-input--short"
                               disabled={lockRole ? role !== lockRole : false}
                             />
-                            <label
-                              className="sd-form__label sd-form__pricing-label">
+                            <label className="sd-form__label sd-form__pricing-label">
                               {role}
                             </label>
                             <ul className="sd-form__radio-card-body sd-form__pricing-body">
@@ -199,7 +204,7 @@ class NewAdminModal extends React.Component<Props, NewAdminModalState> {
   }
 }
 
-const NewAdminModalForm = reduxForm({
+const NewAdminModalForm = reduxForm<NewAdminModalFormData, NewAdminModalProps>({
   destroyOnUnmount: true,
   initialValues,
 })(NewAdminModal);

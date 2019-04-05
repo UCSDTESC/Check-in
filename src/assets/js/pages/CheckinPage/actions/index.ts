@@ -2,8 +2,10 @@ import * as Types from './types';
 
 import * as Api from '~/data/Api';
 import { TESCUser } from '~/static/types';
+import { ApplicationAction, ApplicationDispatch } from '~/actions';
 
-export const userCheckin = (user: TESCUser, eventAlias: string) => (dispatch: any) =>
+export const userCheckin = (user: TESCUser, eventAlias: string): ApplicationAction =>
+(dispatch: ApplicationDispatch) =>
   Api.checkinUser(user._id, eventAlias)
     .then(() => {
       dispatch({

@@ -8,9 +8,10 @@ import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
 import {loadEventStatistics} from '~/data/Api';
 
-import {loadAllAdminEvents} from '~/actions';
+import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
 
-import {addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert, addEventDangerAlert} from './actions';
+import {addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert,
+  addEventDangerAlert} from './actions';
 
 import Loading from '~/components/Loading';
 
@@ -23,7 +24,6 @@ import SettingsTab from './tabs/SettingsTab';
 
 import { ApplicationState } from '~/reducers';
 import { EventAlert } from './reducers/types';
-import { ThunkDispatch } from 'redux-thunk';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -40,18 +40,17 @@ const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<ApplicationState, void, AnyAction>) => {
-  return {
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
-    updateEventStatistics: bindActionCreators(updateEventStatistics, dispatch),
-    addEventAlert: bindActionCreators(addEventAlert, dispatch),
-    removeEventAlert: bindActionCreators(removeEventAlert, dispatch),
+const mapDispatchToProps = (dispatch: ApplicationDispatch) =>
+  bindActionCreators({
+    showLoading,
+    hideLoading,
+    loadAllAdminEvents,
+    updateEventStatistics,
+    addEventAlert,
+    removeEventAlert,
     addEventSuccessAlert,
     addEventDangerAlert,
-  };
-};
+  }, dispatch);
 
 interface EventPageProps {
 }
@@ -164,10 +163,10 @@ class EventPage extends React.Component<Props, EventPageState> {
   componentDidMount() {
     this.changeTab();
     loadEventStatistics(this.props.match.params.eventAlias)
-      .catch(console.error)
       .then(res => {
         this.props.updateEventStatistics(this.props.match.params.eventAlias, res);
-      });
+      })
+      .catch(console.error);
 
     if (!this.props.event) {
       showLoading();

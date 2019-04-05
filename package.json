@@ -135,6 +135,7 @@
     "winston": "^3.0.0-rc1"
   },
   "devDependencies": {
+    "@types/jquery": "^3.3.29",
     "@types/node-uuid": "0.0.28",
     "@types/object-diff": "0.0.0",
     "@types/q": "^1.5.2",
