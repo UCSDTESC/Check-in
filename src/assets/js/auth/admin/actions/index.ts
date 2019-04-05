@@ -20,7 +20,7 @@ const COOKIE_OPTIONS = {
  * Stores cookies from a login response.
  * @param {Object} res HTTP request response object.
  */
-function storeLogin(token: string, user: string) {
+function storeLogin(token: string, user: Auth.JWTAuthAdmin) {
   cookies.set(CookieTypes.admin.token, token, COOKIE_OPTIONS);
   cookies.set(CookieTypes.admin.user, user, COOKIE_OPTIONS);
 }
@@ -31,20 +31,14 @@ function storeLogin(token: string, user: string) {
  * @param {Object} error The error to dispatch.
  * @param {String} type The type of error to dispatch.
  */
-export function errorHandler(dispatch: ApplicationDispatch, error: any, type: string) {
+export function errorHandler(dispatch: ApplicationDispatch, error: any) {
   const errorMessage = error.message;
 
   if (error.status === 401) {
-    dispatch({
-      type: type,
-      payload: 'The username or password you entered was not correct.',
-    });
+    dispatch(authoriseError('The username or password you entered was not correct.'));
     logoutUser();
   } else {
-    dispatch({
-      type: type,
-      payload: errorMessage,
-    });
+    dispatch(authoriseError(errorMessage));
   }
 }
 
@@ -61,18 +55,14 @@ export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Pro
     const deferred = Q.defer();
 
     Auth.login(loginFormData.username, loginFormData.password)
-      .end((err, res) => {
-        if (err) {
-          deferred.reject(res.error.message);
-          return errorHandler(dispatch, res.error, Types.AUTH_ERROR);
-        }
-
-        storeLogin(res.body.token, res.body.user);
-        dispatch({
-          type: Types.AUTH_USER,
-          payload: res.body.user,
-        });
+      .then((res) => {
+        storeLogin(res.token, res.user);
+        dispatch(authoriseAdmin(res.user));
         deferred.resolve();
+      })
+      .catch((err) => {
+        deferred.reject(err.message);
+        return errorHandler(dispatch, err);
       });
 
     return deferred.promise;
@@ -84,13 +74,14 @@ export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Pro
  */
 export const logoutUser = (): ApplicationAction => (
   (dispatch: ApplicationDispatch) => {
-    dispatch({type: Types.UNAUTH_USER});
+    dispatch(unauthoriseAdmin());
     cookies.remove(CookieTypes.admin.token, {path: '/'});
     cookies.remove(CookieTypes.admin.user, {path: '/'});
   });
 
 // Return authorisation events
 
-export const authoriseAdmin = createStandardAction(Types.AUTH_USER)<string>();
-
-export const finishAuthorisation = createStandardAction(Types.FINISH_AUTH)<void>();
+export const authoriseAdmin = createStandardAction(Types.AUTH_ADMIN)<Auth.JWTAuthAdmin>();
+export const unauthoriseAdmin = createStandardAction(Types.UNAUTH_ADMIN)<void>();
+export const finishAuthorisation = createStandardAction(Types.FINISH_ADMIN_AUTH)<void>();
+export const authoriseError = createStandardAction(Types.AUTH_ADMIN_ERROR)<string>();

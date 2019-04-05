@@ -9,8 +9,8 @@ import {hot} from 'react-hot-loader/root';
 
 import PrivateRoute from './PrivateRoute';
 import PrivateUserRoute from './PrivateUserRoute';
-import {AUTH_USER as AUTH_ADMIN,
-  FINISH_AUTH as FINISH_ADMIN_AUTH} from './auth/admin/actions/types';
+import {AUTH_ADMIN as AUTH_ADMIN,
+  FINISH_ADMIN_AUTH as FINISH_ADMIN_AUTH} from './auth/admin/actions/types';
 import {AUTH_USER, FINISH_AUTH} from './auth/user/actions/types';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
@@ -34,13 +34,14 @@ import NotFoundPage from './pages/NotFound';
 
 import {authorised as AdminAuthorised} from '~/data/Api';
 
-import {authorised as UserAuthorised} from '~/data/User';
+import {authorised as UserAuthorised, JWTAuthUser} from '~/data/User';
 
 import CookieTypes from '~/static/Cookies';
 import { ApplicationDispatch } from './actions';
 import { bindActionCreators, compose } from 'redux';
 import { finishAuthorisation, authoriseAdmin } from './auth/admin/actions';
 import { connect } from 'react-redux';
+import { JWTAuthAdmin } from './data/AdminAuth';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   authoriseAdmin,
@@ -64,7 +65,7 @@ class Routes extends React.Component<Props> {
       // Verify the JWT Token is still valid
       AdminAuthorised()
         .then(() =>
-          authoriseAdmin(cookies.get(CookieTypes.admin.user))
+          authoriseAdmin(JSON.parse(cookies.get(CookieTypes.admin.user)) as JWTAuthAdmin)
         );
     } else {
       finishAuthorisation();
@@ -74,7 +75,8 @@ class Routes extends React.Component<Props> {
       // Verify the user JWT Token is still valid
       UserAuthorised()
         .then(() =>
-          authoriseAdmin(cookies.get(CookieTypes.user.user))
+          // TODO : Remove JSON Parse - Use a better library for Cookies
+          authoriseAdmin(JSON.parse(cookies.get(CookieTypes.user.user)) as JWTAuthUser)
         );
     } else {
       // Finish auth process

@@ -8,9 +8,9 @@ import events from './Events';
 import { EventsState } from './Admin/types';
 
 export interface ApplicationState {
-  admin: AdminState;
-  user: UserState;
-  events: EventsState;
+  readonly admin: AdminState;
+  readonly user: UserState;
+  readonly events: EventsState;
 }
 
 const reducers: Reducer = combineReducers({

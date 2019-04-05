@@ -1,9 +1,9 @@
-import { Admin } from '~/static/types';
+import { JWTAuthAdmin } from '~/data/AdminAuth';
 
 export interface AdminAuthState {
-  error: string;
-  message: string;
-  authenticated: boolean;
-  user: Admin;
-  authFinished: boolean;
+  readonly error: string;
+  readonly message: string;
+  readonly authenticated: boolean;
+  readonly user?: JWTAuthAdmin;
+  readonly authFinished: boolean;
 }

@@ -9,6 +9,7 @@ import Q from 'q';
 
 import CookieTypes from '~/static/Cookies';
 import { LoginFormData } from '../Login';
+import { createStandardAction } from 'typesafe-actions';
 
 const cookies = new Cookies();
 const COOKIE_OPTIONS = {
@@ -25,47 +26,32 @@ function storeLogin(token: string, user: Auth.JWTAuthUser) {
   cookies.set(CookieTypes.user.user, user, COOKIE_OPTIONS);
 }
 
-export function errorHandler(dispatch: ApplicationDispatch, error: any, type: string) {
+export function errorHandler(dispatch: ApplicationDispatch, error: any) {
   const errorMessage = error.message;
 
   if (error.status === 401) {
-    dispatch({
-      type: type,
-      payload: 'Unable to find an account with that email and password',
-    });
+    dispatch(authoriseError('Unable to find an account with that email and password'));
     logoutUser();
   } else {
-    dispatch({
-      type: type,
-      payload: errorMessage,
-    });
+    dispatch(authoriseError(errorMessage));
   }
-}
-
-export function removeError(dispatch: ApplicationDispatch) {
-  dispatch({
-    type: Types.REMOVE_ERROR,
-  });
 }
 
 export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
   (dispatch: ApplicationDispatch) => {
     // Make the event return a promise
     const deferred = Q.defer();
-    removeError(dispatch);
+    dispatch(removeError());
 
     Auth.login(loginFormData.email, loginFormData.password)
       .then((res) => {
         storeLogin(res.token, res.user);
-        dispatch({
-          type: Types.AUTH_USER,
-          payload: res.user,
-        });
+        dispatch(authoriseUser(res.user));
         deferred.resolve();
       })
       .catch((err) => {
         deferred.reject(err.message);
-        return errorHandler(dispatch, err, Types.AUTH_ERROR);
+        return errorHandler(dispatch, err);
       });
 
     return deferred.promise;
@@ -73,8 +59,16 @@ export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Pro
 
 export const logoutUser = (): ApplicationAction => (
   (dispatch: ApplicationDispatch) => {
-    dispatch({type: Types.UNAUTH_USER});
+    dispatch(unauthoriseUser());
     dispatch(deleteUserEvents());
     cookies.remove(CookieTypes.user.token, {path: '/'});
     cookies.remove(CookieTypes.user.user, {path: '/'});
   });
+
+// Return authorisation events
+
+export const authoriseUser = createStandardAction(Types.AUTH_USER)<Auth.JWTAuthUser>();
+export const unauthoriseUser = createStandardAction(Types.UNAUTH_USER)<void>();
+export const finishAuthorisation = createStandardAction(Types.FINISH_AUTH)<void>();
+export const authoriseError = createStandardAction(Types.AUTH_ERROR)<string>();
+export const removeError = createStandardAction(Types.REMOVE_ERROR)<void>();

@@ -5,10 +5,10 @@ export interface EventStatisticsState {
 }
 
 export interface EventAlert {
-  message: string;
-  severity: string;
-  title: string;
-  timestamp: Date;
+  readonly message: string;
+  readonly severity: string;
+  readonly title: string;
+  readonly timestamp: Date;
 }
 
 export interface EventAlertsState {

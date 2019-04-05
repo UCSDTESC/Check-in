@@ -27,16 +27,16 @@ import { ResumesState } from '~/pages/ResumesPage/reducers/types';
 import { EventAlertsState, EventStatisticsState } from '~/pages/EventPage/reducers/types';
 
 export interface AdminState {
-  auth: AdminAuthState;
-  admins: Admin[];
-  events: EventsState;
-  filters: FiltersState;
-  general: GeneralState;
-  userColumns: ColumnsState;
-  users: TESCUser[];
-  resumes: ResumesState;
-  eventAlerts: EventAlertsState;
-  eventStatistics: EventStatisticsState;
+  readonly auth: AdminAuthState;
+  readonly admins: Admin[];
+  readonly events: EventsState;
+  readonly filters: FiltersState;
+  readonly general: GeneralState;
+  readonly userColumns: ColumnsState;
+  readonly users: TESCUser[];
+  readonly resumes: ResumesState;
+  readonly eventAlerts: EventAlertsState;
+  readonly eventStatistics: EventStatisticsState;
 }
 
 export default {

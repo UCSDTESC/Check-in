@@ -9,5 +9,5 @@ export interface FiltersState {
 }
 
 export interface GeneralState {
-  editing: boolean;
+  readonly editing: boolean;
 }

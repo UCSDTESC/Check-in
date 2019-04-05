@@ -7,8 +7,8 @@ import {applyResumeFilter} from '~/static/ResumeFilter';
 
 import {downloadResumes, pollDownload} from '~/data/Api';
 
-import {toggleFilter, toggleFilterOption, selectAllOptions,
-  selectNoneOptions, addFilterOption, ApplicationDispatch} from '../actions';
+import {toggleFilter, filterOptionActions, selectAllOptions,
+  selectNoneOptions, ApplicationDispatch} from '../actions';
 
 import Sidebar from './components/SponsorSidebar';
 import { ApplicationState } from '~/reducers';
@@ -21,15 +21,15 @@ const mapStateToProps = (state: ApplicationState) => ({
   filtered: state.admin.resumes.filtered,
 });
 
-const mapDispatchToProps = (dispatch: ApplicationDispatch) => ({
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   toggleFilter,
-  toggleFilterOption,
+  toggleFilterOption: filterOptionActions.toggleFilterOption,
   selectAllOptions,
   selectNoneOptions,
-  addFilterOption,
-  showLoading: bindActionCreators(showLoading, dispatch),
-  hideLoading: bindActionCreators(hideLoading, dispatch),
-});
+  addFilterOption: filterOptionActions.addFilterOption,
+  showLoading,
+  hideLoading,
+}, dispatch);
 
 interface SponsorLayoutProps {
 }
@@ -123,7 +123,8 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
           <div className="d-flex flex-column flex-md-row h-100">
             <div
               className={`admin-sidebar__container
-              admin-sidebar__container--authenticated`}>
+              admin-sidebar__container--authenticated`}
+            >
               <Sidebar
                 user={user}
                 selected={filtered}

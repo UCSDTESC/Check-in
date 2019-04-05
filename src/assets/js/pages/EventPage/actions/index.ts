@@ -76,17 +76,3 @@ export const updateEventStatistics = (eventAlias: string, statistics: EventStati
         statistics,
       })
     );
-
-// export const removeEventAlert = (eventAlias, timestamp) =>
-//   (dispatch: any) => dispatch({
-//     type: Types.REMOVE_EVENT_ALERT,
-//     event: eventAlias,
-//     timestamp
-//   });
-
-// export const updateEventStatistics = (eventAlias, statistics) =>
-//   (dispatch: any) => dispatch({
-//     type: Types.UPDATE_EVENT_STATISTICS,
-//     event: eventAlias,
-//     statistics
-//   });

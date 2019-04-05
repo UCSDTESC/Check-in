@@ -12,9 +12,10 @@ const eventAlerts: Reducer<EventAlertsState> = (state: EventAlertsState = initia
     const newState: EventAlertsState = Object.assign({}, state);
     const payload: AddEventAlertPayload = action.payload;
 
-    const newAlert: EventAlert = payload.alert;
-    // Add the timestamp
-    newAlert.timestamp = new Date();
+    const newAlert: EventAlert = {
+      ...payload.alert,
+      timestamp: new Date(),
+    };
 
     // Get the current alerts
     const currentAlerts = action.event in newState ? [

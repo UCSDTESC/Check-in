@@ -47,6 +47,11 @@ export interface Column {
   accessor: string;
 }
 
+export interface FilterOption {
+  filterName: string;
+  optionValue: string;
+}
+
 export interface FilterOptions {
   [OptionName: string]: boolean;
 }

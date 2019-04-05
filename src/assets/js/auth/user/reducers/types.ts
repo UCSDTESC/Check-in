@@ -1,9 +1,9 @@
-import { TESCUser } from '~/static/types';
+import { JWTAuthUser } from '~/data/User';
 
 export interface UserAuthState {
-  error: string;
-  message: string;
-  authenticated: boolean;
-  user: TESCUser | {};
-  authFinished: boolean;
+  readonly error: string;
+  readonly message: string;
+  readonly authenticated: boolean;
+  readonly user?: JWTAuthUser;
+  readonly authFinished: boolean;
 }

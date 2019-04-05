@@ -1,7 +1,7 @@
 import { Column } from '~/static/types';
 
 export interface ColumnsState {
-  loadedAvailable: boolean;
-  available: Column[];
-  active: Column[];
+  readonly loadedAvailable: boolean;
+  readonly available: Column[];
+  readonly active: Column[];
 }

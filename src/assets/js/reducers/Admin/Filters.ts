@@ -1,7 +1,9 @@
-import {Reducer, AnyAction} from 'redux';
+import {handleActions} from 'redux-actions';
 import * as Types from '~/actions/types';
+import * as Actions from '~/actions';
 import { FiltersState } from './types';
-import { FilterOptions, Filter } from '~/static/types';
+import { FilterOptions, Filter, FilterOption } from '~/static/types';
+import { ActionType } from 'typesafe-actions';
 
 const INITIAL_STATE: FiltersState = {
   university: {
@@ -51,20 +53,21 @@ const INITIAL_STATE: FiltersState = {
 
 /**
  * Adds a new filter to the system.
- * @param {Object} state The existing redux state.
- * @param {Object} action The action parameters.
  */
-function addFilter(state: FiltersState, action: AnyAction) {
+function addFilter(state: FiltersState, action: ActionType<typeof Actions.addFilter>) {
   // Already exists
   if (state[action.payload.name]) {
     return state;
   }
 
-  return {...state, [action.payload.name]: {
-    displayName: action.payload.displayName,
-    enabled: true,
-    options: {},
-  }};
+  return {...state,
+    [action.payload.name]: {
+      displayName: action.payload.displayName,
+      enabled: true,
+      options: {},
+      editable: true,
+    },
+  };
 }
 
 /**
@@ -72,7 +75,7 @@ function addFilter(state: FiltersState, action: AnyAction) {
  * @param {Object} state The existing redux state.
  * @param {Object} action The action parameters.
  */
-function removeFilter(state: FiltersState, action: AnyAction) {
+function removeFilter(state: FiltersState, action: ActionType<typeof Actions.removeFilter>) {
   // Filter out all filters that aren't that filter
   return Object.keys(state)
     .filter(key => key !== action.payload)
@@ -86,7 +89,7 @@ function removeFilter(state: FiltersState, action: AnyAction) {
  * Enables or disables a given filter.
  * @param {Object} filter The existing filter.
  */
-function toggleFilter(filter: Filter) {
+function toggleFilter(filter: Filter): Filter {
   return filter.enabled ? disableFilter(filter) : enableFilter(filter);
 }
 
@@ -94,7 +97,7 @@ function toggleFilter(filter: Filter) {
  * Enables a given filter.
  * @param {Obect} filter The exsiting filter.
  */
-function enableFilter(filter: Filter) {
+function enableFilter(filter: Filter): Filter {
   return {...filter, enabled: true};
 }
 
@@ -102,7 +105,7 @@ function enableFilter(filter: Filter) {
  * Disables a given filter.
  * @param {Object} filter The existing filter.
  */
-function disableFilter(filter: Filter) {
+function disableFilter(filter: Filter): Filter {
   return {...filter, enabled: false};
 }
 
@@ -111,12 +114,13 @@ function disableFilter(filter: Filter) {
  * @param {Object} options The existing options for the selected filter.
  * @param {Object} action The action parameters.
  */
-function addFilterOption(options: FilterOptions, action: AnyAction) {
-  if (options[action.payload.option]) {
+function addFilterOption(options: FilterOptions,
+                         action: ActionType<typeof Actions.filterOptionActions.addFilterOption>) {
+  if (options[action.payload.optionValue]) {
     return {...options};
   }
 
-  return {...options, [action.payload.option]: true};
+  return {...options, [action.payload.optionValue]: true};
 }
 
 /**
@@ -124,9 +128,10 @@ function addFilterOption(options: FilterOptions, action: AnyAction) {
  * @param {Object} options The existing options for the selected filter.
  * @param {Object} action The action parameters.
  */
-function removeFilterOption(options: FilterOptions, action: AnyAction) {
+function removeFilterOption(options: FilterOptions,
+                            action: ActionType<typeof Actions.filterOptionActions.removeFilterOption>) {
   return Object.keys(options)
-    .filter(key => key !== action.payload.option)
+    .filter(key => key !== action.payload.optionValue)
     .reduce((result: FilterOptions, current) => {
       result[current] = options[current];
       return result;
@@ -138,8 +143,8 @@ function removeFilterOption(options: FilterOptions, action: AnyAction) {
  * @param {Object} options The existing options for the selected filter.
  * @param {Object} action The action parameters.
  */
-function enableFilterOption(options: FilterOptions, action: AnyAction) {
-  return {...options, [action.payload.option]: true};
+function enableFilterOption(options: FilterOptions, toEnable: FilterOption) {
+  return {...options, [toEnable.optionValue]: true};
 }
 
 /**
@@ -147,8 +152,8 @@ function enableFilterOption(options: FilterOptions, action: AnyAction) {
  * @param {Object} options The existing options for the selected filter.
  * @param {Object} action The action parameters.
  */
-function disableFilterOption(options: FilterOptions, action: AnyAction) {
-  return {...options, [action.payload.option]: false};
+function disableFilterOption(options: FilterOptions, toDisable: FilterOption) {
+  return {...options, [toDisable.optionValue]: false};
 }
 
 /**
@@ -156,9 +161,10 @@ function disableFilterOption(options: FilterOptions, action: AnyAction) {
  * @param {Object} options The existing options for the selected filter.
  * @param {Object} action The action parameters.
  */
-function toggleFilterOption(options: FilterOptions, action: AnyAction) {
-  return options[action.payload.option] ? disableFilterOption(options, action) :
-    enableFilterOption(options, action);
+function toggleFilterOption(options: FilterOptions,
+                            action: ActionType<typeof Actions.filterOptionActions.toggleFilterOption>) {
+  return options[action.payload.optionValue] ? disableFilterOption(options, action.payload) :
+    enableFilterOption(options, action.payload);
 }
 
 /**
@@ -188,12 +194,12 @@ function selectNoneFilterOptions(options: FilterOptions) {
  * @param {Object} options The existing options for the selected filter.
  * @param {Object} action The action parameters.
  */
-function selectFilterOption(options: FilterOptions, action: AnyAction) {
+function selectFilterOption(options: FilterOptions, action: Actions.FilterOptionActionsTypes) {
   switch (action.type) {
   case Types.ENABLE_FILTER_OPTION:
-    return enableFilterOption(options, action);
+    return enableFilterOption(options, action.payload);
   case Types.DISABLE_FILTER_OPTION:
-    return disableFilterOption(options, action);
+    return disableFilterOption(options, action.payload);
   case Types.TOGGLE_FILTER_OPTION:
     return toggleFilterOption(options, action);
   }
@@ -205,7 +211,7 @@ function selectFilterOption(options: FilterOptions, action: AnyAction) {
  * @param {Object} options The existing options for a filter.
  * @param {Object} action The action parameters.
  */
-function option(options: FilterOptions, action: AnyAction) {
+function option(options: FilterOptions, action: Actions.FilterOptionActionsTypes) {
   switch (action.type) {
   case Types.ADD_FILTER_OPTION:
     return addFilterOption(options, action);
@@ -215,10 +221,6 @@ function option(options: FilterOptions, action: AnyAction) {
   case Types.DISABLE_FILTER_OPTION:
   case Types.TOGGLE_FILTER_OPTION:
     return selectFilterOption(options, action);
-  case Types.SELECT_ALL_FILTER_OPTIONS:
-    return selectAllFilterOptions(options);
-  case Types.SELECT_NONE_FILTER_OPTIONS:
-    return selectNoneFilterOptions(options);
   }
 
   return options;
@@ -229,7 +231,7 @@ function option(options: FilterOptions, action: AnyAction) {
  * @param {Object} state The existing redux state.
  * @param {Object} action The action parameters.
  */
-function selectFilter(state: FiltersState, action: AnyAction) {
+function selectFilter(state: FiltersState, action: Actions.FilterActionsTypes) {
   if (!state[action.payload]) {
     return state;
   }
@@ -243,43 +245,79 @@ function selectFilter(state: FiltersState, action: AnyAction) {
     return {...state, [action.payload]: disableFilter(filter)};
   case Types.TOGGLE_FILTER:
     return {...state, [action.payload]: toggleFilter(filter)};
+  }
 
+  return state;
+}
+
+/**
+ * Passes an existing filter onto modifying reducer actions.
+ * @param {Object} state The existing redux state.
+ * @param {Object} action The action parameters.
+ */
+function selectFilterOptions(state: FiltersState, action: Actions.FilterOptionActionsTypes) {
+  if (!state[action.payload.filterName]) {
+    return state;
+  }
+
+  const filter = state[action.payload.filterName];
+
+  switch (action.type) {
   case Types.ADD_FILTER_OPTION:
   case Types.REMOVE_FILTER_OPTION:
   case Types.ENABLE_FILTER_OPTION:
   case Types.DISABLE_FILTER_OPTION:
   case Types.TOGGLE_FILTER_OPTION:
-  case Types.SELECT_ALL_FILTER_OPTIONS:
-  case Types.SELECT_NONE_FILTER_OPTIONS:
-    return {...state, [action.payload]: {
+    return {...state, [action.payload.filterName]: {
       ...filter,
       options: option(filter.options, action),
     }};
   }
 
-  return {...state, [action.payload]: filter};
+  return state;
 }
 
-const filters: Reducer<FiltersState> = (state: FiltersState = INITIAL_STATE, action: AnyAction) => {
-  switch (action.type) {
-  case Types.ADD_FILTER:
-    return addFilter(state, action);
-  case Types.REMOVE_FILTER:
-    return removeFilter(state, action);
-  case Types.ENABLE_FILTER:
-  case Types.DISABLE_FILTER:
-  case Types.TOGGLE_FILTER:
-  case Types.ADD_FILTER_OPTION:
-  case Types.REMOVE_FILTER_OPTION:
-  case Types.ENABLE_FILTER_OPTION:
-  case Types.DISABLE_FILTER_OPTION:
-  case Types.TOGGLE_FILTER_OPTION:
-  case Types.SELECT_ALL_FILTER_OPTIONS:
-  case Types.SELECT_NONE_FILTER_OPTIONS:
-    return selectFilter(state, action);
-  }
+const handleSelectFilterOptions = (state: FiltersState, action: Actions.FilterOptionActionsTypes) =>
+  selectFilterOptions(state, action);
 
-  return state;
-};
+const handleSelectFilter = (state: FiltersState, action: Actions.FilterActionsTypes) =>
+  selectFilter(state, action);
 
-export default filters;
+export default handleActions({
+  [Types.ADD_FILTER]: (state: FiltersState, action: ActionType<typeof Actions.addFilter>) =>
+    addFilter(state, action),
+  [Types.REMOVE_FILTER]: (state: FiltersState, action: ActionType<typeof Actions.removeFilter>) =>
+    removeFilter(state, action),
+  [Types.ENABLE_FILTER]: handleSelectFilter,
+  [Types.DISABLE_FILTER]: handleSelectFilter,
+  [Types.TOGGLE_FILTER]: handleSelectFilter,
+  [Types.ADD_FILTER_OPTION]: handleSelectFilterOptions,
+  [Types.REMOVE_FILTER_OPTION]: handleSelectFilterOptions,
+  [Types.ENABLE_FILTER_OPTION]: handleSelectFilterOptions,
+  [Types.DISABLE_FILTER_OPTION]: handleSelectFilterOptions,
+  [Types.TOGGLE_FILTER_OPTION]: handleSelectFilterOptions,
+  [Types.SELECT_ALL_FILTER_OPTIONS]: (state: FiltersState, action: ActionType<typeof Actions.selectAllOptions>) => {
+    if (!state[action.payload]) {
+      return state;
+    }
+
+    const filter = state[action.payload];
+
+    return {...state, [action.payload]: {
+      ...filter,
+      options: selectAllFilterOptions(filter.options),
+    }};
+  },
+  [Types.SELECT_NONE_FILTER_OPTIONS]: (state: FiltersState, action: ActionType<typeof Actions.selectNoneOptions>) => {
+    if (!state[action.payload]) {
+      return state;
+    }
+
+    const filter = state[action.payload];
+
+    return {...state, [action.payload]: {
+      ...filter,
+      options: selectNoneFilterOptions(filter.options),
+    }};
+  },
+}, INITIAL_STATE);

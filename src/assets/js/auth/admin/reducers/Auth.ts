@@ -1,13 +1,10 @@
-import {Reducer} from 'redux';
-import {
-  AUTH_ERROR,
-  AUTH_USER,
-  UNAUTH_USER,
-  FINISH_AUTH
-} from '../actions/types';
+import * as Types from '../actions/types';
 import { AdminAuthState } from './types';
+import { handleActions } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
+import { authoriseAdmin, authoriseError } from '../actions';
 
-const INITIAL_STATE: AdminAuthState = {
+const initialState: AdminAuthState = {
   error: '',
   message: '',
   authenticated: false,
@@ -15,20 +12,26 @@ const INITIAL_STATE: AdminAuthState = {
   authFinished: false,
 };
 
-const adminAuth: Reducer<AdminAuthState> = (state: AdminAuthState = INITIAL_STATE, action) => {
-  switch (action.type) {
-  case AUTH_USER:
-    return {...state, error: '', message: '', authenticated: true,
-      user: action.payload, authFinished: true};
-  case UNAUTH_USER:
-    return {...state, authenticated: false, user: null};
-  case AUTH_ERROR:
-    return {...state, error: action.payload};
-  case FINISH_AUTH:
-    return {...state, authFinished: true};
-  }
-
-  return state;
-};
-
-export default adminAuth;
+export default handleActions({
+  [Types.AUTH_ADMIN]: (state, action: ActionType<typeof authoriseAdmin>) => ({
+    user: action.payload,
+    error: '',
+    message: '',
+    authenticated: true,
+    authFinished: true,
+  }),
+  [Types.UNAUTH_ADMIN]: (state) => ({
+    ...state,
+    authenticated: false,
+    user: null,
+  }),
+  // TODO: Fix unknown error
+  // [Types.AUTH_ADMIN_ERROR]: (state, action: ActionType<typeof authoriseError>) => ({
+  //   ...state,
+  //   error: action.payload,
+  // }),
+  [Types.FINISH_ADMIN_AUTH]: (state) => ({
+    ...state,
+    authFinished: true,
+  }),
+}, initialState);

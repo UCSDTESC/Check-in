@@ -8,9 +8,9 @@ import { TESCUser } from '~/static/types';
 import { UserEventsState } from './types';
 
 export interface UserState {
-  auth: UserAuthState;
-  current?: TESCUser;
-  events: UserEventsState;
+  readonly auth: UserAuthState;
+  readonly current?: TESCUser;
+  readonly events: UserEventsState;
 }
 
 export default {

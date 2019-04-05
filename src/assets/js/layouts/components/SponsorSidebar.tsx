@@ -4,9 +4,8 @@ import {Link as RouteLink} from 'react-router-dom';
 
 import Filter from './Filter';
 import Section from './Section';
-import { Admin } from '~/static/types';
+import { Admin, FilterOption } from '~/static/types';
 import { FiltersState } from '~/reducers/Admin/types';
-import { FilterOption } from '~/actions';
 
 interface SponsorSidebarProps {
   user: Admin;
@@ -80,7 +79,7 @@ export default class SponsorSidebar extends React.Component<SponsorSidebarProps,
   handleToggleFilterOption = (filterName: string) =>
     (optionName: string) => this.props.toggleFilterOption({
       filterName: filterName,
-      option: optionName,
+      optionValue: optionName,
     } as FilterOption);
 
   handleSelectAll = (filterName: string) =>
@@ -92,7 +91,7 @@ export default class SponsorSidebar extends React.Component<SponsorSidebarProps,
   addFilterOption = (filterName: string) =>
     (optionName: string) => this.props.addFilterOption({
       filterName: filterName,
-      option: optionName,
+      optionValue: optionName,
     } as FilterOption);
 
   /**
@@ -128,8 +127,7 @@ export default class SponsorSidebar extends React.Component<SponsorSidebarProps,
 
     return (
       <div className="admin-sidebar">
-        <div
-          className="admin-sidebar__header navbar-expand-md navbar-inverse">
+        <div className="admin-sidebar__header navbar-expand-md navbar-inverse">
           <img
             className="admin-sidebar__logo"
             src="/img/vectors/tesc-logo.svg"
