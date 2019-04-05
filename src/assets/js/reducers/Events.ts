@@ -1,6 +1,7 @@
 import {Reducer} from 'redux';
 import * as ActionTypes from '~/actions/types';
 import { EventsState } from './types';
+import { TESCEvent } from '~/static/types';
 
 const initialState: EventsState = {};
 
@@ -9,17 +10,17 @@ const events: Reducer<EventsState> = (state: EventsState = initialState, action)
   case ActionTypes.ADD_EVENT:
     return {
       ...state,
-      [action.event.alias]: action.event,
+      [action.payload.alias]: action.event,
     };
   case ActionTypes.ADD_EVENTS:
-    return action.events
-      .reduce((result, current) => {
+    return action.payload
+      .reduce((result: EventsState, current: TESCEvent) => {
         result[current.alias] = current;
         return result;
       }, state);
   case ActionTypes.REPLACE_EVENTS:
-    return action.events
-      .reduce((result, current) => {
+    return action.payload
+      .reduce((result: EventsState, current: TESCEvent) => {
         result[current.alias] = current;
         return result;
       }, {});

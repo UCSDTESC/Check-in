@@ -14,7 +14,7 @@ export interface LoginFormData {
 }
 
 interface LoginProps {
-  loginUser: (user: LoginFormData) => Promise<void>;
+  loginUser: (user: LoginFormData) => Q.Promise<any>;
   errorMessage: string;
 }
 
@@ -30,7 +30,7 @@ class Login extends React.Component<Props> {
    * @param {Object} formProps The validated form data.
    */
   handleFormSubmit = (formProps: LoginFormData) => {
-    return this.props.loginUser(formProps)
+    this.props.loginUser(formProps)
       .catch((e) => {
         console.error('Could not log in', e);
       });

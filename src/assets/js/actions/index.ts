@@ -73,7 +73,7 @@ export const addAdminEvents = createStandardAction(Types.ADD_ADMIN_EVENTS)<TESCE
 
 export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENTS)<TESCEvent[]>();
 
-export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, AnyAction>;
+export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, Action>;
 export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
 
 export const loadAllAdminEvents = (): ApplicationAction<Q.Promise<{}>> =>

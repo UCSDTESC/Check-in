@@ -6,7 +6,7 @@ import SponsorList from '../components/SponsorList';
 import {addNewSponsor, addNewOrganiser, registerAdmin} from '~/data/Api';
 import EventPageTab from './EventPageTab';
 import { AdminSelectType } from '~/components/AdminSelect';
-import { Admin } from '~/static/types';
+import { NewAdminModalFormData } from '~/components/NewAdminModal';
 
 interface AdministratorsTabProps {
 }
@@ -61,7 +61,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
    * sponsor to the current event.
    * @param {Object} newSponsor The new admin object to add as a sponsor.
    */
-  registerNewSponsor = (newAdmin: Admin) => {
+  registerNewSponsor = (newAdmin: NewAdminModalFormData) => {
     const {event, addEventDangerAlert} = this.props;
 
     return registerAdmin(newAdmin)
@@ -77,7 +77,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
    * organiser to the current event.
    * @param {Object} newSponsor The new admin object to add as a organiser.
    */
-  registerNewOrganiser = (newAdmin: Admin) => {
+  registerNewOrganiser = (newAdmin: NewAdminModalFormData) => {
     const {event, addEventDangerAlert} = this.props;
 
     return registerAdmin(newAdmin)

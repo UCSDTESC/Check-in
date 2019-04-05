@@ -9,7 +9,7 @@ import { UserEventsState } from './types';
 
 export interface UserState {
   auth: UserAuthState;
-  current: TESCUser | {};
+  current?: TESCUser;
   events: UserEventsState;
 }
 

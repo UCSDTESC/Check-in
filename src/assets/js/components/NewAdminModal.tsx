@@ -7,6 +7,7 @@ import FA from 'react-fontawesome';
 
 import {Role} from '~/static/Roles';
 import { ApplicationState } from '~/reducers';
+import { compose } from 'redux';
 
 const generatorSettings = {
   length: 15,
@@ -69,7 +70,7 @@ interface NewAdminModalProps {
   formName?: string;
 }
 
-interface NewAdminModalFormData {
+export interface NewAdminModalFormData {
   username: string;
   password: string;
   role: Role;
@@ -204,9 +205,11 @@ class NewAdminModal extends React.Component<Props, NewAdminModalState> {
   }
 }
 
-const NewAdminModalForm = reduxForm<NewAdminModalFormData, NewAdminModalProps>({
-  destroyOnUnmount: true,
-  initialValues,
-})(NewAdminModal);
-
-export default connect(mapStateToProps)(NewAdminModalForm);
+export default compose(
+  reduxForm<NewAdminModalFormData, NewAdminModalProps>({
+    form: 'newAdmin',
+    destroyOnUnmount: true,
+    initialValues,
+  }),
+  connect(mapStateToProps)
+)(NewAdminModal);

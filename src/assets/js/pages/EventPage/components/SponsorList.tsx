@@ -3,7 +3,7 @@ import FA from 'react-fontawesome';
 
 import SponsorSelect from '~/components/SponsorSelect';
 
-import NewAdminModal from '~/components/NewAdminModal';
+import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
 
 import { Role, RolesColors} from '~/static/Roles';
 import { AdminSelectType } from '~/components/AdminSelect';
@@ -12,7 +12,7 @@ import { Admin } from '~/static/types';
 interface SponsorListProps {
   sponsors: Admin[];
   addNewSponsor: (toAdd: AdminSelectType) => void;
-  registerNewSponsor: (newSponsor: any) => void;
+  registerNewSponsor: (newSponsor: NewAdminModalFormData) => void;
 }
 
 interface SponsorListState {
@@ -39,7 +39,7 @@ export default class SponsorList extends React.Component<SponsorListProps, Spons
     this.changeNewSponsor(null);
   };
 
-  onRegisterModalSubmit = (values: AdminSelectType) => {
+  onRegisterModalSubmit = (values: NewAdminModalFormData) => {
     this.props.registerNewSponsor(values);
 
     this.toggleRegisterModal();

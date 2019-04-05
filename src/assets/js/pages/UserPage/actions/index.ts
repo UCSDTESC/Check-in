@@ -11,7 +11,8 @@ import { ApplicationAction, ApplicationDispatch } from '~/actions';
 export const updateCurrentUser = createStandardAction(Types.UPDATE_CURRENT_USER)<TESCUser>();
 
 // Get the current user information
-export const getCurrentUser = (eventAlias: string): ApplicationAction => (dispatch: ApplicationDispatch) => {
+export const getCurrentUser = (eventAlias: string): ApplicationAction<Q.Promise<{}>> =>
+(dispatch: ApplicationDispatch) => {
   const deferred = Q.defer();
   Api.getCurrentUser(eventAlias)
     .then((user) => {

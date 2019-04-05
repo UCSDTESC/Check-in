@@ -48,7 +48,7 @@ export function removeError(dispatch: ApplicationDispatch) {
   });
 }
 
-export const loginUser = (loginFormData: LoginFormData): ApplicationAction => (
+export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
   (dispatch: ApplicationDispatch) => {
     // Make the event return a promise
     const deferred = Q.defer();

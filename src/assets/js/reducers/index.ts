@@ -13,7 +13,7 @@ export interface ApplicationState {
   events: EventsState;
 }
 
-const reducers: Reducer<ApplicationState> = combineReducers<ApplicationState>({
+const reducers: Reducer = combineReducers({
   admin: combineReducers(adminReducers),
   user: combineReducers(userReducers),
   events,

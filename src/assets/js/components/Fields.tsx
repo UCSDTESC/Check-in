@@ -56,6 +56,7 @@ export const errorTextInput: React.StatelessComponent<CustomFieldProps> = ({inpu
           {...input}
           className={errorClassName}
           placeholder={placeholder}
+          type={type}
         />
         {touched && error && createError(error)}
       </div>
@@ -94,8 +95,8 @@ export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({input
       </div>);
   };
 
-export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
-    meta: {touched, error}}) => {
+export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({input, className,
+  meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -241,7 +242,7 @@ export function createLabel(text: string, required: boolean = true, className: s
   );
 }
 
-export function createInput(name: string, placeholder: string, type: string= 'text',
+export function createInput(name: string, placeholder: string, type: string = 'text',
                             className: string= 'sd-form__input-text',
                             normalize: (value: any, previousValue: any) => void = null) {
   return (

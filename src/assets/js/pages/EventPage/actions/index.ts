@@ -5,20 +5,26 @@ import { EventStatistics } from '~/static/types';
 import { AlertType } from '~/pages/AlertPage';
 import { ApplicationDispatch, ApplicationAction } from '~/actions';
 
-const _addEventAlert = createStandardAction(Types.ADD_EVENT_ALERT)<{
+export interface AddEventAlertPayload {
   eventAlias: string;
   alert: EventAlert;
-}>();
+};
 
-const _removeEventAlert = createStandardAction(Types.REMOVE_EVENT_ALERT)<{
+export interface RemoveEventAlertPayload {
   eventAlias: string;
   timestamp: Date;
-}>();
+}
 
-const _updateEventStatistics = createStandardAction(Types.UPDATE_EVENT_STATISTICS)<{
+export interface UpdateEventStatisticsPayload {
   eventAlias: string;
   statistics: EventStatistics;
-}>();
+}
+
+const _addEventAlert = createStandardAction(Types.ADD_EVENT_ALERT)<AddEventAlertPayload>();
+
+const _removeEventAlert = createStandardAction(Types.REMOVE_EVENT_ALERT)<RemoveEventAlertPayload>();
+
+const _updateEventStatistics = createStandardAction(Types.UPDATE_EVENT_STATISTICS)<UpdateEventStatisticsPayload>();
 
 export const addEventAlert = (eventAlias: string, message: string, severity: AlertType, title: string):
 ApplicationAction =>

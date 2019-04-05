@@ -9,6 +9,7 @@ import CookieTypes from '~/static/Cookies';
 import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
     TESCEvent, Column } from '~/static/types';
 import { QuestionType } from '~/static/Questions';
+import { NewAdminModalFormData } from '~/components/NewAdminModal';
 
 const API_URL_PREFIX = '/api';
 
@@ -202,7 +203,7 @@ export const registerNewEvent = (event: any) =>
  * @param {Object} admin The admin fields to register.
  * @returns {Promise} A promise of the request.
  */
-export const registerAdmin = (admin: Admin) =>
+export const registerAdmin = (admin: NewAdminModalFormData) =>
   promisify<Admin>(
     request
       .post('/admins/register')

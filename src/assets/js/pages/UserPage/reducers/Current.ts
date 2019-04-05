@@ -9,7 +9,7 @@ const initialState: NullableTESCUser = {};
 const currentUser: Reducer<NullableTESCUser> = (state: NullableTESCUser = initialState, action) => {
   switch (action.type) {
   case ActionTypes.UPDATE_CURRENT_USER:
-    return {...action.user};
+    return {...action.payload};
   default:
     return state;
   }

@@ -7,19 +7,23 @@ import {loginUser} from '~/auth/user/actions';
 import Login from '~/auth/user/Login';
 import AlertPage, { AlertPageState, PageAlert, AlertType } from './AlertPage';
 import { ApplicationState } from '~/reducers';
+import { ApplicationDispatch } from '~/actions';
+import { bindActionCreators } from 'redux';
+import { LoginFormData } from '~/auth/user/Login';
 
-interface StateProps {
-  loginError: string;
-}
+const mapStateToProps = (state: ApplicationState) => ({
+  loginError: state.user.auth.error,
+});
 
-interface DispatchProps {
-  loginUser: (...args: any) => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  loginUser,
+}, dispatch);
 
 interface LoginPageProps {
 }
 
-type Props = RouteComponentProps & StateProps & DispatchProps & LoginPageProps;
+type Props = RouteComponentProps & ReturnType<typeof mapStateToProps> &
+  ReturnType<typeof mapDispatchToProps> & LoginPageProps;
 
 interface LoginPageState extends AlertPageState {
   redirectToReferrer: boolean;
@@ -45,7 +49,7 @@ class LoginPage extends AlertPage<Props, LoginPageState> {
     }
   }
 
-  loginUser = (formProps: any) => {
+  loginUser = (formProps: LoginFormData) => {
     const {loginUser, history} = this.props;
     return loginUser(formProps)
       .then(() => history.push('/'))
@@ -74,10 +78,4 @@ class LoginPage extends AlertPage<Props, LoginPageState> {
   }
 }
 
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    loginError: state.user.auth.error,
-  };
-};
-
-export default connect(mapStateToProps, {loginUser})(withRouter(LoginPage));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(LoginPage));

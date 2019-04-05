@@ -9,15 +9,16 @@ import Loading from '~/components/Loading';
 
 import {addUsers} from '../UsersPage/actions';
 
-import {loadAllAdminEvents} from '~/actions';
+import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
 
 import {loadAllUsers} from '~/data/Api';
 
 import {userCheckin} from './actions';
 
 import { RouteComponentProps } from 'react-router-dom';
-import { TESCUser } from '~/static/types';
+import { TESCUser, UserStatus } from '~/static/types';
 import { ApplicationState } from '~/reducers';
+import { bindActionCreators } from 'redux';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -30,18 +31,18 @@ const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => ({
   event: state.admin.events[ownProps.match.params.eventAlias],
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   showLoading,
   hideLoading,
   addUsers,
   loadAllAdminEvents,
   userCheckin,
-};
+}, dispatch);
 
 interface CheckinPageProps {
 }
 
-type Props = RouteProps & ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & CheckinPageProps;
+type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & CheckinPageProps;
 
 interface CheckinPageState {
   isProcessing: boolean;
@@ -98,13 +99,13 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
   validateUser = (user: TESCUser) =>
     Q.Promise((resolve, reject) => {
       // Ensure they're eligible
-      if (user.status !== 'Confirmed') {
+      if (user.status !== UserStatus.Confirmed) {
         switch (user.status) {
-        case ('Declined'):
+        case (UserStatus.Declined):
           return reject('User marked as rejecting invitation');
-        case ('Unconfirmed'):
+        case (UserStatus.Unconfirmed):
           return reject('User never confirmed their invitation');
-        case ('Rejected'):
+        case (UserStatus.Rejected):
           return reject('User was rejected from ' + user.event.name);
         default:
           return reject('User was not invited to event');
@@ -280,7 +281,6 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
                 style={previewStyle}
                 onError={console.error}
                 onScan={this.onScan}
-                playsinline="true"
               />
             </div>
           </div>

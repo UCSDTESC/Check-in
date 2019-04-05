@@ -6,7 +6,7 @@ import {Button} from 'reactstrap';
 import {replaceAdmins} from './actions';
 import AdminList from './components/AdminList';
 
-import NewAdminModal from '~/components/NewAdminModal';
+import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
 
 import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
 
@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
 interface AdminsPageProps {
 }
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps & AdminsPageProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & AdminsPageProps;
 
 interface AdminsPageState {
   isRegisterModalOpen: boolean;
@@ -56,11 +56,12 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
     isRegisterModalOpen: !this.state.isRegisterModalOpen,
   });
 
-  registerNewAdmin = (newAdmin: Admin) =>
+  registerNewAdmin = (newAdmin: NewAdminModalFormData) => {
     registerAdmin(newAdmin)
       .then(this.loadAdmins)
       .then(this.toggleRegisterModal)
       .catch(console.error);
+  }
 
   onDeleteAdmin = (adminId: string) =>
     deleteAdmin(adminId)

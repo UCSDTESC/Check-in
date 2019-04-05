@@ -3,7 +3,7 @@ import FA from 'react-fontawesome';
 
 import OrganiserSelect from '~/components/OrganiserSelect';
 
-import NewAdminModal from '~/components/NewAdminModal';
+import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
 
 import {Role, RolesColors} from '~/static/Roles';
 import { Admin } from '~/static/types';
@@ -12,7 +12,7 @@ import { AdminSelectType } from '~/components/AdminSelect';
 interface OrganiserListProps {
   organisers: Admin[];
   addNewOrganiser: (toAdd: AdminSelectType) => void;
-  registerNewOrganiser: (newOrganiser: any) => void;
+  registerNewOrganiser: (newOrganiser: NewAdminModalFormData) => void;
 }
 
 interface OrganiserListState {
@@ -39,7 +39,7 @@ export default class OrganiserList extends React.Component<OrganiserListProps, O
     this.changeNewOrganiser(null);
   };
 
-  onRegisterModalSubmit = (values: any) => {
+  onRegisterModalSubmit = (values: NewAdminModalFormData) => {
     this.props.registerNewOrganiser(values);
 
     this.toggleRegisterModal();

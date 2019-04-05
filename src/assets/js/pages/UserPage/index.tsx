@@ -1,8 +1,6 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types';
-import {UncontrolledAlert} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import diff from 'object-diff';
 
@@ -17,26 +15,27 @@ import Loading from '~/components/Loading';
 import {updateUserField, rsvpUser} from '~/data/User';
 import { RouteComponentProps } from 'react-router-dom';
 import { ApplicationState } from '~/reducers';
-import { TESCUser } from '~/static/types';
+import { TESCUser, UserStatus } from '~/static/types';
 import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
+import { ApplicationDispatch } from '~/actions';
 
-interface StateProps {
-  user: TESCUser;
-}
+const mapStateToProps = (state: ApplicationState) => ({
+  user: state.user.current,
+});
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  getCurrentUser: (arg0: any) => Promise<any>;
-  updateCurrentUser: (arg0: any) => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  showLoading,
+  hideLoading,
+  getCurrentUser,
+  updateCurrentUser,
+}, dispatch);
 
 interface UserPageProps {
 }
 
 type Props = RouteComponentProps<{
   eventAlias: string;
-}> & StateProps & DispatchProps & UserPageProps;
+}> & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & UserPageProps;
 
 interface UserPageState extends AlertPageState {
   showRSVP: boolean;
@@ -100,7 +99,7 @@ class UserPage extends AlertPage<Props, UserPageState> {
    */
   userRSVP = (status: boolean, bussing: boolean) => {
     const {user, updateCurrentUser} = this.props;
-    if (user.status !== 'Unconfirmed') {
+    if (user.status !== UserStatus.Unconfirmed) {
       return;
     }
 
@@ -146,26 +145,12 @@ class UserPage extends AlertPage<Props, UserPageState> {
             initialValues={user}
             onSubmit={this.updateUser}
             toggleRSVP={this.toggleRSVP}
+            event={user.event}
           />
         </div>
       </div>
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    user: state.user.current,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    getCurrentUser: bindActionCreators(getCurrentUser, dispatch),
-    updateCurrentUser: bindActionCreators(updateCurrentUser, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserPage);

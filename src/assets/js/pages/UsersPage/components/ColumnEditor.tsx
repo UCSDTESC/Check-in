@@ -28,8 +28,8 @@ export default class UserList extends React.Component<UserListProps, UserListSta
    * Add a new column to the list.
    * @param {Object} event The select onChange event.
    */
-  newColumn = (event: React.FormEvent<HTMLInputElement>) => {
-    this.props.onAddColumn(this.props.available[event.currentTarget.value]);
+  newColumn = (event: React.FormEvent<HTMLSelectElement>) => {
+    this.props.onAddColumn(this.props.available[Number(event.currentTarget.value)]);
   };
 
   render() {

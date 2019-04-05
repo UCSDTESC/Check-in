@@ -12,26 +12,28 @@ import {loadAllApplicants} from '~/data/Api';
 import ResumeList from './components/ResumeList';
 import { RouteComponentProps } from 'react-router';
 import { ApplicationState } from '~/reducers';
-import { TESCUser } from '~/static/types';
+import { TESCUser, UserStatus } from '~/static/types';
+import { ApplicationDispatch } from '~/actions';
 
-interface StateProps {
-  applicants: TESCUser[];
-  totalApplicants: number;
-}
+const mapStateToProps = (state: ApplicationState) => ({
+  applicants: applyResumeFilter(state.admin.filters,
+    state.admin.resumes.applicants),
+  totalApplicants: state.admin.resumes.applicants.length,
+});
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  replaceApplicants: (arg0: any) => Promise<any>;
-  updateFiltered: (arg0: any) => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  replaceApplicants,
+  showLoading,
+  hideLoading,
+  replaceFiltered,
+}, dispatch);
 
 interface ResumesPageProps {
 }
 
 type Props = RouteComponentProps<{
   eventAlias: string;
-}> & StateProps & DispatchProps & ResumesPageProps;
+}> & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & ResumesPageProps;
 
 interface ResumesPageState {
   isCompacted: boolean;
@@ -51,12 +53,6 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
 
     loadAllApplicants(this.props.match.params.eventAlias)
       .then((res: TESCUser[]) => {
-        res = res.map(x => {
-          if (!x.status) {
-            x.status = 'No Status';
-          }
-          return x;
-        });
         hideLoading();
         return replaceApplicants(res);
       })
@@ -65,7 +61,7 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.applicants.length !== this.props.applicants.length) {
-      this.props.updateFiltered(this.props.applicants.length);
+      this.props.replaceFiltered(this.props.applicants.length);
     }
   }
 
@@ -90,18 +86,5 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState) => ({
-  applicants: applyResumeFilter(Object.values(state.admin.filters),
-    state.admin.resumes.applicants),
-  totalApplicants: state.admin.resumes.applicants.length,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  replaceApplicants: bindActionCreators(replaceApplicants, dispatch),
-  showLoading: bindActionCreators(showLoading, dispatch),
-  hideLoading: bindActionCreators(hideLoading, dispatch),
-  updateFiltered: bindActionCreators(replaceFiltered, dispatch),
-});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResumesPage);

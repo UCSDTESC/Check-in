@@ -1,47 +1,35 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadAllAdminEvents} from '~/actions';
+import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
 
-import {Roles, getRole} from '~/static/Roles';
+import {Role, getRole} from '~/static/Roles';
 
 import AdminDashboard from './components/AdminDashboard';
 import CheckinDashboard from './components/CheckinDashboard';
 import SponsorDashboard from './components/SponsorDashboard';
 import { ApplicationState } from '~/reducers';
-import { EventsState } from '~/reducers/Admin/types';
-import { Admin } from '~/static/types';
 
-interface StateProps {
-  events: EventsState;
-  editing: boolean;
-  user: Admin;
-}
+const mapStateToProps = (state: ApplicationState) => ({
+  events: state.admin.events,
+  editing: state.admin.general.editing,
+  user: state.admin.auth.user,
+});
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  loadAllAdminEvents: () => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  showLoading,
+  hideLoading,
+  loadAllAdminEvents,
+}, dispatch);
 
 interface DashboardPageProps {
 }
 
-type Props = StateProps & DispatchProps & DashboardPageProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & DashboardPageProps;
 
 class DashboardPage extends React.Component<Props> {
-  static propTypes = {
-    events: PropTypes.object.isRequired,
-    showLoading: PropTypes.func.isRequired,
-    hideLoading: PropTypes.func.isRequired,
-    loadAllAdminEvents: PropTypes.func.isRequired,
-    editing: PropTypes.bool.isRequired,
-    user: PropTypes.object.isRequired,
-  };
-
   componentDidMount() {
     this.props.showLoading();
 
@@ -60,30 +48,14 @@ class DashboardPage extends React.Component<Props> {
           <h1>Dashboard</h1>
 
           {checkinUser && <CheckinDashboard />}
-          {getRole(user.role) >= getRole(Roles.ROLE_ADMIN) &&
+          {getRole(user.role) >= getRole(Role.ROLE_ADMIN) &&
             <AdminDashboard events={Object.values(events)} user={user} />}
-          {getRole(user.role) === getRole(Roles.ROLE_SPONSOR) &&
+          {getRole(user.role) === getRole(Role.ROLE_SPONSOR) &&
             <SponsorDashboard events={Object.values(events)} />}
         </div>
       </div>
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    events: state.admin.events,
-    editing: state.admin.general.editing,
-    user: state.admin.auth.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);

@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -16,31 +15,33 @@ import Loading from '~/components/Loading';
 import ColumnEditor from './components/ColumnEditor';
 import UserList from './components/UserList';
 import { ApplicationState } from '~/reducers';
-import { Column, TESCEvent, TESCUser } from '~/static/types';
+import { Column, TESCUser } from '~/static/types';
 
-interface StateProps {
-  availableColumns: Column[];
-  activeColumns: Column[];
-  loadedAvailableColumns: boolean;
-  event: TESCEvent;
-}
+const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => ({
+  availableColumns: state.admin.userColumns.available,
+  activeColumns: state.admin.userColumns.active,
+  loadedAvailableColumns: state.admin.userColumns.loadedAvailable,
+  event: state.admin.events[ownProps.match.params.eventAlias],
+});
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  updateUser: (...args: any) => Promise<any>;
-  addColumn: (...args: any) => Promise<any>;
-  removeColumn: (...args: any) => Promise<any>;
-  addAvailableColumns: (...args: any) => Promise<any>;
-  loadAllAdminEvents: (...args: any) => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  updateUser,
+  addColumn,
+  removeColumn,
+  addAvailableColumns,
+  showLoading,
+  hideLoading,
+  loadAllAdminEvents,
+}, dispatch);
 
 interface UsersPageProps {
 }
 
-type Props = RouteComponentProps<{
+type RouteProps = RouteComponentProps<{
   eventAlias: string;
-}> & StateProps & DispatchProps & UsersPageProps;
+}>;
+
+type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & UsersPageProps;
 
 interface UsersPageState {
   users: TESCUser[];
@@ -77,12 +78,12 @@ class UsersPage extends React.Component<Props, UsersPageState> {
   loadAvailableColumns() {
     loadColumns()
       .then(columns => {
-        const newColumns = Object.entries(columns)
+        const newColumns: Column[] = Object.entries(columns)
           .reduce((acc, [key, value]) => {
             acc.push({
-              Header: value,
+              Header: value.Header,
               accessor: key,
-            });
+            } as Column);
             return acc;
           }, []);
         this.props.addAvailableColumns(newColumns);
@@ -175,24 +176,5 @@ class UsersPage extends React.Component<Props, UsersPageState> {
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState, ownProps: Props) => ({
-  availableColumns: state.admin.userColumns.available,
-  activeColumns: state.admin.userColumns.active,
-  loadedAvailableColumns: state.admin.userColumns.loadedAvailable,
-  event: state.admin.events[ownProps.match.params.eventAlias],
-});
-
-const mapDispatchToProps = (dispatch: ApplicationDispatch) => {
-  return {
-    updateUser: bindActionCreators(updateUser, dispatch),
-    addColumn: bindActionCreators(addColumn, dispatch),
-    removeColumn: bindActionCreators(removeColumn, dispatch),
-    addAvailableColumns: bindActionCreators(addAvailableColumns, dispatch),
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllAdminEvents: bindActionCreators(loadAllAdminEvents, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(UsersPage);

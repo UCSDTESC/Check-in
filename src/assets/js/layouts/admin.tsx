@@ -1,15 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {toggleEditing} from '~/actions';
+import {toggleEditing, ApplicationDispatch} from '~/actions';
 
 import {loginUser} from '~/auth/admin/actions';
 
-import Login from '~/auth/admin/Login';
+import Login, { LoginFormData } from '~/auth/admin/Login';
 
 import Sidebar from './components/AdminSidebar';
 import { ApplicationState } from '~/reducers';
+import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state: ApplicationState) => ({
   isAuthenticated: state.admin.auth.authenticated,
@@ -19,12 +19,12 @@ const mapStateToProps = (state: ApplicationState) => ({
   events: state.admin.events,
 });
 
-const mapDispatchToProps = {
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   loginUser,
   toggleEditing,
-};
+}, dispatch);
 
-type Props = ReturnType<typeof mapStateToProps> & typeof mapDispatchToProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
 
 interface AdminLayoutState {
   isSidebarOpen: boolean;

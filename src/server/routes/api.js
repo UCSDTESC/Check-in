@@ -72,7 +72,8 @@ module.exports = function(app) {
       .exec()
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
       .then(addEventStatistics)
-      .then(res.json);
+      .then(events => res.json(events))
+      .catch(err => Errors.respondError(res, err, Errors.UNKNOWN_ERROR));
   });
 
   api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_SPONSOR),

@@ -1,37 +1,36 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';
 
-import {loadAllPublicEvents, loadUserEvents} from '~/actions';
+import {loadAllPublicEvents, loadUserEvents, ApplicationDispatch} from '~/actions';
 
 import Hero from '~/components/Hero';
 
 import CurrentEvents from './components/CurrentEvents';
 import UserEvents from './components/UserEvents';
 import { ApplicationState } from '~/reducers';
-import { EventsState } from '~/reducers/Admin/types';
-import { UserEventsState } from '~/reducers/types';
 import { TESCEvent } from '~/static/types';
 
-interface StateProps {
-  events: EventsState;
-  userEvents: UserEventsState;
-  authenticated: boolean;
-}
+const mapStateToProps = (state: ApplicationState) => {
+  return {
+    events: state.events,
+    userEvents: state.user.events,
+    authenticated: state.user.auth.authenticated,
+  };
+};
 
-interface DispatchProps {
-  showLoading: () => void;
-  hideLoading: () => void;
-  loadAllPublicEvents: () => Promise<any>;
-  loadUserEvents: () => Promise<any>;
-}
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  showLoading,
+  hideLoading,
+  loadAllPublicEvents,
+  loadUserEvents,
+}, dispatch);
 
 interface HomePageProps {
 }
 
-type Props = StateProps & DispatchProps & HomePageProps;
+type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & HomePageProps;
 
 class HomePage extends React.Component<Props> {
   componentDidMount() {
@@ -64,7 +63,7 @@ class HomePage extends React.Component<Props> {
   currentEvents(events: TESCEvent[], small: boolean = false) {
     return (
     <div className={small ? 'col-md-8' : 'col-12'}>
-      <CurrentEvents small={true} events={events} />
+      <CurrentEvents events={events} />
     </div>
     );
   }
@@ -96,22 +95,5 @@ class HomePage extends React.Component<Props> {
     );
   }
 }
-
-const mapStateToProps = (state: ApplicationState) => {
-  return {
-    events: state.events,
-    userEvents: state.user.events,
-    authenticated: state.user.auth.authenticated,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    showLoading: bindActionCreators(showLoading, dispatch),
-    hideLoading: bindActionCreators(hideLoading, dispatch),
-    loadAllPublicEvents: bindActionCreators(loadAllPublicEvents, dispatch),
-    loadUserEvents: bindActionCreators(loadUserEvents, dispatch),
-  };
-};
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

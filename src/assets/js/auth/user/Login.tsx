@@ -17,7 +17,7 @@ export interface LoginFormData {
 }
 
 interface LoginProps {
-  loginUser: (user: LoginFormData) => Promise<void>;
+  loginUser: (user: LoginFormData) => Q.Promise<void>;
   errorMessage: string;
   alerts: PageAlert[];
 }
@@ -37,7 +37,7 @@ class Login extends React.Component<Props, LoginState> {
     isErrorVisible: false,
   };
 
-  componentDidReceiveProps(newProps: Props) {
+  componentDidUpdate(newProps: Props) {
     // Show error message if new one appears
     if (newProps.errorMessage) {
       this.setState({

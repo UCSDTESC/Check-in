@@ -8,6 +8,7 @@ import Q from 'q';
 import CookieTypes from '~/static/Cookies';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import { LoginFormData } from '../Login';
+import { createStandardAction } from 'typesafe-actions';
 
 const cookies = new Cookies();
 const COOKIE_OPTIONS = {
@@ -54,7 +55,7 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any, type: st
  * administrator to login.
  * @returns {Promise} The login request promise.
  */
-export const loginUser = (loginFormData: LoginFormData): ApplicationAction => (
+export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
   (dispatch: ApplicationDispatch) => {
     // Make the event return a promise
     const deferred = Q.defer();
@@ -87,3 +88,9 @@ export const logoutUser = (): ApplicationAction => (
     cookies.remove(CookieTypes.admin.token, {path: '/'});
     cookies.remove(CookieTypes.admin.user, {path: '/'});
   });
+
+// Return authorisation events
+
+export const authoriseAdmin = createStandardAction(Types.AUTH_USER)<string>();
+
+export const finishAuthorisation = createStandardAction(Types.FINISH_AUTH)<void>();

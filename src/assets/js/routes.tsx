@@ -37,17 +37,25 @@ import {authorised as AdminAuthorised} from '~/data/Api';
 import {authorised as UserAuthorised} from '~/data/User';
 
 import CookieTypes from '~/static/Cookies';
+import { ApplicationDispatch } from './actions';
+import { bindActionCreators, compose } from 'redux';
+import { finishAuthorisation, authoriseAdmin } from './auth/admin/actions';
+import { connect } from 'react-redux';
+
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  authoriseAdmin,
+  finishAuthorisation,
+}, dispatch);
 
 interface RoutesProps {
-  dispatch: (arg0: object) => void;
   cookies: Cookies;
 }
 
-type Props = RouteComponentProps & RoutesProps;
+type Props = RouteComponentProps & ReturnType<typeof mapDispatchToProps> & RoutesProps;
 
 class Routes extends React.Component<Props> {
   componentDidMount() {
-    const dispatch = this.props.dispatch;
+    const {authoriseAdmin, finishAuthorisation} = this.props;
 
     // Check initial authentication
     const {cookies} = this.props;
@@ -56,31 +64,21 @@ class Routes extends React.Component<Props> {
       // Verify the JWT Token is still valid
       AdminAuthorised()
         .then(() =>
-          dispatch({
-            type: AUTH_ADMIN,
-            payload: cookies.get(CookieTypes.admin.user),
-          })
+          authoriseAdmin(cookies.get(CookieTypes.admin.user))
         );
     } else {
-      dispatch({
-        type: FINISH_ADMIN_AUTH,
-      });
+      finishAuthorisation();
     }
 
     if (cookies.get(CookieTypes.user.token)) {
       // Verify the user JWT Token is still valid
       UserAuthorised()
         .then(() =>
-          dispatch({
-            type: AUTH_USER,
-            payload: cookies.get(CookieTypes.user.user),
-          })
+          authoriseAdmin(cookies.get(CookieTypes.user.user))
         );
     } else {
       // Finish auth process
-      dispatch({
-        type: FINISH_AUTH,
-      });
+      finishAuthorisation();
     }
   }
 
@@ -225,4 +223,9 @@ class Routes extends React.Component<Props> {
   }
 }
 
-export default hot(withRouter(withCookies(Routes)));
+export default compose(
+  hot,
+  withRouter,
+  withCookies,
+  connect(null, mapDispatchToProps),
+)(Routes) as React.ComponentType;
