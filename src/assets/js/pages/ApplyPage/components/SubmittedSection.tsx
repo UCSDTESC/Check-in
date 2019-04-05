@@ -1,13 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { ApplyPageSectionProps } from './ApplyPageSection';
 
-class SubmittedSection extends React.Component {
-  static propTypes = {
-    event: PropTypes.object.isRequired
-  };
-
+export default class SubmittedSection extends React.Component<ApplyPageSectionProps> {
   render() {
-    let {event} = this.props;
+    const {event} = this.props;
 
     return (
       <div className="container">
@@ -15,8 +11,10 @@ class SubmittedSection extends React.Component {
           <div className="col-sm-12 text-center">
             <h3>You have successfully applied for {event.name} </h3>
             <h5>Please check your email for confirmation</h5>
-            <a href={event.homepage}
-              className="rounded-button sd-form__home text-white">
+            <a
+              href={event.homepage}
+              className="rounded-button sd-form__home text-white"
+            >
               Return to {event.name}
             </a>
           </div>
@@ -24,6 +22,4 @@ class SubmittedSection extends React.Component {
       </div>
     );
   }
-};
-
-export default SubmittedSection;
+}

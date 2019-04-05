@@ -1,15 +1,18 @@
+import { TESCEventOptions, CustomQuestions, Question } from '~/static/types';
+
 /**
  * Validates the form data for correctness.
  * @param {Object} values The unvalidated form data.
  * @returns {(Object|undefined)} An error object where the key represents the
  * name of the form property, and the value its error.
  */
-const createValidator = (options, customQuestions) => (values) => {
-  const errors = {};
+const createValidator = (options: TESCEventOptions, customQuestions: CustomQuestions) =>
+(values: any) => {
+  const errors: any = {};
 
-  let required = ['firstName', 'lastName', 'email', 'birthdateDay',
+  const required = ['firstName', 'lastName', 'email', 'birthdateDay',
     'birthdateMonth', 'birthdateYear', 'gender', 'phone', 'institution',
-    'major', 'year', 'shirtFit', 'shirtSize', 'firstHackathon', 'outcomeStmt'
+    'major', 'year', 'shirtFit', 'shirtSize', 'firstHackathon', 'outcomeStmt',
   ];
 
   if (options.allowOutOfState) {
@@ -54,22 +57,20 @@ const createValidator = (options, customQuestions) => (values) => {
 
   const notValid = required.filter(name => !(name in values));
 
-  //for all question types
-  for (let questionType in customQuestions) {
+  // for all question types
+  for (const questionType in customQuestions) {
 
-    //Check any questions exist
+    // Check any questions exist
     if (!customQuestions[questionType]) {
       continue;
     }
 
-    //get all required questions
-    const requiredQuestions = customQuestions[questionType]
+    // get all required questions
+    const requiredQuestions: Question[] = customQuestions[questionType]
       .filter(x => x.isRequired);
 
-    //iterate through required questions
-    for (let idx in requiredQuestions) {
-      const question = requiredQuestions[idx];
-
+    // iterate through required questions
+    for (const question of requiredQuestions) {
       if (!values.customQuestionResponses
         || !(question._id in values.customQuestionResponses)) {
         errors.customQuestionResponses = errors.customQuestionResponses || {};

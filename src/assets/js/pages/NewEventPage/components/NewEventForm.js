@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {Field, Fields, reduxForm} from 'redux-form';
 
-import fields from '~/components/Fields';
+import * as FormFields from '~/components/Fields';
 
 import FileField from '~/components/FileField';
 
@@ -23,10 +23,10 @@ class NewEventForm extends Component {
   showThirdPartyText(values) {
     if (values.organisedBy && values.organisedBy.input.value!== 'TESC') {
       return (
-        fields.createRow(
-          fields.createColumn('col-sm-12',
-            fields.createLabel('Third Party Text', false),
-            fields.createInput('thirdPartyText',
+        FormFields.createRow(
+          FormFields.createColumn('col-sm-12',
+            FormFields.createLabel('Third Party Text', false),
+            FormFields.createInput('thirdPartyText',
               'This Event is Organised By Your Org..')
           )
         )
@@ -39,68 +39,68 @@ class NewEventForm extends Component {
     const {pristine, submitting, handleSubmit} = this.props;
     return (
       <form onSubmit={handleSubmit}>
-        {fields.createRow(
-          fields.createColumn('col-md-6',
-            fields.createLabel('Event Name'),
-            fields.createInput('name', 'SD Hacks 9001')
+        {FormFields.createRow(
+          FormFields.createColumn('col-md-6',
+            FormFields.createLabel('Event Name'),
+            FormFields.createInput('name', 'SD Hacks 9001')
           ),
-          fields.createColumn('col-md-6',
-            fields.createLabel('Event Alias'),
-            fields.createInput('alias', 'sdhacks9001')
+          FormFields.createColumn('col-md-6',
+            FormFields.createLabel('Event Alias'),
+            FormFields.createInput('alias', 'sdhacks9001')
           )
         )}
-        {fields.createRow(
-          fields.createColumn('col-sm-12',
-              fields.createLabel('Application Close Date'),
+        {FormFields.createRow(
+          FormFields.createColumn('col-sm-12',
+              FormFields.createLabel('Application Close Date'),
             <div className="row">
-              {fields.createColumn('col-sm-4',
-                  fields.createMonthPicker('closeTimeMonth')
+              {FormFields.createColumn('col-sm-4',
+                  FormFields.createMonthPicker('closeTimeMonth')
                   )}
-              {fields.createColumn('col-sm-4',
-                  fields.createInput('closeTimeDay', 'Day', 'number',
+              {FormFields.createColumn('col-sm-4',
+                  FormFields.createInput('closeTimeDay', 'Day', 'number',
                       'sd-form__input-text mb-1 mb-md-0')
                   )}
-              {fields.createColumn('col-sm-4',
-                  fields.createInput('closeTimeYear', 'Year', 'number',
+              {FormFields.createColumn('col-sm-4',
+                  FormFields.createInput('closeTimeYear', 'Year', 'number',
                       'sd-form__input-text')
                   )}
             </div>
           )
         )}
-        {fields.createRow(
-            fields.createColumn('col-md-6',
-              fields.createLabel('Event Homepage URL'),
-              fields.createInput('homepage', 'https://sdhacks.io')
+        {FormFields.createRow(
+            FormFields.createColumn('col-md-6',
+              FormFields.createLabel('Event Homepage URL'),
+              FormFields.createInput('homepage', 'https://sdhacks.io')
             ),
-            fields.createColumn('col-md-6',
-              fields.createLabel('Event Contact Email'),
-              fields.createInput('email', 'you@tesc.ucsd.edu')
+            FormFields.createColumn('col-md-6',
+              FormFields.createLabel('Event Contact Email'),
+              FormFields.createInput('email', 'you@tesc.ucsd.edu')
             )
         )}
-        {fields.createRow(
-          fields.createColumn('col-md-12',
-            fields.createLabel('Event Description'),
-            fields.createInput('description',
+        {FormFields.createRow(
+          FormFields.createColumn('col-md-12',
+            FormFields.createLabel('Event Description'),
+            FormFields.createInput('description',
               `SD Hacks 9001 is UC San Diego's Premier Annual
               Collegiate Hackathon!`)
           )
         )}
-        {fields.createRow(
-          fields.createColumn('col-md-12',
-            fields.createLabel('Organised By'),
-            fields.createInput('organisedBy', 'Your Organisation Here'),
+        {FormFields.createRow(
+          FormFields.createColumn('col-md-12',
+            FormFields.createLabel('Organised By'),
+            FormFields.createInput('organisedBy', 'Your Organisation Here'),
         ))}
 
         <Fields names={['organisedBy']} component={this.showThirdPartyText} />
 
-        {fields.createRow(
-          fields.createColumn('col-md-4 col-md-offset-4',
-            fields.createLabel('Logo Upload (5MB Max)'),
+        {FormFields.createRow(
+          FormFields.createColumn('col-md-4 col-md-offset-4',
+            FormFields.createLabel('Logo Upload (5MB Max)'),
                 this.createLogoUpload()
             )
         )}
 
-        {fields.createColumn('col-sm-12 col-md-8 text-right',
+        {FormFields.createColumn('col-sm-12 col-md-8 text-right',
           <button className={'btn sd-form__nav-button rounded-button ' +
             'success button'} type="submit" disabled={pristine || submitting}>
               Create Event!

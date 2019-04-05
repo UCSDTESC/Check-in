@@ -2,12 +2,10 @@ import React, {DragEvent} from 'react';
 import PropTypes from 'prop-types';
 import Dropzone from 'react-dropzone';
 
-import fields from './Fields';
+import * as FormFields from './Fields';
+import { WrappedFieldProps } from 'redux-form';
 
 interface FileFieldProps {
-  // TODO: Fix input type
-  input: any;
-  meta: any;
   accept?: string;
   multiple?: boolean;
   className?: string;
@@ -17,7 +15,9 @@ interface FileFieldProps {
   secondary?: boolean;
 }
 
-export default class FileField extends React.Component<FileFieldProps> {
+type Props = WrappedFieldProps & FileFieldProps;
+
+export default class FileField extends React.Component<Props> {
   /**
    * Event handler for dropping or clicking a new file into the zone.
    */
@@ -84,7 +84,7 @@ export default class FileField extends React.Component<FileFieldProps> {
         <Dropzone {...dropzoneProps}>
           {button ? this.renderAsButton(text) : this.renderAsDropzone(text)}
         </Dropzone>
-        {touched && error && fields.createError(error)}
+        {touched && error && FormFields.createError(error)}
       </div>
     );
   }

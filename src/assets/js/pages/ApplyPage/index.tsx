@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {withRouter, RouteComponentProps} from 'react-router-dom';
 import Progress from 'react-progress';
 import ReactGA from 'react-ga';
@@ -28,7 +27,7 @@ type Props = RouteComponentProps<{
 
 interface ApplyPageState {
   page: number;
-  error: string;
+  error: Error;
   isSubmitting: boolean;
   event: TESCEvent;
   emailExists: boolean;
@@ -88,7 +87,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     this.loadPageFromHash();
   }
 
-  sanitiseValues(values) {
+  sanitiseValues(values: any) {
     values.birthdateDay = ('00' + values.birthdateDay)
       .substring(values.birthdateDay.length);
     values.birthdateYear = ('0000' + values.birthdateYear)
@@ -130,7 +129,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
    * Modifies then submits the validated data to register the user.
    * @param {Object} values The validated form data.
    */
-  onFinalSubmit = (values) => {
+  onFinalSubmit = (values: any) => {
     this.setState({
       isSubmitting: true,
     });
@@ -252,24 +251,21 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
               onSubmit={this.nextPage}
               validate={validator}
               event={event}
-              options={options}
               onEmailChange={this.lookupEmail}
             />}
             {page === 2 && <ResponseSection
               onSubmit={this.nextPage}
-              previousPage={this.previousPage}
+              goToPreviousPage={this.previousPage}
               validate={validator}
-              options={options}
-              customQuestions={event.customQuestions}
               event={event}
             />}
             {page === 3 && <UserSection
               onSubmit={this.onFinalSubmit}
-              previousPage={this.previousPage}
+              goToPreviousPage={this.previousPage}
               submitError={this.state.error}
               isSubmitting={this.state.isSubmitting}
               validate={validator}
-              options={options}
+              event={event}
               emailExists={emailExists}
             />}
             {page === 4 && <SubmittedSection event={event} />}
