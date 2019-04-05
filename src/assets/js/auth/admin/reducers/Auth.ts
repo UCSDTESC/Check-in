@@ -21,7 +21,7 @@ const adminAuth: Reducer<AdminAuthState> = (state: AdminAuthState = INITIAL_STAT
     return {...state, error: '', message: '', authenticated: true,
       user: action.payload, authFinished: true};
   case UNAUTH_USER:
-    return {...state, authenticated: false, user: {}};
+    return {...state, authenticated: false, user: null};
   case AUTH_ERROR:
     return {...state, error: action.payload};
   case FINISH_AUTH:

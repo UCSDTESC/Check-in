@@ -14,14 +14,16 @@ const URL_PREFIX = '/api/user';
 const prefix = pref(URL_PREFIX);
 const cookies = new Cookies();
 
+export interface JWTAuthUser {
+  _id: string;
+  username: string;
+  role: Role;
+  checkin: boolean;
+}
+
 interface JWTAuth {
   token: string;
-  user: {
-    _id: string;
-    username: string;
-    role: Role;
-    checkin: boolean;
-  };
+  user: JWTAuthUser;
 }
 
 /**

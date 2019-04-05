@@ -20,18 +20,3 @@ export const login = (username: string, password: string) => {
     .use(prefix)
     .use(nocache);
 };
-
-/**
- * Request a new administrator be registered.
- * @param {String} username The username of the new user.
- * @param {String} password The password of the new user.
- * @returns {Object} A superagent request object.
- */
-export const register = (username: string, password: string) => {
-  return request
-    .post('/register')
-    .set('Content-Type', 'application/json')
-    .send({username, password})
-    .use(prefix)
-    .use(nocache);
-};

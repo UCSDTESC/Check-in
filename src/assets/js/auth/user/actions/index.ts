@@ -2,63 +2,64 @@ import * as Auth from '~/data/User';
 
 import * as Types from './types';
 
-import {deleteUserEvents} from '~/actions';
+import {deleteUserEvents, ApplicationDispatch, ApplicationAction} from '~/actions';
 
 import Cookies from 'universal-cookie';
 import Q from 'q';
 
 import CookieTypes from '~/static/Cookies';
+import { LoginFormData } from '../Login';
 
 const cookies = new Cookies();
 const COOKIE_OPTIONS = {
   path: '/',
-  maxAge: 7 * 24 * 60 * 60
+  maxAge: 7 * 24 * 60 * 60,
 };
 
 /**
  * Stores cookies from a login response.
  * @param {Object} res HTTP request response object.
  */
-function storeLogin(res) {
-  cookies.set(CookieTypes.user.token, res.token, COOKIE_OPTIONS);
-  cookies.set(CookieTypes.user.user, res.user, COOKIE_OPTIONS);
+function storeLogin(token: string, user: Auth.JWTAuthUser) {
+  cookies.set(CookieTypes.user.token, token, COOKIE_OPTIONS);
+  cookies.set(CookieTypes.user.user, user, COOKIE_OPTIONS);
 }
 
-export function errorHandler(dispatch, error, type) {
-  let errorMessage = error.message;
+export function errorHandler(dispatch: ApplicationDispatch, error: any, type: string) {
+  const errorMessage = error.message;
 
   if (error.status === 401) {
     dispatch({
       type: type,
-      payload: 'Unable to find an account with that email and password'
+      payload: 'Unable to find an account with that email and password',
     });
     logoutUser();
   } else {
     dispatch({
       type: type,
-      payload: errorMessage
+      payload: errorMessage,
     });
   }
 }
 
-export function removeError(dispatch) {
+export function removeError(dispatch: ApplicationDispatch) {
   dispatch({
-    type: Types.REMOVE_ERROR
+    type: Types.REMOVE_ERROR,
   });
 }
 
-export function loginUser({email, password}) {
-  return function(dispatch) {
+export const loginUser = (loginFormData: LoginFormData): ApplicationAction => (
+  (dispatch: ApplicationDispatch) => {
     // Make the event return a promise
-    var deferred = Q.defer();
+    const deferred = Q.defer();
     removeError(dispatch);
 
-    Auth.login(email, password)
+    Auth.login(loginFormData.email, loginFormData.password)
       .then((res) => {
-        storeLogin(res);
+        storeLogin(res.token, res.user);
         dispatch({
           type: Types.AUTH_USER,
-          payload: res.user
+          payload: res.user,
         });
         deferred.resolve();
       })
@@ -68,14 +69,12 @@ export function loginUser({email, password}) {
       });
 
     return deferred.promise;
-  };
-};
+  });
 
-export function logoutUser() {
-  return function(dispatch) {
+export const logoutUser = (): ApplicationAction => (
+  (dispatch: ApplicationDispatch) => {
     dispatch({type: Types.UNAUTH_USER});
     dispatch(deleteUserEvents());
     cookies.remove(CookieTypes.user.token, {path: '/'});
     cookies.remove(CookieTypes.user.user, {path: '/'});
-  };
-};
+  });

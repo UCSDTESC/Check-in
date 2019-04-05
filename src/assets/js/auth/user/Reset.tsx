@@ -1,43 +1,46 @@
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, InjectedFormProps} from 'redux-form';
 import PropTypes from 'prop-types';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Alert, UncontrolledAlert} from 'reactstrap';
 
 import NavHeader from '~/components/NavHeader';
+import { AlertType } from '~/pages/AlertPage';
 
-const form = reduxForm({
-  form: 'userForgot'
+const form = reduxForm<ResetFormData, ResetProps>({
+  form: 'userReset',
 });
 
-class Reset extends React.Component {
-  static propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
-    pristine: PropTypes.bool.isRequired,
-    submitting: PropTypes.bool.isRequired,
-    errorMessage: PropTypes.string,
-    successMessage: PropTypes.string
+interface ResetFormData {
+}
+
+interface ResetProps {
+  errorMessage: string;
+  successMessage: string;
+}
+
+type Props = InjectedFormProps<ResetFormData, ResetProps> & ResetProps;
+
+interface ResetState {
+  isErrorVisible: boolean;
+}
+
+class Reset extends React.Component<Props, ResetState> {
+  state: Readonly<ResetState> = {
+    isErrorVisible: false,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isErrorVisible: false
-    };
-  }
-
-  componentDidReceiveProps(newProps) {
+  componentDidReceiveProps(newProps: Props) {
     // Show error message if new one appears
     if (newProps.errorMessage) {
       this.setState({
-        isErrorVisible: true
+        isErrorVisible: true,
       });
     }
   }
 
   dismissError = () => this.setState({
-    isErrorVisible: false
+    isErrorVisible: false,
   });
 
   /**
@@ -48,8 +51,11 @@ class Reset extends React.Component {
     if (this.props.errorMessage) {
       return (
         <div className="user-login__error">
-          <Alert color="danger" isOpen={this.state.isErrorVisible}
-            toggle={this.dismissError}>
+          <Alert
+            color={AlertType.Danger}
+            isOpen={this.state.isErrorVisible}
+            toggle={this.dismissError}
+          >
             {this.props.errorMessage}
           </Alert>
         </div>
@@ -74,11 +80,13 @@ class Reset extends React.Component {
   }
 
   render() {
-    let {pristine, submitting} = this.props;
+    const {pristine, submitting} = this.props;
 
     return (
-      <form className="user-login"
-        onSubmit={this.props.handleSubmit}>
+      <form
+        className="user-login"
+        onSubmit={this.props.handleSubmit}
+      >
         <div className="user-login__above">
           <div className="user-login__alerts">
             {this.renderErrorAlert()}
@@ -90,23 +98,32 @@ class Reset extends React.Component {
           <div className="user-login__username row sd-form__row">
             <div className="col-12">
               <label>New Password</label>
-              <Field name="password" component="input" type="password"
+              <Field
+                name="password"
+                component="input"
+                type="password"
                 className="form-control sd-form__input-text"
-                placeholder="Password" />
+                placeholder="Password"
+              />
             </div>
           </div>
           <div className="user-login__username row sd-form__row">
             <div className="col-12">
               <label>Repeat New Password</label>
-              <Field name="passwordRepeat" component="input" type="password"
+              <Field
+                name="passwordRepeat"
+                component="input"
+                type="password"
                 className="form-control sd-form__input-text"
-                placeholder="Password" />
+                placeholder="Password"
+              />
             </div>
           </div>
           <div className="row sd-form__row">
             <div className="col-12">
-              <button type="submit" className={`btn rounded-button
-                rounded-button--small user-login__button`}
+              <button
+                type="submit"
+                className="btn rounded-button rounded-button--small user-login__button"
                 disabled={pristine || submitting}>
                 Reset My Password
               </button>
@@ -116,8 +133,10 @@ class Reset extends React.Component {
         <div className="user-login__below">
           <div className="row sd-form__row">
             <div className="col-12">
-              <Link to="/user/login"
-                className="sd-link__underline user-login__forgot">
+              <Link
+                to="/user/login"
+                className="sd-link__underline user-login__forgot"
+              >
                 Back to Login
               </Link>
             </div>

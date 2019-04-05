@@ -1,43 +1,44 @@
-import {Field, reduxForm} from 'redux-form';
-import PropTypes from 'prop-types';
+import {Field, reduxForm, InjectedFormProps} from 'redux-form';
 import React from 'react';
 import {Link} from 'react-router-dom';
 import {Alert, UncontrolledAlert} from 'reactstrap';
 
 import NavHeader from '~/components/NavHeader';
 
-const form = reduxForm({
-  form: 'userForgot'
+const form = reduxForm<ForgotFormData, ForgotProps>({
+  form: 'userForgot',
 });
 
-class Forgot extends React.Component {
-  static propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
-    pristine: PropTypes.bool.isRequired,
-    submitting: PropTypes.bool.isRequired,
-    errorMessage: PropTypes.string,
-    successMessage: PropTypes.string
+interface ForgotFormData {
+}
+
+interface ForgotProps {
+  errorMessage: string;
+  successMessage: string;
+}
+
+type Props = InjectedFormProps<ForgotFormData, ForgotProps> & ForgotProps;
+
+interface ForgotState {
+  isErrorVisible: boolean;
+}
+
+class Forgot extends React.Component<Props, ForgotState> {
+  state: Readonly<ForgotState> = {
+    isErrorVisible: false,
   };
 
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isErrorVisible: false
-    };
-  }
-
-  componentDidReceiveProps(newProps) {
+  componentDidReceiveProps(newProps: Props) {
     // Show error message if new one appears
     if (newProps.errorMessage) {
       this.setState({
-        isErrorVisible: true
+        isErrorVisible: true,
       });
     }
   }
 
   dismissError = () => this.setState({
-    isErrorVisible: false
+    isErrorVisible: false,
   });
 
   /**
@@ -48,8 +49,11 @@ class Forgot extends React.Component {
     if (this.props.errorMessage) {
       return (
         <div className="user-login__error">
-          <Alert color="danger" isOpen={this.state.isErrorVisible}
-            toggle={this.dismissError}>
+          <Alert
+            color="danger"
+            isOpen={this.state.isErrorVisible}
+            toggle={this.dismissError}
+          >
             {this.props.errorMessage}
           </Alert>
         </div>
@@ -74,11 +78,13 @@ class Forgot extends React.Component {
   }
 
   render() {
-    let {pristine, submitting} = this.props;
+    const {pristine, submitting} = this.props;
 
     return (
-      <form className="user-login"
-        onSubmit={this.props.handleSubmit}>
+      <form
+        className="user-login"
+        onSubmit={this.props.handleSubmit}
+      >
         <div className="user-login__above">
           <div className="user-login__alerts">
             {this.renderErrorAlert()}
@@ -91,16 +97,22 @@ class Forgot extends React.Component {
           <div className="user-login__username row sd-form__row">
             <div className="col-12">
               <label>Email</label>
-              <Field name="email" component="input" type="email"
+              <Field
+                name="email"
+                component="input"
+                type="email"
                 className="form-control sd-form__input-email"
-                placeholder="Email" />
+                placeholder="Email"
+              />
             </div>
           </div>
           <div className="row sd-form__row">
             <div className="col-12">
-              <button type="submit" className={`btn rounded-button
-                rounded-button--small user-login__button`}
-                disabled={pristine || submitting}>
+              <button
+                type="submit"
+                className="btn rounded-button rounded-button--small user-login__button"
+                disabled={pristine || submitting}
+              >
                 Reset My Password
               </button>
             </div>
@@ -109,8 +121,10 @@ class Forgot extends React.Component {
         <div className="user-login__below">
           <div className="row sd-form__row">
             <div className="col-12">
-              <Link to="/login"
-                className="sd-link__underline user-login__forgot">
+              <Link
+                to="/login"
+                className="sd-link__underline user-login__forgot"
+              >
                 Back to Login
               </Link>
             </div>
