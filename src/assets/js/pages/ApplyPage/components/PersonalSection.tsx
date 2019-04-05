@@ -1,4 +1,4 @@
-import {Field, Fields, reduxForm, InjectedFormProps} from 'redux-form';
+import {Field, Fields, reduxForm } from 'redux-form';
 import React from 'react';
 
 import UniversityField from './UniversityField';
@@ -7,7 +7,7 @@ import * as FormFields from '~/components/Fields';
 
 import FileField from '~/components/FileField';
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
-import { TESCEvent, TESCEventOptions } from '~/static/types';
+import { TESCEvent } from '~/static/types';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
   onEmailChange: (newEmail: string) => void;
@@ -364,7 +364,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     if (onlyNums.length <= 6) {
       return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}`;
     }
-    return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3)}-${onlyNums.slice(6, 10)}`;
+    return `${onlyNums.slice(0, 3)}-${onlyNums.slice(3, 6)}-${onlyNums.slice(6, 10)}`;
   }
 }
 

@@ -1,6 +1,5 @@
 import {Field, reduxForm, InjectedFormProps} from 'redux-form';
 import React from 'react';
-import {compose} from 'redux';
 import {connect} from 'react-redux';
 import UUID from 'node-uuid';
 
@@ -21,11 +20,14 @@ const mapStateToProps = (state: ApplicationState, ownProps: UserProps) => ({
 
 interface UserProps {
   user: TESCUser;
-  resume: Resume;
   event: TESCEvent;
 }
 
-type Props = InjectedFormProps & ReturnType<typeof mapStateToProps> & UserProps;
+interface UserFormData {
+
+}
+
+type Props = InjectedFormProps<UserFormData, UserProps> & ReturnType<typeof mapStateToProps> & UserProps;
 
 class User extends React.Component<Props> {
   /**
@@ -44,7 +46,7 @@ class User extends React.Component<Props> {
             className="btn btn-primary form-control"
             role="button"
             target="_blank"
-            href={this.props.resume.url}
+            href={this.props.user.resume.url}
             rel="noopener noreferrer"
           >
             View
@@ -136,7 +138,7 @@ class User extends React.Component<Props> {
   }
 
   render() {
-    const {handleSubmit, pristine, reset, submitting, event} = this.props;
+    const {handleSubmit, pristine, reset, submitting, event, user} = this.props;
     return (
       <div>
         <h3>User <small>{this.props.user._id}</small></h3>
@@ -157,7 +159,7 @@ class User extends React.Component<Props> {
                 {this.renderFormField('Github', 'github')}
                 {this.renderFormField('Website', 'website')}
               </div>
-              {this.props.resume &&
+              {user.resume &&
               <span>
                 <h5>Resume</h5>
                 <div className="form-group row mb-2">
@@ -288,11 +290,8 @@ class User extends React.Component<Props> {
   }
 }
 
-export default compose(
-  connect(mapStateToProps),
-  reduxForm({
-    form: UUID.v4(),
-    destroyOnUnmount: true,
-    enableReinitialize: true,
-  }),
-)(User);
+export default reduxForm<UserFormData, UserProps>({
+  form: UUID.v4(),
+  destroyOnUnmount: true,
+  enableReinitialize: true,
+})(connect(mapStateToProps)(User));

@@ -1,5 +1,14 @@
 import { Role } from './Roles';
 
+export enum UserStatus {
+  Rejected = 'Rejected',
+  Unconfirmed = 'Unconfirmed',
+  Confirmed = 'Confirmed',
+  Declined = 'Declined',
+  Late = 'Late',
+  Waitlisted = 'Waitlisted',
+}
+
 export interface UploadedFile {
   name: string;
   size: number;
@@ -139,7 +148,7 @@ export interface TESCUser {
   availableBus?: string;
   bussing?: boolean;
   teammates?: string[];
-  status?: string;
+  status?: UserStatus;
   checkedIn?: boolean;
   sanitized?: boolean;
   race?: boolean;

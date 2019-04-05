@@ -3,7 +3,7 @@ import React from 'react';
 
 import majors from '~/static/Majors.json';
 
-type CustomFieldProps = WrappedFieldProps & {
+export type CustomFieldProps = WrappedFieldProps & {
   className?: string;
   placeholder?: string;
   type?: string;

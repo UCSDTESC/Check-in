@@ -1,7 +1,7 @@
-const createValidator = () => (values) => {
-  const errors = {};
+const createValidator = () => (values: any) => {
+  const errors: any = {};
 
-  let required = ['name', 'alias', 'closeTimeMonth', 'closeTimeDay',
+  const required = ['name', 'alias', 'closeTimeMonth', 'closeTimeDay',
     'closeTimeYear', 'email', 'homepage', 'description', 'logo'];
 
   const notValid = required.filter(name => !(name in values));
@@ -20,7 +20,7 @@ const createValidator = () => (values) => {
     errors.closeTimeMonth = 'Invalid Month';
   }
 
-  if (values.closeTimeYear < 1900 + new Date().getYear()) {
+  if (values.closeTimeYear < new Date().getFullYear()) {
     errors.closeTimeYear = 'Invalid Year';
   }
 

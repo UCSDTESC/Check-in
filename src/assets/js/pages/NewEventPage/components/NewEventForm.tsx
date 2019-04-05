@@ -1,27 +1,36 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import {Field, Fields, reduxForm} from 'redux-form';
+import {Field, Fields, reduxForm, InjectedFormProps} from 'redux-form';
 
 import * as FormFields from '~/components/Fields';
 
 import FileField from '~/components/FileField';
 
-class NewEventForm extends Component {
+interface NewEventFormData {
 
-  static propTypes = {
-    handleSubmit: PropTypes.func.isRequired,
-    pristine: PropTypes.bool.isRequired,
-    reset: PropTypes.func.isRequired,
-    submitting: PropTypes.bool.isRequired
-  }
+}
+
+interface NewEventFormProps {
+
+}
+
+type Props = InjectedFormProps<NewEventFormData, NewEventFormProps> & NewEventFormProps;
+
+class NewEventForm extends React.Component<Props> {
 
   createLogoUpload() {
-    return (<Field component={FileField} name="logo"
-      placeholder="Resume" text="Drop Your Logo" />);
+    return (
+    <Field
+      component={FileField}
+      name="logo"
+      placeholder="Resume"
+      text="Drop Your Logo"
+    />
+    );
   }
 
-  showThirdPartyText(values) {
-    if (values.organisedBy && values.organisedBy.input.value!== 'TESC') {
+  showThirdPartyText(values: any) {
+    if (values.organisedBy && values.organisedBy.input.value !== 'TESC') {
       return (
         FormFields.createRow(
           FormFields.createColumn('col-sm-12',
@@ -32,7 +41,7 @@ class NewEventForm extends Component {
         )
       );
     }
-    return <span></span>;
+    return <span />;
   }
 
   render() {
@@ -101,8 +110,11 @@ class NewEventForm extends Component {
         )}
 
         {FormFields.createColumn('col-sm-12 col-md-8 text-right',
-          <button className={'btn sd-form__nav-button rounded-button ' +
-            'success button'} type="submit" disabled={pristine || submitting}>
+          <button
+            className="btn sd-form__nav-button rounded-button success button"
+            type="submit"
+            disabled={pristine || submitting}
+          >
               Create Event!
           </button>
         )}
@@ -111,7 +123,7 @@ class NewEventForm extends Component {
   }
 }
 
-export default reduxForm({
+export default reduxForm<NewEventFormData, NewEventFormProps>({
   form: 'newEvent',
-  destroyOnUnmount: true
+  destroyOnUnmount: true,
 })(NewEventForm);

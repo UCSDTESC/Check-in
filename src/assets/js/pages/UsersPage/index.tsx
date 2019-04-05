@@ -169,6 +169,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
           users={users}
           columns={activeColumns}
           onUserUpdate={this.onUserUpdate}
+          event={event}
         />
       </div>
     );
@@ -182,7 +183,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: Props) => ({
   event: state.admin.events[ownProps.match.params.eventAlias],
 });
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch: any) => {
   return {
     updateUser: bindActionCreators(updateUser, dispatch),
     addColumn: bindActionCreators(addColumn, dispatch),

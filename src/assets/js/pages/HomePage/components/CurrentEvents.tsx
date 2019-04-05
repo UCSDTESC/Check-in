@@ -1,18 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import EventCard from '~/components/EventCard';
+import { TESCEvent } from '~/static/types';
 
-export default class CurrentEvents extends React.Component {
-  static propTypes = {
-    events: PropTypes.array.isRequired
-  };
+interface CurrentEventProps {
+  events: TESCEvent[];
+}
 
+export default class CurrentEvents extends React.Component<CurrentEventProps> {
   render() {
-    let {events} = this.props;
-    const highlightEvent = (o) => (o !== 'TESC');
+    const {events} = this.props;
+    const highlightEvent = (o: string) => (o !== 'TESC');
 
-    return (<div className="about">
+    return (
+    <div className="about">
       <div className="container">
         <div className="row row-eq-height">
 
@@ -26,18 +27,20 @@ export default class CurrentEvents extends React.Component {
 
           {events.length !== 0 && events.map(event => (
             <div key={event._id} className="col-md-4">
-              <EventCard to={`/register/${event.alias}`}
+              <EventCard
+                to={`/register/${event.alias}`}
                 highlighted={highlightEvent(event.organisedBy)}
                 header={`Organized By ${event.organisedBy}`}
                 image={event.logo.url}
                 title={event.name}
                 subtext={`Registration Closes ${new Date(event.closeTime)
                   .toLocaleDateString()}`}
-                />
+              />
             </div>
           ))}
         </div>
       </div>
-    </div>);
+    </div>
+    );
   }
-};
+}
