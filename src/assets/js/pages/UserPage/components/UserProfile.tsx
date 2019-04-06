@@ -76,6 +76,10 @@ class UserProfile extends React.Component<Props> {
       );
     }
 
+    if (!status) {
+      statusText = 'Applied';
+    }
+
     switch (status) {
     case (UserStatus.Declined):
     case (UserStatus.Rejected):
@@ -109,8 +113,8 @@ class UserProfile extends React.Component<Props> {
    * @returns {Component}
    */
   renderUserBussing = (user: TESCUser) => {
-    if (user.status !== 'Confirmed') {
-      return  <span/>;
+    if (user.status !== UserStatus.Confirmed) {
+      return <span/>;
     }
 
     const statusClass = 'user-profile__bussing user-profile__bussing--';

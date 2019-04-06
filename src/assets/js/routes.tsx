@@ -9,9 +9,6 @@ import {hot} from 'react-hot-loader/root';
 
 import PrivateRoute from './PrivateRoute';
 import PrivateUserRoute from './PrivateUserRoute';
-import {AUTH_ADMIN as AUTH_ADMIN,
-  FINISH_ADMIN_AUTH as FINISH_ADMIN_AUTH} from './auth/admin/actions/types';
-import {AUTH_USER, FINISH_AUTH} from './auth/user/actions/types';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
 import UserLayout from './layouts/user';
@@ -42,10 +39,13 @@ import { bindActionCreators, compose } from 'redux';
 import { finishAuthorisation, authoriseAdmin } from './auth/admin/actions';
 import { connect } from 'react-redux';
 import { JWTAuthAdmin } from './data/AdminAuth';
+import { authoriseUser, finishAuthorisation as finishUserAuth } from './auth/user/actions';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   authoriseAdmin,
+  authoriseUser,
   finishAuthorisation,
+  finishUserAuth,
 }, dispatch);
 
 interface RoutesProps {
@@ -64,9 +64,11 @@ class Routes extends React.Component<Props> {
     if (cookies.get(CookieTypes.admin.token)) {
       // Verify the JWT Token is still valid
       AdminAuthorised()
-        .then(() =>
-          authoriseAdmin(JSON.parse(cookies.get(CookieTypes.admin.user)) as JWTAuthAdmin)
-        );
+        .then(() => {
+          const authCookie: unknown = cookies.get(CookieTypes.admin.user);
+          return authoriseAdmin(authCookie as JWTAuthAdmin);
+        })
+        .catch(console.error);
     } else {
       finishAuthorisation();
     }
@@ -74,13 +76,14 @@ class Routes extends React.Component<Props> {
     if (cookies.get(CookieTypes.user.token)) {
       // Verify the user JWT Token is still valid
       UserAuthorised()
-        .then(() =>
+        .then(() => {
           // TODO : Remove JSON Parse - Use a better library for Cookies
-          authoriseAdmin(JSON.parse(cookies.get(CookieTypes.user.user)) as JWTAuthUser)
-        );
+          const authCookie: unknown = cookies.get(CookieTypes.user.user);
+          return authoriseUser(authCookie as JWTAuthUser);
+        });
     } else {
       // Finish auth process
-      finishAuthorisation();
+      finishUserAuth();
     }
   }
 

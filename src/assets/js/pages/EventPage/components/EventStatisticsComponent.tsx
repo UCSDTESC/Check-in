@@ -3,7 +3,7 @@ import { TESCEvent, EventStatistics } from '~/static/types';
 
 interface EventStatisticsComponentProps {
   event: TESCEvent;
-  statistics: EventStatistics;
+  statistics: EventStatistics | null;
 }
 
 export default class EventStatisticsComponent<P = {}, S = {}> extends

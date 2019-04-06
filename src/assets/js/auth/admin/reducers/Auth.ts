@@ -1,6 +1,6 @@
 import * as Types from '../actions/types';
 import { AdminAuthState } from './types';
-import { handleActions } from 'redux-actions';
+import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 import { authoriseAdmin, authoriseError } from '../actions';
 
@@ -25,13 +25,12 @@ export default handleActions({
     authenticated: false,
     user: null,
   }),
-  // TODO: Fix unknown error
-  // [Types.AUTH_ADMIN_ERROR]: (state, action: ActionType<typeof authoriseError>) => ({
-  //   ...state,
-  //   error: action.payload,
-  // }),
+  [Types.AUTH_ADMIN_ERROR]: (state, action: ActionType<typeof authoriseError>) => ({
+    ...state,
+    error: action.payload,
+  }),
   [Types.FINISH_ADMIN_AUTH]: (state) => ({
     ...state,
     authFinished: true,
   }),
-}, initialState);
+} as ReducerMap<AdminAuthState, any>, initialState);

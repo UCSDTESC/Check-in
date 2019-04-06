@@ -25,7 +25,7 @@ export default handleActions({
     authenticated: false,
     user: null,
   }),
-  AUTH_ERROR: (state, action: ActionType<typeof authoriseError>) => ({
+  [Types.AUTH_ERROR]: (state, action: ActionType<typeof authoriseError>) => ({
     ...state,
     error: action.payload,
   }),

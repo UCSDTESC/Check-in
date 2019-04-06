@@ -136,6 +136,7 @@
     "winston": "^3.0.0-rc1"
   },
   "devDependencies": {
+    "@hot-loader/react-dom": "^16.8.6",
     "@types/jquery": "^3.3.29",
     "@types/node-uuid": "0.0.28",
     "@types/object-diff": "0.0.0",

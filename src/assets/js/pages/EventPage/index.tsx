@@ -161,10 +161,12 @@ class EventPage extends React.Component<Props, EventPageState> {
   };
 
   componentDidMount() {
+    const {eventAlias} = this.props.match.params;
+
     this.changeTab();
-    loadEventStatistics(this.props.match.params.eventAlias)
+    loadEventStatistics(eventAlias)
       .then(res => {
-        this.props.updateEventStatistics(this.props.match.params.eventAlias, res);
+        this.props.updateEventStatistics(eventAlias, res);
       })
       .catch(console.error);
 
