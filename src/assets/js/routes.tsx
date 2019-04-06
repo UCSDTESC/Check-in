@@ -56,7 +56,7 @@ type Props = RouteComponentProps & ReturnType<typeof mapDispatchToProps> & Route
 
 class Routes extends React.Component<Props> {
   componentDidMount() {
-    const {authoriseAdmin, finishAuthorisation} = this.props;
+    const {authoriseAdmin, authoriseUser, finishAuthorisation, finishUserAuth} = this.props;
 
     // Check initial authentication
     const {cookies} = this.props;
