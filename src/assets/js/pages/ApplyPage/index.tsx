@@ -134,8 +134,10 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
       isSubmitting: true,
     });
 
-    // Clean up values
-    // values = this.sanitiseValues(values);
+    // Flatten resume field
+    if (values.resume && values.resume.length > 0) {
+      values.resume = values.resume[0];
+    }
 
     registerUser(this.props.match.params.eventAlias, values)
       .then(() => {

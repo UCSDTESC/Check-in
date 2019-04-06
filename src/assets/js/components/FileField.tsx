@@ -1,5 +1,4 @@
-import React, {DragEvent} from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import Dropzone from 'react-dropzone';
 
 import * as FormFields from './Fields';
@@ -27,6 +26,9 @@ export default class FileField extends React.Component<Props, FileFieldState> {
   };
 
   onDrop = (acceptedFiles: File[]) => {
+    if (!this.props.multiple && acceptedFiles.length > 1) {
+      this.props.input.onChange(acceptedFiles[0]);
+    }
     this.props.input.onChange(acceptedFiles);
   }
 
@@ -70,9 +72,8 @@ export default class FileField extends React.Component<Props, FileFieldState> {
     const text = this.props.text ? this.props.text : 'Drop Your File';
 
     return (
-      <div>
-        <input type="hidden" disabled={true} {...input} />
-        {selectedFile ? <span>{selectedFile.name}</span> : null}
+      <>
+        <div>{selectedFile ? <span>{selectedFile.name}</span> : null}</div>
         <Dropzone {...dropzoneProps} >
           {({getRootProps, getInputProps}) => (
             <div {...getRootProps()} className={className}>
@@ -82,7 +83,7 @@ export default class FileField extends React.Component<Props, FileFieldState> {
           )}
         </Dropzone>
         {touched && error && FormFields.createError(error)}
-      </div>
+      </>
     );
   }
 }
