@@ -1,19 +1,16 @@
 import {Reducer} from 'redux';
-import * as ActionTypes from '../actions/types';
+import * as Types from '../actions/types';
 import { TESCUser } from '~/static/types';
+import { handleActions } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
+import { _userCheckin } from '../actions';
 
 const initialState: TESCUser[] = [];
 
-const checkin: Reducer<TESCUser[]> = (state: TESCUser[] = initialState, action) => {
-  switch (action.type) {
-  case ActionTypes.CHECKIN_USER:
-    return [...state.filter(x => x._id !== action.user._id), {
-      ...action.user,
-      checkedIn: true,
-    }];
-  default:
-    return state;
-  }
-};
-
-export default checkin;
+export default handleActions({
+  [Types.CHECKIN_USER]: (state, action: ActionType<typeof _userCheckin>) => ([
+    ...state.filter(x => x._id !== action.payload._id), {
+    ...action.payload,
+    checkedIn: true,
+  }]),
+}, initialState);

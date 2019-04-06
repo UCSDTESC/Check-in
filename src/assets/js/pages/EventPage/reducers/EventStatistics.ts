@@ -1,18 +1,14 @@
-import {Reducer} from 'redux';
-import * as ActionTypes from '../actions/types';
+import * as Types from '../actions/types';
 import { EventStatisticsState } from './types';
+import { handleActions } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
+import { _updateEventStatistics } from '../actions';
 
 const initialState: EventStatisticsState = {};
 
-const eventStatistics: Reducer<EventStatisticsState> =
-(state: EventStatisticsState = initialState, action) => {
-  switch (action.type) {
-  case ActionTypes.UPDATE_EVENT_STATISTICS: {
-    return {...state, [action.event]: action.statistics};
-  }
-  default:
-    return state;
-  }
-};
-
-export default eventStatistics;
+export default handleActions({
+  [Types.UPDATE_EVENT_STATISTICS]: (state, action: ActionType<typeof _updateEventStatistics>) => ({
+    ...state,
+    [action.payload.eventAlias]: action.payload.statistics,
+  }),
+}, initialState);

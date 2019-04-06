@@ -1,6 +1,6 @@
 import * as Types from '../actions/types';
 import { UserAuthState } from './types';
-import { handleActions } from 'redux-actions';
+import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 import { authoriseUser, authoriseError } from '../actions';
 
@@ -25,11 +25,10 @@ export default handleActions({
     authenticated: false,
     user: null,
   }),
-  // TODO: Fix unknown auth error compiler error
-  // AUTH_ERROR: (state, action: ActionType<typeof authoriseError>) => ({
-  //   ...state,
-  //   error: action.payload,
-  // }),
+  AUTH_ERROR: (state, action: ActionType<typeof authoriseError>) => ({
+    ...state,
+    error: action.payload,
+  }),
   [Types.FINISH_AUTH]: (state) => ({
     ...state,
     authFinished: true,
@@ -38,4 +37,4 @@ export default handleActions({
     ...state,
     error: '',
   }),
-}, initialState);
+} as ReducerMap<UserAuthState, any>, initialState);

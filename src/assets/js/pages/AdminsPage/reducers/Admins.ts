@@ -1,23 +1,17 @@
-import {Reducer} from 'redux';
-import * as ActionTypes from '../actions/types';
+import * as Types from '../actions/types';
 import { Admin } from '~/static/types';
+import { handleActions } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
+import { addAdmins, replaceAdmins } from '../actions';
 
 const initialState: Admin[] = [];
 
-const admins: Reducer<Admin[]> = (state: Admin[] = initialState, action) => {
-  switch (action.type) {
-  case ActionTypes.ADD_ADMINS:
-    return [
-      ...state,
-      ...action.admins,
-    ];
-  case ActionTypes.REPLACE_ADMINS:
-    return [
-      ...action.admins,
-    ];
-  default:
-    return state;
-  }
-};
-
-export default admins;
+export default handleActions({
+  [Types.ADD_ADMINS]: (state, action: ActionType<typeof addAdmins>) => ([
+    ...state,
+    ...action.payload,
+  ]),
+  [Types.REPLACE_ADMINS]: (state, action: ActionType<typeof replaceAdmins>) => ([
+    ...action.payload,
+  ]),
+}, initialState);

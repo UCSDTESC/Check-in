@@ -1,15 +1,14 @@
-import {Reducer} from 'redux';
-import * as ActionTypes from '../actions/types';
+import * as Types from '../actions/types';
 import { EventAlertsState, EventAlert } from './types';
-import { TESCEvent } from '~/static/types';
-import { AddEventAlertPayload, RemoveEventAlertPayload } from '../actions';
+import { AddEventAlertPayload, RemoveEventAlertPayload, _addEventAlert, _removeEventAlert } from '../actions';
+import { handleActions, ReducerMap } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
 
 const initialState: EventAlertsState = {};
 
-const eventAlerts: Reducer<EventAlertsState> = (state: EventAlertsState = initialState, action) => {
-  switch (action.type) {
-  case ActionTypes.ADD_EVENT_ALERT: {
-    const newState: EventAlertsState = Object.assign({}, state);
+export default handleActions({
+  [Types.ADD_EVENT_ALERT]: (state, action: ActionType<typeof _addEventAlert>) => {
+    const newState = Object.assign({}, state);
     const payload: AddEventAlertPayload = action.payload;
 
     const newAlert: EventAlert = {
@@ -18,33 +17,29 @@ const eventAlerts: Reducer<EventAlertsState> = (state: EventAlertsState = initia
     };
 
     // Get the current alerts
-    const currentAlerts = action.event in newState ? [
-      ...newState[action.event],
+    const currentAlerts = payload.eventAlias in newState ? [
+      ...newState[payload.eventAlias],
       newAlert,
     ] : [
       newAlert,
     ];
-    newState[action.event] = currentAlerts;
+    newState[payload.eventAlias] = currentAlerts;
     return newState;
-  }
-  case ActionTypes.REMOVE_EVENT_ALERT: {
-    if (Object.keys(state).indexOf(action.event) === -1) {
+  },
+  [Types.REMOVE_EVENT_ALERT]: (state, action: ActionType<typeof _removeEventAlert>) => {
+    const payload = action.payload;
+    if (Object.keys(state).indexOf(payload.eventAlias) === -1) {
       return state;
     }
 
-    const newState: EventAlertsState = Object.assign({}, state);
-    const payload: RemoveEventAlertPayload = action.payload;
-
-    let currentAlerts: EventAlert[] = newState[payload.eventAlias];
+    let currentAlerts: EventAlert[] = state[payload.eventAlias];
     // Filter out all messages with the given timestamp.
     currentAlerts = currentAlerts
-      .filter((alert) => alert.timestamp !== action.timestamp);
-    newState[action.event] = currentAlerts;
+      .filter((alert) => alert.timestamp !== payload.timestamp);
+    const newState: EventAlertsState = {
+      ...state,
+      [payload.eventAlias]: currentAlerts,
+    };
     return newState;
-  }
-  default:
-    return state;
-  }
-};
-
-export default eventAlerts;
+  },
+} as ReducerMap<EventAlertsState, any>, initialState);

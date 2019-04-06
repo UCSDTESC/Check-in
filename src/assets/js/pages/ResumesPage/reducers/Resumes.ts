@@ -1,23 +1,23 @@
-import {Reducer} from 'redux';
-import * as ActionTypes from '../actions/types';
+import * as Types from '../actions/types';
 import { ResumesState } from './types';
+import { handleActions, ReducerMap } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
+import { replaceApplicants, replaceFiltered } from '../actions';
 
 const initialState: ResumesState = {
   filtered: 0,
   applicants: [],
 };
 
-const resumes: Reducer<ResumesState> = (state: ResumesState = initialState, action) => {
-  switch (action.type) {
-  case ActionTypes.REPLACE_APPLICANTS:
-    return {...state, applicants: [
-      ...action.applicants,
-    ]};
-  case ActionTypes.REPLACE_FILTERED:
-    return {...state, filtered: action.filtered};
-  default:
-    return state;
-  }
-};
-
-export default resumes;
+export default handleActions({
+  [Types.REPLACE_APPLICANTS]: (state, action: ActionType<typeof replaceApplicants>) => ({
+    ...state,
+    applicants: [
+      ...action.payload,
+    ],
+  }),
+  [Types.REPLACE_FILTERED]: (state, action: ActionType<typeof replaceFiltered>) => ({
+    ...state,
+    filtered: action.payload,
+  }),
+} as ReducerMap<ResumesState, any>, initialState);

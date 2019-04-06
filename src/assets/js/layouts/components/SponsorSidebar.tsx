@@ -4,7 +4,7 @@ import {Link as RouteLink} from 'react-router-dom';
 
 import Filter from './Filter';
 import Section from './Section';
-import { Admin, FilterOption } from '~/static/types';
+import { Admin, FilterOption, FilterOptions } from '~/static/types';
 import { FiltersState } from '~/reducers/Admin/types';
 
 interface SponsorSidebarProps {
@@ -12,7 +12,6 @@ interface SponsorSidebarProps {
   selected: number;
   total: number;
   filters: FiltersState;
-  // TODO: Create a separate filters option interface
   filterOptions: any;
 
   toggleFilter: (filterName: string) => void;

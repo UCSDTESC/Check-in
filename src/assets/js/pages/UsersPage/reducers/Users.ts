@@ -1,35 +1,17 @@
-import {Reducer, AnyAction} from 'redux';
-import * as ActionTypes from '../actions/types';
+import * as Types from '../actions/types';
 import { TESCUser } from '~/static/types';
+import { handleActions, ReducerMap } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
+import { addUsers, _updateUser } from '../actions';
 
 const initialState: TESCUser[] = [];
 
-const user = (state: TESCUser[], action: AnyAction) => {
-  switch (action.type) {
-  case ActionTypes.ADD_USERS:
-    return action.users;
-  case ActionTypes.UPDATE_USER:
-    return state.filter((user) => user._id !== action.user._id);
-  default:
-    return state;
-  }
-};
-
-const users: Reducer<TESCUser[]> = (state: TESCUser[] = initialState, action) => {
-  switch (action.type) {
-  case ActionTypes.ADD_USERS:
-    return [
-      ...user(undefined, action),
-    ];
-  case ActionTypes.UPDATE_USER:
-    const oldUsers = user(state, action);
-    return [
-      ...oldUsers,
-      action.user,
-    ];
-  default:
-    return state;
-  }
-};
-
-export default users;
+export default handleActions({
+  [Types.ADD_USERS]: (state, action: ActionType<typeof addUsers>) => ([
+    ...action.payload,
+  ]),
+  [Types.UPDATE_USER]: (state, action: ActionType<typeof _updateUser>) => ([
+    ...state.filter((user) => user._id !== action.payload._id),
+    action.payload,
+  ]),
+} as ReducerMap<TESCUser[], any>, initialState);

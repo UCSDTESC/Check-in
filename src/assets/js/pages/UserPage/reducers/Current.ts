@@ -1,18 +1,13 @@
-import {Reducer} from 'redux';
-import * as ActionTypes from '../actions/types';
+import * as Types from '../actions/types';
 import { TESCUser } from '~/static/types';
+import { handleActions } from 'redux-actions';
+import { ActionType } from 'typesafe-actions';
+import { updateCurrentUser } from '../actions';
 
-type NullableTESCUser = TESCUser | null;
+const initialState: TESCUser = null;
 
-const initialState: NullableTESCUser = null;
-
-const currentUser: Reducer<NullableTESCUser> = (state: NullableTESCUser = initialState, action) => {
-  switch (action.type) {
-  case ActionTypes.UPDATE_CURRENT_USER:
-    return {...action.payload};
-  default:
-    return state;
-  }
-};
-
-export default currentUser;
+export default handleActions({
+  [Types.UPDATE_CURRENT_USER]: (state, action: ActionType<typeof updateCurrentUser>) => ({
+    ...action.payload,
+  }),
+}, initialState);
