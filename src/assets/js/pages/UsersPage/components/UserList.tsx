@@ -37,7 +37,8 @@ class UserList extends React.Component<UserListProps> {
         SubComponent={({original}) => this.expandComponent(original)}
         filterable={true}
         defaultFilterMethod={(filter, row) =>
-          String(row[filter.id]).indexOf(filter.value) !== -1} />
+          String(row[filter.id]).indexOf(filter.value) !== -1}
+      />
     );
   }
 }

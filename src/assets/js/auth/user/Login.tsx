@@ -132,7 +132,8 @@ class Login extends React.Component<Props, LoginState> {
             <div className="col-12">
               <button
                 type="submit"
-                className="btn rounded-button rounded-button--small user-login__button">
+                className="btn rounded-button rounded-button--small user-login__button"
+              >
                 Login
               </button>
             </div>

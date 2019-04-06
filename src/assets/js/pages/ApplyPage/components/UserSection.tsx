@@ -91,7 +91,8 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
           </span>
         )
       )}
-    </span>);
+    </span>
+    );
   }
 
   render() {
@@ -168,7 +169,8 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
             ' (Your Resume Upload Might Be Too Big)')
         )
       )}
-    </form>);
+    </form>
+    );
   }
 }
 

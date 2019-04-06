@@ -24,8 +24,7 @@ export default class EventCard extends React.Component<EventCardProps> {
       <Link to={to}>
         <div className={`card mb-4 box-shadow event-card ${className}`}>
           {!!header &&
-            <div
-              className={`card-header ${eventHeaderClass}`}>
+            <div className={`card-header ${eventHeaderClass}`}>
               {header}
             </div>
           }

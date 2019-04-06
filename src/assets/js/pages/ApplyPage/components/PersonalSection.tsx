@@ -193,7 +193,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    * @returns {Component} The institution selection components.
    */
   renderInstitutionOptions(allowHighSchool: boolean) {
-    return (<span>
+    return (
+    <span>
       {FormFields.createRow(
         FormFields.createColumn('col-sm-12 no-margin-bottom',
           FormFields.createLabel('Institution')
@@ -220,7 +221,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
       <Fields names={['institution']} component={this.showInstitutionBox} />
       <Fields names={['institution']} component={this.showPIDBox} />
-    </span>);
+    </span>
+    );
   }
 
   createDiversityOptions() {
@@ -235,7 +237,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     const {handleSubmit, pristine, submitting} = this.props;
     const options = this.props.event.options;
 
-    return (<form onSubmit={handleSubmit}>
+    return (
+    <form onSubmit={handleSubmit}>
       {FormFields.createRow(
         FormFields.createColumn('col-md-6',
           FormFields.createLabel('First Name'),

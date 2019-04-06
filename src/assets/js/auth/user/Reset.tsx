@@ -124,7 +124,8 @@ class Reset extends React.Component<Props, ResetState> {
               <button
                 type="submit"
                 className="btn rounded-button rounded-button--small user-login__button"
-                disabled={pristine || submitting}>
+                disabled={pristine || submitting}
+              >
                 Reset My Password
               </button>
             </div>

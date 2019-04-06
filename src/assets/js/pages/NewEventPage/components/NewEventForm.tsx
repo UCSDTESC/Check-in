@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Field, Fields, reduxForm, InjectedFormProps} from 'redux-form';
 
 import * as FormFields from '~/components/Fields';
@@ -20,12 +19,12 @@ class NewEventForm extends React.Component<Props> {
 
   createLogoUpload() {
     return (
-    <Field
-      component={FileField}
-      name="logo"
-      placeholder="Resume"
-      text="Drop Your Logo"
-    />
+      <Field
+        component={FileField}
+        name="logo"
+        placeholder="Resume"
+        text="Drop Your Logo"
+      />
     );
   }
 

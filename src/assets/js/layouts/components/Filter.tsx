@@ -121,8 +121,7 @@ export default class Filter extends React.Component<FilterProps, FilterState> {
       >
         <ToggleSwitch checked={enabled} onChange={onEnableChange} />
         <span className="sidebar-filter__name">{name}</span>
-        <span
-          className={`sidebar-filter__show ${showDisabled}`}>
+        <span className={`sidebar-filter__show ${showDisabled}`}>
           {isHidden &&  <i className="fa fa-angle-down"/>}
           {!isHidden &&  <i className="fa fa-angle-up"/>}
         </span>

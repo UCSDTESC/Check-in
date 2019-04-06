@@ -92,7 +92,8 @@ export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({input
           maxLength={maxLength}
         />
         {touched && error && createError(error)}
-      </div>);
+      </div>
+    );
   };
 
 export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({input, className,
@@ -165,7 +166,8 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({i
             <option key={i} value={gender}>{gender}</option>)}
         </select>
         {touched && error && createError(error)}
-      </div>);
+      </div>
+    );
   };
 
 export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
@@ -208,7 +210,8 @@ export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({inp
             <option key={i} value={year}>{year}</option>)}
         </select>
         {touched && error && createError(error)}
-      </div>);
+      </div>
+    );
   };
 
 export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,

@@ -66,7 +66,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     const {goToPreviousPage, handleSubmit, pristine, submitting, event} = this.props;
     const {options, customQuestions} = this.props.event;
 
-    return (<form onSubmit={handleSubmit}>
+    return (
+    <form onSubmit={handleSubmit}>
       {options.foodOption && FormFields.createRow(
         FormFields.createColumn('col-sm-12',
           FormFields.createLabel('What kind of food would you like to see ' +
