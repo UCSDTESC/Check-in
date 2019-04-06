@@ -15,26 +15,19 @@ interface FileFieldProps {
   secondary?: boolean;
 }
 
+interface FileFieldState {
+  selectedFiles?: string[];
+}
+
 type Props = WrappedFieldProps & FileFieldProps;
 
-export default class FileField extends React.Component<Props> {
-  /**
-   * Event handler for dropping or clicking a new file into the zone.
-   */
-  handleDropOrClick = (acceptedFiles: File[], rejectedFiles: File[], e: DragEvent<HTMLDivElement>) => {
-    let eventOrValue = null;
-    const {input: {onChange, onBlur}} = this.props;
-    if (e.type === 'drop') {
-      if (acceptedFiles.length) {
-        // FileList or [File]
-        eventOrValue =
-          (e.dataTransfer && e.dataTransfer.files) || acceptedFiles;
-      } else {
-        eventOrValue = null;
-      }
-    }
-    onBlur(eventOrValue); // update touched
-    onChange(eventOrValue); // update value
+export default class FileField extends React.Component<Props, FileFieldState> {
+  state: Readonly<FileFieldState> = {
+    selectedFiles: [],
+  };
+
+  onDrop = (acceptedFiles: File[]) => {
+    this.props.input.onChange(acceptedFiles);
   }
 
   renderAsButton(text: string) {
@@ -71,8 +64,7 @@ export default class FileField extends React.Component<Props> {
     const dropzoneProps = {
       accept,
       multiple,
-      onDrop: this.handleDropOrClick,
-      className: className,
+      onDrop: this.onDrop,
     };
 
     const text = this.props.text ? this.props.text : 'Drop Your File';
@@ -81,8 +73,13 @@ export default class FileField extends React.Component<Props> {
       <div>
         <input type="hidden" disabled={true} {...input} />
         {selectedFile ? <span>{selectedFile.name}</span> : null}
-        <Dropzone {...dropzoneProps}>
-          {button ? this.renderAsButton(text) : this.renderAsDropzone(text)}
+        <Dropzone {...dropzoneProps} >
+          {({getRootProps, getInputProps}) => (
+            <div {...getRootProps()} className={className}>
+              <input {...getInputProps()} />
+              {button ? this.renderAsButton(text) : this.renderAsDropzone(text)}
+            </div>
+          )}
         </Dropzone>
         {touched && error && FormFields.createError(error)}
       </div>
