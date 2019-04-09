@@ -14,8 +14,7 @@ import reducer, { ApplicationState } from './reducers';
 ReactGA.initialize('UA-123201625-1');
 
 // Required for Redux Devtools Chrome extension
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ ||
-  compose;
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 // Create Redux store with middlewares
 const store = createStore(reducer,
