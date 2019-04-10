@@ -455,7 +455,7 @@ module.exports = function(app) {
         .select('username role')
         .sort({createdAt: -1})
         .exec()
-        .then(res.json)
+        .then(admins => res.json(admins))
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
   );
 

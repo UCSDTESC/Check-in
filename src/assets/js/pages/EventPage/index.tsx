@@ -132,7 +132,7 @@ class EventPage extends React.Component<Props, EventPageState> {
    * @param {EventAlert} alert The alert to render.
    * @returns {Component}
    */
-  renderAlert(alert: EventAlert) {
+  renderAlert = (alert: EventAlert) => {
     const {message, severity, title, timestamp} = alert;
     if (message) {
       return (
@@ -214,7 +214,7 @@ class EventPage extends React.Component<Props, EventPageState> {
   render() {
     const {event, statistics, alerts} = this.props;
     const {activeTab} = this.state;
-    if (!event) {
+    if (!event || !statistics) {
       return (
         <Loading />
       );

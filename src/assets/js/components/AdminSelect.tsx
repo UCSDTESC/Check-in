@@ -19,5 +19,7 @@ interface AdminSelectState {
 }
 
 export default class AdminSelect extends StyledSelect<AdminSelectProps, AdminSelectState> {
-
+  state: Readonly<AdminSelectState> = {
+    admins: [],
+  };
 }
