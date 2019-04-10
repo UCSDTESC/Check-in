@@ -9,10 +9,7 @@ export const userCheckin = (user: TESCUser, eventAlias: string): ApplicationActi
 (dispatch: ApplicationDispatch) =>
   Api.checkinUser(user._id, eventAlias)
     .then(() => {
-      dispatch({
-        type: Types.CHECKIN_USER,
-        user,
-      });
+      dispatch(_userCheckin(user));
     })
     .catch(console.error);
 

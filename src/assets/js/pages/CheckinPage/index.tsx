@@ -19,6 +19,14 @@ import { RouteComponentProps } from 'react-router-dom';
 import { TESCUser, UserStatus } from '~/static/types';
 import { ApplicationState } from '~/reducers';
 import { bindActionCreators } from 'redux';
+import WebcamScanner from './components/WebcamScanner';
+import ManualScanner from './components/ManualScanner';
+import LiabilityWaiverModal from './components/LiabilityWaiverModal';
+import ScannerSelector from './components/ScannerSelector';
+import KeyboardScanner from './components/KeyboardScanner';
+
+// Length of _id in MongoDB
+export const USER_ID_LENGTH = 24;
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -48,10 +56,16 @@ interface CheckinPageState {
   isProcessing: boolean;
   wasSuccessful: boolean;
   errorMessage: string;
-  isModalShowing: boolean;
-  lastUser: string;
+  isLiabilityShowing: boolean;
+  lastUser?: TESCUser;
   lastName: string;
-  nameApplicants: TESCUser[];
+  activeScanner: ScannerType;
+}
+
+export enum ScannerType {
+  Keyboard = 1,
+  Webcam = 2,
+  Manual = 3,
 }
 
 class CheckinPage extends React.Component<Props, CheckinPageState> {
@@ -59,10 +73,10 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     isProcessing: false,
     wasSuccessful: false,
     errorMessage: '',
-    isModalShowing: false,
-    lastUser: '',
+    isLiabilityShowing: false,
+    lastUser: null,
     lastName: '',
-    nameApplicants: [],
+    activeScanner: ScannerType.Manual,
   };
 
   componentDidMount() {
@@ -118,40 +132,37 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       return resolve(user);
     })
 
-  checkinById = (id: string): Q.Promise<TESCUser> =>
+  checkinUser = (user: TESCUser): Q.Promise<TESCUser> =>
     Q.Promise((resolve, reject) => {
-      const {users, event} = this.props;
-
-      // Filter by given ID
-      const eligibleUsers = users.filter((user) => user._id === id);
-
-      if (eligibleUsers.length !== 1) {
-        return reject(`User not found with ID ${id}`);
-      }
-
-      // Get the particular user
-      const user = eligibleUsers[0];
+      const {event} = this.props;
 
       this.validateUser(user)
-        .then(() => {
+        .then(() =>
           this.props.userCheckin(user, event.alias)
-            .then(() => {
-              resolve(user);
-            })
-            .catch(reject);
-        })
+        )
+        .then(() => resolve(user))
         .catch(reject);
     });
 
-  onScan = (data: string) => {
-    if (data === null || this.state.isProcessing) {
-      return;
-    }
+  onScan = (userId: string) => {
+    const {lastUser} = this.state;
 
-    if (data === this.state.lastUser) {
+    if (lastUser && userId === lastUser._id) {
       return this.setState({
         errorMessage: 'User has already checked in',
         wasSuccessful: false,
+        isProcessing: false,
+      });
+    }
+
+    // Filter by given ID
+    const eligibleUsers = this.props.users.filter((user) => user._id === userId);
+
+    if (eligibleUsers.length !== 1) {
+      return this.setState({
+        errorMessage: `User not found with ID ${userId}`,
+        wasSuccessful: false,
+        isProcessing: false,
       });
     }
 
@@ -159,48 +170,24 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       isProcessing: true,
       wasSuccessful: false,
       errorMessage: '',
-      lastUser: data,
+      lastUser: eligibleUsers[0],
       lastName: '',
     });
 
     this.toggleModal();
   }
 
-  nameApplicants = (event: React.FormEvent<HTMLInputElement>) => {
-    const {users} = this.props;
-
-    const name = event.currentTarget.value;
-    if (name.length < 3) {
-      return;
-    }
-
-    // Filter by given name
-    const eligibleUsers = users.filter((user) =>
-      (`${user.firstName} ${user.lastName}`).indexOf(name) !== -1);
-    this.setState({
-      nameApplicants: eligibleUsers,
-    });
-  }
-
-  selectApplicant = (id: string) => {
-    this.onScan(id);
-
-    this.setState({
-      nameApplicants: [],
-    });
-  }
-
   toggleModal = () =>
     this.setState({
-      isModalShowing: !this.state.isModalShowing,
+      isLiabilityShowing: !this.state.isLiabilityShowing,
     });
 
-  startCheckin = () => {
+  callCheckin = () => {
     this.setState({
-      isModalShowing: false,
+      isLiabilityShowing: false,
     });
 
-    this.checkinById(this.state.lastUser)
+    this.checkinUser(this.state.lastUser)
       .then((user) => {
         this.setState({
           wasSuccessful: true,
@@ -224,16 +211,21 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       });
   }
 
+  renderActiveScanner = () => {
+    switch (this.state.activeScanner) {
+      case (ScannerType.Keyboard):
+        return <KeyboardScanner onUserScanned={this.onScan} />;
+      case (ScannerType.Webcam):
+        return <WebcamScanner onUserScanned={this.onScan} />;
+      case (ScannerType.Manual):
+        return <ManualScanner onUserScanned={this.onScan} users={this.props.users} />;
+    }
+  }
+
   render() {
     const {users, event} = this.props;
-    const {errorMessage, wasSuccessful, lastName, nameApplicants, isModalShowing}
-      = this.state;
-
-    const previewStyle = {
-      maxWidth: '100%',
-      maxHeight: '50vh',
-      display: 'inline',
-    };
+    const {errorMessage, wasSuccessful, lastName, isLiabilityShowing,
+      activeScanner} = this.state;
 
     if (!users.length) {
       return (
@@ -244,70 +236,37 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     return (
 
       <div className="full-height">
-        <Modal
-          isOpen={isModalShowing}
-          toggle={this.toggleModal}
-          className="modal-lg"
-        >
-          <ModalHeader toggle={this.toggleModal}>Liability Waiver</ModalHeader>
-          <ModalBody>
-            <object
-              width="100%"
-              height="500px"
-              data={event.checkinWaiver}
-            />
-          </ModalBody>t
-          <ModalFooter>
-            <Button color="primary" onClick={this.startCheckin}>I agree</Button>
-            {' '}
-            <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
+        <LiabilityWaiverModal
+          isOpen={isLiabilityShowing}
+          onWaiverAgree={this.callCheckin}
+          toggleModal={this.toggleModal}
+          event={event}
+        />
         <div className="checkin container">
-          <div className="row">
-            <div className="col-12 text-center">
+          <div className="row align-items-center">
+            <div className="col">
               <h1>{event.name} Checkin</h1>
-              <h2>Scan QR</h2>
               {errorMessage && <h2 className="checkin__error text-danger">
-                {JSON.stringify(errorMessage)}
+                {errorMessage}
               </h2>}
               {wasSuccessful &&
                 <h2 className="checkin__success">Checked In&nbsp;
                   <span className="checkin__name">{lastName}</span>!
                 </h2>
               }
-              <QrReader
-                delay={200}
-                style={previewStyle}
-                onError={console.error}
-                onScan={this.onScan}
+            </div>
+            <div className="col">
+              <ScannerSelector
+                selectedScanner={activeScanner}
+                onSelectScanner={(newScanner) =>
+                  this.setState({
+                    activeScanner: newScanner,
+                  })
+                }
               />
             </div>
           </div>
-          <div className="row">
-            <div className="col-12 text-center">
-              <h2>Manual Checkin</h2>
-              <input
-                type="text"
-                placeholder="Name"
-                className="rounded-input"
-                onChange={this.nameApplicants}
-              />
-              <ul className="checkin__list">
-                {nameApplicants.map((app) => (
-                  <li className="checkin__list-user" key={app._id}>
-                    <button
-                      className="rounded-button rounded-button--small"
-                      onClick={() => this.selectApplicant(app._id)}
-                    >
-                      {app.firstName} {app.lastName}<br/>
-                      <small>{app.account.email}</small>
-                    </button>
-                  </li>)
-                )}
-              </ul>
-            </div>
-          </div>
+          {this.renderActiveScanner()}
         </div>
       </div>
     );
