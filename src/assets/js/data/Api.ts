@@ -7,7 +7,7 @@ import { promisify, SuccessResponse } from './helpers';
 
 import CookieTypes from '~/static/Cookies';
 import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
-    TESCEvent, Column } from '~/static/types';
+    TESCEvent, Column, ColumnResponse } from '~/static/types';
 import { QuestionType } from '~/static/Questions';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
 
@@ -300,7 +300,7 @@ export const updateOptions = (eventAlias: string, options: TESCEventOptions) =>
  * @returns {Promise} A promise of the request.
  */
 export const loadColumns = () =>
-  promisify<Column[]>(
+  promisify<ColumnResponse>(
     request
       .get('/admin/columns')
       .set('Authorization', cookies.get(CookieTypes.admin.token))

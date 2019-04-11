@@ -81,7 +81,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
         const newColumns: Column[] = Object.entries(columns)
           .reduce((acc, [key, value]) => {
             acc.push({
-              Header: value.Header,
+              Header: value,
               accessor: key,
             } as Column);
             return acc;
