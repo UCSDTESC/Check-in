@@ -24,7 +24,9 @@ module.exports = {
   },
   plugins:[
     new webpack.NamedModulesPlugin(),
-    new ForkTsCheckerWebpackPlugin(),
+    new ForkTsCheckerWebpackPlugin({
+      workers: ForkTsCheckerWebpackPlugin.ONE_CPU_FREE
+    }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
     }),
