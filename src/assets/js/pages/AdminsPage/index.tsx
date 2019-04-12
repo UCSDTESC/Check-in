@@ -87,7 +87,7 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
           onClick={this.toggleRegisterModal}
         >
           Register New Admin
-        </Button>}
+        </Button>
       </div>
     );
   }

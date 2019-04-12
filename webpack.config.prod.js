@@ -25,7 +25,8 @@ module.exports = {
   plugins:[
     new webpack.NamedModulesPlugin(),
     new ForkTsCheckerWebpackPlugin({
-      workers: ForkTsCheckerWebpackPlugin.ONE_CPU_FREE
+      // Maximum for CircleCI Free
+      workers: 2
     }),
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': JSON.stringify('production')
