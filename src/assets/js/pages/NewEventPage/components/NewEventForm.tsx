@@ -1,12 +1,22 @@
 import React from 'react';
-import {Field, Fields, reduxForm, InjectedFormProps} from 'redux-form';
+import {Field, Fields, reduxForm, InjectedFormProps, WrappedFieldsProps} from 'redux-form';
 
 import * as FormFields from '~/components/Fields';
 
 import FileField from '~/components/FileField';
 
-interface NewEventFormData {
-
+export interface NewEventFormData {
+  name: string;
+  alias: string;
+  closeTimeDay: string;
+  closeTimeMonth: string;
+  closeTimeYear: string;
+  homepage: string;
+  email: string;
+  description: string;
+  organisedBy: string;
+  thirdPartyText?: string;
+  logo: File[];
 }
 
 interface NewEventFormProps {
@@ -28,7 +38,7 @@ class NewEventForm extends React.Component<Props> {
     );
   }
 
-  showThirdPartyText(values: any) {
+  showThirdPartyText: React.StatelessComponent<WrappedFieldsProps> = ({values}) => {
     if (values.organisedBy && values.organisedBy.input.value !== 'TESC') {
       return (
         FormFields.createRow(

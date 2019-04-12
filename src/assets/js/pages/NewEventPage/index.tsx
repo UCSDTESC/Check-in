@@ -11,7 +11,7 @@ import createValidator from './validate';
 
 import {registerNewEvent} from '~/data/Api';
 
-import NewEventForm from './components/NewEventForm';
+import NewEventForm, { NewEventFormData } from './components/NewEventForm';
 import { TESCEvent } from '~/static/types';
 import { ApplicationDispatch } from '~/actions';
 
@@ -35,7 +35,7 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
     err: null,
   };
 
-  createNewEvent = (event: TESCEvent) => {
+  createNewEvent = (event: NewEventFormData) => {
     registerNewEvent(event)
       .then((res: TESCEvent) => {
         this.setState({err: null});

@@ -1,5 +1,6 @@
 import React from 'react';
 import {Field, reduxForm, InjectedFormProps} from 'redux-form';
+import { UserStatus } from '~/static/types';
 
 export interface BulkChangeFormData {
   users: string;
@@ -39,12 +40,9 @@ class BulkChange extends React.Component<Props> {
             required="required"
           >
             <option />
-            <option>Rejected</option>
-            <option>Unconfirmed</option>
-            <option>Confirmed</option>
-            <option>Declined</option>
-            <option>Late</option>
-            <option>Waitlisted</option>
+            {Object.entries(UserStatus).map(([key, status]) => (
+              <option key={key}>{status}</option>
+            ))}
           </Field>
         </div>
 

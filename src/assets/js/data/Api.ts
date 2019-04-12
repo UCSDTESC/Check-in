@@ -10,6 +10,7 @@ import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
     TESCEvent, Column, ColumnResponse } from '~/static/types';
 import { QuestionType } from '~/static/Questions';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
+import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
 
 const API_URL_PREFIX = '/api';
 
@@ -187,16 +188,20 @@ export const registerUser = (eventAlias: string, user: TESCUser) => {
   }>(baseReq);
 };
 
-export const registerNewEvent = (event: any) =>
-  promisify<TESCEvent>(
+export const registerNewEvent = (event: NewEventFormData) => {
+  const {logo, ...eventWithoutLogo} = event;
+  return promisify<TESCEvent>(
     request
       .post('/admin/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .field(event)
-      .attach('logo', event.logo[0])
+      .field({
+        ...eventWithoutLogo,
+      })
+      .attach('logo', logo[0])
       .use(apiPrefix)
       .use(nocache)
   );
+};
 
 /**
  * Request to register a new admin.
