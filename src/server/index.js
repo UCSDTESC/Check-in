@@ -27,7 +27,9 @@ require('./models/index')()
       }, startInstance);
     }
   })
-  .catch(console.error);
+  .catch((error) => {
+    logger.log('error', error);
+  });
 
 function startInstance() {
   var app = express();

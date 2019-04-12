@@ -50,7 +50,7 @@ module.exports = function(app) {
       }
 
       events.forEach((event) => {
-        User.count({event})
+        User.countDocuments({event})
           .catch(logging.error)
           .then(count => {
             let newEvent = event.toJSON();
@@ -404,7 +404,7 @@ module.exports = function(app) {
     isOrganiser,
     (req, res) => {
       return Promise.all(
-        [User.count({event: req.event}),
+        [User.countDocuments({event: req.event}),
           User.find({
             event: req.event._id
           }).distinct('university').exec(),
@@ -416,7 +416,7 @@ module.exports = function(app) {
               $group: {_id: '$gender', count: {$sum: 1}}
             }
           ]).exec(),
-          User.count({event: req.event, checkedIn: true}),
+          User.countDocuments({event: req.event, checkedIn: true}),
           User.aggregate([
             {
               $match: {event: req.event._id}
@@ -424,7 +424,7 @@ module.exports = function(app) {
             {
               $group : {_id: '$status', count: {$sum: 1}}
             }]).exec(),
-          User.count(getResumeConditions(req))
+          User.countDocuments(getResumeConditions(req))
         ])
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
         .then(values => {

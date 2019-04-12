@@ -122,7 +122,7 @@ module.exports = function(app) {
           throw Errors.INSTITUTION_NOT_PROVIDED;
         }
       })
-      .then(() => User.count({account, event}))
+      .then(() => User.countDocuments({account, event}))
       .then((count) => {
         if (count !== 0) {
           throw Errors.USER_ALREADY_REGISTERED;
@@ -176,7 +176,7 @@ module.exports = function(app) {
         //TODO: Refer teammates;
       })
       .catch(err => {
-        console.log(err);
+        logging.log('error', err);
         return Errors.respondUserError(res, err);
       });
   });
