@@ -9,7 +9,8 @@ const form = reduxForm<ForgotFormData, ForgotProps>({
   form: 'userForgot',
 });
 
-interface ForgotFormData {
+export interface ForgotFormData {
+  email: string;
 }
 
 interface ForgotProps {

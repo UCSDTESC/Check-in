@@ -17,7 +17,7 @@ export interface LoginFormData {
 }
 
 interface LoginProps {
-  loginUser: (user: LoginFormData) => Q.Promise<void>;
+  loginUser: (user: LoginFormData) => Promise<void>;
   errorMessage: string;
   alerts: PageAlert[];
 }

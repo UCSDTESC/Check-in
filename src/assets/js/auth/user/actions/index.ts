@@ -37,24 +37,23 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any) {
   }
 }
 
-export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
+export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Promise<{}>> => (
   (dispatch: ApplicationDispatch) => {
     // Make the event return a promise
-    const deferred = Q.defer();
     dispatch(removeError());
 
-    Auth.login(loginFormData.email, loginFormData.password)
-      .then((res) => {
-        storeLogin(res.token, res.user);
-        dispatch(authoriseUser(res.user));
-        deferred.resolve();
-      })
-      .catch((err) => {
-        deferred.reject(err.message);
-        return errorHandler(dispatch, err);
-      });
-
-    return deferred.promise;
+    return new Promise((resolve, reject) => {
+      Auth.login(loginFormData.email, loginFormData.password)
+        .then((res) => {
+          storeLogin(res.token, res.user);
+          dispatch(authoriseUser(res.user));
+          resolve();
+        })
+        .catch((err) => {
+          reject(err.message);
+          return errorHandler(dispatch, err);
+        });
+    });
   });
 
 export const logoutUser = (): ApplicationAction => (

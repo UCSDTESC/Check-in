@@ -49,24 +49,21 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any) {
  * administrator to login.
  * @returns {Promise} The login request promise.
  */
-export const loginAdmin = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
-  (dispatch: ApplicationDispatch) => {
-    // Make the event return a promise
-    const deferred = Q.defer();
-
-    Auth.login(loginFormData.username, loginFormData.password)
-      .then((res) => {
-        storeLogin(res.token, res.user);
-        dispatch(authoriseAdmin(res.user));
-        deferred.resolve();
-      })
-      .catch((err) => {
-        deferred.reject(err.message);
-        return errorHandler(dispatch, err);
-      });
-
-    return deferred.promise;
-  });
+export const loginAdmin = (loginFormData: LoginFormData): ApplicationAction<Promise<{}>> => (
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      Auth.login(loginFormData.username, loginFormData.password)
+        .then((res) => {
+          storeLogin(res.token, res.user);
+          dispatch(authoriseAdmin(res.user));
+          resolve();
+        })
+        .catch((err) => {
+          reject(err.message);
+          return errorHandler(dispatch, err);
+        });
+    })
+  );
 
 /**
  * Logout the current authenticated user.

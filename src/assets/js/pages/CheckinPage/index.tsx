@@ -97,7 +97,7 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
   }
 
   validateUser = (user: TESCUser) =>
-    Q.Promise((resolve, reject) => {
+    new Promise((resolve, reject) => {
       // Ensure they're eligible
       if (user.status !== UserStatus.Confirmed) {
         switch (user.status) {
@@ -118,8 +118,8 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       return resolve(user);
     })
 
-  checkinById = (id: string): Q.Promise<TESCUser> =>
-    Q.Promise((resolve, reject) => {
+  checkinById = (id: string): Promise<TESCUser> =>
+    new Promise((resolve, reject) => {
       const {users, event} = this.props;
 
       // Filter by given ID

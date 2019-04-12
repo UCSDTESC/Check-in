@@ -5,7 +5,7 @@ import { TESCUser } from '~/static/types';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import { createStandardAction } from 'typesafe-actions';
 
-export const userCheckin = (user: TESCUser, eventAlias: string): ApplicationAction<Q.Promise<void>> =>
+export const userCheckin = (user: TESCUser, eventAlias: string): ApplicationAction<Promise<void>> =>
 (dispatch: ApplicationDispatch) =>
   Api.checkinUser(user._id, eventAlias)
     .then(() => {

@@ -52,7 +52,7 @@ export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENT
 export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, Action>;
 export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
 
-export const loadAllAdminEvents = (): ApplicationAction<Q.Promise<{}>> =>
+export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) => {
     const deferred = Q.defer();
     Api.loadAllEvents()
@@ -64,7 +64,7 @@ export const loadAllAdminEvents = (): ApplicationAction<Q.Promise<{}>> =>
     return deferred.promise;
   };
 
-export const loadAllPublicEvents = (): ApplicationAction<Q.Promise<{}>> =>
+export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) => {
   const deferred = Q.defer();
 
@@ -78,7 +78,7 @@ export const loadAllPublicEvents = (): ApplicationAction<Q.Promise<{}>> =>
   return deferred.promise;
 };
 
-export const loadUserEvents = (): ApplicationAction<Q.Promise<{}>> =>
+export const loadUserEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) => {
   const deferred = Q.defer();
 
