@@ -13,6 +13,7 @@ import {toggleFilter, filterOptionActions, selectAllOptions,
 import Sidebar from './components/SponsorSidebar';
 import { ApplicationState } from '~/reducers';
 import { TESCUser } from '~/static/types';
+import Loading from '~/components/Loading';
 
 const mapStateToProps = (state: ApplicationState) => ({
   filters: state.admin.filters,
@@ -116,6 +117,10 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
   render() {
     const {user, filters, resumes, filtered} = this.props;
     const filterOptions = this.createFilterOptions(resumes.applicants);
+
+    if (!user) {
+      return <Loading />;
+    }
 
     return (
       <div className="admin-body d-flex flex-column">

@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 
 import {toggleEditing, ApplicationDispatch} from '~/actions';
 
-import {loginUser} from '~/auth/admin/actions';
+import {loginAdmin} from '~/auth/admin/actions';
 
 import Login, { LoginFormData } from '~/auth/admin/Login';
 
@@ -20,7 +20,7 @@ const mapStateToProps = (state: ApplicationState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
-  loginUser,
+  loginAdmin,
   toggleEditing,
 }, dispatch);
 
@@ -63,7 +63,7 @@ class AdminLayout extends React.Component<Props, AdminLayoutState> {
 
     const login = (
       <Login
-        loginUser={this.props.loginUser}
+        loginUser={this.props.loginAdmin}
         errorMessage={this.props.loginError}
       />
     );

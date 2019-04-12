@@ -36,16 +36,18 @@ import {authorised as UserAuthorised, JWTAuthUser} from '~/data/User';
 import CookieTypes from '~/static/Cookies';
 import { ApplicationDispatch } from './actions';
 import { bindActionCreators, compose } from 'redux';
-import { finishAuthorisation, authoriseAdmin } from './auth/admin/actions';
+import { finishAuthorisation, authoriseAdmin, logoutAdmin } from './auth/admin/actions';
 import { connect } from 'react-redux';
 import { JWTAuthAdmin } from './data/AdminAuth';
-import { authoriseUser, finishAuthorisation as finishUserAuth } from './auth/user/actions';
+import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   authoriseAdmin,
   authoriseUser,
   finishAuthorisation,
   finishUserAuth,
+  logoutAdmin,
+  logoutUser,
 }, dispatch);
 
 interface RoutesProps {
@@ -56,7 +58,8 @@ type Props = RouteComponentProps & ReturnType<typeof mapDispatchToProps> & Route
 
 class Routes extends React.Component<Props> {
   componentDidMount() {
-    const {authoriseAdmin, authoriseUser, finishAuthorisation, finishUserAuth} = this.props;
+    const {authoriseAdmin, authoriseUser, finishAuthorisation, finishUserAuth,
+      logoutAdmin, logoutUser} = this.props;
 
     // Check initial authentication
     const {cookies} = this.props;
@@ -68,7 +71,9 @@ class Routes extends React.Component<Props> {
           const authCookie: unknown = cookies.get(CookieTypes.admin.user);
           return authoriseAdmin(authCookie as JWTAuthAdmin);
         })
-        .catch(console.error);
+        .catch(() => {
+          logoutAdmin();
+        });
     } else {
       finishAuthorisation();
     }
@@ -80,6 +85,9 @@ class Routes extends React.Component<Props> {
           // TODO : Remove JSON Parse - Use a better library for Cookies
           const authCookie: unknown = cookies.get(CookieTypes.user.user);
           return authoriseUser(authCookie as JWTAuthUser);
+        })
+        .catch(() => {
+          logoutUser();
         });
     } else {
       // Finish auth process

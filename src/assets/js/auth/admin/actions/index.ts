@@ -36,7 +36,7 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any) {
 
   if (error.status === 401) {
     dispatch(authoriseError('The username or password you entered was not correct.'));
-    logoutUser();
+    logoutAdmin();
   } else {
     dispatch(authoriseError(errorMessage));
   }
@@ -49,7 +49,7 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any) {
  * administrator to login.
  * @returns {Promise} The login request promise.
  */
-export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
+export const loginAdmin = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
   (dispatch: ApplicationDispatch) => {
     // Make the event return a promise
     const deferred = Q.defer();
@@ -72,7 +72,7 @@ export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Pro
  * Logout the current authenticated user.
  * @returns {Function} The function to dispatch.
  */
-export const logoutUser = (): ApplicationAction => (
+export const logoutAdmin = (): ApplicationAction => (
   (dispatch: ApplicationDispatch) => {
     dispatch(unauthoriseAdmin());
     cookies.remove(CookieTypes.admin.token, {path: '/'});

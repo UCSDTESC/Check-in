@@ -4,7 +4,7 @@ import {Link as RouteLink} from 'react-router-dom';
 
 import Filter from './Filter';
 import Section from './Section';
-import { Admin, FilterOption, FilterOptions } from '~/static/types';
+import { Admin, FilterOption } from '~/static/types';
 import { FiltersState } from '~/reducers/Admin/types';
 
 interface SponsorSidebarProps {
@@ -135,7 +135,7 @@ export default class SponsorSidebar extends React.Component<SponsorSidebarProps,
             Sponsor Resume Tool
           </span>
           <NavbarToggler
-            right={true}
+            right="true"
             className="admin-sidebar__toggler navbar-dark"
             onClick={this.toggleHidden}
           />
