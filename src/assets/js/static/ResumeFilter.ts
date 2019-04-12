@@ -27,7 +27,7 @@ export function applyResumeFilter(filters: FiltersState, applicants: TESCUser[])
 
         return Object.values(filter.options)
           .some((option, optionIndex) => {
-            // Ignore the filter if it's disabled
+            // Ignore the filter if it's disabled or doesn't exist on the user
             if (!option || !applicant.hasOwnProperty(filterName)) {
               return false;
             }

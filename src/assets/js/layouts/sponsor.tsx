@@ -61,9 +61,12 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
     const modelApplicant = applicants[0];
     return Object.keys(modelApplicant)
       .reduce((total: any, curr) => {
-        // TODO: Rewrite logo
-        // @ts-ignore: Access dynamic properties of user
-        total[curr] = [...new Set(applicants.map(item => item[curr]))];
+        total[curr] = [...new Set(applicants
+          .filter(item => item.hasOwnProperty(curr))
+          // TODO: Rewrite logic
+          // @ts-ignore: Access dynamic properties of user
+          .map(item => item[curr])),
+        ];
         return total;
       }, {});
   }
