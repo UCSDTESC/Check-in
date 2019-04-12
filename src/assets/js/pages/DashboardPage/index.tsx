@@ -14,7 +14,6 @@ import { ApplicationState } from '~/reducers';
 
 const mapStateToProps = (state: ApplicationState) => ({
   events: state.admin.events,
-  editing: state.admin.general.editing,
   user: state.admin.auth.user,
 });
 
