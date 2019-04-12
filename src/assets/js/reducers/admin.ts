@@ -18,7 +18,6 @@ import eventStatistics from '~/pages/EventPage/reducers/EventStatistics';
 
 import events from './Admin/Events';
 import filters from './Admin/Filters';
-import general from './Admin/General';
 import { AdminAuthState } from '~/auth/admin/reducers/types';
 import { Admin, TESCUser } from '~/static/types';
 import { EventsState, FiltersState, GeneralState } from './Admin/types';
@@ -31,7 +30,6 @@ export interface AdminState {
   readonly admins: Admin[];
   readonly events: EventsState;
   readonly filters: FiltersState;
-  readonly general: GeneralState;
   readonly userColumns: ColumnsState;
   readonly users: TESCUser[];
   readonly resumes: ResumesState;
@@ -44,7 +42,6 @@ export default {
   admins,
   events,
   filters,
-  general,
   userColumns,
   users: reduceReducers(usersReducer, checkinReducer),
   resumes,

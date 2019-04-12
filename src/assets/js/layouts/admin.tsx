@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 
-import {toggleEditing, ApplicationDispatch} from '~/actions';
+import {ApplicationDispatch} from '~/actions';
 
 import {loginAdmin} from '~/auth/admin/actions';
 
@@ -15,13 +15,11 @@ const mapStateToProps = (state: ApplicationState) => ({
   isAuthenticated: state.admin.auth.authenticated,
   user: state.admin.auth.user,
   loginError: state.admin.auth.error,
-  isEditing: state.admin.general.editing,
   events: state.admin.events,
 });
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   loginAdmin,
-  toggleEditing,
 }, dispatch);
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
@@ -53,7 +51,7 @@ class AdminLayout extends React.Component<Props, AdminLayoutState> {
   }
 
   render() {
-    const {isAuthenticated, user, events, isEditing} = this.props;
+    const {isAuthenticated, user, events} = this.props;
 
     const containerState = 'admin-sidebar__container--' +
       (isAuthenticated ? 'authenticated' : 'logged-out');
@@ -75,10 +73,8 @@ class AdminLayout extends React.Component<Props, AdminLayoutState> {
           <div className="d-flex flex-column flex-md-row h-100">
             <div className={`admin-sidebar__container ${containerState}`}>
               <Sidebar
-                isEditing={isEditing}
                 isAuthenticated={isAuthenticated}
                 user={user}
-                onEditChange={this.props.toggleEditing}
                 events={events}
               >
                 {!isAuthenticated && login}

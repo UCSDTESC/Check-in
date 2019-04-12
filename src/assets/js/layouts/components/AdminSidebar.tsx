@@ -12,8 +12,6 @@ import { EventsState } from '~/reducers/Admin/types';
 
 interface AdminSidebarProps {
   isAuthenticated: boolean;
-  onEditChange: (newEditing: boolean) => void;
-  isEditing: boolean;
   user?: Admin;
   isHidden?: boolean;
   events: EventsState;
@@ -116,7 +114,7 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
    * Creates the user menu for the authenticated user
    */
   renderUser() {
-    const {user, isEditing} = this.props;
+    const {user} = this.props;
     const auth = this.props.isAuthenticated;
     const role = this.props.user ?
       getRole(this.props.user.role) :
@@ -131,17 +129,6 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
         <div className="admin-sidebar__user-role">
           Your Role: {user && user.role}
         </div>
-        {auth && !checkinAdmin && role >= getRole(Role.ROLE_ADMIN) &&
-        <div className="admin-sidebar__user-toggle">
-          <ToggleSwitch
-            onChange={this.props.onEditChange}
-            checked={isEditing}
-          />
-          <div className="admin-sidebar__user-editing">
-            Editing:&nbsp;
-            <span className="text-uppercase">{isEditing ? 'ON' : 'OFF'}</span>
-          </div>
-        </div>}
       </div>
     );
   }

@@ -9,12 +9,6 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { ApplicationState } from '~/reducers';
 import { Action, AnyAction } from 'redux';
 
-// General
-
-export const enableEditing = createStandardAction(Types.ENABLE_EDITING)<undefined>();
-export const disableEditing = createStandardAction(Types.DISABLE_EDITING)<undefined>();
-export const toggleEditing = createStandardAction(Types.TOGGLE_EDITING)<undefined>();
-
 // User Events
 
 export const replaceUserEvents = createStandardAction(Types.REPLACE_USER_EVENTS)<TESCEvent[]>();

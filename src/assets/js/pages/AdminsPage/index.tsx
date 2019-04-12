@@ -10,14 +10,12 @@ import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal
 
 import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
 
-import { Admin } from '~/static/types';
 import { ApplicationState } from '~/reducers';
 import { ApplicationDispatch } from '~/actions';
 import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state: ApplicationState) => ({
   admins: state.admin.admins,
-  editing: state.admin.general.editing,
 });
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
@@ -69,7 +67,7 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
       .catch(console.error);
 
   render() {
-    const {editing, admins} = this.props;
+    const {admins} = this.props;
 
     return (
       <div>
@@ -81,9 +79,9 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
         <AdminList
           admins={admins}
           onDeleteAdmin={this.onDeleteAdmin}
-          editing={editing}
+          editing={true}
         />
-        {editing && <Button
+        <Button
           className="ml-2"
           color="primary"
           onClick={this.toggleRegisterModal}
