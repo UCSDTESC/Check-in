@@ -93,7 +93,7 @@ const userLogin = new LocalStrategy(localUserOptions,
 
 const jwtUserLogin = new JwtStrategy(jwtOptions, function(payload, done) {
   Account.findById(payload._id, function(err, account) {
-    if (err || account.deleted) {
+    if (err || account === null || account.deleted) {
       return done(err, false);
     }
 
