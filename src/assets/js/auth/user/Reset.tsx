@@ -11,7 +11,7 @@ const form = reduxForm<ResetFormData, ResetProps>({
   form: 'userReset',
 });
 
-interface ResetFormData {
+export interface ResetFormData {
   newPassword: string;
   repeatNewPassword: string;
 }

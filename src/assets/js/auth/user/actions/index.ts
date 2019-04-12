@@ -5,7 +5,6 @@ import * as Types from './types';
 import {deleteUserEvents, ApplicationDispatch, ApplicationAction} from '~/actions';
 
 import Cookies from 'universal-cookie';
-import Q from 'q';
 
 import CookieTypes from '~/static/Cookies';
 import { LoginFormData } from '../Login';

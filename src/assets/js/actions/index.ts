@@ -1,4 +1,3 @@
-import Q from 'q';
 import {createStandardAction, ActionType} from 'typesafe-actions';
 
 import * as Types from './types';
@@ -53,41 +52,34 @@ export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, Action>;
 export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
 
 export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
-  (dispatch: ApplicationDispatch) => {
-    const deferred = Q.defer();
-    Api.loadAllEvents()
-      .then(res => {
-        dispatch(replaceAdminEvents(res));
-        return deferred.resolve();
-      })
-      .catch(deferred.reject);
-    return deferred.promise;
-  };
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      Api.loadAllEvents()
+        .then(res => {
+          dispatch(replaceAdminEvents(res));
+          return resolve();
+        })
+        .catch(reject);
+    });
 
 export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
-  (dispatch: ApplicationDispatch) => {
-  const deferred = Q.defer();
-
-  Api.loadAllPublicEvents()
-    .then(res => {
-      dispatch(replaceEvents(res));
-      return deferred.resolve();
-    })
-    .catch(deferred.reject);
-
-  return deferred.promise;
-};
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      Api.loadAllPublicEvents()
+        .then(res => {
+          dispatch(replaceEvents(res));
+          return resolve();
+        })
+        .catch(reject);
+    });
 
 export const loadUserEvents = (): ApplicationAction<Promise<{}>> =>
-  (dispatch: ApplicationDispatch) => {
-  const deferred = Q.defer();
-
-  UserApi.getUserEvents()
-    .then(res => {
-      dispatch(replaceUserEvents(res));
-      return deferred.resolve();
-    })
-    .catch(deferred.reject);
-
-  return deferred.promise;
-};
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      UserApi.getUserEvents()
+        .then(res => {
+          dispatch(replaceUserEvents(res));
+          return resolve();
+        })
+        .catch(reject);
+    });

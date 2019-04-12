@@ -1,6 +1,5 @@
 import React from 'react';
 import QrReader from 'react-qr-reader';
-import Q from 'q';
 import {connect} from 'react-redux';
 import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
 import {showLoading, hideLoading} from 'react-redux-loading-bar';

@@ -1,7 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
-import Reset from '~/auth/user/Reset';
+import Reset, { ResetFormData } from '~/auth/user/Reset';
 
 import {resetPassword} from '~/data/User';
 import { RouteComponentProps } from 'react-router-dom';
@@ -21,17 +20,22 @@ class ResetPage extends React.Component<Props, ResetPageState> {
     success: '',
   };
 
-  resetPassword = (values: any) => {
-    if (!values.password || !values.passwordRepeat) {
-      return false;
+  resetPassword = (values: ResetFormData) => {
+    if (!values.newPassword || !values.repeatNewPassword) {
+      return {
+        newPassword: 'Required',
+        repeatNewPassword: 'Required'
+      };
     }
 
-    if (values.password !== values.passwordRepeat) {
+    if (values.newPassword !== values.repeatNewPassword) {
       this.setState({error: 'Your new passwords didn\'t match'});
-      return false;
+      return {
+        repeatNewPassword: 'Your new passwords didn\'t match',
+      };
     }
 
-    return resetPassword(this.props.match.params.id, values.password)
+    return resetPassword(this.props.match.params.id, values.newPassword)
       .then(() => this.setState({success: 'Your password has been reset'}))
       .catch((e) => this.setState({error: e.message}));
   }

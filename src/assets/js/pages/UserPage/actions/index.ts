@@ -2,7 +2,6 @@ import * as Api from '~/data/User';
 
 import * as Types from './types';
 
-import Q from 'q';
 import { TESCUser } from '~/static/types';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';

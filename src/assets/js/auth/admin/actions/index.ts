@@ -3,7 +3,6 @@ import * as Auth from '~/data/AdminAuth';
 import * as Types from './types';
 
 import Cookies from 'universal-cookie';
-import Q from 'q';
 
 import CookieTypes from '~/static/Cookies';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
