@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React from 'react';
 import {VictoryPie, VictoryTooltip, VictoryTheme} from 'victory';
 import EventStatisticsComponent from './EventStatisticsComponent';

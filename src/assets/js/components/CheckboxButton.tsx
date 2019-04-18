@@ -1,31 +1,24 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Field } from 'redux-form';
+import { WrappedFieldProps } from 'redux-form';
 
 interface CheckboxButtonProps {
-  // TODO: Fix input type
-  input: any;
 }
 
 interface CheckboxButtonState {
   value: boolean | string;
 }
 
-// TODO: Check functionality
+type Props = WrappedFieldProps & CheckboxButtonProps;
 
-export default class CheckboxButton extends React.Component<CheckboxButtonProps, CheckboxButtonState> {
-  static propTypes = {
-    input: PropTypes.object.isRequired,
-  };
-
-  constructor(props: CheckboxButtonProps) {
+export default class CheckboxButton extends React.Component<Props, CheckboxButtonState> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       value: props.input.value,
     };
   }
 
-  componentDidReceiveProps(nextProps: CheckboxButtonProps) {
+  componentDidReceiveProps(nextProps: Props) {
     this.setState({
       value: nextProps.input.value,
     });

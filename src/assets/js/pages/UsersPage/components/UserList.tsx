@@ -11,7 +11,7 @@ interface UserListProps {
   users: TESCUser[];
   columns: Column[];
   event: TESCEvent;
-  onUserUpdate: (newUser: any) => void;
+  onUserUpdate: (newUser: TESCUser) => void;
 }
 
 class UserList extends React.Component<UserListProps> {

@@ -40,7 +40,7 @@ export default class AutoSuggest extends React.Component<AutoSuggestProps, AutoS
     sectionTitle: 'react-autosuggest__section-title',
   };
 
-  onChange = (event: FormEvent<any>, {newValue}: {newValue: string}) => {
+  onChange = (event: FormEvent, {newValue}: {newValue: string}) => {
     this.setState({
       value: newValue,
     });

@@ -3,7 +3,6 @@ import { SuperAgentRequest } from 'superagent';
 export interface SuccessResponse {
   success: boolean;
 }
-
 /**
  * Run a request and return a Q promise.
  * @param  {Object} request The superagent request to run.

@@ -106,8 +106,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
   }
 
   /**
-   * Handles an updated user.
-   * @param {Object} user The updated user.
+   * Handles an update to a user in the list.
    */
   onUserUpdate = (user: TESCUser) => {
     this.props.updateUser(user)

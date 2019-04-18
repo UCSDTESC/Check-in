@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import {Link} from 'react-router-dom';
 import { TESCEvent } from '~/static/types';
 
@@ -8,10 +7,6 @@ interface UserEventsProps {
 }
 
 export default class UserEvents extends React.Component<UserEventsProps> {
-  static propTypes = {
-    events: PropTypes.array.isRequired,
-  };
-
   render() {
     const {events} = this.props;
 

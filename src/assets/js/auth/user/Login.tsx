@@ -1,6 +1,5 @@
 import {Field, reduxForm, InjectedFormProps} from 'redux-form';
 import {Link, RouteComponentProps} from 'react-router-dom';
-import PropTypes from 'prop-types';
 import React from 'react';
 import {Alert, UncontrolledAlert} from 'reactstrap';
 
@@ -29,10 +28,6 @@ interface LoginState {
 }
 
 class Login extends React.Component<Props, LoginState> {
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-  };
-
   state: Readonly<LoginState> = {
     isErrorVisible: false,
   };
