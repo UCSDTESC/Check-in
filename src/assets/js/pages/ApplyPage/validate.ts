@@ -1,4 +1,13 @@
-import { TESCEventOptions, CustomQuestions, Question } from '~/static/types';
+import { TESCEventOptions, CustomQuestions, Question, CustomQuestionResponses } from '~/static/types';
+import { ApplyPageFormData } from '.';
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+export type ApplyFormValidatorError = {
+  [P in keyof Omit<ApplyPageFormData, 'customQuestionResponses'>]?: string;
+} & {
+  customQuestionResponses?: CustomQuestionResponses;
+};
 
 /**
  * Validates the form data for correctness.
@@ -8,11 +17,14 @@ import { TESCEventOptions, CustomQuestions, Question } from '~/static/types';
  */
 const createValidator = (options: TESCEventOptions, customQuestions: CustomQuestions) =>
 (values: any) => {
-  const errors: any = {};
+  const errors: ApplyFormValidatorError  = {
+    customQuestionResponses: {},
+  };
 
-  const required = ['firstName', 'lastName', 'email', 'birthdateDay',
+  const required: Array<keyof ApplyPageFormData> = [
+    'firstName', 'lastName', 'email', 'birthdateDay',
     'birthdateMonth', 'birthdateYear', 'gender', 'phone', 'institution',
-    'major', 'year', 'shirtFit', 'shirtSize', 'firstHackathon', 'outcomeStmt',
+    'major', 'year', 'shirtSize',
   ];
 
   if (options.allowOutOfState) {
@@ -73,7 +85,6 @@ const createValidator = (options: TESCEventOptions, customQuestions: CustomQuest
     for (const question of requiredQuestions) {
       if (!values.customQuestionResponses
         || !(question._id in values.customQuestionResponses)) {
-        errors.customQuestionResponses = errors.customQuestionResponses || {};
         errors.customQuestionResponses[question._id] = 'Required';
       }
     }

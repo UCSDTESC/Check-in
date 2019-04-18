@@ -6,29 +6,19 @@ import { WrappedFieldProps } from 'redux-form';
 
 interface FileFieldProps {
   accept?: string;
-  multiple?: boolean;
   className?: string;
+  multiple?: boolean;
 
   button?: boolean;
   text?: string;
   secondary?: boolean;
 }
 
-interface FileFieldState {
-  selectedFiles?: string[];
-}
-
 type Props = WrappedFieldProps & FileFieldProps;
 
-export default class FileField extends React.Component<Props, FileFieldState> {
-  state: Readonly<FileFieldState> = {
-    selectedFiles: [],
-  };
+export default class FileField extends React.Component<Props> {
 
   onDrop = (acceptedFiles: File[]) => {
-    if (!this.props.multiple && acceptedFiles.length > 1) {
-      this.props.input.onChange(acceptedFiles[0]);
-    }
     this.props.input.onChange(acceptedFiles);
   }
 

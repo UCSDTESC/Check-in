@@ -10,7 +10,11 @@ interface UserSectionProps extends ApplyPageSectionProps {
   isSubmitting: boolean;
 }
 
-interface UserSectionFormData {
+export interface UserSectionFormData {
+  provision: boolean;
+  accept: boolean;
+  password?: string;
+  confirmPassword?: string;
 }
 
 class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps> {

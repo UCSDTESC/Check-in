@@ -14,7 +14,34 @@ interface PersonalSectionProps extends ApplyPageSectionProps {
   event: TESCEvent;
 }
 
-interface PersonalSectionFormData {
+export enum InstitutionType {
+  University = 'uni',
+  UCSD = 'ucsd',
+  HighSchool = 'hs',
+}
+
+export interface PersonalSectionFormData {
+  email: string;
+  firstName: string;
+  lastName: string;
+  birthdateMonth: string;
+  birthdateDay: string;
+  birthdateYear: string;
+  gender: string;
+  phone: string;
+  major: string;
+  year: string;
+  github?: string;
+  website?: string;
+  resume: File[];
+  shareResume: boolean;
+  institution: InstitutionType;
+  university?: string;
+  highSchool?: string;
+  pid?: string;
+  gpa?: number;
+  majorGPA?: number;
+  race?: string;
 }
 
 class PersonalSection extends ApplyPageSection<PersonalSectionFormData, PersonalSectionProps> {
@@ -74,7 +101,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    * @param {String} label The label underneath the card.
    * @returns {Component}
    */
-  createInstitutionCard(value: string, id: string, label: string) {
+  createInstitutionCard(value: InstitutionType, id: string, label: string) {
     return (
       <div className="sd-form__institution">
         <Field
@@ -114,8 +141,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    */
   showInstitutionBox(info: any) {
     // TODO: Fix info type
-    const value = info.institution.input.value;
-    if (value === 'uni') {
+    const value: InstitutionType = info.institution.input.value;
+    if (value === InstitutionType.University) {
       return (
         FormFields.createRow(
           FormFields.createColumn('col-sm-12',
@@ -131,7 +158,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
           )
         )
       );
-    } else if (value === 'hs') {
+    } else if (value === InstitutionType.HighSchool) {
       return (
         FormFields.createRow(
           FormFields.createColumn('col-sm-12',
@@ -152,10 +179,10 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    */
   showPIDBox(info: any) {
     // TODO: Fix info type
-    const value = info.institution.input.value;
+    const value: InstitutionType = info.institution.input.value;
     // Only show for UCSD institution
-    if (value !== 'ucsd') {
-      return  <span/>;
+    if (value !== InstitutionType.UCSD) {
+      return <span/>;
     }
     return (FormFields.createRow(
       FormFields.createColumn('col',
@@ -200,15 +227,15 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
           FormFields.createLabel('Institution')
         ),
         FormFields.createColumn('col-md',
-          this.createInstitutionCard('ucsd', 'institution-ucsd',
+          this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
             'UCSD')
         ),
         FormFields.createColumn('col-md',
-          this.createInstitutionCard('uni', 'institution-uni',
+          this.createInstitutionCard(InstitutionType.University, 'institution-uni',
             'Other University')
         ),
         allowHighSchool ? FormFields.createColumn('col-md',
-          this.createInstitutionCard('hs',
+          this.createInstitutionCard(InstitutionType.HighSchool,
             'institution-hs', 'High School')
         ) : '',
         FormFields.createColumn('col-sm-12',

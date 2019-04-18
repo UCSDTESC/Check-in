@@ -10,7 +10,19 @@ import { CustomQuestions } from '~/static/types';
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }
 
-interface ResponseSectionFormData {
+export interface ResponseSectionFormData {
+  customQuestionResponses: Map<string, string>;
+  food?: string;
+  diet?: string;
+  whyEventResponse?: string;
+  outOfState: boolean;
+  city?: string;
+  extraCurriculars?: string;
+  shirtSize?: string;
+  classRequirement?: boolean;
+  team1?: string;
+  team2?: string;
+  team3?: string;
 }
 
 class ResponseSection extends ApplyPageSection<ResponseSectionFormData, ResponseSectionProps> {

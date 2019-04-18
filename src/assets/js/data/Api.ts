@@ -11,6 +11,7 @@ import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
 import { QuestionType } from '~/static/Questions';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
 import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
+import { ApplyPageFormData } from '~/pages/ApplyPage';
 
 const API_URL_PREFIX = '/api';
 
@@ -167,21 +168,27 @@ export const checkinUser = (id: string, eventAlias: string) =>
  * @param  {Object} user The user fields to register.
  * @returns {Promise} A promise of the request.
  */
-export const registerUser = (eventAlias: string, user: TESCUser) => {
-  const { customQuestionResponses } = user;
-  const postObject: any = Object.assign({}, user);
+export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
+  const { customQuestionResponses, resume } = user;
+  const postObject: ApplyPageFormData = Object.assign({}, user);
 
   // Ensure it doesn't push an undefined field
-  postObject.customQuestionResponses = customQuestionResponses
-    ? JSON.stringify(customQuestionResponses)
-    : '';
+  if (!customQuestionResponses) {
+    delete postObject.customQuestionResponses;
+  }
+  if (resume.length > 0) {
+    delete postObject.resume;
+  }
+
   let baseReq = request
     .post(`/register/${eventAlias}`)
     .use(apiPrefix)
-    .field(postObject);
+    .field({
+      ...postObject,
+    } as any);
 
-  if (postObject.resume && postObject.resume.length > 0) {
-    baseReq = baseReq.attach('resume', postObject.resume[0]);
+  if (resume) {
+    baseReq = baseReq.attach('resume', user.resume[0]);
   }
   return promisify<{
     email: string;

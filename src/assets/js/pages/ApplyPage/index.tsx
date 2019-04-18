@@ -11,10 +11,10 @@ import Loading from '~/components/Loading';
 import NavHeader from '~/components/NavHeader';
 
 import Header from './components/Header';
-import PersonalSection from './components/PersonalSection';
-import ResponseSection from './components/ResponseSection';
+import PersonalSection, { PersonalSectionFormData, InstitutionType } from './components/PersonalSection';
+import ResponseSection, { ResponseSectionFormData } from './components/ResponseSection';
 import SubmittedSection from './components/SubmittedSection';
-import UserSection from './components/UserSection';
+import UserSection, { UserSectionFormData } from './components/UserSection';
 import createValidator from './validate';
 import { TESCEvent } from '~/static/types';
 
@@ -32,6 +32,8 @@ interface ApplyPageState {
   event: TESCEvent;
   emailExists: boolean;
 }
+
+export type ApplyPageFormData = PersonalSectionFormData & ResponseSectionFormData & UserSectionFormData;
 
 class ApplyPage extends React.Component<Props, ApplyPageState> {
   state: Readonly<ApplyPageState> = {
@@ -87,18 +89,18 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     this.loadPageFromHash();
   }
 
-  sanitiseValues(values: any) {
+  sanitiseValues(values: ApplyPageFormData) {
     values.birthdateDay = ('00' + values.birthdateDay)
       .substring(values.birthdateDay.length);
     values.birthdateYear = ('0000' + values.birthdateYear)
       .substring(values.birthdateYear.length);
 
     // Check for UCSD institution
-    if (values.institution === 'ucsd') {
-      values.institution = 'uni';
+    if (values.institution === InstitutionType.UCSD) {
+      values.institution = InstitutionType.University;
       values.university = 'The University of California, San Diego';
     }
-    if (values.institution === 'hs') {
+    if (values.institution === InstitutionType.HighSchool) {
       values.university = values.highSchool;
     }
 
@@ -129,15 +131,10 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
    * Modifies then submits the validated data to register the user.
    * @param {Object} values The validated form data.
    */
-  onFinalSubmit = (values: any) => {
+  onFinalSubmit = (values: ApplyPageFormData) => {
     this.setState({
       isSubmitting: true,
     });
-
-    // Flatten resume field
-    if (values.resume && values.resume.length > 0) {
-      values.resume = values.resume[0];
-    }
 
     registerUser(this.props.match.params.eventAlias, values)
       .then(() => {
