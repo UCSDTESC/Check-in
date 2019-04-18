@@ -39,7 +39,7 @@ class NewEventForm extends React.Component<Props> {
   }
 
   showThirdPartyText: React.StatelessComponent<WrappedFieldsProps> = ({values}) => {
-    if (values.organisedBy && values.organisedBy.input.value !== 'TESC') {
+    if (values && values.organisedBy && values.organisedBy.input.value !== 'TESC') {
       return (
         FormFields.createRow(
           FormFields.createColumn('col-sm-12',
