@@ -2,6 +2,7 @@ import request from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import Cookies from 'universal-cookie';
+import { UserProfileFormData } from '~/pages/UserPage/components/UserProfile';
 import CookieTypes from '~/static/Cookies';
 import { Role } from '~/static/Roles';
 import { TESCUser, TESCEvent } from '~/static/types';
@@ -111,11 +112,19 @@ export const getUserEvents = () => {
  * Updates a field for a given user.
  * @returns {Promise} A promise of the request.
  */
-export const updateUserField = (user: any, eventAlias: string) => {
+export const updateUserField = (user: UserProfileFormData, eventAlias: string) => {
+  const postObject: UserProfileFormData = Object.assign({}, user);
+
+  if (user.newResume) {
+    delete postObject.newResume;
+  }
+
   return promisify<TESCUser>(request
     .post(`/update/${eventAlias}`)
-    .field(user)
-    .attach('resume', user.resume ? user.resume[0] : null)
+    .field({
+      ...postObject,
+    } as any)
+    .attach('resume', user.newResume ? user.newResume[0] : null)
     .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix)
     .use(nocache));

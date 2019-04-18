@@ -15,7 +15,7 @@ import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
 
 import { getCurrentUser, updateCurrentUser } from './actions';
 import RSVPConfirm from './components/RSVPConfirm';
-import UserProfile from './components/UserProfile';
+import UserProfile, { UserProfileFormData } from './components/UserProfile';
 
 const mapStateToProps = (state: ApplicationState) => ({
   user: state.user.current,
@@ -66,9 +66,9 @@ class UserPage extends AlertPage<Props, UserPageState> {
 
   /**
    * Requests that the server update the current user to the new, given values.
-   * @param {TESCUser} newUser The new user object to update to.
+   * @param {UserProfileFormData} newUser The new user object to update to.
    */
-  updateUser = (newUser: TESCUser) => {
+  updateUser = (newUser: UserProfileFormData) => {
     const {updateCurrentUser} = this.props;
     const {eventAlias} = this.props.match.params;
     const oldUser = this.props.user;

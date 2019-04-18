@@ -30,7 +30,7 @@ class NewEventForm extends React.Component<Props> {
       <Field
         component={FileField}
         name="logo"
-        placeholder="Resume"
+        placeholder="Logo"
         text="Drop Your Logo"
       />
     );
