@@ -1,5 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
 import EventStatisticsComponent from './EventStatisticsComponent';
 
 export default class CheckinStatistics extends EventStatisticsComponent {

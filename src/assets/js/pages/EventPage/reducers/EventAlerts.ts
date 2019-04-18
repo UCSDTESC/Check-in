@@ -1,8 +1,10 @@
-import * as Types from '../actions/types';
-import { EventAlertsState, EventAlert } from './types';
-import { AddEventAlertPayload, RemoveEventAlertPayload, _addEventAlert, _removeEventAlert } from '../actions';
 import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+
+import { AddEventAlertPayload, RemoveEventAlertPayload, _addEventAlert, _removeEventAlert } from '../actions';
+import * as Types from '../actions/types';
+
+import { EventAlertsState, EventAlert } from './types';
 
 const initialState: EventAlertsState = {};
 

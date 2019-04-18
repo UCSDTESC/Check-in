@@ -1,9 +1,7 @@
 import React from 'react';
-
-import Reset, { ResetFormData } from '~/auth/user/Reset';
-
-import {resetPassword} from '~/data/User';
 import { RouteComponentProps } from 'react-router-dom';
+import Reset, { ResetFormData } from '~/auth/user/Reset';
+import { resetPassword } from '~/data/User';
 
 interface ResetPageState {
   error: string;
@@ -24,7 +22,7 @@ class ResetPage extends React.Component<Props, ResetPageState> {
     if (!values.newPassword || !values.repeatNewPassword) {
       return {
         newPassword: 'Required',
-        repeatNewPassword: 'Required'
+        repeatNewPassword: 'Required',
       };
     }
 

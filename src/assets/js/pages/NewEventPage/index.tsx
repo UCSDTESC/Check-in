@@ -1,19 +1,17 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter, RouteComponentProps} from 'react-router';
-import {bindActionCreators} from 'redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-import {UncontrolledAlert} from 'reactstrap';
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { withRouter, RouteComponentProps } from 'react-router';
+import { UncontrolledAlert } from 'reactstrap';
+import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
+import { registerNewEvent } from '~/data/Api';
+import { TESCEvent } from '~/static/types';
 
-import {addEventSuccessAlert} from '../EventPage/actions';
-
-import createValidator from './validate';
-
-import {registerNewEvent} from '~/data/Api';
+import { addEventSuccessAlert } from '../EventPage/actions';
 
 import NewEventForm, { NewEventFormData } from './components/NewEventForm';
-import { TESCEvent } from '~/static/types';
-import { ApplicationDispatch } from '~/actions';
+import createValidator from './validate';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => ({
   showLoading: bindActionCreators(showLoading, dispatch),

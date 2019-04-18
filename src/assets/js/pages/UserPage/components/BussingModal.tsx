@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 interface BussingModalProps {
   isOpen: boolean;

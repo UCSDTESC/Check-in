@@ -1,23 +1,21 @@
-import React from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import diff from 'object-diff';
-
-import UserProfile from './components/UserProfile';
-import RSVPConfirm from './components/RSVPConfirm';
-import {getCurrentUser, updateCurrentUser} from './actions';
-
-import NavHeader from '~/components/NavHeader';
-
-import Loading from '~/components/Loading';
-
-import {updateUserField, rsvpUser} from '~/data/User';
+import React from 'react';
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { RouteComponentProps } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
+import Loading from '~/components/Loading';
+import NavHeader from '~/components/NavHeader';
+import { updateUserField, rsvpUser } from '~/data/User';
 import { ApplicationState } from '~/reducers';
 import { TESCUser, UserStatus } from '~/static/types';
+
 import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
-import { ApplicationDispatch } from '~/actions';
+
+import { getCurrentUser, updateCurrentUser } from './actions';
+import RSVPConfirm from './components/RSVPConfirm';
+import UserProfile from './components/UserProfile';
 
 const mapStateToProps = (state: ApplicationState) => ({
   user: state.user.current,

@@ -1,17 +1,16 @@
-import Cookies from 'universal-cookie';
+import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
-import request, { SuperAgentRequest } from 'superagent';
-
-import { promisify, SuccessResponse } from './helpers';
-
+import Cookies from 'universal-cookie';
+import { NewAdminModalFormData } from '~/components/NewAdminModal';
+import { ApplyPageFormData } from '~/pages/ApplyPage';
+import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
 import CookieTypes from '~/static/Cookies';
+import { QuestionType } from '~/static/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
     TESCEvent, Column, ColumnResponse } from '~/static/types';
-import { QuestionType } from '~/static/Questions';
-import { NewAdminModalFormData } from '~/components/NewAdminModal';
-import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
-import { ApplyPageFormData } from '~/pages/ApplyPage';
+
+import { promisify, SuccessResponse } from './helpers';
 
 const API_URL_PREFIX = '/api';
 

@@ -1,12 +1,12 @@
-import {createStandardAction, ActionType} from 'typesafe-actions';
-
-import * as Types from './types';
+import { Action, AnyAction } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { createStandardAction, ActionType } from 'typesafe-actions';
 import * as Api from '~/data/Api';
 import * as UserApi from '~/data/User';
-import { TESCEvent, FilterOption } from '~/static/types';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { ApplicationState } from '~/reducers';
-import { Action, AnyAction } from 'redux';
+import { TESCEvent, FilterOption } from '~/static/types';
+
+import * as Types from './types';
 
 // User Events
 

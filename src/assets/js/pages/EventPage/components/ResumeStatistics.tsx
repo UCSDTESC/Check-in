@@ -1,7 +1,8 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {UncontrolledTooltip} from 'reactstrap';
 import FA from 'react-fontawesome';
+import { Link } from 'react-router-dom';
+import { UncontrolledTooltip } from 'reactstrap';
+
 import EventStatisticsComponent from './EventStatisticsComponent';
 
 interface ResumeStatisticsProps {

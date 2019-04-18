@@ -1,10 +1,10 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter, RouteComponentProps} from 'react-router';
-
-import {logoutUser} from './actions';
-import { ApplicationDispatch } from '~/actions';
+import { connect } from 'react-redux';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
+
+import { logoutUser } from './actions';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) =>
   bindActionCreators({

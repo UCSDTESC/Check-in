@@ -1,29 +1,21 @@
 import reduceReducers from 'reduce-reducers';
-
-import userColumns from '~/pages/UsersPage/reducers/Columns';
-
-import usersReducer from '~/pages/UsersPage/reducers/Users';
-
-import checkinReducer from '~/pages/CheckinPage/reducers/Checkin';
-
 import auth from '~/auth/admin/reducers/Auth';
-
+import { AdminAuthState } from '~/auth/admin/reducers/types';
 import admins from '~/pages/AdminsPage/reducers/Admins';
-
-import resumes from '~/pages/ResumesPage/reducers/Resumes';
-
+import checkinReducer from '~/pages/CheckinPage/reducers/Checkin';
 import eventAlerts from '~/pages/EventPage/reducers/EventAlerts';
-
 import eventStatistics from '~/pages/EventPage/reducers/EventStatistics';
+import { EventAlertsState, EventStatisticsState } from '~/pages/EventPage/reducers/types';
+import resumes from '~/pages/ResumesPage/reducers/Resumes';
+import { ResumesState } from '~/pages/ResumesPage/reducers/types';
+import userColumns from '~/pages/UsersPage/reducers/Columns';
+import usersReducer from '~/pages/UsersPage/reducers/Users';
+import { ColumnsState } from '~/pages/UsersPage/reducers/types';
+import { Admin, TESCUser } from '~/static/types';
 
 import events from './Admin/Events';
 import filters from './Admin/Filters';
-import { AdminAuthState } from '~/auth/admin/reducers/types';
-import { Admin, TESCUser } from '~/static/types';
 import { EventsState, FiltersState, GeneralState } from './Admin/types';
-import { ColumnsState } from '~/pages/UsersPage/reducers/types';
-import { ResumesState } from '~/pages/ResumesPage/reducers/types';
-import { EventAlertsState, EventStatisticsState } from '~/pages/EventPage/reducers/types';
 
 export interface AdminState {
   readonly auth: AdminAuthState;

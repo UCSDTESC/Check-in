@@ -1,10 +1,9 @@
 import React from 'react';
-
-import {QuestionType} from '~/static/Questions';
-
-import QuestionInput from './QuestionInput';
-import CustomQuestion from './CustomQuestion';
+import { QuestionType } from '~/static/Questions';
 import { Question, CustomQuestions } from '~/static/types';
+
+import CustomQuestion from './CustomQuestion';
+import QuestionInput from './QuestionInput';
 
 interface CustomQuestionsProps {
   customQuestions: CustomQuestions;

@@ -1,10 +1,9 @@
 import auth from '~/auth/user/reducers/Auth';
-
+import { UserAuthState } from '~/auth/user/reducers/types';
 import current from '~/pages/UserPage/reducers/Current';
+import { TESCUser } from '~/static/types';
 
 import events from './UserEvents';
-import { UserAuthState } from '~/auth/user/reducers/types';
-import { TESCUser } from '~/static/types';
 import { UserEventsState } from './types';
 
 export interface UserState {

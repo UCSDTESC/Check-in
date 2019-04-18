@@ -1,18 +1,15 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-import {Button} from 'reactstrap';
-
-import {replaceAdmins} from './actions';
-import AdminList from './components/AdminList';
-
-import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
-
-import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
-
-import { ApplicationState } from '~/reducers';
-import { ApplicationDispatch } from '~/actions';
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { Button } from 'reactstrap';
 import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
+import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
+import { loadAllAdmins, registerAdmin, deleteAdmin } from '~/data/Api';
+import { ApplicationState } from '~/reducers';
+
+import { replaceAdmins } from './actions';
+import AdminList from './components/AdminList';
 
 const mapStateToProps = (state: ApplicationState) => ({
   admins: state.admin.admins,

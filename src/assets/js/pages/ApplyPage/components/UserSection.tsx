@@ -1,7 +1,7 @@
-import {Field, reduxForm} from 'redux-form';
 import React from 'react';
-
+import { Field, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
+
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 
 interface UserSectionProps extends ApplyPageSectionProps {

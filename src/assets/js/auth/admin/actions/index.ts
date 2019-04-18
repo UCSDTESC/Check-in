@@ -1,13 +1,12 @@
+import { createStandardAction } from 'typesafe-actions';
+import Cookies from 'universal-cookie';
+import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Auth from '~/data/AdminAuth';
+import CookieTypes from '~/static/Cookies';
+
+import { LoginFormData } from '../Login';
 
 import * as Types from './types';
-
-import Cookies from 'universal-cookie';
-
-import CookieTypes from '~/static/Cookies';
-import { ApplicationAction, ApplicationDispatch } from '~/actions';
-import { LoginFormData } from '../Login';
-import { createStandardAction } from 'typesafe-actions';
 
 const cookies = new Cookies();
 const COOKIE_OPTIONS = {

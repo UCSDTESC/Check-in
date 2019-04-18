@@ -1,21 +1,17 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {Link, RouteComponentProps} from 'react-router-dom';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-
-import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
-
-import {addColumn, updateUser, removeColumn, addAvailableColumns} from './actions';
-
-import {loadAllUsers, loadColumns} from '~/data/Api';
-
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
+import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
-
-import ColumnEditor from './components/ColumnEditor';
-import UserList from './components/UserList';
+import { loadAllUsers, loadColumns } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 import { Column, TESCUser } from '~/static/types';
+
+import { addColumn, updateUser, removeColumn, addAvailableColumns } from './actions';
+import ColumnEditor from './components/ColumnEditor';
+import UserList from './components/UserList';
 
 const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => ({
   availableColumns: state.admin.userColumns.available,

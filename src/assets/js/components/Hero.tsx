@@ -1,5 +1,4 @@
 import React, { CSSProperties } from 'react';
-
 import NavHeader from '~/components/NavHeader';
 
 interface HeroProps {

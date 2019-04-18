@@ -1,14 +1,12 @@
 import React from 'react';
-import {withRouter, RouteComponentProps} from 'react-router-dom';
-import Progress from 'react-progress';
 import ReactGA from 'react-ga';
-import {Link} from 'react-router-dom';
-
-import {registerUser, loadEventByAlias, checkUserExists} from '~/data/Api';
-
+import Progress from 'react-progress';
+import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Loading from '~/components/Loading';
-
 import NavHeader from '~/components/NavHeader';
+import { registerUser, loadEventByAlias, checkUserExists } from '~/data/Api';
+import { TESCEvent } from '~/static/types';
 
 import Header from './components/Header';
 import PersonalSection, { PersonalSectionFormData, InstitutionType } from './components/PersonalSection';
@@ -16,7 +14,6 @@ import ResponseSection, { ResponseSectionFormData } from './components/ResponseS
 import SubmittedSection from './components/SubmittedSection';
 import UserSection, { UserSectionFormData } from './components/UserSection';
 import createValidator from './validate';
-import { TESCEvent } from '~/static/types';
 
 interface ApplyPageProps {
 }

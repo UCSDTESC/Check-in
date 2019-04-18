@@ -28,7 +28,14 @@
     "object-literal-shorthand": false,
     "one-variable-per-declaration": [false],
     "only-arrow-functions": [true, "allow-declarations"],
-    "ordered-imports": [false],
+    "ordered-imports": [
+      true,
+      {
+        "import-sources-order": "lowercase-last",
+        "named-imports-order": "any",
+        "grouped-imports": true
+      }
+    ],
     "prefer-method-signature": false,
     "prefer-template": [true, "allow-single-concat"],
     "quotemark": [true, "single", "jsx-double"],
@@ -56,6 +63,7 @@
       "allow-pascal-case",
       "allow-leading-underscore"
     ],
+    "whitespace": [true, "check-module"],
     // tslint-react
     "jsx-no-multiline-js": false,
     "jsx-no-lambda": false

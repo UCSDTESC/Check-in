@@ -1,45 +1,42 @@
-import {Switch, Route} from 'react-router-dom';
-import {Cookies, withCookies} from 'react-cookie';
 import React, { Component } from 'react';
-import {withRouter} from 'react-router-dom';
-import {RouteComponentProps} from 'react-router';
+import { Cookies, withCookies } from 'react-cookie';
 import ReactGA from 'react-ga';
 // tslint:disable-next-line:no-submodule-imports
-import {hot} from 'react-hot-loader/root';
+import { hot } from 'react-hot-loader/root';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
+import { withRouter } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
+import { bindActionCreators, compose } from 'redux';
+import { authorised as AdminAuthorised } from '~/data/Api';
+import { authorised as UserAuthorised, JWTAuthUser } from '~/data/User';
+import CookieTypes from '~/static/Cookies';
 
 import PrivateRoute from './PrivateRoute';
 import PrivateUserRoute from './PrivateUserRoute';
+import { ApplicationDispatch } from './actions';
+import AdminLogout from './auth/admin/Logout';
+import { finishAuthorisation, authoriseAdmin, logoutAdmin } from './auth/admin/actions';
+import UserLogout from './auth/user/Logout';
+import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
+import { JWTAuthAdmin } from './data/AdminAuth';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
 import UserLayout from './layouts/user';
-import HomePage from './pages/HomePage';
-import ApplyPage from './pages/ApplyPage';
-import Dashboard from './pages/DashboardPage';
 import AdminsPage from './pages/AdminsPage';
-import EventPage from './pages/EventPage';
-import UsersPage from './pages/UsersPage';
-import LoginPage from './pages/LoginPage';
-import ResetPage from './pages/ResetPage';
-import ForgotPage from './pages/ForgotPage';
-import UserPage from './pages/UserPage';
-import AdminLogout from './auth/admin/Logout';
-import UserLogout from './auth/user/Logout';
+import ApplyPage from './pages/ApplyPage';
 import CheckinPage from './pages/CheckinPage';
-import ResumesPage from './pages/ResumesPage';
+import Dashboard from './pages/DashboardPage';
+import EventPage from './pages/EventPage';
+import ForgotPage from './pages/ForgotPage';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
 import NewEventPage from './pages/NewEventPage';
 import NotFoundPage from './pages/NotFound';
-
-import {authorised as AdminAuthorised} from '~/data/Api';
-
-import {authorised as UserAuthorised, JWTAuthUser} from '~/data/User';
-
-import CookieTypes from '~/static/Cookies';
-import { ApplicationDispatch } from './actions';
-import { bindActionCreators, compose } from 'redux';
-import { finishAuthorisation, authoriseAdmin, logoutAdmin } from './auth/admin/actions';
-import { connect } from 'react-redux';
-import { JWTAuthAdmin } from './data/AdminAuth';
-import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
+import ResetPage from './pages/ResetPage';
+import ResumesPage from './pages/ResumesPage';
+import UserPage from './pages/UserPage';
+import UsersPage from './pages/UsersPage';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   authoriseAdmin,

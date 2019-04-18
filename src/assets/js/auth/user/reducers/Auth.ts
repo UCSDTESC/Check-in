@@ -1,8 +1,10 @@
-import * as Types from '../actions/types';
-import { UserAuthState } from './types';
 import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+
 import { authoriseUser, authoriseError } from '../actions';
+import * as Types from '../actions/types';
+
+import { UserAuthState } from './types';
 
 const initialState: UserAuthState = {
   error: '',

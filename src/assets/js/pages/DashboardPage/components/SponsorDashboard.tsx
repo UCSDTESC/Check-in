@@ -1,7 +1,7 @@
 import React from 'react';
+import { TESCEvent } from '~/static/types';
 
 import EventList from './EventList';
-import { TESCEvent } from '~/static/types';
 
 interface SponsorDashboardProps {
   events: TESCEvent[];

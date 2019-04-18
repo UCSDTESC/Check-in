@@ -1,5 +1,4 @@
 import React from 'react';
-
 import ToggleSwitch from '~/components/ToggleSwitch';
 import { TESCUser } from '~/static/types';
 

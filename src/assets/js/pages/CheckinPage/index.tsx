@@ -1,23 +1,19 @@
 import React from 'react';
 import QrReader from 'react-qr-reader';
-import {connect} from 'react-redux';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-
-import Loading from '~/components/Loading';
-
-import {addUsers} from '../UsersPage/actions';
-
-import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
-
-import {loadAllUsers} from '~/data/Api';
-
-import {userCheckin} from './actions';
-
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { RouteComponentProps } from 'react-router-dom';
-import { TESCUser, UserStatus } from '~/static/types';
-import { ApplicationState } from '~/reducers';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
+import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
+import Loading from '~/components/Loading';
+import { loadAllUsers } from '~/data/Api';
+import { ApplicationState } from '~/reducers';
+import { TESCUser, UserStatus } from '~/static/types';
+
+import { addUsers } from '../UsersPage/actions';
+
+import { userCheckin } from './actions';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;

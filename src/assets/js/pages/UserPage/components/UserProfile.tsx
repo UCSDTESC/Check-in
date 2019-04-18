@@ -1,9 +1,8 @@
 import React from 'react';
-import {Field, reduxForm, InjectedFormProps, WrappedFieldProps} from 'redux-form';
-
+import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
+import { CustomFieldProps } from '~/components/Fields';
 import FileField from '~/components/FileField';
 import { TESCUser, TESCEvent, UserStatus } from '~/static/types';
-import { CustomFieldProps } from '~/components/Fields';
 
 interface UserProfileFormData {
 

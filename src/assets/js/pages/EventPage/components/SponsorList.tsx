@@ -1,12 +1,9 @@
 import React from 'react';
 import FA from 'react-fontawesome';
-
-import SponsorSelect from '~/components/SponsorSelect';
-
-import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
-
-import { Role, RolesColors} from '~/static/Roles';
 import { AdminSelectType } from '~/components/AdminSelect';
+import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
+import SponsorSelect from '~/components/SponsorSelect';
+import { Role, RolesColors } from '~/static/Roles';
 import { Admin } from '~/static/types';
 
 interface SponsorListProps {

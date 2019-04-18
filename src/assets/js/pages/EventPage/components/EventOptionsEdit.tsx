@@ -1,7 +1,6 @@
 import React from 'react';
-import {UncontrolledTooltip} from 'reactstrap';
 import FA from 'react-fontawesome';
-
+import { UncontrolledTooltip } from 'reactstrap';
 import ToggleSwitch from '~/components/ToggleSwitch';
 import { TESCEvent, TESCEventOptions } from '~/static/types';
 

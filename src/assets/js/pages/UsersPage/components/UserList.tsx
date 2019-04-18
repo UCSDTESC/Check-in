@@ -1,9 +1,5 @@
 import React from 'react';
 import ReactTable from 'react-table';
-
-// tslint:disable-next-line
-const styles = require('react-table/react-table.css');
-
 import User from '~/components/User';
 import { TESCUser, Column, TESCEvent } from '~/static/types';
 

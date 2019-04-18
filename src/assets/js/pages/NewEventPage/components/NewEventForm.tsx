@@ -1,8 +1,6 @@
 import React from 'react';
-import {Field, Fields, reduxForm, InjectedFormProps, WrappedFieldsProps} from 'redux-form';
-
+import { Field, Fields, reduxForm, InjectedFormProps, WrappedFieldsProps } from 'redux-form';
 import * as FormFields from '~/components/Fields';
-
 import FileField from '~/components/FileField';
 
 export interface NewEventFormData {

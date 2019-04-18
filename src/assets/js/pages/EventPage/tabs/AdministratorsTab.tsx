@@ -1,12 +1,12 @@
 import React from 'react';
+import { AdminSelectType } from '~/components/AdminSelect';
+import { NewAdminModalFormData } from '~/components/NewAdminModal';
+import { addNewSponsor, addNewOrganiser, registerAdmin } from '~/data/Api';
 
 import OrganiserList from '../components/OrganiserList';
 import SponsorList from '../components/SponsorList';
 
-import {addNewSponsor, addNewOrganiser, registerAdmin} from '~/data/Api';
 import EventPageTab from './EventPageTab';
-import { AdminSelectType } from '~/components/AdminSelect';
-import { NewAdminModalFormData } from '~/components/NewAdminModal';
 
 interface AdministratorsTabProps {
 }

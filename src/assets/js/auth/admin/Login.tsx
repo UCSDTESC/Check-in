@@ -1,7 +1,7 @@
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
 import React from 'react';
-import {UncontrolledAlert} from 'reactstrap';
 import { RouteComponentProps } from 'react-router-dom';
+import { UncontrolledAlert } from 'reactstrap';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 
 const form = reduxForm<LoginFormData, LoginProps>({
   form: 'adminLogin',

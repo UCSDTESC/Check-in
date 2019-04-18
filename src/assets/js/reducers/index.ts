@@ -1,11 +1,11 @@
-import {reducer as form} from 'redux-form';
-import {combineReducers, Reducer} from 'redux';
-import {loadingBarReducer as loadingBar} from 'react-redux-loading-bar';
+import { loadingBarReducer as loadingBar } from 'react-redux-loading-bar';
+import { combineReducers, Reducer } from 'redux';
+import { reducer as form } from 'redux-form';
 
+import { EventsState } from './Admin/types';
+import events from './Events';
 import adminReducers, { AdminState } from './admin';
 import userReducers, { UserState } from './user';
-import events from './Events';
-import { EventsState } from './Admin/types';
 
 export interface ApplicationState {
   readonly admin: AdminState;

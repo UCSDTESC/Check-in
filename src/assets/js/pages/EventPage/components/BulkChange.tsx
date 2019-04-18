@@ -1,5 +1,5 @@
 import React from 'react';
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { UserStatus } from '~/static/types';
 
 export interface BulkChangeFormData {

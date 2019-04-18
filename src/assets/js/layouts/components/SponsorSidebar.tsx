@@ -1,11 +1,11 @@
 import React from 'react';
-import {NavbarToggler} from 'reactstrap';
-import {Link as RouteLink} from 'react-router-dom';
+import { Link as RouteLink } from 'react-router-dom';
+import { NavbarToggler } from 'reactstrap';
+import { FiltersState } from '~/reducers/Admin/types';
+import { Admin, FilterOption } from '~/static/types';
 
 import Filter from './Filter';
 import Section from './Section';
-import { Admin, FilterOption } from '~/static/types';
-import { FiltersState } from '~/reducers/Admin/types';
 
 interface SponsorSidebarProps {
   user: Admin;

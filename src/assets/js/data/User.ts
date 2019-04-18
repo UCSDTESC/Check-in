@@ -1,13 +1,12 @@
-import Cookies from 'universal-cookie';
+import request from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
-import request from 'superagent';
-
-import {promisify, SuccessResponse} from './helpers';
-
+import Cookies from 'universal-cookie';
 import CookieTypes from '~/static/Cookies';
-import { TESCUser, TESCEvent } from '~/static/types';
 import { Role } from '~/static/Roles';
+import { TESCUser, TESCEvent } from '~/static/types';
+
+import { promisify, SuccessResponse } from './helpers';
 
 const URL_PREFIX = '/api/user';
 

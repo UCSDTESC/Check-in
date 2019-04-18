@@ -1,11 +1,10 @@
-import {Fields, reduxForm} from 'redux-form';
 import React from 'react';
-
+import { Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
-
-import {QuestionType} from '~/static/Questions';
-import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
+import { QuestionType } from '~/static/Questions';
 import { CustomQuestions } from '~/static/types';
+
+import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }

@@ -1,15 +1,13 @@
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
-import React from 'react';
-import {connect} from 'react-redux';
 import UUID from 'node-uuid';
-
-import {getRole, Role} from '~/static/Roles';
-
-import {QuestionType} from '~/static/Questions';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
+import { ApplicationState } from '~/reducers';
+import { QuestionType } from '~/static/Questions';
+import { getRole, Role } from '~/static/Roles';
+import { TESCUser, TESCEvent, Question } from '~/static/types';
 
 import CheckboxButton from './CheckboxButton';
-import { ApplicationState } from '~/reducers';
-import { TESCUser, TESCEvent, Question } from '~/static/types';
 
 const mapStateToProps = (state: ApplicationState, ownProps: UserProps) => ({
   resume: ownProps.user.resume ? ownProps.user.resume : null,

@@ -1,9 +1,8 @@
 import React from 'react';
-
-import {Role, getRole} from '~/static/Roles';
+import { Role, getRole } from '~/static/Roles';
+import { Admin, TESCEvent } from '~/static/types';
 
 import EventList from './EventList';
-import { Admin, TESCEvent } from '~/static/types';
 
 interface AdminDashboardProps {
   events: TESCEvent[];

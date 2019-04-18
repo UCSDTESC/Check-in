@@ -1,13 +1,12 @@
-import React from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import {connect} from 'react-redux';
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
 import generator from 'generate-password';
+import React from 'react';
 import FA from 'react-fontawesome';
-
-import {Role} from '~/static/Roles';
-import { ApplicationState } from '~/reducers';
+import { connect } from 'react-redux';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { compose } from 'redux';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
+import { ApplicationState } from '~/reducers';
+import { Role } from '~/static/Roles';
 
 const generatorSettings = {
   length: 15,

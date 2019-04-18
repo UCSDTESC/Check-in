@@ -1,13 +1,10 @@
 import React from 'react';
 import FA from 'react-fontawesome';
-
-import OrganiserSelect from '~/components/OrganiserSelect';
-
-import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
-
-import {Role, RolesColors} from '~/static/Roles';
-import { Admin } from '~/static/types';
 import { AdminSelectType } from '~/components/AdminSelect';
+import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
+import OrganiserSelect from '~/components/OrganiserSelect';
+import { Role, RolesColors } from '~/static/Roles';
+import { Admin } from '~/static/types';
 
 interface OrganiserListProps {
   organisers: Admin[];

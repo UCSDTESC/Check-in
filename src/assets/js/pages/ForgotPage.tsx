@@ -1,9 +1,7 @@
 import React from 'react';
-
-import Forgot, { ForgotFormData } from '~/auth/user/Forgot';
-
-import {forgotPassword} from '~/data/User';
 import { InjectedFormProps, FormErrors } from 'redux-form';
+import Forgot, { ForgotFormData } from '~/auth/user/Forgot';
+import { forgotPassword } from '~/data/User';
 
 interface ForgotPageState {
   error: string;

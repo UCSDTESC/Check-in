@@ -1,15 +1,12 @@
 import React from 'react';
-import {connect} from 'react-redux';
-
-import {ApplicationDispatch} from '~/actions';
-
-import {loginAdmin} from '~/auth/admin/actions';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
 import Login, { LoginFormData } from '~/auth/admin/Login';
+import { loginAdmin } from '~/auth/admin/actions';
+import { ApplicationState } from '~/reducers';
 
 import Sidebar from './components/AdminSidebar';
-import { ApplicationState } from '~/reducers';
-import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state: ApplicationState) => ({
   isAuthenticated: state.admin.auth.authenticated,

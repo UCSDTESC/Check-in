@@ -1,8 +1,10 @@
-import * as Types from '../actions/types';
-import { EventStatisticsState } from './types';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+
 import { _updateEventStatistics } from '../actions';
+import * as Types from '../actions/types';
+
+import { EventStatisticsState } from './types';
 
 const initialState: EventStatisticsState = {};
 

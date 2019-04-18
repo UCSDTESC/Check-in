@@ -1,5 +1,6 @@
 import React from 'react';
 import { TESCEvent } from '~/static/types';
+
 import { Props } from '../index';
 
 interface EventPageTabProps {

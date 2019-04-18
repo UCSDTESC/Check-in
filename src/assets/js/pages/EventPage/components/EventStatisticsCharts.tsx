@@ -1,7 +1,8 @@
 import React from 'react';
-import {VictoryPie, VictoryTooltip, VictoryTheme} from 'victory';
-import EventStatisticsComponent from './EventStatisticsComponent';
+import { VictoryPie, VictoryTooltip, VictoryTheme } from 'victory';
 import { EventStatistics } from '~/static/types';
+
+import EventStatisticsComponent from './EventStatisticsComponent';
 
 const PIE_CHART_COLOURS =
   ['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC'];

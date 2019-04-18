@@ -1,10 +1,9 @@
-import * as Api from '~/data/User';
-
-import * as Types from './types';
-
-import { TESCUser } from '~/static/types';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
+import * as Api from '~/data/User';
+import { TESCUser } from '~/static/types';
+
+import * as Types from './types';
 
 // User
 export const updateCurrentUser = createStandardAction(Types.UPDATE_CURRENT_USER)<TESCUser>();

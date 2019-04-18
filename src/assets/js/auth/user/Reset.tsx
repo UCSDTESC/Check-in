@@ -1,8 +1,7 @@
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {Alert, UncontrolledAlert} from 'reactstrap';
-
+import { Link } from 'react-router-dom';
+import { Alert, UncontrolledAlert } from 'reactstrap';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import NavHeader from '~/components/NavHeader';
 import { AlertType } from '~/pages/AlertPage';
 

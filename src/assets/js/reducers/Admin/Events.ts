@@ -1,9 +1,10 @@
-import * as Types from '~/actions/types';
-import { EventsState } from './types';
-import { TESCEvent } from '~/static/types';
-import { addAdminEvent, replaceAdminEvents, addAdminEvents } from '~/actions';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+import { addAdminEvent, replaceAdminEvents, addAdminEvents } from '~/actions';
+import * as Types from '~/actions/types';
+import { TESCEvent } from '~/static/types';
+
+import { EventsState } from './types';
 
 const initialState: EventsState = {};
 

@@ -1,14 +1,12 @@
 import React from 'react';
-import {NavbarToggler} from 'reactstrap';
+import { NavbarToggler } from 'reactstrap';
+import ToggleSwitch from '~/components/ToggleSwitch';
+import { EventsState } from '~/reducers/Admin/types';
+import { Role, getRole } from '~/static/Roles';
+import { Admin } from '~/static/types';
 
 import Link from './Link';
 import Section from './Section';
-
-import ToggleSwitch from '~/components/ToggleSwitch';
-
-import {Role, getRole} from '~/static/Roles';
-import { Admin } from '~/static/types';
-import { EventsState } from '~/reducers/Admin/types';
 
 interface AdminSidebarProps {
   isAuthenticated: boolean;

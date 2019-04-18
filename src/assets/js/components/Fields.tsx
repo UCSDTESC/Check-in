@@ -1,6 +1,5 @@
-import {Field, WrappedFieldProps} from 'redux-form';
 import React from 'react';
-
+import { Field, WrappedFieldProps } from 'redux-form';
 import majors from '~/static/Majors.json';
 
 export type CustomFieldProps = WrappedFieldProps & {

@@ -1,9 +1,10 @@
+import request from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
-import request from 'superagent';
-import { promisify } from './helpers';
 import { Role } from '~/static/Roles';
+
 import { JWTAuthUser } from './User';
+import { promisify } from './helpers';
 
 const URL_PREFIX = '/api/auth';
 

@@ -1,9 +1,11 @@
-import * as Types from './types';
 import { createStandardAction } from 'typesafe-actions';
-import { EventAlert } from '../reducers/types';
-import { EventStatistics } from '~/static/types';
-import { AlertType } from '~/pages/AlertPage';
 import { ApplicationDispatch, ApplicationAction } from '~/actions';
+import { AlertType } from '~/pages/AlertPage';
+import { EventStatistics } from '~/static/types';
+
+import { EventAlert } from '../reducers/types';
+
+import * as Types from './types';
 
 export interface AddEventAlertPayload {
   eventAlias: string;

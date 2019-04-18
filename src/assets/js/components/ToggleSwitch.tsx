@@ -1,5 +1,5 @@
-import React from 'react';
 import UUID from 'node-uuid';
+import React from 'react';
 
 interface ToggleSwitchProps {
   checked: boolean;

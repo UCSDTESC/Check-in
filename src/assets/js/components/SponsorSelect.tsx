@@ -1,10 +1,8 @@
 import React from 'react';
-
-import StyledSelect from './StyledSelect';
-
-import {loadSponsors} from '~/data/Api';
+import { loadSponsors } from '~/data/Api';
 
 import AdminSelect from './AdminSelect';
+import StyledSelect from './StyledSelect';
 
 export default class SponsorSelect extends AdminSelect {
   componentDidMount() {

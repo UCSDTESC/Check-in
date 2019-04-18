@@ -1,8 +1,8 @@
 import React from 'react';
 import Dropzone from 'react-dropzone';
+import { WrappedFieldProps } from 'redux-form';
 
 import * as FormFields from './Fields';
-import { WrappedFieldProps } from 'redux-form';
 
 interface FileFieldProps {
   accept?: string;

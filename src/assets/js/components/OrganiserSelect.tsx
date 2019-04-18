@@ -1,12 +1,10 @@
 import React from 'react';
-
-import StyledSelect from './StyledSelect';
-
-import {loadAllAdmins} from '~/data/Api';
-
-import {Role, getRole} from '~/static/Roles';
-import AdminSelect from './AdminSelect';
+import { loadAllAdmins } from '~/data/Api';
+import { Role, getRole } from '~/static/Roles';
 import { Admin } from '~/static/types';
+
+import AdminSelect from './AdminSelect';
+import StyledSelect from './StyledSelect';
 
 export default class OrganiserSelect extends AdminSelect {
   componentDidMount() {

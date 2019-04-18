@@ -1,13 +1,11 @@
-import {Field, Fields, reduxForm } from 'redux-form';
 import React from 'react';
-
-import UniversityField from './UniversityField';
-
+import { Field, Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
-
 import FileField from '~/components/FileField';
-import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import { TESCEvent } from '~/static/types';
+
+import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
+import UniversityField from './UniversityField';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
   onEmailChange: (newEmail: string) => void;

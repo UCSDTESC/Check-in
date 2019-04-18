@@ -1,6 +1,5 @@
 import React from 'react';
-import {Button} from 'reactstrap';
-
+import { Button } from 'reactstrap';
 import { Admin } from '~/static/types';
 
 interface AdminListProps {

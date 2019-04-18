@@ -1,16 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-
-import {loadAllPublicEvents, loadUserEvents, ApplicationDispatch} from '~/actions';
-
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { bindActionCreators } from 'redux';
+import { loadAllPublicEvents, loadUserEvents, ApplicationDispatch } from '~/actions';
 import Hero from '~/components/Hero';
+import { ApplicationState } from '~/reducers';
+import { TESCEvent } from '~/static/types';
 
 import CurrentEvents from './components/CurrentEvents';
 import UserEvents from './components/UserEvents';
-import { ApplicationState } from '~/reducers';
-import { TESCEvent } from '~/static/types';
 
 const mapStateToProps = (state: ApplicationState) => {
   return {

@@ -1,9 +1,9 @@
+import { createStandardAction } from 'typesafe-actions';
+import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Api from '~/data/Api';
+import { TESCUser, Column } from '~/static/types';
 
 import * as Types from './types';
-import { createStandardAction } from 'typesafe-actions';
-import { TESCUser, Column } from '~/static/types';
-import { ApplicationAction, ApplicationDispatch } from '~/actions';
 
 // Users
 export const addUsers = createStandardAction(Types.ADD_USERS)<TESCUser[]>();
