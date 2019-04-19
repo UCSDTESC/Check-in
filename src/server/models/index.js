@@ -10,7 +10,10 @@ require('mongoose-cachebox')(mongoose, cachingOptions);
 const logger = require('../config/logging');
 
 module.exports = () => new Promise((fulfill, reject) => {
-  mongoose.connect(process.env.MONGODB_URI, {})
+  mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  })
     .then(() => {
       logger.info('Connected to Database');
 

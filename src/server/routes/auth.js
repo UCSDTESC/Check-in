@@ -30,7 +30,7 @@ module.exports = function(app) {
   /**
    * Used to verify that the JWT Token is still valid.
    */
-  auth.get('/authorised', requireAuth, function (req, res) {
+  auth.get('/authorised', requireAuth, function (_, res) {
     return res.sendStatus(200);
   });
 

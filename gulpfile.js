@@ -8,9 +8,9 @@ var gulp = require('gulp'),
   webpackStream = require('webpack-stream'),
   webpack = require('webpack'),
   eslint = require('gulp-eslint'),
-  plumber = require('gulp-plumber'),
   gutil = require('gulp-util'),
-  gulpif = require('gulp-if');
+  gulpif = require('gulp-if'),
+  tslint = require('gulp-tslint');
 let browserSync = gutil.env.production ?
   undefined : require('browser-sync').create();
 
@@ -22,20 +22,11 @@ const paths = {
   js: [
     'src/server/**/*.js',
     'src/assets/js/**/*.js'
+  ],
+  ts: [
+    'src/assets/js/**/*.ts',
+    'src/assets/js/**/*.tsx'
   ]
-};
-
-// Handle Errors
-function handleError(err) {
-  gutil.log(err);
-  this.emit('end');
-  if (gutil.env.production) {
-    process.exit(1);
-  }
-}
-
-var plumberOptions = {
-  errorHandler: handleError
 };
 
 gulp.task('css', function () {
@@ -63,6 +54,16 @@ gulp.task('eslint', function() {
     .pipe(eslint.failAfterError());
 });
 
+gulp.task('tslint', function() {
+  return gulp.src(paths.ts)
+    .pipe(tslint({
+      formatter: 'stylish'
+    }))
+    .pipe(tslint.report({
+      allowWarnings: true
+    }));
+});
+
 gulp.task('nodemon', ['css'], function(cb) {
   return nodemon({
     exec: 'node --inspect=9229',
@@ -82,8 +83,8 @@ gulp.task('nodemon', ['css'], function(cb) {
     });
 });
 
-gulp.task('webpack', function() {
-  gulp.src('src/assets/js/main.js')
+gulp.task('webpack', ['tslint'], function() {
+  gulp.src('src/assets/js/main.tsx')
     .pipe(webpackStream(require('./webpack.config.prod.js'), webpack))
     .pipe(gulp.dest('src/assets/public/js'));
 });
@@ -101,10 +102,10 @@ gulp.task('bs-reload', function () {
   browserSync.reload();
 });
 
-gulp.task('test', ['eslint']);
+gulp.task('test', ['webpack']);
 
 gulp.task('default', ['css', 'browser-sync'], function () {
   gulp.watch('src/assets/scss/**/*.scss', ['css']);
 });
 
-gulp.task('prod', ['webpack', 'css', 'eslint']);
+gulp.task('prod', ['webpack', 'css']);
