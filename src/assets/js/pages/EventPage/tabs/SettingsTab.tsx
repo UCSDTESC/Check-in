@@ -98,7 +98,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
     const {customQuestionsRequests} = this.state;
 
     return (
-      <div className="event-tab">
+      <div className="tab-page__contents">
         <div className="row">
           <div className="col-lg-5 col-md-5">
             <EventOptionsEdit

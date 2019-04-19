@@ -19,7 +19,7 @@ export default class StatisticsTab extends EventPageTab<StatisticsTabProps> {
     }
 
     return (
-      <div className="event-tab">
+      <div className="tab-page__contents">
         <div className="row">
           <div className="col-lg-4 col-md-6">
             <EventStatisticsCharts event={event} statistics={statistics} />

@@ -1,19 +1,20 @@
 import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+import { PageAlert } from '~/pages/AlertPage';
 
-import { AddEventAlertPayload, RemoveEventAlertPayload, _addEventAlert, _removeEventAlert } from '../actions';
+import { _addEventAlert, _removeEventAlert } from '../actions';
 import * as Types from '../actions/types';
 
-import { EventAlertsState, EventAlert } from './types';
+import { EventAlertsState } from './types';
 
 const initialState: EventAlertsState = {};
 
 export default handleActions({
   [Types.ADD_EVENT_ALERT]: (state, action: ActionType<typeof _addEventAlert>) => {
     const newState = Object.assign({}, state);
-    const payload: AddEventAlertPayload = action.payload;
+    const payload = action.payload;
 
-    const newAlert: EventAlert = {
+    const newAlert: PageAlert = {
       ...payload.alert,
       timestamp: new Date(),
     };
@@ -34,7 +35,7 @@ export default handleActions({
       return state;
     }
 
-    let currentAlerts: EventAlert[] = state[payload.eventAlias];
+    let currentAlerts: PageAlert[] = state[payload.eventAlias];
     // Filter out all messages with the given timestamp.
     currentAlerts = currentAlerts
       .filter((alert) => alert.timestamp !== payload.timestamp);

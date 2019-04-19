@@ -16,6 +16,7 @@ export interface PageAlert {
   message: string;
   type: AlertType;
   title: string;
+  timestamp: Date;
 }
 
 export interface AlertPageState {
@@ -46,16 +47,17 @@ export default class AlertPage<P, S extends AlertPageState> extends React.Compon
    * Creates a new error alert if there was a login error.
    * @param {PageAlert} alert The alert to display.
    * @param {String} key The given key for the element map.
+   * @param {Boolean} container Determines whether the alert is wrapped in a container.
    * @param {String} className Override the alert with a different className.
    * @returns {Component}
    */
-  renderAlert(alert: PageAlert, key: number = 0, className: string = 'user-page__error') {
+  renderAlert(alert: PageAlert, key: number = 0, container: boolean = false, className: string = 'alert-page__alert') {
     const {message, type, title} = alert;
     if (message) {
       return (
         <div className={className} key={key}>
           <UncontrolledAlert color={type}>
-            <div className="container">
+            <div className={`${container ? 'container' : ''}`}>
               <strong>{title}</strong> {message}
             </div>
           </UncontrolledAlert>

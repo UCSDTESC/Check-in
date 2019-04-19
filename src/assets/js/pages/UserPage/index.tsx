@@ -131,7 +131,7 @@ class UserPage extends AlertPage<Props, UserPageState> {
         />}
         <div className="user-page__above">
           <div className="user-page__alerts">
-            {alerts.map((alert, index) => this.renderAlert(alert, index))}
+            {alerts.map((alert, index) => this.renderAlert(alert, index, true))}
           </div>
 
           <NavHeader title="Your Profile" />

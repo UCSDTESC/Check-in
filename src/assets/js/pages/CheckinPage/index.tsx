@@ -1,9 +1,7 @@
 import React from 'react';
-import QrReader from 'react-qr-reader';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
@@ -11,23 +9,14 @@ import { loadAllUsers } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 import { TESCUser, UserStatus } from '~/static/types';
 
+import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
 import { addUsers } from '../UsersPage/actions';
 
 import { userCheckin } from './actions';
-
-import {loadAllUsers} from '~/data/Api';
-
-import {userCheckin} from './actions';
-
-import { RouteComponentProps } from 'react-router-dom';
-import { TESCUser, UserStatus } from '~/static/types';
-import { ApplicationState } from '~/reducers';
-import { bindActionCreators } from 'redux';
-import WebcamScanner from './components/WebcamScanner';
-import ManualScanner from './components/ManualScanner';
-import LiabilityWaiverModal from './components/LiabilityWaiverModal';
-import ScannerSelector from './components/ScannerSelector';
 import KeyboardScanner from './components/KeyboardScanner';
+import LiabilityWaiverModal from './components/LiabilityWaiverModal';
+import ManualScanner from './components/ManualScanner';
+import WebcamScanner from './components/WebcamScanner';
 
 // Length of _id in MongoDB
 export const USER_ID_LENGTH = 24;
@@ -51,28 +40,50 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
   userCheckin,
 }, dispatch);
 
-interface CheckinPageProps {
+interface CheckinPageProps extends TabularPageProps {
 }
 
 type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & CheckinPageProps;
 
-interface CheckinPageState {
+interface CheckinPageState extends TabularPageState {
   isProcessing: boolean;
   wasSuccessful: boolean;
   errorMessage: string;
   isLiabilityShowing: boolean;
   lastUser?: TESCUser;
   lastName: string;
-  activeScanner: ScannerType;
 }
 
-export enum ScannerType {
-  Keyboard = 1,
-  Webcam = 2,
-  Manual = 3,
-}
+const CheckinTab: React.StatelessComponent = (props) => {
+  return (
+    <div className="tab-page__contents">
+      {props.children}
+    </div>
+  );
+};
 
-class CheckinPage extends React.Component<Props, CheckinPageState> {
+class CheckinPage extends TabularPage<Props, CheckinPageState> {
+  tabPages: Readonly<TabPage[]> = [
+    {
+      icon: 'qrcode',
+      name: 'Scanner',
+      anchor: 'scanner',
+      render: this.renderKeyboardTab,
+    } as TabPage,
+    {
+      icon: 'video-camera',
+      name: 'Webcam',
+      anchor: 'webcam',
+      render: this.renderWebcamTab,
+    } as TabPage,
+    {
+      icon: 'search',
+      name: 'Manual',
+      anchor: 'manual',
+      render: this.renderManualTab,
+    } as TabPage,
+  ];
+
   state: Readonly<CheckinPageState> = {
     isProcessing: false,
     wasSuccessful: false,
@@ -80,10 +91,12 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     isLiabilityShowing: false,
     lastUser: null,
     lastName: '',
-    activeScanner: ScannerType.Manual,
+    activeTab: this.tabPages[0],
+    alerts: [],
   };
 
   componentDidMount() {
+    super.componentDidMount();
     const {users, event} = this.props;
 
     if (!users.length) {
@@ -215,21 +228,33 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       });
   }
 
-  renderActiveScanner = () => {
-    switch (this.state.activeScanner) {
-      case (ScannerType.Keyboard):
-        return <KeyboardScanner onUserScanned={this.onScan} />;
-      case (ScannerType.Webcam):
-        return <WebcamScanner onUserScanned={this.onScan} />;
-      case (ScannerType.Manual):
-        return <ManualScanner onUserScanned={this.onScan} users={this.props.users} />;
-    }
+  renderKeyboardTab(props: Props) {
+    return (
+      <CheckinTab>
+        <KeyboardScanner onUserScanned={this.onScan} />
+      </CheckinTab>
+    );
+  }
+
+  renderWebcamTab(props: Props) {
+    return (
+      <CheckinTab>
+        <WebcamScanner onUserScanned={this.onScan} />
+      </CheckinTab>
+    );
+  }
+
+  renderManualTab(props: Props) {
+    return (
+      <CheckinTab>
+        <ManualScanner onUserScanned={this.onScan} users={props.users} />
+      </CheckinTab>
+    );
   }
 
   render() {
     const {users, event} = this.props;
-    const {errorMessage, wasSuccessful, lastName, isLiabilityShowing,
-      activeScanner} = this.state;
+    const {errorMessage, wasSuccessful, lastName, isLiabilityShowing, activeTab} = this.state;
 
     if (!users.length) {
       return (
@@ -238,18 +263,22 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     }
 
     return (
-
-      <div className="full-height">
+      <div className="page page--admin checkin-page d-flex flex-column h-100">
         <LiabilityWaiverModal
           isOpen={isLiabilityShowing}
           onWaiverAgree={this.callCheckin}
           toggleModal={this.toggleModal}
           event={event}
         />
-        <div className="checkin container">
+
+        <div className="checkin container-fluid">
+          <TabularPageNav
+            tabPages={this.tabPages}
+            activeTab={activeTab}
+          />
+
           <div className="row align-items-center">
             <div className="col">
-              <h1>{event.name} Checkin</h1>
               {errorMessage && <h2 className="checkin__error text-danger">
                 {errorMessage}
               </h2>}
@@ -259,18 +288,8 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
                 </h2>
               }
             </div>
-            <div className="col">
-              <ScannerSelector
-                selectedScanner={activeScanner}
-                onSelectScanner={(newScanner) =>
-                  this.setState({
-                    activeScanner: newScanner,
-                  })
-                }
-              />
-            </div>
           </div>
-          {this.renderActiveScanner()}
+          {this.renderActiveTab()}
         </div>
       </div>
     );
