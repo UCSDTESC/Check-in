@@ -9,6 +9,7 @@ import { loadAllUsers } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 import { TESCUser, UserStatus } from '~/static/types';
 
+import { AlertType } from '../AlertPage';
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
 import { addUsers } from '../UsersPage/actions';
 
@@ -47,11 +48,8 @@ type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof
 
 interface CheckinPageState extends TabularPageState {
   isProcessing: boolean;
-  wasSuccessful: boolean;
-  errorMessage: string;
   isLiabilityShowing: boolean;
   lastUser?: TESCUser;
-  lastName: string;
 }
 
 const CheckinTab: React.StatelessComponent = (props) => {
@@ -68,29 +66,26 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
       icon: 'qrcode',
       name: 'Scanner',
       anchor: 'scanner',
-      render: this.renderKeyboardTab,
+      render: this.renderKeyboardTab.bind(this),
     } as TabPage,
     {
       icon: 'video-camera',
       name: 'Webcam',
       anchor: 'webcam',
-      render: this.renderWebcamTab,
+      render: this.renderWebcamTab.bind(this),
     } as TabPage,
     {
       icon: 'search',
       name: 'Manual',
       anchor: 'manual',
-      render: this.renderManualTab,
+      render: this.renderManualTab.bind(this),
     } as TabPage,
   ];
 
   state: Readonly<CheckinPageState> = {
     isProcessing: false,
-    wasSuccessful: false,
-    errorMessage: '',
     isLiabilityShowing: false,
     lastUser: null,
-    lastName: '',
     activeTab: this.tabPages[0],
     alerts: [],
   };
@@ -112,6 +107,18 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     }
   }
 
+  onCheckinError = (error: string) => {
+    this.clearAlerts();
+    this.createAlert(error, AlertType.Danger);
+  };
+
+  onCheckinSuccessful = () => {
+    const {lastUser} = this.state;
+
+    this.clearAlerts();
+    this.createAlert(`Checked in ${lastUser.firstName}`, AlertType.Success);
+  };
+
   /**
    * Loads all the users into the redux state.
    */
@@ -121,10 +128,10 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     showLoading();
 
     loadAllUsers(this.props.match.params.eventAlias)
-      .then(res => {
-        hideLoading();
-        return addUsers(res);
-      });
+    .then(res => {
+      hideLoading();
+      return addUsers(res);
+    });
   }
 
   validateUser = (user: TESCUser) =>
@@ -132,42 +139,43 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
       // Ensure they're eligible
       if (user.status !== UserStatus.Confirmed) {
         switch (user.status) {
-        case (UserStatus.Declined):
-          return reject('User marked as rejecting invitation');
-        case (UserStatus.Unconfirmed):
-          return reject('User never confirmed their invitation');
-        case (UserStatus.Rejected):
-          return reject('User was rejected from ' + user.event.name);
-        default:
-          return reject('User was not invited to event');
+          case (UserStatus.Declined):
+            return reject('User marked as rejecting invitation');
+          case (UserStatus.Unconfirmed):
+            return reject('User never confirmed their invitation');
+          case (UserStatus.Rejected):
+            return reject('User was rejected from ' + user.event.name);
+          default:
+            return reject('User was not invited to event');
         }
       }
+
       if (user.checkedIn) {
         return reject('User has already checked in');
       }
 
       return resolve(user);
-    })
+  })
 
   checkinUser = (user: TESCUser): Promise<TESCUser> =>
-    new Promise((resolve, reject) => {
-      const {event} = this.props;
+  new Promise((resolve, reject) => {
+    const {event} = this.props;
 
-      this.validateUser(user)
-        .then(() =>
-          this.props.userCheckin(user, event.alias)
-        )
-        .then(() => resolve(user))
-        .catch(reject);
-    });
+    this.validateUser(user)
+    .then(() =>
+    this.props.userCheckin(user, event.alias)
+    )
+    .then(() => resolve(user))
+    .catch(reject);
+  });
 
   onScan = (userId: string) => {
     const {lastUser} = this.state;
 
     if (lastUser && userId === lastUser._id) {
+      this.onCheckinError('User has already checked in');
+
       return this.setState({
-        errorMessage: 'User has already checked in',
-        wasSuccessful: false,
         isProcessing: false,
       });
     }
@@ -176,19 +184,16 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     const eligibleUsers = this.props.users.filter((user) => user._id === userId);
 
     if (eligibleUsers.length !== 1) {
+      this.onCheckinError(`User not found with ID ${userId}`);
+
       return this.setState({
-        errorMessage: `User not found with ID ${userId}`,
-        wasSuccessful: false,
         isProcessing: false,
       });
     }
 
     this.setState({
       isProcessing: true,
-      wasSuccessful: false,
-      errorMessage: '',
       lastUser: eligibleUsers[0],
-      lastName: '',
     });
 
     this.toggleModal();
@@ -205,26 +210,17 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     });
 
     this.checkinUser(this.state.lastUser)
-      .then((user) => {
-        this.setState({
-          wasSuccessful: true,
-          lastName: `${user.firstName} ${user.lastName}`,
-        });
+    .then((user) => {
+        this.onCheckinSuccessful();
       })
       .catch((err: string) => {
-        this.setState({
-          wasSuccessful: false,
-          errorMessage: err,
-        });
+        this.onCheckinError(err);
       })
       .finally(() => this.setState({
         isProcessing: false,
       }))
       .catch((err: string) => {
-        this.setState({
-          wasSuccessful : false,
-          errorMessage : err,
-        });
+        this.onCheckinError(err);
       });
   }
 
@@ -254,7 +250,7 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
 
   render() {
     const {users, event} = this.props;
-    const {errorMessage, wasSuccessful, lastName, isLiabilityShowing, activeTab} = this.state;
+    const {isLiabilityShowing, activeTab} = this.state;
 
     if (!users.length) {
       return (
@@ -264,6 +260,8 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
 
     return (
       <div className="page page--admin checkin-page d-flex flex-column h-100">
+        {this.renderAlerts()}
+
         <LiabilityWaiverModal
           isOpen={isLiabilityShowing}
           onWaiverAgree={this.callCheckin}
@@ -277,18 +275,6 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
             activeTab={activeTab}
           />
 
-          <div className="row align-items-center">
-            <div className="col">
-              {errorMessage && <h2 className="checkin__error text-danger">
-                {errorMessage}
-              </h2>}
-              {wasSuccessful &&
-                <h2 className="checkin__success">Checked In&nbsp;
-                  <span className="checkin__name">{lastName}</span>!
-                </h2>
-              }
-            </div>
-          </div>
           {this.renderActiveTab()}
         </div>
       </div>

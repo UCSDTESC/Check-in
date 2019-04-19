@@ -23,6 +23,14 @@ export interface AlertPageState {
   alerts: PageAlert[];
 }
 
+export const AlertPageAbove: React.StatelessComponent = (props) => {
+  return (
+    <div className="alert-page__above">
+      {props.children}
+    </div>
+  );
+};
+
 /**
  * Allows for extension with bootstrap alerts in the state.
  */
@@ -33,7 +41,7 @@ export default class AlertPage<P, S extends AlertPageState> extends React.Compon
    * @param {AlertType} type The type of alert to show.
    * @param {String} title The title of the alert.
    */
-  createAlert(message: string, type: AlertType = AlertType.Danger, title: string = '') {
+  createAlert = (message: string, type: AlertType = AlertType.Danger, title: string = '') => {
     this.setState({
       alerts: [...this.state.alerts, {
         message,
@@ -51,7 +59,8 @@ export default class AlertPage<P, S extends AlertPageState> extends React.Compon
    * @param {String} className Override the alert with a different className.
    * @returns {Component}
    */
-  renderAlert(alert: PageAlert, key: number = 0, container: boolean = false, className: string = 'alert-page__alert') {
+  renderAlert = (alert: PageAlert, key: number = 0, container: boolean = false,
+                 className: string = 'alert-page__alert') => {
     const {message, type, title} = alert;
     if (message) {
       return (
@@ -65,4 +74,18 @@ export default class AlertPage<P, S extends AlertPageState> extends React.Compon
       );
     }
   }
+
+  clearAlerts = () => {
+    this.setState({
+      alerts: [],
+    });
+  };
+
+  renderAlerts = (container: boolean = false, className: string = 'alert-page__alert') => {
+    return (
+      <AlertPageAbove>
+        {this.state.alerts.map((alert, index) => this.renderAlert(alert, index, container, className))}
+      </AlertPageAbove>
+    )
+  };
 }

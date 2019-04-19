@@ -20,6 +20,7 @@ import ActionsTab from './tabs/ActionsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
+import { AlertPageAbove } from '../AlertPage';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -163,9 +164,8 @@ class EventPage extends TabularPage<Props, EventPageState> {
 
     return (
       <div className="page page--admin event-page d-flex flex-column h-100">
-        <div className="event-page__above">
-          {alerts.map((alert, index) => this.renderAlert(alert, index))}
-        </div>
+        {this.renderAlerts()}
+
         <div className="container-fluid">
           <div className="row event-page__header">
             <div
