@@ -3,6 +3,9 @@ import ReactTable from 'react-table';
 import User from '~/components/User';
 import { TESCUser, Column, TESCEvent } from '~/static/types';
 
+// tslint:disable-next-line
+const styles = require('react-table/react-table.css');
+
 interface UserListProps {
   users: TESCUser[];
   columns: Column[];
