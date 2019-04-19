@@ -1,15 +1,14 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {withRouter, Redirect, RouteComponentProps} from 'react-router-dom';
-
-import {loginUser} from '~/auth/user/actions';
-
-import Login from '~/auth/user/Login';
-import AlertPage, { AlertPageState, PageAlert, AlertType } from './AlertPage';
-import { ApplicationState } from '~/reducers';
-import { ApplicationDispatch } from '~/actions';
+import { connect } from 'react-redux';
+import { withRouter, Redirect, RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
+import Login from '~/auth/user/Login';
 import { LoginFormData } from '~/auth/user/Login';
+import { loginUser } from '~/auth/user/actions';
+import { ApplicationState } from '~/reducers';
+
+import AlertPage, { AlertPageState, PageAlert, AlertType } from './AlertPage';
 
 const mapStateToProps = (state: ApplicationState) => ({
   loginError: state.user.auth.error,

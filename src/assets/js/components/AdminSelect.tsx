@@ -1,5 +1,6 @@
+import { Admin } from '~/static/types';
+
 import StyledSelect from './StyledSelect';
-import {Admin} from '~/static/types';
 
 // Has to match React-Select style
 // TODO: Abstract out select type to match Admin

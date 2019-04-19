@@ -1,7 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
 import FA from 'react-fontawesome';
-
+import { Link } from 'react-router-dom';
 import EventCard from '~/components/EventCard';
 import { TESCEvent } from '~/static/types';
 

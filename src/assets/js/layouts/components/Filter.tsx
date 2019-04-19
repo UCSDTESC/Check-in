@@ -1,9 +1,6 @@
 import React, { FormEvent } from 'react';
-import PropTypes from 'prop-types';
-
-import ToggleSwitch from '~/components/ToggleSwitch';
-
 import AutoSuggest from '~/components/AutoSuggest';
+import ToggleSwitch from '~/components/ToggleSwitch';
 import { FilterOptions } from '~/static/types';
 
 interface FilterProps {

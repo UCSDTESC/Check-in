@@ -1,14 +1,12 @@
+import { createStandardAction } from 'typesafe-actions';
+import Cookies from 'universal-cookie';
+import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Auth from '~/data/AdminAuth';
+import CookieTypes from '~/static/Cookies';
+
+import { LoginFormData } from '../Login';
 
 import * as Types from './types';
-
-import Cookies from 'universal-cookie';
-import Q from 'q';
-
-import CookieTypes from '~/static/Cookies';
-import { ApplicationAction, ApplicationDispatch } from '~/actions';
-import { LoginFormData } from '../Login';
-import { createStandardAction } from 'typesafe-actions';
 
 const cookies = new Cookies();
 const COOKIE_OPTIONS = {
@@ -36,7 +34,7 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any) {
 
   if (error.status === 401) {
     dispatch(authoriseError('The username or password you entered was not correct.'));
-    logoutUser();
+    logoutAdmin();
   } else {
     dispatch(authoriseError(errorMessage));
   }
@@ -49,30 +47,27 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any) {
  * administrator to login.
  * @returns {Promise} The login request promise.
  */
-export const loginUser = (loginFormData: LoginFormData): ApplicationAction<Q.Promise<{}>> => (
-  (dispatch: ApplicationDispatch) => {
-    // Make the event return a promise
-    const deferred = Q.defer();
-
-    Auth.login(loginFormData.username, loginFormData.password)
-      .then((res) => {
-        storeLogin(res.token, res.user);
-        dispatch(authoriseAdmin(res.user));
-        deferred.resolve();
-      })
-      .catch((err) => {
-        deferred.reject(err.message);
-        return errorHandler(dispatch, err);
-      });
-
-    return deferred.promise;
-  });
+export const loginAdmin = (loginFormData: LoginFormData): ApplicationAction<Promise<{}>> => (
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      Auth.login(loginFormData.username, loginFormData.password)
+        .then((res) => {
+          storeLogin(res.token, res.user);
+          dispatch(authoriseAdmin(res.user));
+          resolve();
+        })
+        .catch((err) => {
+          reject(err.message);
+          return errorHandler(dispatch, err);
+        });
+    })
+  );
 
 /**
  * Logout the current authenticated user.
  * @returns {Function} The function to dispatch.
  */
-export const logoutUser = (): ApplicationAction => (
+export const logoutAdmin = (): ApplicationAction => (
   (dispatch: ApplicationDispatch) => {
     dispatch(unauthoriseAdmin());
     cookies.remove(CookieTypes.admin.token, {path: '/'});

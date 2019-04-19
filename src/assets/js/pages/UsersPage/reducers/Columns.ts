@@ -1,8 +1,10 @@
-import * as Types from '../actions/types';
-import { ColumnsState } from './types';
 import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+
 import { addAvailableColumns, addColumn, removeColumn } from '../actions';
+import * as Types from '../actions/types';
+
+import { ColumnsState } from './types';
 
 const initialState: ColumnsState = {
   loadedAvailable: false,

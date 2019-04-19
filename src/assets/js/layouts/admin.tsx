@@ -1,27 +1,22 @@
 import React from 'react';
-import {connect} from 'react-redux';
-
-import {toggleEditing, ApplicationDispatch} from '~/actions';
-
-import {loginUser} from '~/auth/admin/actions';
-
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
 import Login, { LoginFormData } from '~/auth/admin/Login';
+import { loginAdmin } from '~/auth/admin/actions';
+import { ApplicationState } from '~/reducers';
 
 import Sidebar from './components/AdminSidebar';
-import { ApplicationState } from '~/reducers';
-import { bindActionCreators } from 'redux';
 
 const mapStateToProps = (state: ApplicationState) => ({
   isAuthenticated: state.admin.auth.authenticated,
   user: state.admin.auth.user,
   loginError: state.admin.auth.error,
-  isEditing: state.admin.general.editing,
   events: state.admin.events,
 });
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
-  loginUser,
-  toggleEditing,
+  loginAdmin,
 }, dispatch);
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps>;
@@ -53,7 +48,7 @@ class AdminLayout extends React.Component<Props, AdminLayoutState> {
   }
 
   render() {
-    const {isAuthenticated, user, events, isEditing} = this.props;
+    const {isAuthenticated, user, events} = this.props;
 
     const containerState = 'admin-sidebar__container--' +
       (isAuthenticated ? 'authenticated' : 'logged-out');
@@ -63,7 +58,7 @@ class AdminLayout extends React.Component<Props, AdminLayoutState> {
 
     const login = (
       <Login
-        loginUser={this.props.loginUser}
+        loginUser={this.props.loginAdmin}
         errorMessage={this.props.loginError}
       />
     );
@@ -75,10 +70,8 @@ class AdminLayout extends React.Component<Props, AdminLayoutState> {
           <div className="d-flex flex-column flex-md-row h-100">
             <div className={`admin-sidebar__container ${containerState}`}>
               <Sidebar
-                isEditing={isEditing}
                 isAuthenticated={isAuthenticated}
                 user={user}
-                onEditChange={this.props.toggleEditing}
                 events={events}
               >
                 {!isAuthenticated && login}

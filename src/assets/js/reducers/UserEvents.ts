@@ -1,8 +1,9 @@
-import * as Types from '~/actions/types';
-import { UserEventsState } from './types';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 import { replaceUserEvents, addUserEvent } from '~/actions';
+import * as Types from '~/actions/types';
+
+import { UserEventsState } from './types';
 
 const initialState: UserEventsState = {};
 

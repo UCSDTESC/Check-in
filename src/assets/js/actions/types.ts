@@ -1,10 +1,3 @@
-import { Action } from 'redux';
-
-// General
-export const ENABLE_EDITING = 'ENABLE_EDITING';
-export const DISABLE_EDITING = 'DISABLE_EDITING';
-export const TOGGLE_EDITING = 'TOGGLE_EDITING';
-
 // User Events
 export const REPLACE_USER_EVENTS = 'REPLACE_USER_EVENTS';
 export const ADD_USER_EVENT = 'ADD_USER_EVENT';

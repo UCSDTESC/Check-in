@@ -1,15 +1,15 @@
-import {applyMiddleware, compose, createStore, AnyAction} from 'redux';
-import {CookiesProvider} from 'react-cookie';
-import {Provider} from 'react-redux';
 import * as React from 'react';
-import {BrowserRouter as Router} from 'react-router-dom';
-import reduxThunk, { ThunkMiddleware } from 'redux-thunk';
-import {render} from 'react-dom';
-import LoadingBar from 'react-redux-loading-bar';
+import { CookiesProvider } from 'react-cookie';
+import { render } from 'react-dom';
 import * as ReactGA from 'react-ga';
+import { Provider } from 'react-redux';
+import LoadingBar from 'react-redux-loading-bar';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { applyMiddleware, compose, createStore, AnyAction } from 'redux';
+import reduxThunk, { ThunkMiddleware } from 'redux-thunk';
 
-import Routes from './routes';
 import reducer, { ApplicationState } from './reducers';
+import Routes from './routes';
 
 ReactGA.initialize('UA-123201625-1');
 

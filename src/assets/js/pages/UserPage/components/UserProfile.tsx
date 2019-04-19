@@ -1,12 +1,21 @@
 import React from 'react';
-import {Field, reduxForm, InjectedFormProps, WrappedFieldProps} from 'redux-form';
-
+import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
+import { CustomFieldProps } from '~/components/Fields';
 import FileField from '~/components/FileField';
 import { TESCUser, TESCEvent, UserStatus } from '~/static/types';
-import { CustomFieldProps } from '~/components/Fields';
 
-interface UserProfileFormData {
-
+export interface UserProfileFormData {
+  gender: string;
+  newResume: File[];
+  shareResume: boolean;
+  majorGPA: string;
+  gpa: string;
+  website: string;
+  github: string;
+  shirtSize: string;
+  diet: string;
+  food: string;
+  teammates: string[];
 }
 
 interface UserProfileProps {
@@ -318,7 +327,7 @@ class UserProfile extends React.Component<Props> {
         <div className="col-lg-6 mt-3 mt-lg-0">
           <Field
             component={FileField}
-            name="resume"
+            name="newResume"
             placeholder="Resume"
             button={true}
             className="sd-form__dropzone--button"

@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { ApplyPageSectionProps } from './ApplyPageSection';
 
 export default class SubmittedSection extends React.Component<ApplyPageSectionProps> {

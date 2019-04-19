@@ -1,19 +1,12 @@
-import Q from 'q';
-import {createStandardAction, ActionType} from 'typesafe-actions';
-
-import * as Types from './types';
+import { Action, AnyAction } from 'redux';
+import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { createStandardAction, ActionType } from 'typesafe-actions';
 import * as Api from '~/data/Api';
 import * as UserApi from '~/data/User';
-import { TESCEvent, FilterOption } from '~/static/types';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { ApplicationState } from '~/reducers';
-import { Action, AnyAction } from 'redux';
+import { TESCEvent, FilterOption } from '~/static/types';
 
-// General
-
-export const enableEditing = createStandardAction(Types.ENABLE_EDITING)<undefined>();
-export const disableEditing = createStandardAction(Types.DISABLE_EDITING)<undefined>();
-export const toggleEditing = createStandardAction(Types.TOGGLE_EDITING)<undefined>();
+import * as Types from './types';
 
 // User Events
 
@@ -58,42 +51,35 @@ export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENT
 export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, Action>;
 export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
 
-export const loadAllAdminEvents = (): ApplicationAction<Q.Promise<{}>> =>
-  (dispatch: ApplicationDispatch) => {
-    const deferred = Q.defer();
-    Api.loadAllEvents()
-      .then(res => {
-        dispatch(replaceAdminEvents(res));
-        return deferred.resolve();
-      })
-      .catch(deferred.reject);
-    return deferred.promise;
-  };
+export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      Api.loadAllEvents()
+        .then(res => {
+          dispatch(replaceAdminEvents(res));
+          return resolve();
+        })
+        .catch(reject);
+    });
 
-export const loadAllPublicEvents = (): ApplicationAction<Q.Promise<{}>> =>
-  (dispatch: ApplicationDispatch) => {
-  const deferred = Q.defer();
+export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      Api.loadAllPublicEvents()
+        .then(res => {
+          dispatch(replaceEvents(res));
+          return resolve();
+        })
+        .catch(reject);
+    });
 
-  Api.loadAllPublicEvents()
-    .then(res => {
-      dispatch(replaceEvents(res));
-      return deferred.resolve();
-    })
-    .catch(deferred.reject);
-
-  return deferred.promise;
-};
-
-export const loadUserEvents = (): ApplicationAction<Q.Promise<{}>> =>
-  (dispatch: ApplicationDispatch) => {
-  const deferred = Q.defer();
-
-  UserApi.getUserEvents()
-    .then(res => {
-      dispatch(replaceUserEvents(res));
-      return deferred.resolve();
-    })
-    .catch(deferred.reject);
-
-  return deferred.promise;
-};
+export const loadUserEvents = (): ApplicationAction<Promise<{}>> =>
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      UserApi.getUserEvents()
+        .then(res => {
+          dispatch(replaceUserEvents(res));
+          return resolve();
+        })
+        .catch(reject);
+    });

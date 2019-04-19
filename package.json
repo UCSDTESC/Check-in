@@ -1,6 +1,6 @@
 {
   "name": "checkin",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "server.js",
   "engines": {
@@ -91,7 +91,6 @@
     "password-generator": "^2.2.0",
     "popper.js": "^1.12.9",
     "pug": "^2.0.0-rc.4",
-    "q": "^1.5.1",
     "react": "^16.0.0",
     "react-autosuggest": "^9.3.3",
     "react-cookie": "^2.1.2",
@@ -133,14 +132,13 @@
     "webpack-dev-middleware": "^1.12.0",
     "webpack-hot-middleware": "^2.20.0",
     "webpack-stream": "^4.0.0",
-    "winston": "^3.0.0-rc1"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@hot-loader/react-dom": "^16.8.6",
     "@types/jquery": "^3.3.29",
     "@types/node-uuid": "0.0.28",
     "@types/object-diff": "0.0.0",
-    "@types/q": "^1.5.2",
     "@types/react": "^16.0.0",
     "@types/react-autosuggest": "^9.3.7",
     "@types/react-dom": "^16.0.6",

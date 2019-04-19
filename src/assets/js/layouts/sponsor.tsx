@@ -1,18 +1,17 @@
 import React from 'react';
-import {bindActionCreators} from 'redux';
-import {connect} from 'react-redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { bindActionCreators } from 'redux';
+import Loading from '~/components/Loading';
+import { downloadResumes, pollDownload } from '~/data/Api';
+import { ApplicationState } from '~/reducers';
+import { applyResumeFilter } from '~/static/ResumeFilter';
+import { TESCUser } from '~/static/types';
 
-import {applyResumeFilter} from '~/static/ResumeFilter';
-
-import {downloadResumes, pollDownload} from '~/data/Api';
-
-import {toggleFilter, filterOptionActions, selectAllOptions,
-  selectNoneOptions, ApplicationDispatch} from '../actions';
+import { toggleFilter, filterOptionActions, selectAllOptions,
+  selectNoneOptions, ApplicationDispatch } from '../actions';
 
 import Sidebar from './components/SponsorSidebar';
-import { ApplicationState } from '~/reducers';
-import { TESCUser } from '~/static/types';
 
 const mapStateToProps = (state: ApplicationState) => ({
   filters: state.admin.filters,
@@ -60,9 +59,12 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
     const modelApplicant = applicants[0];
     return Object.keys(modelApplicant)
       .reduce((total: any, curr) => {
-        // TODO: Rewrite logo
-        // @ts-ignore: Access dynamic properties of user
-        total[curr] = [...new Set(applicants.map(item => item[curr]))];
+        total[curr] = [...new Set(applicants
+          .filter(item => item.hasOwnProperty(curr))
+          // TODO: Rewrite logic
+          // @ts-ignore: Access dynamic properties of user
+          .map(item => item[curr])),
+        ];
         return total;
       }, {});
   }
@@ -116,6 +118,10 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
   render() {
     const {user, filters, resumes, filtered} = this.props;
     const filterOptions = this.createFilterOptions(resumes.applicants);
+
+    if (!user) {
+      return <Loading />;
+    }
 
     return (
       <div className="admin-body d-flex flex-column">

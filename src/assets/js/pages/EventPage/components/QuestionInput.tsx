@@ -1,6 +1,5 @@
 import React from 'react';
 import FA from 'react-fontawesome';
-
 import ToggleSwitch from '~/components/ToggleSwitch';
 import { Question } from '~/static/types';
 

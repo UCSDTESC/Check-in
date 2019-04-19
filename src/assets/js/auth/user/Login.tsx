@@ -1,9 +1,7 @@
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
-import {Link, RouteComponentProps} from 'react-router-dom';
-import PropTypes from 'prop-types';
 import React from 'react';
-import {Alert, UncontrolledAlert} from 'reactstrap';
-
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { Alert, UncontrolledAlert } from 'reactstrap';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import NavHeader from '~/components/NavHeader';
 import { PageAlert, AlertType } from '~/pages/AlertPage';
 
@@ -17,7 +15,7 @@ export interface LoginFormData {
 }
 
 interface LoginProps {
-  loginUser: (user: LoginFormData) => Q.Promise<void>;
+  loginUser: (user: LoginFormData) => Promise<void>;
   errorMessage: string;
   alerts: PageAlert[];
 }
@@ -29,17 +27,13 @@ interface LoginState {
 }
 
 class Login extends React.Component<Props, LoginState> {
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-  };
-
   state: Readonly<LoginState> = {
     isErrorVisible: false,
   };
 
-  componentDidUpdate(newProps: Props) {
+  componentDidUpdate(oldProps: Props) {
     // Show error message if new one appears
-    if (newProps.errorMessage) {
+    if (oldProps.errorMessage !== this.props.errorMessage) {
       this.setState({
         isErrorVisible: true,
       });

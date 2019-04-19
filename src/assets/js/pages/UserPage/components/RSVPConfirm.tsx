@@ -1,7 +1,8 @@
 import React from 'react';
-import RSVPModal from './RSVPModal';
-import BussingModal from './BussingModal';
 import { TESCEvent } from '~/static/types';
+
+import BussingModal from './BussingModal';
+import RSVPModal from './RSVPModal';
 
 interface RSVPConfirmProps {
   availableBus?: string;

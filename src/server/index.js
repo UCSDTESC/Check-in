@@ -27,7 +27,9 @@ require('./models/index')()
       }, startInstance);
     }
   })
-  .catch(console.error);
+  .catch((error) => {
+    logger.error(error);
+  });
 
 function startInstance() {
   var app = express();
@@ -53,7 +55,7 @@ function startInstance() {
   require('./config/passport');
 
   http.createServer(app).listen(app.get(port), function(){
-    logger.log('info', 'Server started. Listening on port %s with %s worker(s)',
+    logger.info('Server started. Listening on port %s with %s worker(s)',
       port, WORKERS);
   });
 };

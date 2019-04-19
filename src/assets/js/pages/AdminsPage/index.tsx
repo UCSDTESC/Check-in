@@ -1,23 +1,18 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-import {Button} from 'reactstrap';
-
-import {replaceAdmins} from './actions';
-import AdminList from './components/AdminList';
-
-import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
-
-import {loadAllAdmins, registerAdmin, deleteAdmin} from '~/data/Api';
-
-import { Admin } from '~/static/types';
-import { ApplicationState } from '~/reducers';
-import { ApplicationDispatch } from '~/actions';
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { Button } from 'reactstrap';
 import { bindActionCreators } from 'redux';
+import { ApplicationDispatch } from '~/actions';
+import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
+import { loadAllAdmins, registerAdmin, deleteAdmin } from '~/data/Api';
+import { ApplicationState } from '~/reducers';
+
+import { replaceAdmins } from './actions';
+import AdminList from './components/AdminList';
 
 const mapStateToProps = (state: ApplicationState) => ({
   admins: state.admin.admins,
-  editing: state.admin.general.editing,
 });
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
@@ -69,7 +64,7 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
       .catch(console.error);
 
   render() {
-    const {editing, admins} = this.props;
+    const {admins} = this.props;
 
     return (
       <div>
@@ -81,15 +76,15 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
         <AdminList
           admins={admins}
           onDeleteAdmin={this.onDeleteAdmin}
-          editing={editing}
+          editing={true}
         />
-        {editing && <Button
+        <Button
           className="ml-2"
           color="primary"
           onClick={this.toggleRegisterModal}
         >
           Register New Admin
-        </Button>}
+        </Button>
       </div>
     );
   }

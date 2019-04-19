@@ -1,19 +1,16 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-
-import {replaceApplicants, replaceFiltered} from './actions';
-
-import {applyResumeFilter} from '~/static/ResumeFilter';
-
-import {loadAllApplicants} from '~/data/Api';
-
-import ResumeList from './components/ResumeList';
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { RouteComponentProps } from 'react-router';
-import { ApplicationState } from '~/reducers';
-import { TESCUser, UserStatus } from '~/static/types';
+import { bindActionCreators } from 'redux';
 import { ApplicationDispatch } from '~/actions';
+import { loadAllApplicants } from '~/data/Api';
+import { ApplicationState } from '~/reducers';
+import { applyResumeFilter } from '~/static/ResumeFilter';
+import { TESCUser, UserStatus } from '~/static/types';
+
+import { replaceApplicants, replaceFiltered } from './actions';
+import ResumeList from './components/ResumeList';
 
 const mapStateToProps = (state: ApplicationState) => ({
   applicants: applyResumeFilter(state.admin.filters,

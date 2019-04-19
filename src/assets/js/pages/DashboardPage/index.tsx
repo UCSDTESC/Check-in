@@ -1,20 +1,17 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-
-import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
-
-import {Role, getRole} from '~/static/Roles';
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { bindActionCreators } from 'redux';
+import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
+import { ApplicationState } from '~/reducers';
+import { Role, getRole } from '~/static/Roles';
 
 import AdminDashboard from './components/AdminDashboard';
 import CheckinDashboard from './components/CheckinDashboard';
 import SponsorDashboard from './components/SponsorDashboard';
-import { ApplicationState } from '~/reducers';
 
 const mapStateToProps = (state: ApplicationState) => ({
   events: state.admin.events,
-  editing: state.admin.general.editing,
   user: state.admin.auth.user,
 });
 

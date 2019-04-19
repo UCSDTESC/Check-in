@@ -1,11 +1,8 @@
 import React from 'react';
-
-import AutoSuggest from '~/components/AutoSuggest';
-
-import {getSuggestions} from '~/static/Universities';
-
-import * as FormFields from '~/components/Fields';
 import { WrappedFieldProps } from 'redux-form';
+import AutoSuggest from '~/components/AutoSuggest';
+import * as FormFields from '~/components/Fields';
+import { getSuggestions } from '~/static/Universities';
 
 interface UniversityFieldProps {
   className?: string;

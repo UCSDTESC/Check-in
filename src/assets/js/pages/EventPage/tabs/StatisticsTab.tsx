@@ -1,9 +1,10 @@
 import React from 'react';
+import { EventStatistics } from '~/static/types';
+
+import EventStatisticsCharts from '../components/EventStatisticsCharts';
+import GenderStatistics from '../components/GenderStatistics';
 
 import EventPageTab from './EventPageTab';
-import GenderStatistics from '../components/GenderStatistics';
-import EventStatisticsCharts from '../components/EventStatisticsCharts';
-import { EventStatistics } from '~/static/types';
 
 interface StatisticsTabProps {
   statistics: EventStatistics | null;

@@ -1,14 +1,13 @@
 import React from 'react';
+import { updateOptions, addCustomQuestion, updateCustomQuestion,
+  deleteCustomQuestion } from '~/data/Api';
+import { QuestionType } from '~/static/Questions';
+import { TESCEventOptions, Question } from '~/static/types';
 
-import {updateOptions, addCustomQuestion, updateCustomQuestion,
-  deleteCustomQuestion} from '~/data/Api';
-
-import EventOptionsEdit from '../components/EventOptionsEdit';
 import CustomQuestionsEdit from '../components/CustomQuestionsEdit';
+import EventOptionsEdit from '../components/EventOptionsEdit';
 
 import EventPageTab from './EventPageTab';
-import { TESCEventOptions, Question } from '~/static/types';
-import { QuestionType } from '~/static/Questions';
 
 interface SettingsTabProps {
 }

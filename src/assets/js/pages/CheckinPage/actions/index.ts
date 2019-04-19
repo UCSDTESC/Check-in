@@ -1,11 +1,11 @@
-import * as Types from './types';
-
+import { createStandardAction } from 'typesafe-actions';
+import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Api from '~/data/Api';
 import { TESCUser } from '~/static/types';
-import { ApplicationAction, ApplicationDispatch } from '~/actions';
-import { createStandardAction } from 'typesafe-actions';
 
-export const userCheckin = (user: TESCUser, eventAlias: string): ApplicationAction<Q.Promise<void>> =>
+import * as Types from './types';
+
+export const userCheckin = (user: TESCUser, eventAlias: string): ApplicationAction<Promise<void>> =>
 (dispatch: ApplicationDispatch) =>
   Api.checkinUser(user._id, eventAlias)
     .then(() => {

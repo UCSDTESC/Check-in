@@ -1,6 +1,5 @@
 import React from 'react';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { TESCEvent } from '~/static/types';
 
 interface RSVPModalProps {

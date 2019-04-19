@@ -1,8 +1,7 @@
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
-import PropTypes from 'prop-types';
 import React from 'react';
-import {UncontrolledAlert} from 'reactstrap';
 import { RouteComponentProps } from 'react-router-dom';
+import { UncontrolledAlert } from 'reactstrap';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 
 const form = reduxForm<LoginFormData, LoginProps>({
   form: 'adminLogin',
@@ -14,17 +13,13 @@ export interface LoginFormData {
 }
 
 interface LoginProps {
-  loginUser: (user: LoginFormData) => Q.Promise<{}>;
+  loginUser: (user: LoginFormData) => Promise<{}>;
   errorMessage: string;
 }
 
 type Props = InjectedFormProps<LoginFormData, LoginProps> & RouteComponentProps & LoginProps;
 
 class Login extends React.Component<Props> {
-  static contextTypes = {
-    router: PropTypes.object.isRequired,
-  };
-
   /**
    * Handles the validated form data, and logs the user in.
    * @param {Object} formProps The validated form data.

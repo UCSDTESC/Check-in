@@ -1,5 +1,6 @@
-import { Filter, TESCUser } from './types';
 import { FiltersState } from '~/reducers/Admin/types';
+
+import { Filter, TESCUser } from './types';
 
 /**
  * Applies the user defined filters to resumes.
@@ -27,8 +28,8 @@ export function applyResumeFilter(filters: FiltersState, applicants: TESCUser[])
 
         return Object.values(filter.options)
           .some((option, optionIndex) => {
-            // Ignore the filter if it's disabled
-            if (!option) {
+            // Ignore the filter if it's disabled or doesn't exist on the user
+            if (!option || !applicant.hasOwnProperty(filterName)) {
               return false;
             }
 

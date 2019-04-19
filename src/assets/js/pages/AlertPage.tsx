@@ -1,5 +1,5 @@
 import React from 'react';
-import {UncontrolledAlert} from 'reactstrap';
+import { UncontrolledAlert } from 'reactstrap';
 
 export enum AlertType {
   Primary = 'primary',

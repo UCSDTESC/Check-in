@@ -1,12 +1,11 @@
 import React from 'react';
-
-import {exportUsers, bulkChange} from '~/data/Api';
+import { exportUsers, bulkChange } from '~/data/Api';
+import { AlertType } from '~/pages/AlertPage';
 
 import BulkChange, { BulkChangeFormData } from '../components/BulkChange';
+import { EventAlert } from '../reducers/types';
 
 import EventPageTab from './EventPageTab';
-import { EventAlert } from '../reducers/types';
-import { AlertType } from '~/pages/AlertPage';
 
 interface ActionsTabProps {
 }

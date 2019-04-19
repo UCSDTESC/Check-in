@@ -1,9 +1,7 @@
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
-import PropTypes from 'prop-types';
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {Alert, UncontrolledAlert} from 'reactstrap';
-
+import { Link } from 'react-router-dom';
+import { Alert, UncontrolledAlert } from 'reactstrap';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import NavHeader from '~/components/NavHeader';
 import { AlertType } from '~/pages/AlertPage';
 
@@ -11,7 +9,9 @@ const form = reduxForm<ResetFormData, ResetProps>({
   form: 'userReset',
 });
 
-interface ResetFormData {
+export interface ResetFormData {
+  newPassword: string;
+  repeatNewPassword: string;
 }
 
 interface ResetProps {

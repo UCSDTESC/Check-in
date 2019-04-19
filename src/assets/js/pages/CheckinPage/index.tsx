@@ -1,15 +1,19 @@
 import React from 'react';
 import QrReader from 'react-qr-reader';
-import Q from 'q';
-import {connect} from 'react-redux';
-import {Button, Modal, ModalHeader, ModalBody, ModalFooter} from 'reactstrap';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { RouteComponentProps } from 'react-router-dom';
+import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import { bindActionCreators } from 'redux';
+import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
+import { loadAllUsers } from '~/data/Api';
+import { ApplicationState } from '~/reducers';
+import { TESCUser, UserStatus } from '~/static/types';
 
-import {addUsers} from '../UsersPage/actions';
+import { addUsers } from '../UsersPage/actions';
 
-import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
+import { userCheckin } from './actions';
 
 import {loadAllUsers} from '~/data/Api';
 
@@ -111,7 +115,7 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
   }
 
   validateUser = (user: TESCUser) =>
-    Q.Promise((resolve, reject) => {
+    new Promise((resolve, reject) => {
       // Ensure they're eligible
       if (user.status !== UserStatus.Confirmed) {
         switch (user.status) {
@@ -132,8 +136,8 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       return resolve(user);
     })
 
-  checkinUser = (user: TESCUser): Q.Promise<TESCUser> =>
-    Q.Promise((resolve, reject) => {
+  checkinUser = (user: TESCUser): Promise<TESCUser> =>
+    new Promise((resolve, reject) => {
       const {event} = this.props;
 
       this.validateUser(user)

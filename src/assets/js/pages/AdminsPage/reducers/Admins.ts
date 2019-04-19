@@ -1,8 +1,9 @@
-import * as Types from '../actions/types';
-import { Admin } from '~/static/types';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+import { Admin } from '~/static/types';
+
 import { addAdmins, replaceAdmins } from '../actions';
+import * as Types from '../actions/types';
 
 const initialState: Admin[] = [];
 

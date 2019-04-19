@@ -1,17 +1,14 @@
-import {Field, reduxForm, InjectedFormProps} from 'redux-form';
-import React from 'react';
-import {connect} from 'react-redux';
 import UUID from 'node-uuid';
-
-import {getRole, Role} from '~/static/Roles';
-
-import {QuestionType} from '~/static/Questions';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Field, reduxForm, InjectedFormProps } from 'redux-form';
+import { ApplicationState } from '~/reducers';
+import { QuestionType } from '~/static/Questions';
+import { getRole, Role } from '~/static/Roles';
+import { TESCUser, TESCEvent, Question } from '~/static/types';
 
 import CheckboxButton from './CheckboxButton';
-import { ApplicationState } from '~/reducers';
-import { TESCUser, Resume, TESCEvent, Question } from '~/static/types';
 
-// Sets the form name to the id of the user
 const mapStateToProps = (state: ApplicationState, ownProps: UserProps) => ({
   resume: ownProps.user.resume ? ownProps.user.resume : null,
   event: ownProps.user.event ? ownProps.user.event : null,
@@ -23,8 +20,9 @@ interface UserProps {
   event: TESCEvent;
 }
 
+// TODO: Create unified User form data that allows for easy extensibility of
+// underlying user object.
 interface UserFormData {
-
 }
 
 type Props = InjectedFormProps<UserFormData, UserProps> & ReturnType<typeof mapStateToProps> & UserProps;

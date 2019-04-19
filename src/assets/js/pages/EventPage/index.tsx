@@ -1,29 +1,24 @@
 import React from 'react';
-import {connect} from 'react-redux';
-import {bindActionCreators, AnyAction} from 'redux';
-import {Link, RouteComponentProps} from 'react-router-dom';
 import FA from 'react-fontawesome';
-import {Alert, Nav, NavItem, NavLink, UncontrolledTooltip} from 'reactstrap';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
-
-import {loadEventStatistics} from '~/data/Api';
-
-import {loadAllAdminEvents, ApplicationDispatch} from '~/actions';
-
-import {addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert,
-  addEventDangerAlert} from './actions';
-
+import { connect } from 'react-redux';
+import { showLoading, hideLoading } from 'react-redux-loading-bar';
+import { Link, RouteComponentProps } from 'react-router-dom';
+import { Alert, Nav, NavItem, NavLink, UncontrolledTooltip } from 'reactstrap';
+import { bindActionCreators, AnyAction } from 'redux';
+import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
+import { loadEventStatistics } from '~/data/Api';
+import { ApplicationState } from '~/reducers';
 
+import { addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert,
+  addEventDangerAlert } from './actions';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
+import { EventAlert } from './reducers/types';
 import ActionsTab from './tabs/ActionsTab';
-import StatisticsTab from './tabs/StatisticsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
-
-import { ApplicationState } from '~/reducers';
-import { EventAlert } from './reducers/types';
+import StatisticsTab from './tabs/StatisticsTab';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;

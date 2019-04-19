@@ -1,9 +1,10 @@
-import {handleActions} from 'redux-actions';
-import * as Types from '~/actions/types';
-import * as Actions from '~/actions';
-import { FiltersState } from './types';
-import { FilterOptions, Filter, FilterOption } from '~/static/types';
+import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+import * as Actions from '~/actions';
+import * as Types from '~/actions/types';
+import { FilterOptions, Filter, FilterOption } from '~/static/types';
+
+import { FiltersState } from './types';
 
 const INITIAL_STATE: FiltersState = {
   university: {

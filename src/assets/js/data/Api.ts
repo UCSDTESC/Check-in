@@ -1,15 +1,16 @@
-import Cookies from 'universal-cookie';
+import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
-import request, { SuperAgentRequest } from 'superagent';
+import Cookies from 'universal-cookie';
+import { NewAdminModalFormData } from '~/components/NewAdminModal';
+import { ApplyPageFormData } from '~/pages/ApplyPage';
+import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
+import CookieTypes from '~/static/Cookies';
+import { QuestionType } from '~/static/Questions';
+import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
+    TESCEvent, Column, ColumnResponse } from '~/static/types';
 
 import { promisify, SuccessResponse } from './helpers';
-
-import CookieTypes from '~/static/Cookies';
-import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
-    TESCEvent, Column } from '~/static/types';
-import { QuestionType } from '~/static/Questions';
-import { NewAdminModalFormData } from '~/components/NewAdminModal';
 
 const API_URL_PREFIX = '/api';
 
@@ -166,37 +167,47 @@ export const checkinUser = (id: string, eventAlias: string) =>
  * @param  {Object} user The user fields to register.
  * @returns {Promise} A promise of the request.
  */
-export const registerUser = (eventAlias: string, user: TESCUser) => {
-  const { customQuestionResponses } = user;
-  const postObject: any = Object.assign({}, user);
+export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
+  const { customQuestionResponses, resume } = user;
+  const postObject: ApplyPageFormData = Object.assign({}, user);
 
   // Ensure it doesn't push an undefined field
-  postObject.customQuestionResponses = customQuestionResponses
-    ? JSON.stringify(customQuestionResponses)
-    : '';
+  if (!customQuestionResponses) {
+    delete postObject.customQuestionResponses;
+  }
+  if (resume.length > 0) {
+    delete postObject.resume;
+  }
+
   let baseReq = request
     .post(`/register/${eventAlias}`)
     .use(apiPrefix)
-    .field(postObject);
+    .field({
+      ...postObject,
+    } as any);
 
-  if (postObject.resume && postObject.resume.length > 0) {
-    baseReq = baseReq.attach('resume', postObject.resume[0]);
+  if (resume) {
+    baseReq = baseReq.attach('resume', user.resume[0]);
   }
   return promisify<{
     email: string;
   }>(baseReq);
 };
 
-export const registerNewEvent = (event: any) =>
-  promisify<TESCEvent>(
+export const registerNewEvent = (event: NewEventFormData) => {
+  const {logo, ...eventWithoutLogo} = event;
+  return promisify<TESCEvent>(
     request
       .post('/admin/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .field(event)
-      .attach('logo', event.logo[0])
+      .field({
+        ...eventWithoutLogo,
+      })
+      .attach('logo', logo[0])
       .use(apiPrefix)
       .use(nocache)
   );
+};
 
 /**
  * Request to register a new admin.
@@ -300,7 +311,7 @@ export const updateOptions = (eventAlias: string, options: TESCEventOptions) =>
  * @returns {Promise} A promise of the request.
  */
 export const loadColumns = () =>
-  promisify<Column[]>(
+  promisify<ColumnResponse>(
     request
       .get('/admin/columns')
       .set('Authorization', cookies.get(CookieTypes.admin.token))

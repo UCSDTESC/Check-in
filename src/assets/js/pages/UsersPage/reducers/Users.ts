@@ -1,8 +1,9 @@
-import * as Types from '../actions/types';
-import { TESCUser } from '~/static/types';
 import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
+import { TESCUser } from '~/static/types';
+
 import { addUsers, _updateUser } from '../actions';
+import * as Types from '../actions/types';
 
 const initialState: TESCUser[] = [];
 

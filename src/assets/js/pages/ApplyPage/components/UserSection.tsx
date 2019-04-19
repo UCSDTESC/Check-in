@@ -1,7 +1,7 @@
-import {Field, reduxForm} from 'redux-form';
 import React from 'react';
-
+import { Field, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
+
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 
 interface UserSectionProps extends ApplyPageSectionProps {
@@ -10,7 +10,11 @@ interface UserSectionProps extends ApplyPageSectionProps {
   isSubmitting: boolean;
 }
 
-interface UserSectionFormData {
+export interface UserSectionFormData {
+  provision: boolean;
+  accept: boolean;
+  password?: string;
+  confirmPassword?: string;
 }
 
 class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps> {
