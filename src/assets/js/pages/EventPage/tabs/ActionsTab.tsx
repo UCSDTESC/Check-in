@@ -1,9 +1,7 @@
 import React from 'react';
 import { exportUsers, bulkChange } from '~/data/Api';
-import { AlertType } from '~/pages/AlertPage';
 
 import BulkChange, { BulkChangeFormData } from '../components/BulkChange';
-import { EventAlert } from '../reducers/types';
 
 import EventPageTab from './EventPageTab';
 
@@ -43,7 +41,7 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
 
   render() {
     return (
-      <div className="event-tab">
+      <div className="tab-page__contents">
         <div className="row">
           <div className="col-lg-3 col-md-6">
             <h2>User Actions</h2>

@@ -1,35 +1,26 @@
-.event-tab {
-  padding: 1rem 0.5rem;
-
-  &__alert {
-    font-weight: 800;
-    display: block;
-    color: $tesc-blue;
-    padding: 0.5rem;
-  }
-
+.tab-page {
   &__container {
     background: $admin-background-blue; 
     padding: 0.5rem 0 0 0;
     border-bottom: 1px solid $medium-gray;
   }
-
+  
   &__nav {
     margin-bottom: -2px !important;
   }
-
+  
   &__tabs {
     border: none;
-
+    
     @include media-breakpoint-down(md) {
       margin-bottom: 0.3rem;
     }
   }
-
+  
   &__link {
     $active-color: $admin-blue;
     $tab-radius: 0.2rem;
-
+    
     border-radius: $tab-radius $tab-radius 0 0 !important;
     background: transparent;
     color: $dark-gray;
@@ -37,13 +28,13 @@
     position: relative;
     border: 1px solid transparent !important;
     border-top: 3px solid transparent !important;
-
+    
     @include media-breakpoint-down(md) {
       border-radius: $tab-radius !important;
       padding: 0.25rem 0.5rem;
       font-size: 0.9rem;
     }
-
+    
     &.active {
       background: $body-background !important;
       color: $black !important;
@@ -52,20 +43,24 @@
       @include media-breakpoint-down(md) {
         border-color: $active-color $medium-gray $medium-gray !important;
       }
-
+      
       .fa {
         color: $black;
       }
     }
-
+    
     .fa {
       color: $medium-gray;
     }
   }
-
+  
   &__icon {
     @include media-breakpoint-down(md) {
       display: none !important;
     }
+  }
+  
+  &__contents {
+    padding: 1rem 0.5rem;
   }
 }

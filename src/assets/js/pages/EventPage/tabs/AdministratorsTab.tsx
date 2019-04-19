@@ -92,7 +92,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
     const {event} = this.props;
 
     return (
-      <div className="event-tab">
+      <div className="tab-page__contents">
         <div className="row">
           <div className="col-12 col-md-6">
             <OrganiserList

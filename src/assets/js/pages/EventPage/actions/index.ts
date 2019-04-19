@@ -1,15 +1,13 @@
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationDispatch, ApplicationAction } from '~/actions';
-import { AlertType } from '~/pages/AlertPage';
+import { AlertType, PageAlert } from '~/pages/AlertPage';
 import { EventStatistics } from '~/static/types';
-
-import { EventAlert } from '../reducers/types';
 
 import * as Types from './types';
 
 export interface AddEventAlertPayload {
   eventAlias: string;
-  alert: EventAlert;
+  alert: PageAlert;
 }
 
 export interface RemoveEventAlertPayload {
@@ -27,16 +25,17 @@ export const _removeEventAlert = createStandardAction(Types.REMOVE_EVENT_ALERT)<
 export const _updateEventStatistics =
   createStandardAction(Types.UPDATE_EVENT_STATISTICS)<UpdateEventStatisticsPayload>();
 
-export const addEventAlert = (eventAlias: string, message: string, severity: AlertType, title: string):
+export const addEventAlert = (eventAlias: string, message: string,
+                              type: AlertType = AlertType.Danger, title: string = ''):
 ApplicationAction =>
   (dispatch: ApplicationDispatch) => dispatch(
     _addEventAlert({
       eventAlias,
       alert: {
         message,
-        severity,
+        type,
         title,
-      } as EventAlert,
+      } as PageAlert,
     }));
 
 export const addEventSuccessAlert = (eventAlias: string, message: string, title: string): ApplicationAction =>
@@ -45,9 +44,9 @@ export const addEventSuccessAlert = (eventAlias: string, message: string, title:
       eventAlias,
       alert: {
         message,
-        severity: AlertType.Success,
+        type: AlertType.Success,
         title,
-      } as EventAlert,
+      } as PageAlert,
     }));
 
 export const addEventDangerAlert = (eventAlias: string, message: string, title: string): ApplicationAction =>
@@ -56,9 +55,9 @@ export const addEventDangerAlert = (eventAlias: string, message: string, title: 
       eventAlias,
       alert: {
         message,
-        severity: AlertType.Danger,
+        type: AlertType.Danger,
         title,
-      } as EventAlert,
+      } as PageAlert,
     }));
 
 export const removeEventAlert = (eventAlias: string, timestamp: Date): ApplicationAction =>

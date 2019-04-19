@@ -1,4 +1,10 @@
 .event-page {
+  &__third-party {
+    font-weight: 800;
+    display: block;
+    color: $tesc-blue;
+    padding: 0.5rem;
+  }
 
   &__header {
     background: $admin-background-blue;

@@ -1,9 +1,7 @@
 import React from 'react';
-import QrReader from 'react-qr-reader';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { RouteComponentProps } from 'react-router-dom';
-import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
@@ -11,9 +9,18 @@ import { loadAllUsers } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 import { TESCUser, UserStatus } from '~/static/types';
 
+import { AlertType } from '../AlertPage';
+import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
 import { addUsers } from '../UsersPage/actions';
 
 import { userCheckin } from './actions';
+import KeyboardScanner from './components/KeyboardScanner';
+import LiabilityWaiverModal from './components/LiabilityWaiverModal';
+import ManualScanner from './components/ManualScanner';
+import WebcamScanner from './components/WebcamScanner';
+
+// Length of _id in MongoDB
+export const USER_ID_LENGTH = 24;
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -34,33 +41,57 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
   userCheckin,
 }, dispatch);
 
-interface CheckinPageProps {
+interface CheckinPageProps extends TabularPageProps {
 }
 
 type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & CheckinPageProps;
 
-interface CheckinPageState {
+interface CheckinPageState extends TabularPageState {
   isProcessing: boolean;
-  wasSuccessful: boolean;
-  errorMessage: string;
-  isModalShowing: boolean;
-  lastUser: string;
-  lastName: string;
-  nameApplicants: TESCUser[];
+  isLiabilityShowing: boolean;
+  lastUser?: TESCUser;
 }
 
-class CheckinPage extends React.Component<Props, CheckinPageState> {
+const CheckinTab: React.StatelessComponent = (props) => {
+  return (
+    <div className="tab-page__contents">
+      {props.children}
+    </div>
+  );
+};
+
+class CheckinPage extends TabularPage<Props, CheckinPageState> {
+  tabPages: Readonly<TabPage[]> = [
+    {
+      icon: 'qrcode',
+      name: 'Scanner',
+      anchor: 'scanner',
+      render: this.renderKeyboardTab.bind(this),
+    } as TabPage,
+    {
+      icon: 'video-camera',
+      name: 'Webcam',
+      anchor: 'webcam',
+      render: this.renderWebcamTab.bind(this),
+    } as TabPage,
+    {
+      icon: 'search',
+      name: 'Manual',
+      anchor: 'manual',
+      render: this.renderManualTab.bind(this),
+    } as TabPage,
+  ];
+
   state: Readonly<CheckinPageState> = {
     isProcessing: false,
-    wasSuccessful: false,
-    errorMessage: '',
-    isModalShowing: false,
-    lastUser: '',
-    lastName: '',
-    nameApplicants: [],
+    isLiabilityShowing: false,
+    lastUser: null,
+    activeTab: this.tabPages[0],
+    alerts: [],
   };
 
   componentDidMount() {
+    super.componentDidMount();
     const {users, event} = this.props;
 
     if (!users.length) {
@@ -76,6 +107,18 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     }
   }
 
+  onCheckinError = (error: string) => {
+    this.clearAlerts();
+    this.createAlert(error, AlertType.Danger);
+  };
+
+  onCheckinSuccessful = () => {
+    const {lastUser} = this.state;
+
+    this.clearAlerts();
+    this.createAlert(`Checked in ${lastUser.firstName}`, AlertType.Success);
+  };
+
   /**
    * Loads all the users into the redux state.
    */
@@ -85,10 +128,10 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     showLoading();
 
     loadAllUsers(this.props.match.params.eventAlias)
-      .then(res => {
-        hideLoading();
-        return addUsers(res);
-      });
+    .then(res => {
+      hideLoading();
+      return addUsers(res);
+    });
   }
 
   validateUser = (user: TESCUser) =>
@@ -96,139 +139,118 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
       // Ensure they're eligible
       if (user.status !== UserStatus.Confirmed) {
         switch (user.status) {
-        case (UserStatus.Declined):
-          return reject('User marked as rejecting invitation');
-        case (UserStatus.Unconfirmed):
-          return reject('User never confirmed their invitation');
-        case (UserStatus.Rejected):
-          return reject('User was rejected from ' + user.event.name);
-        default:
-          return reject('User was not invited to event');
+          case (UserStatus.Declined):
+            return reject('User marked as rejecting invitation');
+          case (UserStatus.Unconfirmed):
+            return reject('User never confirmed their invitation');
+          case (UserStatus.Rejected):
+            return reject('User was rejected from ' + user.event.name);
+          default:
+            return reject('User was not invited to event');
         }
       }
+
       if (user.checkedIn) {
         return reject('User has already checked in');
       }
 
       return resolve(user);
-    })
+  })
 
-  checkinById = (id: string): Promise<TESCUser> =>
-    new Promise((resolve, reject) => {
-      const {users, event} = this.props;
+  checkinUser = (user: TESCUser): Promise<TESCUser> =>
+  new Promise((resolve, reject) => {
+    const {event} = this.props;
 
-      // Filter by given ID
-      const eligibleUsers = users.filter((user) => user._id === id);
+    this.validateUser(user)
+    .then(() =>
+    this.props.userCheckin(user, event.alias)
+    )
+    .then(() => resolve(user))
+    .catch(reject);
+  });
 
-      if (eligibleUsers.length !== 1) {
-        return reject(`User not found with ID ${id}`);
-      }
+  onScan = (userId: string) => {
+    const {lastUser} = this.state;
 
-      // Get the particular user
-      const user = eligibleUsers[0];
+    if (lastUser && userId === lastUser._id) {
+      this.onCheckinError('User has already checked in');
 
-      this.validateUser(user)
-        .then(() => {
-          this.props.userCheckin(user, event.alias)
-            .then(() => {
-              resolve(user);
-            })
-            .catch(reject);
-        })
-        .catch(reject);
-    });
-
-  onScan = (data: string) => {
-    if (data === null || this.state.isProcessing) {
-      return;
+      return this.setState({
+        isProcessing: false,
+      });
     }
 
-    if (data === this.state.lastUser) {
+    // Filter by given ID
+    const eligibleUsers = this.props.users.filter((user) => user._id === userId);
+
+    if (eligibleUsers.length !== 1) {
+      this.onCheckinError(`User not found with ID ${userId}`);
+
       return this.setState({
-        errorMessage: 'User has already checked in',
-        wasSuccessful: false,
+        isProcessing: false,
       });
     }
 
     this.setState({
       isProcessing: true,
-      wasSuccessful: false,
-      errorMessage: '',
-      lastUser: data,
-      lastName: '',
+      lastUser: eligibleUsers[0],
     });
 
     this.toggleModal();
   }
 
-  nameApplicants = (event: React.FormEvent<HTMLInputElement>) => {
-    const {users} = this.props;
-
-    const name = event.currentTarget.value;
-    if (name.length < 3) {
-      return;
-    }
-
-    // Filter by given name
-    const eligibleUsers = users.filter((user) =>
-      (`${user.firstName} ${user.lastName}`).indexOf(name) !== -1);
-    this.setState({
-      nameApplicants: eligibleUsers,
-    });
-  }
-
-  selectApplicant = (id: string) => {
-    this.onScan(id);
-
-    this.setState({
-      nameApplicants: [],
-    });
-  }
-
   toggleModal = () =>
     this.setState({
-      isModalShowing: !this.state.isModalShowing,
+      isLiabilityShowing: !this.state.isLiabilityShowing,
     });
 
-  startCheckin = () => {
+  callCheckin = () => {
     this.setState({
-      isModalShowing: false,
+      isLiabilityShowing: false,
     });
 
-    this.checkinById(this.state.lastUser)
-      .then((user) => {
-        this.setState({
-          wasSuccessful: true,
-          lastName: `${user.firstName} ${user.lastName}`,
-        });
+    this.checkinUser(this.state.lastUser)
+    .then((user) => {
+        this.onCheckinSuccessful();
       })
       .catch((err: string) => {
-        this.setState({
-          wasSuccessful: false,
-          errorMessage: err,
-        });
+        this.onCheckinError(err);
       })
       .finally(() => this.setState({
         isProcessing: false,
       }))
       .catch((err: string) => {
-        this.setState({
-          wasSuccessful : false,
-          errorMessage : err,
-        });
+        this.onCheckinError(err);
       });
+  }
+
+  renderKeyboardTab(props: Props) {
+    return (
+      <CheckinTab>
+        <KeyboardScanner onUserScanned={this.onScan} />
+      </CheckinTab>
+    );
+  }
+
+  renderWebcamTab(props: Props) {
+    return (
+      <CheckinTab>
+        <WebcamScanner onUserScanned={this.onScan} />
+      </CheckinTab>
+    );
+  }
+
+  renderManualTab(props: Props) {
+    return (
+      <CheckinTab>
+        <ManualScanner onUserScanned={this.onScan} users={props.users} />
+      </CheckinTab>
+    );
   }
 
   render() {
     const {users, event} = this.props;
-    const {errorMessage, wasSuccessful, lastName, nameApplicants, isModalShowing}
-      = this.state;
-
-    const previewStyle = {
-      maxWidth: '100%',
-      maxHeight: '50vh',
-      display: 'inline',
-    };
+    const {isLiabilityShowing, activeTab} = this.state;
 
     if (!users.length) {
       return (
@@ -237,72 +259,23 @@ class CheckinPage extends React.Component<Props, CheckinPageState> {
     }
 
     return (
+      <div className="page page--admin checkin-page d-flex flex-column h-100">
+        {this.renderAlerts()}
 
-      <div className="full-height">
-        <Modal
-          isOpen={isModalShowing}
-          toggle={this.toggleModal}
-          className="modal-lg"
-        >
-          <ModalHeader toggle={this.toggleModal}>Liability Waiver</ModalHeader>
-          <ModalBody>
-            <object
-              width="100%"
-              height="500px"
-              data={event.checkinWaiver}
-            />
-          </ModalBody>t
-          <ModalFooter>
-            <Button color="primary" onClick={this.startCheckin}>I agree</Button>
-            {' '}
-            <Button color="secondary" onClick={this.toggleModal}>Cancel</Button>
-          </ModalFooter>
-        </Modal>
-        <div className="checkin container">
-          <div className="row">
-            <div className="col-12 text-center">
-              <h1>{event.name} Checkin</h1>
-              <h2>Scan QR</h2>
-              {errorMessage && <h2 className="checkin__error text-danger">
-                {JSON.stringify(errorMessage)}
-              </h2>}
-              {wasSuccessful &&
-                <h2 className="checkin__success">Checked In&nbsp;
-                  <span className="checkin__name">{lastName}</span>!
-                </h2>
-              }
-              <QrReader
-                delay={200}
-                style={previewStyle}
-                onError={console.error}
-                onScan={this.onScan}
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-12 text-center">
-              <h2>Manual Checkin</h2>
-              <input
-                type="text"
-                placeholder="Name"
-                className="rounded-input"
-                onChange={this.nameApplicants}
-              />
-              <ul className="checkin__list">
-                {nameApplicants.map((app) => (
-                  <li className="checkin__list-user" key={app._id}>
-                    <button
-                      className="rounded-button rounded-button--small"
-                      onClick={() => this.selectApplicant(app._id)}
-                    >
-                      {app.firstName} {app.lastName}<br/>
-                      <small>{app.account.email}</small>
-                    </button>
-                  </li>)
-                )}
-              </ul>
-            </div>
-          </div>
+        <LiabilityWaiverModal
+          isOpen={isLiabilityShowing}
+          onWaiverAgree={this.callCheckin}
+          toggleModal={this.toggleModal}
+          event={event}
+        />
+
+        <div className="checkin container-fluid">
+          <TabularPageNav
+            tabPages={this.tabPages}
+            activeTab={activeTab}
+          />
+
+          {this.renderActiveTab()}
         </div>
       </div>
     );

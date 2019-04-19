@@ -1,0 +1,13 @@
+.alert-page {
+  &__alerts {
+    width: 100%;
+  }
+
+  &__alert {
+    font-family: $header-font-family;
+    
+    @include media-breakpoint-up(md) {
+      margin: 0 auto -2rem;
+    }
+  }
+}
