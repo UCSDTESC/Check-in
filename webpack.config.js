@@ -44,7 +44,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
-      '~': path.join(__dirname, '/src/assets/js'),
+      '~': path.join(__dirname, '/src/client'),
+      'Shared': path.join(__dirname, '/src/shared'),
       'react-dom': '@hot-loader/react-dom',
     }
   },

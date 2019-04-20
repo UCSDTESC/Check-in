@@ -1,6 +1,7 @@
 {
   "extends": ["tslint:recommended", "tslint-react"],
   "rules": {
+    "align": [true, "statements", "members"],
     "arrow-parens": false,
     "arrow-return-shorthand": [false],
     "comment-format": [true, "check-space"],
@@ -15,13 +16,14 @@
     "no-any": false,
     "no-console": false,
     "no-empty-interface": false,
+    "no-empty": [true, "allow-empty-functions"],
     "no-import-side-effect": [true],
     "no-inferrable-types": [true, "ignore-params", "ignore-properties"],
     "no-invalid-this": [true, "check-function-in-method"],
     "no-namespace": false,
     "no-null-keyword": false,
     "no-require-imports": false,
-    "no-submodule-imports": [true, "~"],
+    "no-submodule-imports": [true, "~", "Shared"],
     "no-shadowed-variable": false,
     "no-this-assignment": [true, { "allow-destructuring": true }],
     "no-trailing-whitespace": true,
