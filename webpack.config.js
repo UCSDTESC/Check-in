@@ -13,7 +13,7 @@ module.exports = {
     main: [
       'react-hot-loader/patch',
       'webpack-hot-middleware/client?timeout=2000&path=/__webpack_hmr',
-      path.join(__dirname, 'src/assets/js/main.tsx')
+      path.join(__dirname, 'src/client/main.tsx')
     ]
   },
   output: {
@@ -45,7 +45,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       '~': path.join(__dirname, '/src/client'),
-      'Shared': path.join(__dirname, '/src/shared'),
+      '@Shared': path.join(__dirname, '/src/shared'),
       'react-dom': '@hot-loader/react-dom',
     }
   },

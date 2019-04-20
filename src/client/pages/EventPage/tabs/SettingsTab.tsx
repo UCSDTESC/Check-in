@@ -1,5 +1,5 @@
-import { QuestionType } from 'Shared/Questions';
-import { TESCEventOptions, Question } from 'Shared/types';
+import { QuestionType } from '@Shared/Questions';
+import { TESCEventOptions, Question } from '@Shared/Types';
 import React from 'react';
 import { updateOptions, addCustomQuestion, updateCustomQuestion,
   deleteCustomQuestion } from '~/data/Api';

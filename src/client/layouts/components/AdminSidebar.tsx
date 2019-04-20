@@ -1,8 +1,9 @@
-import { Role, getRole } from 'Shared/Roles';
-import { Admin } from 'Shared/types';
+import { Role, getRole } from '@Shared/Roles';
+import { Admin } from '@Shared/Types';
 import React from 'react';
 import { NavbarToggler } from 'reactstrap';
 import ToggleSwitch from '~/components/ToggleSwitch';
+import { JWTAuthAdmin } from '~/data/AdminAuth';
 import { EventsState } from '~/reducers/Admin/types';
 
 import Link from './Link';
@@ -10,7 +11,7 @@ import Section from './Section';
 
 interface AdminSidebarProps {
   isAuthenticated: boolean;
-  user?: Admin;
+  user?: JWTAuthAdmin;
   isHidden?: boolean;
   events: EventsState;
   children: JSX.Element;

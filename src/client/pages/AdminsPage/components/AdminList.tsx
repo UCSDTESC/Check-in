@@ -1,4 +1,4 @@
-import { Admin } from 'Shared/types';
+import { Admin } from '@Shared/Types';
 import React from 'react';
 import { Button } from 'reactstrap';
 

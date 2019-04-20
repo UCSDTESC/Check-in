@@ -1,6 +1,6 @@
-import { QuestionType } from 'Shared/Questions';
+import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
-    TESCEvent, Column, ColumnResponse } from 'Shared/types';
+    TESCEvent, Column, ColumnResponse } from '@Shared/Types';
 import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';

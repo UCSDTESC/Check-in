@@ -1,12 +1,13 @@
-import { Role, getRole } from 'Shared/Roles';
-import { Admin, TESCEvent } from 'Shared/types';
+import { Role, getRole } from '@Shared/Roles';
+import { Admin, TESCEvent } from '@Shared/Types';
 import React from 'react';
+import { JWTAuthAdmin } from '~/data/AdminAuth';
 
 import EventList from './EventList';
 
 interface AdminDashboardProps {
   events: TESCEvent[];
-  user: Admin;
+  user: JWTAuthAdmin;
 }
 
 export default class AdminDashboard extends React.Component<AdminDashboardProps> {

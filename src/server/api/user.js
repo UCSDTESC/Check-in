@@ -9,7 +9,7 @@ var {createTESCEmail} = require('../config/mailer')();
 
 const {setUserInfo, PUBLIC_EVENT_FIELDS, USER_JWT_TIMEOUT} =
   require('./helper');
-const Errors = require('./errors')(logging);
+const Errors = require('./ErrorHandler')(logging);
 
 const User = mongoose.model('User');
 const Event = mongoose.model('Event');

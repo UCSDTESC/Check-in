@@ -1,4 +1,4 @@
-import { TESCEvent } from 'Shared/types';
+import { TESCEvent } from '@Shared/Types';
 
 export interface EventsState {
   [EventName: string]: TESCEvent;

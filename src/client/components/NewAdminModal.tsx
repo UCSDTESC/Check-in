@@ -1,4 +1,4 @@
-import { Role } from 'Shared/Roles';
+import { Role } from '@Shared/Roles';
 import generator from 'generate-password';
 import React from 'react';
 import FA from 'react-fontawesome';

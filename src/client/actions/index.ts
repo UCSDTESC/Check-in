@@ -1,4 +1,4 @@
-import { TESCEvent, FilterOption } from 'Shared/types';
+import { TESCEvent, FilterOption } from '@Shared/Types';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { createStandardAction, ActionType } from 'typesafe-actions';

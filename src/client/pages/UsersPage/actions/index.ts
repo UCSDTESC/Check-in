@@ -1,4 +1,4 @@
-import { TESCUser, Column } from 'Shared/types';
+import { TESCUser, Column } from '@Shared/Types';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Api from '~/data/Api';

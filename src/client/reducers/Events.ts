@@ -1,4 +1,4 @@
-import { TESCEvent } from 'Shared/types';
+import { TESCEvent } from '@Shared/Types';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 import * as Actions from '~/actions';

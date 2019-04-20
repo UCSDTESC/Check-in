@@ -1,10 +1,10 @@
-import dotenv from 'dotenv';
+import { config } from 'dotenv';
 
-dotenv.config({debug: process.env.NODE_ENV !== 'development'});
+config();
 
 export const Config = {
   Port: Number(process.env.PORT) || 3000,
-  NodeEnv: process.env.NODE_ENV,
+  NodeEnv: process.env.NODE_ENV || 'development',
   WebConcurrency: process.env.WEB_CONCURRENCY || 1,
   MongoDBURI: process.env.MONGODB_URI,
   SaltRounds: Number(process.env.SALT_ROUNDS),

@@ -1,4 +1,4 @@
-import { UserStatus } from 'Shared/types';
+import { UserStatus } from '@Shared/Types';
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 

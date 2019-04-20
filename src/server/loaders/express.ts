@@ -1,9 +1,9 @@
-import bodyParser from 'body-parser';
-import compression from 'compression';
-import express from 'express';
-import path from 'path';
+import * as bodyParser from 'body-parser';
+import * as compression from 'compression';
+import * as express from 'express';
+import * as path from 'path';
 
-import Loader from './loader';
+import Loader from './Loader';
 
 export default class ExpressLoader extends Loader {
   public static async initialiseLoader(app: express.Application) {
@@ -15,7 +15,7 @@ export default class ExpressLoader extends Loader {
       parameterLimit: 3000,
     }));
 
-    app.set('views', path.join(__dirname, '../views'));
+    app.set('views', path.join(__dirname, '/views'));
     app.set('view engine', 'pug');
 
     app.use(express.static(path.join(__dirname, '../../assets/public')));

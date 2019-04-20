@@ -1,5 +1,5 @@
-import { Role, getRole } from 'Shared/Roles';
-import { Admin } from 'Shared/types';
+import { Role, getRole } from '@Shared/Roles';
+import { Admin } from '@Shared/Types';
 import React from 'react';
 import { loadAllAdmins } from '~/data/Api';
 

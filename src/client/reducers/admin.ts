@@ -1,4 +1,4 @@
-import { Admin, TESCUser } from 'Shared/types';
+import { Admin, TESCUser } from '@Shared/Types';
 import reduceReducers from 'reduce-reducers';
 import auth from '~/auth/admin/reducers/Auth';
 import { AdminAuthState } from '~/auth/admin/reducers/types';

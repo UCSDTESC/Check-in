@@ -1,5 +1,5 @@
-import crypto from 'crypto';
-import mime from 'mime';
+import * as crypto from 'crypto';
+import * as mime from 'mime';
 import multer from 'multer';
 
 const storage = multer.diskStorage({

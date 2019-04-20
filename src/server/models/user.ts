@@ -1,12 +1,12 @@
-import { TESCUser } from 'Shared/types';
-import mongoose from 'mongoose';
+import { TESCUser } from '@Shared/Types';
+import { Model, Schema, Document, model } from 'mongoose';
 import crate from 'mongoose-crate';
 import S3 from 'mongoose-crate-s3';
 import mongooseSanitizer from 'mongoose-sanitizer';
+import { Container } from 'typedi';
 
-const Schema = mongoose.Schema;
-
-type UserType = TESCUser & mongoose.Document;
+export type UserDocument = TESCUser & Document;
+export type UserModel = Model<UserDocument>;
 
 const UserSchema = new Schema({
   event: {
@@ -247,4 +247,4 @@ UserSchema.method('csvFlatten', function() {
   return autoFilled;
 });
 
-export const UserModel = mongoose.model<UserType>('User', UserSchema);
+Container.set('UserModel', model<UserDocument>('User', UserSchema));

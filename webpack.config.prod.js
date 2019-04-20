@@ -61,7 +61,7 @@ module.exports = {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
       '~': path.join(__dirname, '/src/client'),
-      'Shared': path.join(__dirname, '/src/shared')
+      '@Shared': path.join(__dirname, '/src/shared')
     }
   },
   module: {

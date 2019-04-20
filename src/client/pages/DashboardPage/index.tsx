@@ -1,4 +1,4 @@
-import { Role, getRole } from 'Shared/Roles';
+import { Role, getRole } from '@Shared/Roles';
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';

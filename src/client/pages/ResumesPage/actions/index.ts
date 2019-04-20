@@ -1,4 +1,4 @@
-import { TESCUser } from 'Shared/types';
+import { TESCUser } from '@Shared/Types';
 import { createStandardAction } from 'typesafe-actions';
 
 import * as Types from './types';

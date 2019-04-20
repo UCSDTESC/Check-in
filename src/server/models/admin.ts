@@ -1,14 +1,15 @@
-import { Role } from 'Shared/Roles';
-import { Admin } from 'Shared/types';
-import bcrypt from 'bcrypt-nodejs';
-import mongoose, { HookNextFunction } from 'mongoose';
+import { Config } from '@Config/index';
+import { Role } from '@Shared/Roles';
+import { Admin } from '@Shared/Types';
+import * as bcrypt from 'bcrypt-nodejs';
+import { HookNextFunction, Model, Schema, Document, model } from 'mongoose';
 import mongooseSanitizer from 'mongoose-sanitizer';
+import { Container } from 'typedi';
 
-const Schema = mongoose.Schema;
-
-type AdminType = Admin & mongoose.Document & {
+export type AdminDocument = Admin & Document & {
   comparePassword(password: string, cb: (err: Error, isMatch: boolean) => void): void;
 };
+export type AdminModel = Model<AdminDocument>;
 
 const AdminSchema = new Schema({
   username: {
@@ -45,10 +46,10 @@ const AdminSchema = new Schema({
   },
 }, {timestamps: true});
 
-AdminSchema.pre<AdminType>('save', function(next: HookNextFunction) {
+AdminSchema.pre<AdminDocument>('save', function(next: HookNextFunction) {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
-  const SALT_FACTOR = process.env.SALT_ROUNDS;
+  const SALT_FACTOR = Config.SaltRounds;
 
   if (!user.isModified('password')) {
     return next();
@@ -99,4 +100,4 @@ AdminSchema.set('toJSON', {
 
 AdminSchema.plugin(mongooseSanitizer);
 
-export const AdminModel = mongoose.model<AdminType>('Admin', AdminSchema);
+Container.set('AdminModel', model<AdminDocument>('Admin', AdminSchema));

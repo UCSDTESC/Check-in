@@ -1,8 +1,8 @@
+import { AccountModel } from '@Models/Account';
+import { AdminModel } from '@Models/Admin';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as LocalStrategy } from 'passport-local';
-
-import { AccountModel } from '../models/account';
-import { AdminModel } from '../models/admin';
+import { Service } from 'typedi';
 
 import { Config } from '.';
 
@@ -27,76 +27,92 @@ const returnMessages = {
   NOT_CONFIRMED: 'You have not yet confirmed this account',
 };
 
-export const adminLogin = new LocalStrategy(localAdminOptions,
-  (username, password, done) => {
-    AdminModel.findOne({username: {$regex : new RegExp(`^${username}$`, 'i')}},
-      (err, admin) => {
-        if (err) {
-          return done(err);
-        }
-        if (!admin || admin.isDeleted()) {
-          return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
-        }
+@Service()
+export class PassportStrategy {
+  constructor(
+    private AdminModel: AdminModel,
+    private AccountModel: AccountModel,
+  ) {}
 
-        admin.comparePassword(password, (err, isMatch) => {
-          if (err) {
-            return done(err);
-          }
-          if (!isMatch) {
-            return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
-          }
+  public getAdminLogin() {
+    return new LocalStrategy(localAdminOptions,
+      (username, password, done) => {
+        this.AdminModel.findOne({username: {$regex : new RegExp(`^${username}$`, 'i')}},
+          (err, admin) => {
+            if (err) {
+              return done(err);
+            }
+            if (!admin || admin.isDeleted()) {
+              return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
+            }
 
-          return done(null, admin);
-        });
+            admin.comparePassword(password, (err, isMatch) => {
+              if (err) {
+                return done(err);
+              }
+              if (!isMatch) {
+                return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
+              }
+
+              return done(null, admin);
+            });
+          });
       });
-  });
+  }
 
-export const jwtAdminLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  AdminModel.findById(payload._id, (err, user) => {
-    if (err || user.isDeleted()) {
-      return done(err, false);
-    }
-
-    if (user) {
-      return done(null, user);
-    }
-    return done(null, false);
-  });
-});
-
-export const userLogin = new LocalStrategy(localUserOptions,
-  (email, password, done) => {
-    AccountModel.findOne({email: {$regex : new RegExp(`^${email}$`, 'i')}},
-      (err, account) => {
-        if (err) {
-          return done(err);
-        }
-        if (!account || account.isDeleted()) {
-          return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
+  public getJWTAdminLogin() {
+    return new JwtStrategy(jwtOptions, (payload, done) => {
+      this.AdminModel.findById(payload._id, (err, user) => {
+        if (err || user.isDeleted()) {
+          return done(err, false);
         }
 
-        account.comparePassword(password, (err, isMatch) => {
-          if (err) {
-            return done(err);
-          }
-          if (!isMatch) {
-            return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
-          }
+        if (user) {
+          return done(null, user);
+        }
+        return done(null, false);
+      });
+    });
+  }
 
+  public getUserLogin() {
+    return new LocalStrategy(localUserOptions,
+      (email, password, done) => {
+        this.AccountModel.findOne({email: {$regex : new RegExp(`^${email}$`, 'i')}},
+          (err, account) => {
+            if (err) {
+              return done(err);
+            }
+            if (!account || account.isDeleted()) {
+              return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
+            }
+
+            account.comparePassword(password, (err, isMatch) => {
+              if (err) {
+                return done(err);
+              }
+              if (!isMatch) {
+                return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
+              }
+
+              return done(null, account);
+            });
+          });
+      });
+  }
+
+  public getJWTUserLogin() {
+    return new JwtStrategy(jwtOptions, (payload, done) => {
+      this.AccountModel.findById(payload._id, (err, account) => {
+        if (err || account === null || account.isDeleted()) {
+          return done(err, false);
+        }
+
+        if (account) {
           return done(null, account);
-        });
+        }
+        return done(null, false);
       });
-  });
-
-export const jwtUserLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  AccountModel.findById(payload._id, (err, account) => {
-    if (err || account === null || account.isDeleted()) {
-      return done(err, false);
-    }
-
-    if (account) {
-      return done(null, account);
-    }
-    return done(null, false);
-  });
-});
+    });
+  }
+}

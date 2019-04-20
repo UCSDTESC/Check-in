@@ -1,6 +1,6 @@
 import Email from 'email-templates';
 import mailer from 'nodemailer';
-import path from 'path';
+import * as path from 'path';
 
 import { Config } from '.';
 

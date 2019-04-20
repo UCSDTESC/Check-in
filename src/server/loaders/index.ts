@@ -1,10 +1,10 @@
-import express from 'express';
+import { Logger } from '@Config/Logging';
+import * as express from 'express';
 
-import { Logger } from '../config/logging';
-
-import ExpressLoader from './express';
-import MongooseLoader from './mongoose';
-import PassportLoader from './passport';
+import ExpressLoader from './Express';
+import MongooseLoader from './Mongoose';
+import PassportLoader from './Passport';
+import RoutesLoader from './Routes';
 
 export default class ApplicationLoader {
   public static async InitialiseLoaders(app: express.Application) {
@@ -15,6 +15,9 @@ export default class ApplicationLoader {
     Logger.info('Initialised Express');
     await PassportLoader.initialiseLoader(app);
     Logger.info('Initialised Passport');
+
+    await RoutesLoader.initialiseLoader(app);
+    Logger.info('Initialised Routes');
 
     return {mongoose};
   }

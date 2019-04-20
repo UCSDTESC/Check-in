@@ -1,4 +1,4 @@
-import { Question } from 'Shared/types';
+import { Question } from '@Shared/Types';
 import React from 'react';
 import FA from 'react-fontawesome';
 import ToggleSwitch from '~/components/ToggleSwitch';

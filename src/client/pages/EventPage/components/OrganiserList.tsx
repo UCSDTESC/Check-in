@@ -1,5 +1,5 @@
-import { Role, RolesColors } from 'Shared/Roles';
-import { Admin } from 'Shared/types';
+import { Role, RolesColors } from '@Shared/Roles';
+import { Admin } from '@Shared/Types';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { AdminSelectType } from '~/components/AdminSelect';

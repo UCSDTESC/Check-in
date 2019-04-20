@@ -1,4 +1,4 @@
-import { EventStatistics } from 'Shared/types';
+import { EventStatistics } from '@Shared/Types';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationDispatch, ApplicationAction } from '~/actions';
 import { AlertType, PageAlert } from '~/pages/AlertPage';

@@ -1,4 +1,4 @@
-import { FilterOptions } from 'Shared/types';
+import { FilterOptions } from '@Shared/Types';
 import React, { FormEvent } from 'react';
 import AutoSuggest from '~/components/AutoSuggest';
 import ToggleSwitch from '~/components/ToggleSwitch';

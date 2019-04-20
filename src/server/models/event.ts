@@ -1,12 +1,12 @@
-import { QuestionType } from 'Shared/Questions';
-import { TESCEvent } from 'Shared/types';
-import mongoose from 'mongoose';
+import { QuestionType } from '@Shared/Questions';
+import { TESCEvent } from '@Shared/Types';
+import { Model, Schema, Document, model } from 'mongoose';
 import crate from 'mongoose-crate';
 import S3 from 'mongoose-crate-s3';
+import { Container } from 'typedi';
 
-const Schema = mongoose.Schema;
-
-type EventType = TESCEvent & mongoose.Document;
+export type EventDocument = TESCEvent & Document;
+export type EventModel = Model<EventDocument>;
 
 const EventSchema = new Schema({
   name: {
@@ -145,4 +145,4 @@ EventSchema.plugin(crate, {
   },
 });
 
-export const EventModel = mongoose.model<EventType>('Event', EventSchema);
+Container.set('EventModel', model<EventDocument>('Event', EventSchema));

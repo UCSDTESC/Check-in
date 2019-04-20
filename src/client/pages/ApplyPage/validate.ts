@@ -1,4 +1,4 @@
-import { TESCEventOptions, CustomQuestions, Question, CustomQuestionResponses } from 'Shared/types';
+import { TESCEventOptions, CustomQuestions, Question, CustomQuestionResponses } from '@Shared/Types';
 
 import { ApplyPageFormData } from '.';
 

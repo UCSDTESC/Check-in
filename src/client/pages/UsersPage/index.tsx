@@ -1,4 +1,4 @@
-import { Column, TESCUser } from 'Shared/types';
+import { Column, TESCUser } from '@Shared/Types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';

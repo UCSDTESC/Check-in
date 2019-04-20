@@ -1,6 +1,5 @@
+import { Filter, TESCUser } from '@Shared/Types';
 import { FiltersState } from '~/reducers/Admin/types';
-
-import { Filter, TESCUser } from './types';
 
 /**
  * Applies the user defined filters to resumes.

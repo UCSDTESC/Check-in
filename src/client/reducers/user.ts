@@ -1,4 +1,4 @@
-import { TESCUser } from 'Shared/types';
+import { TESCUser } from '@Shared/Types';
 import auth from '~/auth/user/reducers/Auth';
 import { UserAuthState } from '~/auth/user/reducers/types';
 import current from '~/pages/UserPage/reducers/Current';

@@ -1,4 +1,4 @@
-import { TESCUser, UserStatus } from 'Shared/types';
+import { TESCUser, UserStatus } from '@Shared/Types';
 import diff from 'object-diff';
 import React from 'react';
 import { connect } from 'react-redux';

@@ -1,4 +1,4 @@
-import { Role } from 'Shared/Roles';
+import { Role } from '@Shared/Roles';
 import request from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';

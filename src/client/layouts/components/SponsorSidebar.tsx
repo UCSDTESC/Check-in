@@ -1,14 +1,15 @@
-import { Admin, FilterOption } from 'Shared/types';
+import { Admin, FilterOption } from '@Shared/Types';
 import React from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import { NavbarToggler } from 'reactstrap';
+import { JWTAuthAdmin } from '~/data/AdminAuth';
 import { FiltersState } from '~/reducers/Admin/types';
 
 import Filter from './Filter';
 import Section from './Section';
 
 interface SponsorSidebarProps {
-  user: Admin;
+  user: JWTAuthAdmin;
   selected: number;
   total: number;
   filters: FiltersState;

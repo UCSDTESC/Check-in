@@ -1,4 +1,4 @@
-import { TESCUser, Column, TESCEvent } from 'Shared/types';
+import { TESCUser, Column, TESCEvent } from '@Shared/Types';
 import React from 'react';
 import ReactTable from 'react-table';
 import User from '~/components/User';

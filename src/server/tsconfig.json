@@ -6,16 +6,17 @@
     "module": "commonjs",
     "target": "es6",
     "importHelpers": true,
-    "noImplicitAny": true,
-    "allowSyntheticDefaultImports": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "types": ["node"],
     "paths": {
-      "Shared/*": ["../shared/*"]
+      "@Shared/*": ["../shared/*"],
+      "@Config/*": ["./config/*"],
+      "@Models/*": ["./models/*"],
+      "@Services/*": ["./services/*"],
     },
     "lib": ["es6"],
   },
-  "include": ["./**/*", "../shared/**/*"]
+  "include": ["./**/*.ts", "../shared/**/*.ts"]
 }

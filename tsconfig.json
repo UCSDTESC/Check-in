@@ -10,7 +10,7 @@
     "paths": {
       "*": ["types/*"],
       "~/*": ["./src/client/*"],
-      "Shared/*": ["./src/shared/*"]
+      "@Shared/*": ["./src/shared/*"]
     },
     "typeRoots" : [
       "./src/client/typings/root.d.ts",

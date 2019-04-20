@@ -1,4 +1,4 @@
-import { TESCUser, TESCEvent, UserStatus } from 'Shared/types';
+import { TESCUser, TESCEvent, UserStatus } from '@Shared/Types';
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
 import { CustomFieldProps } from '~/components/Fields';

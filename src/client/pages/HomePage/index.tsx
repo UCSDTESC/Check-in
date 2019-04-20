@@ -1,4 +1,4 @@
-import { TESCEvent } from 'Shared/types';
+import { TESCEvent } from '@Shared/Types';
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';

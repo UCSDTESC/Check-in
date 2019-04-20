@@ -1,4 +1,4 @@
-import { TESCEvent } from 'Shared/types';
+import { TESCEvent } from '@Shared/Types';
 import React from 'react';
 import ReactGA from 'react-ga';
 import Progress from 'react-progress';

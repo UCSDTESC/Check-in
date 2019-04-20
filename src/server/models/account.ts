@@ -1,13 +1,14 @@
-import { TESCAccount } from 'Shared/types';
-import bcrypt from 'bcrypt-nodejs';
-import mongoose, { HookNextFunction } from 'mongoose';
+import { Config } from '@Config/index';
+import { TESCAccount } from '@Shared/Types';
+import * as bcrypt from 'bcrypt-nodejs';
+import { HookNextFunction, Model, model, Schema, Document } from 'mongoose';
 import mongooseSanitizer from 'mongoose-sanitizer';
+import { Container } from 'typedi';
 
-const Schema = mongoose.Schema;
-
-type AccountType = TESCAccount & mongoose.Document & {
+export type AccountDocument = TESCAccount & Document & {
   comparePassword(password: string, cb: (err: Error, isMatch: boolean) => void): void;
 };
+export type AccountModel = Model<AccountDocument>;
 
 const AccountSchema = new Schema({
   // Declares the user's email address
@@ -33,10 +34,10 @@ const AccountSchema = new Schema({
   },
 }, {timestamps: true});
 
-AccountSchema.pre<AccountType>('save', function(next: HookNextFunction) {
+AccountSchema.pre<AccountDocument>('save', function(next: HookNextFunction) {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
-  const SALT_FACTOR = process.env.SALT_ROUNDS;
+  const SALT_FACTOR = Config.SaltRounds;
 
   if (!user.isModified('password')) {
     return next();
@@ -72,4 +73,4 @@ AccountSchema.method('comparePassword', function(candidatePassword: string,
 
 AccountSchema.plugin(mongooseSanitizer);
 
-export const AccountModel = mongoose.model<AccountType>('Account', AccountSchema);
+Container.set('AccountModel', model<AccountDocument>('Account', AccountSchema));

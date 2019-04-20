@@ -1,8 +1,12 @@
-import express from 'express';
-import throng from 'throng';
+import * as express from 'express';
+// tslint:disable-next-line:no-import-side-effect
+import 'reflect-metadata';
+// tslint:disable-next-line:no-import-side-effect no-submodule-imports
+import 'source-map-support/register';
+import * as throng from 'throng';
 
 import { Config } from './config';
-import { Logger } from './config/logging';
+import { Logger } from './config/Logging';
 import ApplicationLoader from './loaders';
 
 // Create workers on all the threads

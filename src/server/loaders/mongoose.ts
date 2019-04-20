@@ -1,9 +1,8 @@
-import express from 'express';
-import mongoose from 'mongoose';
+import { Config } from '@Config/index';
+import * as express from 'express';
+import * as mongoose from 'mongoose';
 
-import { Config } from '../config';
-
-import Loader from './loader';
+import Loader from './Loader';
 
 export default class MongooseLoader extends Loader {
   public static async initialiseLoader(app: express.Application) {

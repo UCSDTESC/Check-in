@@ -4,7 +4,7 @@ const csv = require('fast-csv');
 
 const logging = require('../config/logging');
 
-const Errors = require('./errors')(logging);
+const Errors = require('./ErrorHandler')(logging);
 
 const roles = {
   ROLE_DEVELOPER: 'Developer',

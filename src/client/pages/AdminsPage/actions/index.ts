@@ -1,4 +1,4 @@
-import { Admin } from 'Shared/types';
+import { Admin } from '@Shared/Types';
 import { createStandardAction } from 'typesafe-actions';
 
 import * as Types from './types';

@@ -1,9 +1,9 @@
-import { Question } from 'Shared/types';
-import mongoose from 'mongoose';
+import { Question } from '@Shared/Types';
+import { Model, Schema, Document, model } from 'mongoose';
+import { Container } from 'typedi';
 
-const Schema = mongoose.Schema;
-
-type QuestionType = Question & mongoose.Document;
+export type QuestionDocument = Question & Document;
+export type QuestionModel = Model<QuestionDocument>;
 
 const QuestionSchema = new Schema({
   question: {
@@ -17,4 +17,4 @@ const QuestionSchema = new Schema({
   },
 },{timestamps: true});
 
-export const QuestionModel = mongoose.model<QuestionType>('Question', QuestionSchema);
+Container.set('QuestionModel', model<QuestionDocument>('Question', QuestionSchema));

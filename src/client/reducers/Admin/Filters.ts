@@ -1,4 +1,4 @@
-import { FilterOptions, Filter, FilterOption } from 'Shared/types';
+import { FilterOptions, Filter, FilterOption } from '@Shared/Types';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 import * as Actions from '~/actions';

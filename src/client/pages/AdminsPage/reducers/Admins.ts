@@ -1,4 +1,4 @@
-import { Admin } from 'Shared/types';
+import { Admin } from '@Shared/Types';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 

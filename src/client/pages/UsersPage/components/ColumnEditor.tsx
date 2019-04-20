@@ -1,4 +1,4 @@
-import { Column } from 'Shared/types';
+import { Column } from '@Shared/Types';
 import React from 'react';
 
 interface UserListProps {

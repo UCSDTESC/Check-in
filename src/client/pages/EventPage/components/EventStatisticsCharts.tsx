@@ -1,4 +1,4 @@
-import { EventStatistics } from 'Shared/types';
+import { EventStatistics } from '@Shared/Types';
 import React from 'react';
 import { VictoryPie, VictoryTooltip, VictoryTheme } from 'victory';
 

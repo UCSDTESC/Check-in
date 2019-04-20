@@ -1,4 +1,4 @@
-import { TESCEvent, EventStatistics } from 'Shared/types';
+import { TESCEvent, EventStatistics } from '@Shared/Types';
 import React from 'react';
 
 interface EventStatisticsComponentProps {

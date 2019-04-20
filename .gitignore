@@ -58,6 +58,6 @@ jspm_packages/
 .DS_Store
 
 src/assets/public/css/
-src/server/config/serviceAccountKey.json
 src/assets/public/js/*
 .vscode/launch.json
+dist/server-root/*

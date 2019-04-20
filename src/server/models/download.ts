@@ -1,9 +1,9 @@
-import { Download } from 'Shared/types';
-import mongoose from 'mongoose';
+import { Download } from '@Shared/Types';
+import { Model, Schema, model, Document } from 'mongoose';
+import { Container } from 'typedi';
 
-const Schema = mongoose.Schema;
-
-type DownloadType = Download & mongoose.Document;
+export type DownloadDocument = Download & Document;
+export type DownloadModel = Model<DownloadDocument>;
 
 const DownloadSchema = new Schema({
   // Declares how many files were included in the download
@@ -34,4 +34,4 @@ const DownloadSchema = new Schema({
   },
 }, {timestamps: true});
 
-export const DownloadModel = mongoose.model<DownloadType>('Download', DownloadSchema);
+Container.set('DownloadModel', model<DownloadDocument>('Download', DownloadSchema));

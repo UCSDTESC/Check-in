@@ -1,5 +1,5 @@
-import { Role } from 'Shared/Roles';
-import { TESCUser, TESCEvent } from 'Shared/types';
+import { Role } from '@Shared/Roles';
+import { TESCUser, TESCEvent } from '@Shared/Types';
 import request from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
