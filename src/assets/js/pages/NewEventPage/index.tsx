@@ -13,11 +13,11 @@ import { addEventSuccessAlert } from '../EventPage/actions';
 import NewEventForm, { NewEventFormData } from './components/NewEventForm';
 import createValidator from './validate';
 
-const mapDispatchToProps = (dispatch: ApplicationDispatch) => ({
-  showLoading: bindActionCreators(showLoading, dispatch),
-  hideLoading: bindActionCreators(hideLoading, dispatch),
-  addEventSuccessAlert: bindActionCreators(addEventSuccessAlert, dispatch),
-});
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  showLoading,
+  hideLoading,
+  addEventSuccessAlert,
+}, dispatch);
 
 interface NewEventPageProps {
 }

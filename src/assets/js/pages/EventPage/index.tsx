@@ -20,7 +20,6 @@ import ActionsTab from './tabs/ActionsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
-import { AlertPageAbove } from '../AlertPage';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -37,17 +36,16 @@ const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: ApplicationDispatch) =>
-  bindActionCreators({
-    showLoading,
-    hideLoading,
-    loadAllAdminEvents,
-    updateEventStatistics,
-    addEventAlert,
-    removeEventAlert,
-    addEventSuccessAlert,
-    addEventDangerAlert,
-  }, dispatch);
+const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+  showLoading,
+  hideLoading,
+  loadAllAdminEvents,
+  updateEventStatistics,
+  addEventAlert,
+  removeEventAlert,
+  addEventSuccessAlert,
+  addEventDangerAlert,
+}, dispatch);
 
 interface EventPageProps extends TabularPageProps {
 }
