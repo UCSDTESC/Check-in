@@ -1,5 +1,6 @@
-import { Role } from '@Shared/Roles';
 import { TESCUser, TESCEvent } from '@Shared/Types';
+import { SuccessResponse } from '@Shared/api/Responses';
+import { JWTAdminAuth } from '@Shared/api/Responses';
 import request from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
@@ -7,24 +8,12 @@ import Cookies from 'universal-cookie';
 import { UserProfileFormData } from '~/pages/UserPage/components/UserProfile';
 import CookieTypes from '~/static/Cookies';
 
-import { promisify, SuccessResponse } from './helpers';
+import { promisify } from './helpers';
 
 const URL_PREFIX = '/api/user';
 
 const prefix = pref(URL_PREFIX);
 const cookies = new Cookies();
-
-export interface JWTAuthUser {
-  _id: string;
-  username: string;
-  role: Role;
-  checkin: boolean;
-}
-
-interface JWTAuth {
-  token: string;
-  user: JWTAuthUser;
-}
 
 /**
  * Checks whether the user is still authorised.
@@ -45,7 +34,7 @@ export const authorised = () => {
  * @returns {Promise} A promise of the request.
  */
 export const login = (email: string, password: string) => {
-  return promisify<JWTAuth>(request
+  return promisify<JWTAdminAuth>(request
     .post('/login')
     .set('Content-Type', 'application/json')
     .send({email, password})

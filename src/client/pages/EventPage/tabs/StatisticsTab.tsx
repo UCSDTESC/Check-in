@@ -1,4 +1,4 @@
-import { EventStatistics } from '@Shared/Types';
+import { EventStatistics } from '@Shared/api/Responses';
 import React from 'react';
 
 import EventStatisticsCharts from '../components/EventStatisticsCharts';

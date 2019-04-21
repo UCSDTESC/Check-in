@@ -1,5 +1,6 @@
 import { Download } from '@Shared/Types';
 import { Model, Schema, model, Document } from 'mongoose';
+import * as mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type DownloadDocument = Download & Document;
@@ -34,4 +35,7 @@ const DownloadSchema = new Schema({
   },
 }, {timestamps: true});
 
-Container.set('DownloadModel', model<DownloadDocument>('Download', DownloadSchema));
+DownloadSchema.plugin(mongooseDelete);
+
+export const RegisterModel = () =>
+  Container.set('DownloadModel', model<DownloadDocument, DownloadModel>('Download', DownloadSchema));

@@ -1,6 +1,10 @@
 import { Config } from '@Config/index';
 import * as express from 'express';
-import { useExpressServer } from 'routing-controllers';
+import { useExpressServer, useContainer } from 'routing-controllers';
+import Container from 'typedi';
+
+import { CustomErrorHandler } from '../api/ErrorHandler';
+import Controllers from '../api/controllers';
 
 import Loader from './Loader';
 
@@ -34,16 +38,23 @@ export default class RoutesLoader extends Loader {
       }));
     }
 
-    useExpressServer(app, {
+    useContainer(Container);
+
+    app = useExpressServer(app, {
       routePrefix: '/api',
-      controllers: [__dirname + '../api/controllers/*.js'],
-      middlewares: [__dirname + '../api/middleware/*.js'],
-      classTransformer: true,
+      controllers: Controllers,
+      middlewares: [
+        CustomErrorHandler,
+      ],
+      defaultErrorHandler: false,
+      classTransformer: false,
     });
 
     // React fallback
     app.get('*', (req, res) => {
-      return res.render('index');
+      if (!res.headersSent) {
+        return res.render('index');
+      }
     });
   }
 }

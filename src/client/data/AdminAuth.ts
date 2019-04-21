@@ -1,26 +1,14 @@
 import { Role } from '@Shared/Roles';
+import { JWTAdminAuth } from '@Shared/api/Responses';
 import request from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 
-import { JWTAuthUser } from './User';
 import { promisify } from './helpers';
 
 const URL_PREFIX = '/api/auth';
 
 const prefix = pref(URL_PREFIX);
-
-export interface JWTAuthAdmin {
-  _id: string;
-  username: string;
-  role: Role;
-  checkin: boolean;
-}
-
-interface JWTAuth {
-  token: string;
-  user: JWTAuthUser;
-}
 
 /**
  * Requests a login for the given administrator.
@@ -29,7 +17,7 @@ interface JWTAuth {
  * @returns {Object} A superagent request object.
  */
 export const login = (username: string, password: string) => {
-  return promisify<JWTAuth>(request
+  return promisify<JWTAdminAuth>(request
     .post('/login')
     .set('Content-Type', 'application/json')
     .send({username, password})

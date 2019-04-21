@@ -2,6 +2,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "outDir": "../../dist/server-root",
+    "rootDir": ".",
     "sourceMap": true,
     "module": "commonjs",
     "target": "es6",
@@ -14,7 +15,7 @@
       "@Shared/*": ["../shared/*"],
       "@Config/*": ["./config/*"],
       "@Models/*": ["./models/*"],
-      "@Services/*": ["./services/*"],
+      "@Services/*": ["./services/*"]
     },
     "lib": ["es6"],
   },

@@ -1,5 +1,7 @@
 import { createLogger, format, transports } from 'winston';
 
+import { Config } from '.';
+
 export const Logger = createLogger({
   level: 'info',
   format: format.combine(
@@ -18,7 +20,7 @@ export const Logger = createLogger({
         format.timestamp({
           format: 'YYYY-MM-DD HH:mm:ss',
         }),
-        format.errors({stack: true}),
+        format.errors({stack: Config.NodeEnv !== 'development'}),
         format.splat(),
         format.simple()
       ),

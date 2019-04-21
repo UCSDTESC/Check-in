@@ -20,7 +20,7 @@ export const RolesColors = {
  * {@link Roles}.
  * @returns {Integer} The integer for the given role.
  */
-export function getRole(checkRole: Role) {
+export function getRoleRank(checkRole: Role) {
   let role;
 
   switch (checkRole) {

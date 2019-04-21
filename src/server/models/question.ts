@@ -1,5 +1,6 @@
 import { Question } from '@Shared/Types';
 import { Model, Schema, Document, model } from 'mongoose';
+import * as mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type QuestionDocument = Question & Document;
@@ -17,4 +18,7 @@ const QuestionSchema = new Schema({
   },
 },{timestamps: true});
 
-Container.set('QuestionModel', model<QuestionDocument>('Question', QuestionSchema));
+QuestionSchema.plugin(mongooseDelete);
+
+export const RegisterModel = () =>
+  Container.set('QuestionModel', model<QuestionDocument, QuestionModel>('Question', QuestionSchema));

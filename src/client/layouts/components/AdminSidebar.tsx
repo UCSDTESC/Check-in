@@ -1,9 +1,9 @@
-import { Role, getRole } from '@Shared/Roles';
+import { Role, getRoleRank } from '@Shared/Roles';
 import { Admin } from '@Shared/Types';
+import { JWTAdminAuth, JWTAdminAuthToken } from '@Shared/api/Responses';
 import React from 'react';
 import { NavbarToggler } from 'reactstrap';
 import ToggleSwitch from '~/components/ToggleSwitch';
-import { JWTAuthAdmin } from '~/data/AdminAuth';
 import { EventsState } from '~/reducers/Admin/types';
 
 import Link from './Link';
@@ -11,7 +11,7 @@ import Section from './Section';
 
 interface AdminSidebarProps {
   isAuthenticated: boolean;
-  user?: JWTAuthAdmin;
+  user?: JWTAdminAuthToken;
   isHidden?: boolean;
   events: EventsState;
   children: JSX.Element;
@@ -65,8 +65,8 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
     const auth = this.props.isAuthenticated;
 
     const role = this.props.user ?
-      getRole(this.props.user.role) :
-      getRole(Role.ROLE_MEMBER);
+      getRoleRank(this.props.user.role) :
+      getRoleRank(Role.ROLE_MEMBER);
 
     const checkinAdmin = this.props.user ? !!this.props.user.checkin : false;
 
@@ -96,10 +96,10 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
 
     return (
       <div>
-        {auth && role >= getRole(Role.ROLE_DEVELOPER) && this.developerTools()}
+        {auth && role >= getRoleRank(Role.ROLE_DEVELOPER) && this.developerTools()}
 
-        {auth && role >= getRole(Role.ROLE_SPONSOR) &&
-          this.eventTools(events, role === getRole(Role.ROLE_SPONSOR))}
+        {auth && role >= getRoleRank(Role.ROLE_SPONSOR) &&
+          this.eventTools(events, role === getRoleRank(Role.ROLE_SPONSOR))}
 
         {auth && <Section name="General">
           <Link dest="/" exact={true}>Dashboard</Link>
@@ -116,8 +116,8 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
     const {user} = this.props;
     const auth = this.props.isAuthenticated;
     const role = this.props.user ?
-      getRole(this.props.user.role) :
-      getRole(Role.ROLE_MEMBER);
+      getRoleRank(this.props.user.role) :
+      getRoleRank(Role.ROLE_MEMBER);
     const checkinAdmin = this.props.user ? this.props.user.checkin : false;
 
     return (

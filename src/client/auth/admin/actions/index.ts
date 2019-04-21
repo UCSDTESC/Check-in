@@ -1,3 +1,4 @@
+import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import { createStandardAction } from 'typesafe-actions';
 import Cookies from 'universal-cookie';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
@@ -18,7 +19,7 @@ const COOKIE_OPTIONS = {
  * Stores cookies from a login response.
  * @param {Object} res HTTP request response object.
  */
-function storeLogin(token: string, user: Auth.JWTAuthAdmin) {
+function storeLogin(token: string, user: JWTAdminAuthToken) {
   cookies.set(CookieTypes.admin.token, token, COOKIE_OPTIONS);
   cookies.set(CookieTypes.admin.user, user, COOKIE_OPTIONS);
 }
@@ -76,7 +77,7 @@ export const logoutAdmin = (): ApplicationAction => (
 
 // Return authorisation events
 
-export const authoriseAdmin = createStandardAction(Types.AUTH_ADMIN)<Auth.JWTAuthAdmin>();
+export const authoriseAdmin = createStandardAction(Types.AUTH_ADMIN)<JWTAdminAuthToken>();
 export const unauthoriseAdmin = createStandardAction(Types.UNAUTH_ADMIN)<void>();
 export const finishAuthorisation = createStandardAction(Types.FINISH_ADMIN_AUTH)<void>();
 export const authoriseError = createStandardAction(Types.AUTH_ADMIN_ERROR)<string>();

@@ -31,19 +31,7 @@ export interface Download {
   accessUrl?: string;
   error: boolean;
   fulfilled: boolean;
-}
-
-export interface EventStatistics {
-  count: number;
-  universities: number;
-  genders: {
-    [GenderName: string]: number;
-  };
-  checkedIn: number;
-  status: {
-    [StatusType: string]: number;
-  };
-  resumes: number;
+  deleted?: boolean;
 }
 
 export interface Column {
@@ -73,12 +61,15 @@ export interface Admin {
   password: string;
   role: Role;
   checkin: boolean;
+  lastAccessed: Date;
+  deleted?: boolean;
 }
 
 export interface Question {
   _id?: string;
   question: string;
   isRequired: boolean;
+  deleted?: boolean;
 }
 
 export interface CustomQuestions {
@@ -122,6 +113,7 @@ export interface TESCEvent {
   users?: number;
   customQuestions: CustomQuestions;
   options: TESCEventOptions;
+  deleted?: boolean;
 }
 
 export interface TESCAccount {
@@ -129,6 +121,7 @@ export interface TESCAccount {
   email: string;
   password: string;
   confirmed: boolean;
+  deleted?: boolean;
 }
 
 export interface TESCUser {
@@ -169,4 +162,5 @@ export interface TESCUser {
   customQuestionResponses?: CustomQuestionResponses;
   whyEventResponse?: string;
   resume: Resume;
+  deleted?: boolean;
 }

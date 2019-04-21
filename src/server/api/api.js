@@ -265,15 +265,6 @@ module.exports = function(app) {
       return res.json(columns);
     });
 
-  api.get('/admin/sponsors', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    (_, res) => {
-      Admin.find({role: roles.ROLE_SPONSOR})
-        .select('username')
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(sponsors => res.json(sponsors));
-    });
-
   api.post('/admin/addSponsor/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
       if (!req.body.sponsor) {
@@ -312,42 +303,6 @@ module.exports = function(app) {
             })
             .then(() => res.json({success : true}));;
         });
-    });
-
-  api.get('/users/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    isOrganiser,
-    (req, res) => {
-      let query = User.find({event: req.event});
-
-      return query
-        .populate('account')
-        .populate({
-          path: 'event',
-          populate: [{
-            path: 'customQuestions.longText'
-          },
-          {
-            path: 'customQuestions.shortText'
-          },
-          {
-            path: 'customQuestions.checkBox'
-          }]
-        })
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(users => res.json(users));
-    });
-
-  api.post('/users/checkin/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser,
-    (req, res) => {
-      User
-        .findByIdAndUpdate(req.body.id, {'checkedIn' : true})
-        .exec()
-        .catch(err => {
-          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-        })
-        .then(() => res.json({success : true}));
     });
 
   api.post('/users/:eventAlias/:userId', requireAuth,

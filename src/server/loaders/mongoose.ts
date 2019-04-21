@@ -1,4 +1,5 @@
 import { Config } from '@Config/index';
+import { RegisterModels } from '@Models/index';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 
@@ -9,6 +10,9 @@ export default class MongooseLoader extends Loader {
     return mongoose.connect(Config.MongoDBURI, {
       useNewUrlParser: true,
       useCreateIndex: true,
+    })
+    .then(() => {
+      RegisterModels();
     });
   }
 }

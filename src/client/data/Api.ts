@@ -1,6 +1,8 @@
 import { QuestionType } from '@Shared/Questions';
-import { TESCUser, Admin, TESCEventOptions, Question, Download, EventStatistics,
-    TESCEvent, Column, ColumnResponse } from '@Shared/Types';
+import { TESCUser, Admin, TESCEventOptions, Question, Download,
+    TESCEvent, ColumnResponse } from '@Shared/Types';
+import { EventStatistics, GetSponsorsResponse } from '@Shared/api/Responses';
+import { SuccessResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
@@ -10,7 +12,7 @@ import { ApplyPageFormData } from '~/pages/ApplyPage';
 import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
 import CookieTypes from '~/static/Cookies';
 
-import { promisify, SuccessResponse } from './helpers';
+import { promisify } from './helpers';
 
 const API_URL_PREFIX = '/api';
 
@@ -324,7 +326,7 @@ export const loadColumns = () =>
  * @returns {Promise} A promise of the request.
  */
 export const loadSponsors = () =>
-  promisify<Admin[]>(
+  promisify<GetSponsorsResponse>(
     request
       .get('/admin/sponsors')
       .set('Authorization', cookies.get(CookieTypes.admin.token))

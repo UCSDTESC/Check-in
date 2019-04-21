@@ -3,12 +3,14 @@ import { Role } from '@Shared/Roles';
 import { Admin } from '@Shared/Types';
 import * as bcrypt from 'bcrypt-nodejs';
 import { HookNextFunction, Model, Schema, Document, model } from 'mongoose';
-import mongooseSanitizer from 'mongoose-sanitizer';
+import * as mongooseDelete from 'mongoose-delete';
+import * as mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
 
 export type AdminDocument = Admin & Document & {
   comparePassword(password: string, cb: (err: Error, isMatch: boolean) => void): void;
 };
+
 export type AdminModel = Model<AdminDocument>;
 
 const AdminSchema = new Schema({
@@ -99,5 +101,7 @@ AdminSchema.set('toJSON', {
 });
 
 AdminSchema.plugin(mongooseSanitizer);
+AdminSchema.plugin(mongooseDelete);
 
-Container.set('AdminModel', model<AdminDocument>('Admin', AdminSchema));
+export const RegisterModel = () =>
+  Container.set('AdminModel', model<AdminDocument, AdminModel>('Admin', AdminSchema));

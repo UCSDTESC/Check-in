@@ -1,13 +1,13 @@
-import { Role, getRole } from '@Shared/Roles';
+import { Role, getRoleRank } from '@Shared/Roles';
 import { Admin, TESCEvent } from '@Shared/Types';
+import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import React from 'react';
-import { JWTAuthAdmin } from '~/data/AdminAuth';
 
 import EventList from './EventList';
 
 interface AdminDashboardProps {
   events: TESCEvent[];
-  user: JWTAuthAdmin;
+  user: JWTAdminAuthToken;
 }
 
 export default class AdminDashboard extends React.Component<AdminDashboardProps> {
@@ -17,7 +17,7 @@ export default class AdminDashboard extends React.Component<AdminDashboardProps>
     return (
       <EventList
         events={events}
-        canCreate={getRole(user.role) >= getRole(Role.ROLE_ADMIN)}
+        canCreate={getRoleRank(user.role) >= getRoleRank(Role.ROLE_ADMIN)}
       />
     );
   }

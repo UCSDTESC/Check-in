@@ -1,3 +1,4 @@
+import { JWTAdminAuthToken, JWTUserAuthToken } from '@Shared/api/Responses';
 import React, { Component } from 'react';
 import { Cookies, withCookies } from 'react-cookie';
 import ReactGA from 'react-ga';
@@ -9,7 +10,7 @@ import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
 import { authorised as AdminAuthorised } from '~/data/Api';
-import { authorised as UserAuthorised, JWTAuthUser } from '~/data/User';
+import { authorised as UserAuthorised } from '~/data/User';
 import CookieTypes from '~/static/Cookies';
 
 import PrivateRoute from './PrivateRoute';
@@ -19,7 +20,6 @@ import AdminLogout from './auth/admin/Logout';
 import { finishAuthorisation, authoriseAdmin, logoutAdmin } from './auth/admin/actions';
 import UserLogout from './auth/user/Logout';
 import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
-import { JWTAuthAdmin } from './data/AdminAuth';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
 import UserLayout from './layouts/user';
@@ -56,7 +56,7 @@ type Props = RouteComponentProps & ReturnType<typeof mapDispatchToProps> & Route
 class Routes extends React.Component<Props> {
   componentDidMount() {
     const {authoriseAdmin, authoriseUser, finishAuthorisation, finishUserAuth,
-      logoutAdmin, logoutUser} = this.props;
+           logoutAdmin, logoutUser} = this.props;
 
     // Check initial authentication
     const {cookies} = this.props;
@@ -66,7 +66,7 @@ class Routes extends React.Component<Props> {
       AdminAuthorised()
         .then(() => {
           const authCookie: unknown = cookies.get(CookieTypes.admin.user);
-          return authoriseAdmin(authCookie as JWTAuthAdmin);
+          return authoriseAdmin(authCookie as JWTAdminAuthToken);
         })
         .catch(() => {
           logoutAdmin();
@@ -81,7 +81,7 @@ class Routes extends React.Component<Props> {
         .then(() => {
           // TODO : Remove JSON Parse - Use a better library for Cookies
           const authCookie: unknown = cookies.get(CookieTypes.user.user);
-          return authoriseUser(authCookie as JWTAuthUser);
+          return authoriseUser(authCookie as JWTUserAuthToken);
         })
         .catch(() => {
           logoutUser();

@@ -1,5 +1,5 @@
 import { QuestionType } from '@Shared/Questions';
-import { getRole, Role } from '@Shared/Roles';
+import { getRoleRank, Role } from '@Shared/Roles';
 import { TESCUser, TESCEvent, Question } from '@Shared/Types';
 import UUID from 'node-uuid';
 import React from 'react';
@@ -172,7 +172,7 @@ class User extends React.Component<Props> {
                   'col-sm-4')}
                 {this.renderFormField('Coming From', 'travel.city')}
               </div>
-              {getRole(this.props.role) >= getRole(Role.ROLE_ADMIN) &&
+              {getRoleRank(this.props.role) >= getRoleRank(Role.ROLE_ADMIN) &&
                 <span>
                   <h5>Admin Flags</h5>
                   <div className="form-group row mb-2">

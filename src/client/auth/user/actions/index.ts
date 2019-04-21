@@ -1,3 +1,4 @@
+import { JWTUserAuthToken } from '@Shared/api/Responses';
 import { createStandardAction } from 'typesafe-actions';
 import Cookies from 'universal-cookie';
 import { deleteUserEvents, ApplicationDispatch, ApplicationAction } from '~/actions';
@@ -18,7 +19,7 @@ const COOKIE_OPTIONS = {
  * Stores cookies from a login response.
  * @param {Object} res HTTP request response object.
  */
-function storeLogin(token: string, user: Auth.JWTAuthUser) {
+function storeLogin(token: string, user: JWTUserAuthToken) {
   cookies.set(CookieTypes.user.token, token, COOKIE_OPTIONS);
   cookies.set(CookieTypes.user.user, user, COOKIE_OPTIONS);
 }
@@ -63,7 +64,7 @@ export const logoutUser = (): ApplicationAction => (
 
 // Return authorisation events
 
-export const authoriseUser = createStandardAction(Types.AUTH_USER)<Auth.JWTAuthUser>();
+export const authoriseUser = createStandardAction(Types.AUTH_USER)<JWTUserAuthToken>();
 export const unauthoriseUser = createStandardAction(Types.UNAUTH_USER)<void>();
 export const finishAuthorisation = createStandardAction(Types.FINISH_AUTH)<void>();
 export const authoriseError = createStandardAction(Types.AUTH_ERROR)<string>();

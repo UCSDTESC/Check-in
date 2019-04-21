@@ -5,9 +5,10 @@ import { Container } from 'typedi';
 export function SelectedEvent(options?: {}) {
   return createParamDecorator({
     required: true,
-    value: action => {
+    value: async action => {
       const eventService = Container.get(EventService);
-      return eventService.getEventByAlias(action.request.params.eventAlias);
+      const alias = action.request.params.eventAlias;
+      return await eventService.getEventByAlias(alias);
     },
   });
 }

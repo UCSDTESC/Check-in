@@ -1,8 +1,9 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCEvent } from '@Shared/Types';
 import { Model, Schema, Document, model } from 'mongoose';
-import crate from 'mongoose-crate';
-import S3 from 'mongoose-crate-s3';
+import * as crate from 'mongoose-crate';
+import * as S3 from 'mongoose-crate-s3';
+import * as mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type EventDocument = TESCEvent & Document;
@@ -145,4 +146,7 @@ EventSchema.plugin(crate, {
   },
 });
 
-Container.set('EventModel', model<EventDocument>('Event', EventSchema));
+EventSchema.plugin(mongooseDelete);
+
+export const RegisterModel = () =>
+  Container.set('EventModel', model<EventDocument, EventModel>('Event', EventSchema));

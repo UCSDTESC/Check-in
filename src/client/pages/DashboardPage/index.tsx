@@ -1,4 +1,4 @@
-import { Role, getRole } from '@Shared/Roles';
+import { Role, getRoleRank } from '@Shared/Roles';
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
@@ -45,9 +45,9 @@ class DashboardPage extends React.Component<Props> {
           <h1>Dashboard</h1>
 
           {checkinUser && <CheckinDashboard />}
-          {getRole(user.role) >= getRole(Role.ROLE_ADMIN) &&
+          {getRoleRank(user.role) >= getRoleRank(Role.ROLE_ADMIN) &&
             <AdminDashboard events={Object.values(events)} user={user} />}
-          {getRole(user.role) === getRole(Role.ROLE_SPONSOR) &&
+          {getRoleRank(user.role) === getRoleRank(Role.ROLE_SPONSOR) &&
             <SponsorDashboard events={Object.values(events)} />}
         </div>
       </div>

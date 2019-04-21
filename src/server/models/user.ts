@@ -1,8 +1,9 @@
 import { TESCUser } from '@Shared/Types';
 import { Model, Schema, Document, model } from 'mongoose';
-import crate from 'mongoose-crate';
-import S3 from 'mongoose-crate-s3';
-import mongooseSanitizer from 'mongoose-sanitizer';
+import * as crate from 'mongoose-crate';
+import * as S3 from 'mongoose-crate-s3';
+import * as mongooseSanitizer from 'mongoose-sanitizer';
+import * as mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type UserDocument = TESCUser & Document;
@@ -247,4 +248,7 @@ UserSchema.method('csvFlatten', function() {
   return autoFilled;
 });
 
-Container.set('UserModel', model<UserDocument>('User', UserSchema));
+UserSchema.plugin(mongooseDelete);
+
+export const RegisterModel = () =>
+  Container.set('UserModel', model<UserDocument, UserModel>('User', UserSchema));

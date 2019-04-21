@@ -2,12 +2,14 @@ import { Config } from '@Config/index';
 import { TESCAccount } from '@Shared/Types';
 import * as bcrypt from 'bcrypt-nodejs';
 import { HookNextFunction, Model, model, Schema, Document } from 'mongoose';
-import mongooseSanitizer from 'mongoose-sanitizer';
+import * as mongooseDelete from 'mongoose-delete';
+import * as mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
 
 export type AccountDocument = TESCAccount & Document & {
   comparePassword(password: string, cb: (err: Error, isMatch: boolean) => void): void;
 };
+
 export type AccountModel = Model<AccountDocument>;
 
 const AccountSchema = new Schema({
@@ -72,5 +74,7 @@ AccountSchema.method('comparePassword', function(candidatePassword: string,
 });
 
 AccountSchema.plugin(mongooseSanitizer);
+AccountSchema.plugin(mongooseDelete);
 
-Container.set('AccountModel', model<AccountDocument>('Account', AccountSchema));
+export const RegisterModel = () =>
+  Container.set('AccountModel', model<AccountDocument, AccountModel>('Account', AccountSchema));

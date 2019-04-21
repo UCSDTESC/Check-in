@@ -1,4 +1,4 @@
-import { EventStatistics } from '@Shared/Types';
+import { EventStatistics } from '@Shared/api/Responses';
 import { PageAlert } from '~/pages/AlertPage';
 
 export interface EventStatisticsState {

@@ -1,8 +1,9 @@
 import { AccountModel } from '@Models/Account';
 import { AdminModel } from '@Models/Admin';
+import { Admin } from '@Shared/Types';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as LocalStrategy } from 'passport-local';
-import { Service } from 'typedi';
+import { Service, Inject } from 'typedi';
 
 import { Config } from '.';
 
@@ -27,12 +28,15 @@ const returnMessages = {
   NOT_CONFIRMED: 'You have not yet confirmed this account',
 };
 
+export const ADMIN_JWT_TIMEOUT = 3 * 60 * 60;
+
 @Service()
 export class PassportStrategy {
-  constructor(
-    private AdminModel: AdminModel,
-    private AccountModel: AccountModel,
-  ) {}
+  @Inject('AdminModel')
+  AdminModel: AdminModel;
+
+  @Inject('AccountModel')
+  AccountModel: AccountModel;
 
   public getAdminLogin() {
     return new LocalStrategy(localAdminOptions,
@@ -42,7 +46,8 @@ export class PassportStrategy {
             if (err) {
               return done(err);
             }
-            if (!admin || admin.isDeleted()) {
+
+            if (!admin || admin.deleted) {
               return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
             }
 
@@ -63,7 +68,7 @@ export class PassportStrategy {
   public getJWTAdminLogin() {
     return new JwtStrategy(jwtOptions, (payload, done) => {
       this.AdminModel.findById(payload._id, (err, user) => {
-        if (err || user.isDeleted()) {
+        if (err || user.deleted) {
           return done(err, false);
         }
 
@@ -83,7 +88,7 @@ export class PassportStrategy {
             if (err) {
               return done(err);
             }
-            if (!account || account.isDeleted()) {
+            if (!account || account.deleted) {
               return done(null, false, {message: returnMessages.INCORRECT_LOGIN});
             }
 
@@ -104,7 +109,7 @@ export class PassportStrategy {
   public getJWTUserLogin() {
     return new JwtStrategy(jwtOptions, (payload, done) => {
       this.AccountModel.findById(payload._id, (err, account) => {
-        if (err || account === null || account.isDeleted()) {
+        if (err || account === null || account.deleted) {
           return done(err, false);
         }
 
