@@ -7,7 +7,6 @@ var gulp = require('gulp'),
   nodemon = require('gulp-nodemon'),
   webpackStream = require('webpack-stream'),
   webpack = require('webpack'),
-  eslint = require('gulp-eslint'),
   gutil = require('gulp-util'),
   gulpif = require('gulp-if'),
   tslint = require('gulp-tslint');
@@ -15,17 +14,14 @@ let browserSync = gutil.env.production ?
   undefined : require('browser-sync').create();
 
 const paths = {
-  src: [
-    'src/server/**/*.js',
-    'src/assets/scss/**/*.scss'
-  ],
-  js: [
-    'src/server/**/*.js',
-    'src/assets/js/**/*.js'
+  server: [
+    'src/server/**/*.ts',
+    'src/shared/**/*.ts',
   ],
   ts: [
-    'src/assets/js/**/*.ts',
-    'src/assets/js/**/*.tsx'
+    'src/client/**/*.ts',
+    'src/shared/**/*.ts',
+    'src/client/**/*.tsx'
   ]
 };
 
@@ -47,13 +43,6 @@ gulp.task('css', function () {
   return stream;
 });
 
-gulp.task('eslint', function() {
-  return gulp.src(paths.js)
-    .pipe(eslint())
-    .pipe(eslint.format())
-    .pipe(eslint.failAfterError());
-});
-
 gulp.task('tslint', function() {
   return gulp.src(paths.ts)
     .pipe(tslint({
@@ -66,12 +55,13 @@ gulp.task('tslint', function() {
 
 gulp.task('nodemon', ['css'], function(cb) {
   return nodemon({
-    exec: 'node --inspect=9229',
-    script: 'src/server/index.js',
-    ext: 'js html',
+    exec: './node_modules/.bin/ts-node -P ./src/server/tsconfig.json '+
+      '-r tsconfig-paths/register ./src/server/main.ts',
+    ext: 'ts',
     watch: paths.src,
     env: {
       'NODE_ENV': 'development',
+      'TS_NODE_FILES': 'true',
       'PORT': 3000
     }
   })
@@ -84,7 +74,7 @@ gulp.task('nodemon', ['css'], function(cb) {
 });
 
 gulp.task('webpack', ['tslint'], function() {
-  gulp.src('src/assets/js/main.tsx')
+  gulp.src('src/client/main.tsx')
     .pipe(webpackStream(require('./webpack.config.prod.js'), webpack))
     .pipe(gulp.dest('src/assets/public/js'));
 });

@@ -3,7 +3,7 @@ import AdminService from '@Services/AdminService';
 import { JWTAdminAuth, JWTAdminAuthToken } from '@Shared/api/Responses';
 import { Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
-import { Get, JsonController, UseBefore, Res, Req } from 'routing-controllers';
+import { Get, JsonController, UseBefore, Res, Req, Post } from 'routing-controllers';
 
 import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { AdminLogin } from '../middleware/AdminLogin';
@@ -31,7 +31,7 @@ export class AdminAuthController {
     return res.status(200).end();
   }
 
-  @Get('/login')
+  @Post('/login')
   @UseBefore(AdminLogin)
   login(@Req() req: Request): JWTAdminAuth {
     const jwt = this.AdminService.getJwtAdmin(req.user);
