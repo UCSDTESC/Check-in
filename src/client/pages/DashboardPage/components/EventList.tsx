@@ -1,4 +1,5 @@
 import { TESCEvent } from '@Shared/Types';
+import { EventUserCounts } from '@Shared/api/Responses';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -29,8 +30,7 @@ export default class EventList extends React.Component<EventListProps> {
                 header={`Organized By ${event.organisedBy}`}
                 image={event.logo.url}
                 title={event.name}
-                subtext={`${event.users} Registered ${event.users === 1 ?
-                  'User' : 'Users'}`}
+                subtext={`${event.users} Registered ${event.users === 1 ? 'User' : 'Users'}`}
                 className="h-100"
               />
             </div>)

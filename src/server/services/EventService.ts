@@ -1,12 +1,20 @@
-import { EventModel } from '@Models/event';
+import { UserModel } from '@Models/User';
+import { EventModel, EventSchema } from '@Models/event';
 import { getRoleRank, Role } from '@Shared/Roles';
-import { Admin } from '@Shared/Types';
+import { Admin, TESCEvent } from '@Shared/Types';
 import { Service, Inject } from 'typedi';
+
+const PUBLIC_EVENT_FIELDS = Object.entries((EventSchema as any).paths)
+  .filter(([fieldName, field]: any) => 'public' in field.options)
+  .map(([fieldName, field]: any) => fieldName).join(' ') + ' logo';
 
 @Service()
 export default class EventService {
   @Inject('EventModel')
   private EventModel: EventModel;
+
+  @Inject('UserModel')
+  private UserModel: UserModel;
 
   /**
    * Get an event by its associated alias.
@@ -14,6 +22,32 @@ export default class EventService {
    */
   async getEventByAlias(eventAlias: string) {
     return await this.EventModel.findOne({ alias: eventAlias });
+  }
+
+  /**
+   * Get all public events, selecting only the public fields.
+   */
+  async getAllPublicEvents() {
+    return await this.EventModel.find()
+      .select(PUBLIC_EVENT_FIELDS)
+      .exec();
+  }
+
+  /**
+   * Gets the user counts for all events.
+   */
+  async getAllUserCounts(): Promise<Array<{
+    _id: string;
+    count: number;
+  }>> {
+    return await this.UserModel.aggregate([{
+      $group: {
+        _id: '$event',
+        count: {
+          $sum: 1,
+        },
+      },
+    }]).exec();
   }
 
   /**

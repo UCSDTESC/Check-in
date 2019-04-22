@@ -67,7 +67,15 @@ export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
     new Promise((resolve, reject) => {
       Api.loadAllPublicEvents()
         .then(res => {
-          dispatch(replaceEvents(res));
+          // Map counts into users field
+          const eventsWithCounts = res.events.map(event => {
+            const userCount = res.userCounts.find(count => count._id === event._id);
+            return {
+              ...event,
+              users: userCount === undefined ? 0 : userCount.count,
+            };
+          });
+          dispatch(replaceEvents(eventsWithCounts));
           return resolve();
         })
         .catch(reject);

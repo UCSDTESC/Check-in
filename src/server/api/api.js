@@ -66,16 +66,6 @@ module.exports = function(app) {
     });
   };
 
-  api.get('/events', (req, res) => {
-    return Event.find()
-      .select(PUBLIC_EVENT_FIELDS)
-      .exec()
-      .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-      .then(addEventStatistics)
-      .then(events => res.json(events))
-      .catch(err => Errors.respondError(res, err, Errors.UNKNOWN_ERROR));
-  });
-
   api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_SPONSOR),
     (req, res) => {
       var query;

@@ -110,10 +110,10 @@ export interface TESCEvent {
   thirdPartyText?: string;
   organisedBy: string;
   logo: Logo;
-  users?: number;
   customQuestions: CustomQuestions;
   options: TESCEventOptions;
   deleted?: boolean;
+  users?: number;
 }
 
 export interface TESCAccount {

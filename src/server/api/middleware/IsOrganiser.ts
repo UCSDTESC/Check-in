@@ -10,6 +10,11 @@ import { AdminAuthorisation } from './AdminAuthorisation';
 export class IsOrganiser extends AdminAuthorisation {
   async use(req: express.Request, res: express.Response, next?: express.NextFunction) {
     return super.use(req, res, (err: Error) => {
+      // Force authentication errors forward
+      if (err) {
+        return next(err);
+      }
+
       const eventService = Container.get(EventService);
       if (!req.user) {
         return next(new InternalServerError(ErrorMessage.NO_REQUEST_USER()));

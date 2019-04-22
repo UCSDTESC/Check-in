@@ -1,5 +1,5 @@
 import { Role } from '@Shared/Roles';
-import { Admin } from '@Shared/Types';
+import { Admin, TESCEvent } from '@Shared/Types';
 
 export interface EventStatistics {
   count: number;
@@ -12,6 +12,16 @@ export interface EventStatistics {
     [StatusType: string]: number;
   };
   resumes: number;
+}
+
+export type EventUserCounts = {
+  _id: string;
+  count: number;
+};
+
+export interface EventsWithStatisticsResponse {
+  events: TESCEvent[];
+  userCounts: EventUserCounts[];
 }
 
 export interface JWTAdminAuthToken {

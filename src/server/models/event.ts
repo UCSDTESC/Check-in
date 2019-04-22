@@ -9,12 +9,13 @@ import { Container } from 'typedi';
 export type EventDocument = TESCEvent & Document;
 export type EventModel = Model<EventDocument>;
 
-const EventSchema = new Schema({
+export const EventSchema = new Schema({
   name: {
     type: String,
     trim: true,
     unique: true,
     required: [true, 'Your event must have an name'],
+    public: true,
   },
   alias: {
     type: String,
@@ -22,6 +23,7 @@ const EventSchema = new Schema({
     unique: true,
     lowercase: true,
     required: [true, 'Your event must have an alias'],
+    public: true,
   },
   organisers: [{
     type: Schema.Types.ObjectId,
@@ -34,10 +36,12 @@ const EventSchema = new Schema({
   closeTime: {
     type: Date,
     required: [true, 'Your event must close registrations by a given date'],
+    public: true,
   },
   homepage: {
     type: String,
     required: [true, 'Your event must have an event page'],
+    public: true,
   },
   description: {
     type: String,
@@ -63,6 +67,7 @@ const EventSchema = new Schema({
     default: 'TESC',
     required: true,
     trim: true,
+    public: true,
   },
   options: {
     allowHighSchool: {

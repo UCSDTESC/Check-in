@@ -1,7 +1,7 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent, ColumnResponse } from '@Shared/Types';
-import { EventStatistics, GetSponsorsResponse } from '@Shared/api/Responses';
+import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import { SuccessResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
@@ -86,7 +86,7 @@ export const checkUserExists = (email: string) =>
  * @returns {Promise} A promise of the request.
  */
 export const loadAllPublicEvents = () =>
-  promisify<TESCEvent[]>(
+  promisify<EventsWithStatisticsResponse>(
     request
       .get('/events')
       .use(apiPrefix)
