@@ -68,7 +68,7 @@ export default class EventService {
    * @param sponsor The admin in the sponsor list for the events.
    */
   async getEventsBySponsor(sponsor: Admin): Promise<EventDocument[]> {
-    return this.getPopulatedEvents(this.EventModel.find({sponsors: sponsor}));
+    return this.getPopulatedEvents(true, this.EventModel.find({sponsors: sponsor}));
   }
 
   /**
@@ -76,25 +76,45 @@ export default class EventService {
    * @param organiser The admin in the organiser list for the events.
    */
   async getEventsByOrganiser(organiser: Admin): Promise<EventDocument[]> {
-    return this.getPopulatedEvents(this.EventModel.find({organisers: organiser}));
+    return this.getPopulatedEvents(true, this.EventModel.find({organisers: organiser}));
+  }
+
+  /**
+   * Get the event associated with the given alias with populated fields that are publicly accessible.
+   * @param eventAlias The alias to query.
+   */
+  async getPublicPopulatedEventByAlias(eventAlias: string) {
+    const query = this.EventModel.findOne({alias: eventAlias});
+    return await this.getPopulatedEvents(false, query);
+  }
+
+  /**
+   * Get all events and populate all fields within each document.
+   * @param populatePrivateFields Populate all fields that are not publicly accessible.
+   */
+  async getAllPopulatedEvents(populatePrivateFields: boolean = true) {
+    return this.getPopulatedEvents(populatePrivateFields, this.EventModel.find());
   }
 
   /**
    * Get all events for the given query and populate all fields within each document.
-   * @param query An optional query stem for filtering certain events.
+   * @param populatePrivateFields Populate all fields that are not publicly accessible.
+   * @param query The query stem for filtering certain events.
    */
-  async getPopulatedEvents(query?: DocumentQuery<EventDocument[], EventDocument>): Promise<EventDocument[]> {
-    if (!query) {
-      query = this.EventModel.find();
-    }
-
-    return query
-      .populate('organisers')
-      .populate('sponsors')
+  async getPopulatedEvents<R = EventDocument[]>(populatePrivateFields: boolean = true,
+    query: DocumentQuery<R, EventDocument>): Promise<R> {
+    query = query
       .populate('customQuestions.longText')
       .populate('customQuestions.shortText')
-      .populate('customQuestions.checkBox')
-      .exec();
+      .populate('customQuestions.checkBox');
+
+    if (populatePrivateFields) {
+      query = query
+        .populate('organisers')
+        .populate('sponsors');
+    }
+
+    return query.exec();
   }
 
   /**

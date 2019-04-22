@@ -5,9 +5,11 @@ import { CheckinUserRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
 import { Get, JsonController, UseBefore, Param, Post, Body } from 'routing-controllers';
 
+import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { IsOrganiser } from '../middleware/IsOrganiser';
 
 @JsonController('/users')
+@UseBefore(AdminAuthorisation)
 export class UsersController {
   constructor(
     private UserService: UserService,

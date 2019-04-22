@@ -7,9 +7,11 @@ import { GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/R
 import { Get, JsonController, UseBefore } from 'routing-controllers';
 
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
+import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { RoleAuth } from '../middleware/RoleAuth';
 
 @JsonController('/admin')
+@UseBefore(AdminAuthorisation)
 export class AdminController {
   constructor(
     private SponsorService: SponsorService,
@@ -33,7 +35,7 @@ export class AdminController {
     if (hasRankEqual(admin, Role.ROLE_SPONSOR)) {
       events = await this.EventService.getEventsBySponsor(admin);
     } else if (hasRankAtLeast(admin, Role.ROLE_DEVELOPER)) {
-      events = await this.EventService.getPopulatedEvents();
+      events = await this.EventService.getAllPopulatedEvents();
     } else {
       events = await this.EventService.getEventsByOrganiser(admin);
     }

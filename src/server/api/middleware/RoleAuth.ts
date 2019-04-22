@@ -1,21 +1,18 @@
-import { Role, getRoleRank, hasRankAtLeast } from '@Shared/Roles';
+import { Role, hasRankAtLeast } from '@Shared/Roles';
 import express = require('express');
-import { UnauthorizedError } from 'routing-controllers';
+import { UnauthorizedError, InternalServerError } from 'routing-controllers';
 
-import { AdminAuthorisation } from './AdminAuthorisation';
+import { ErrorMessage } from '../../utils/Errors';
 
 export const RoleAuth = (role: Role) =>
   (req: express.Request, res: express.Response, next?: express.NextFunction) => {
-    return (new AdminAuthorisation()).use(req, res, (err: Error) => {
-      // Force authentication errors forward
-      if (err) {
-        return next(err);
-      }
+    if (!req.user) {
+      return next(new InternalServerError(ErrorMessage.NO_REQUEST_USER()));
+    }
 
-      if (!hasRankAtLeast(req.user, role)) {
-        return next(new UnauthorizedError());
-      }
+    if (!hasRankAtLeast(req.user, role)) {
+      return next(new UnauthorizedError());
+    }
 
-      next();
-    });
+    next();
   };

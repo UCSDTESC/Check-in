@@ -122,23 +122,6 @@ module.exports = function(app) {
         .then(() => res.json({success: true}));
     });
 
-  api.get('/admin/events/:eventAlias',
-    (req, res) => {
-      return Event.findOne({'alias': req.params.eventAlias})
-        .populate('customQuestions.longText')
-        .populate('customQuestions.shortText')
-        .populate('customQuestions.checkBox')
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(event => {
-          if (!event) {
-            return Errors.respondUserError(res, Errors.NO_ALIAS_EXISTS);
-          }
-
-          return res.json(event);
-        });
-    });
-
   api.get('/admin/export/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser, (req, res) => {
       return User.find({event: req.event})

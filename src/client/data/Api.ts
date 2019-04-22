@@ -94,6 +94,18 @@ export const loadAllPublicEvents = () =>
   );
 
 /**
+ * Requests event information based on a given event alias.
+ * @param {String} eventAlias The event alias.
+ */
+export const loadEventByAlias = (eventAlias: string) =>
+  promisify<TESCEvent>(
+    request
+      .get(`/events/${eventAlias}`)
+      .use(apiPrefix)
+      .use(nocache)
+  );
+
+/**
  * Request a list of all events the user has access to.
  * @returns {Promise} A promise of the request.
  */
@@ -102,18 +114,6 @@ export const loadAllEvents = () =>
     request
       .get('/admin/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
-      .use(nocache)
-  );
-
-/**
- * Requests event information based on a given event alias.
- * @param {String} eventAlias The event alias.
- */
-export const loadEventByAlias = (eventAlias: string) =>
-  promisify<TESCEvent>(
-    request
-      .get(`/admin/events/${eventAlias}`)
       .use(apiPrefix)
       .use(nocache)
   );
