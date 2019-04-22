@@ -98,7 +98,7 @@ export const loadAllPublicEvents = () =>
  * @returns {Promise} A promise of the request.
  */
 export const loadAllEvents = () =>
-  promisify<TESCEvent[]>(
+  promisify<EventsWithStatisticsResponse>(
     request
       .get('/admin/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))

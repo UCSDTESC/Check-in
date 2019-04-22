@@ -24,8 +24,8 @@ export type Resume = UploadedFile;
 
 export type Logo = UploadedFile;
 
-export interface Download {
-  _id?: string;
+export interface Download<IDType = string> {
+  _id?: IDType;
   fileCount: number;
   adminId: string;
   accessUrl?: string;
@@ -55,8 +55,8 @@ export interface Filter {
   options: FilterOptions;
 }
 
-export interface Admin {
-  _id?: string;
+export interface Admin<IDType = string> {
+  _id?: IDType;
   username: string;
   password: string;
   role: Role;
@@ -65,8 +65,8 @@ export interface Admin {
   deleted?: boolean;
 }
 
-export interface Question {
-  _id?: string;
+export interface Question<IDType = string> {
+  _id?: IDType;
   question: string;
   isRequired: boolean;
   deleted?: boolean;
@@ -96,8 +96,8 @@ export interface TESCEventOptions {
   requireWhyThisEvent: boolean;
 }
 
-export interface TESCEvent {
-  _id?: string;
+export interface TESCEvent<IDType = string> {
+  _id?: IDType;
   name: string;
   alias: string;
   organisers: Admin[];
@@ -116,16 +116,16 @@ export interface TESCEvent {
   users?: number;
 }
 
-export interface TESCAccount {
-  _id?: string;
+export interface TESCAccount<IDType = string> {
+  _id?: IDType;
   email: string;
   password: string;
   confirmed: boolean;
   deleted?: boolean;
 }
 
-export interface TESCUser {
-  _id?: string;
+export interface TESCUser<IDType = string> {
+  _id?: IDType;
   event?: TESCEvent;
   account?: TESCAccount;
   firstName: string;

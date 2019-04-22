@@ -1,3 +1,5 @@
+import { Admin } from './Types';
+
 // Administrator Roles
 
 export enum Role {
@@ -32,4 +34,22 @@ export function getRoleRank(checkRole: Role) {
   }
 
   return role;
+}
+
+/**
+ * Determines whether the given admin has the role privileges of at least checkRole.
+ * @param admin The admin to check the rank for.
+ * @param checkRole The role to check against.
+ */
+export function hasRankAtLeast(admin: Admin, checkRole: Role) {
+  return getRoleRank(admin.role) >= getRoleRank(checkRole);
+}
+
+/**
+ * Determines whether the given admin has exactly the role.
+ * @param admin The admin to check the rank for.
+ * @param checkRole The role to check against.
+ */
+export function hasRankEqual(admin: Admin, checkRole: Role) {
+  return getRoleRank(admin.role) === getRoleRank(checkRole);
 }

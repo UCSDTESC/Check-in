@@ -1,10 +1,6 @@
 import EventService from '@Services/EventService';
-import { Role } from '@Shared/Roles';
-import { TESCEvent } from '@Shared/Types';
 import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore } from 'routing-controllers';
-
-import { RoleAuth } from '../middleware/RoleAuth';
+import { Get, JsonController } from 'routing-controllers';
 
 @JsonController('/events')
 export class EventsController {

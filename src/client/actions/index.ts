@@ -1,4 +1,5 @@
 import { TESCEvent, FilterOption } from '@Shared/Types';
+import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { createStandardAction, ActionType } from 'typesafe-actions';
@@ -51,12 +52,22 @@ export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENT
 export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, Action>;
 export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
 
+const mapUserCountIntoEvents = (response: EventsWithStatisticsResponse): TESCEvent[] =>
+  response.events.map(event => {
+    const userCount = response.userCounts.find(count => count._id === event._id);
+    return {
+      ...event,
+      users: userCount === undefined ? 0 : userCount.count,
+    };
+  });
+
 export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
       Api.loadAllEvents()
         .then(res => {
-          dispatch(replaceAdminEvents(res));
+          const mapped = mapUserCountIntoEvents(res);
+          dispatch(replaceAdminEvents(mapped));
           return resolve();
         })
         .catch(reject);
@@ -67,15 +78,8 @@ export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
     new Promise((resolve, reject) => {
       Api.loadAllPublicEvents()
         .then(res => {
-          // Map counts into users field
-          const eventsWithCounts = res.events.map(event => {
-            const userCount = res.userCounts.find(count => count._id === event._id);
-            return {
-              ...event,
-              users: userCount === undefined ? 0 : userCount.count,
-            };
-          });
-          dispatch(replaceEvents(eventsWithCounts));
+          const mapped = mapUserCountIntoEvents(res);
+          dispatch(replaceEvents(mapped));
           return resolve();
         })
         .catch(reject);

@@ -1,4 +1,4 @@
-import { Role, getRoleRank } from '@Shared/Roles';
+import { Role, getRoleRank, hasRankAtLeast } from '@Shared/Roles';
 import express = require('express');
 import { UnauthorizedError } from 'routing-controllers';
 
@@ -12,9 +12,7 @@ export const RoleAuth = (role: Role) =>
         return next(err);
       }
 
-      const rolePasses = getRoleRank(req.user.role) >= getRoleRank(role);
-
-      if (!rolePasses) {
+      if (!hasRankAtLeast(req.user, role)) {
         return next(new UnauthorizedError());
       }
 

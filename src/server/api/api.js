@@ -40,55 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  addEventStatistics = (events) => {
-    return new Promise((resolve) => {
-      newEvents = [];
-      updated = 0;
-
-      if (!events || events.length === 0) {
-        resolve([]);
-      }
-
-      events.forEach((event) => {
-        User.countDocuments({event})
-          .catch(logging.error)
-          .then(count => {
-            let newEvent = event.toJSON();
-            newEvent.users = count;
-            newEvents.push(newEvent);
-
-            updated++;
-            if (updated === events.length) {
-              resolve(newEvents);
-            }
-          });
-      });
-    });
-  };
-
-  api.get('/admin/events', requireAuth, roleAuth(roles.ROLE_SPONSOR),
-    (req, res) => {
-      var query;
-      if (getRole(req.user.role) === getRole(roles.ROLE_SPONSOR)) {
-        query = Event.find({'sponsors': req.user});
-      } else if (getRole(req.user.role) >= getRole(roles.ROLE_DEVELOPER)) {
-        query = Event.find();
-      } else {
-        query = Event.find({'organisers': req.user});
-      }
-
-      return query
-        .populate('organisers')
-        .populate('sponsors')
-        .populate('customQuestions.longText')
-        .populate('customQuestions.shortText')
-        .populate('customQuestions.checkBox')
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(addEventStatistics)
-        .then(events => res.json(events));
-    });
-
   api.post('/admin/customQuestion/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
       if (!req.body.question || !req.body.type) {
