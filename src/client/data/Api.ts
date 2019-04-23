@@ -184,9 +184,9 @@ export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
   let baseReq = request
     .post(`/register/${eventAlias}`)
     .use(apiPrefix)
-    .field({
+    .send({
       ...postObject,
-    } as any);
+    });
 
   if (resume) {
     baseReq = baseReq.attach('resume', user.resume[0]);
@@ -202,7 +202,7 @@ export const registerNewEvent = (event: NewEventFormData) => {
     request
       .post('/admin/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .field({
+      .send({
         ...eventWithoutLogo,
       })
       .attach('logo', logo[0])

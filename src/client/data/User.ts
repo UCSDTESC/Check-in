@@ -110,9 +110,9 @@ export const updateUserField = (user: UserProfileFormData, eventAlias: string) =
 
   return promisify<TESCUser>(request
     .post(`/update/${eventAlias}`)
-    .field({
+    .send({
       ...postObject,
-    } as any)
+    })
     .attach('resume', user.newResume ? user.newResume[0] : null)
     .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix)
