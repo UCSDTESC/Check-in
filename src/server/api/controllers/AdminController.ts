@@ -1,10 +1,16 @@
 import { EventDocument } from '@Models/Event';
+import { CSVService } from '@Services/CSVService';
 import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
+import UserService from '@Services/UserService';
 import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
-import { Admin } from '@Shared/Types';
+import { Admin, TESCEvent } from '@Shared/Types';
 import { GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore } from 'routing-controllers';
+import { SelectedEvent } from 'api/decorators/SelectedEvent';
+import { ValidateEventAlias } from 'api/middleware/ValidateEventAlias';
+import { Response } from 'express';
+import * as moment from 'moment';
+import { Get, JsonController, UseBefore, Res } from 'routing-controllers';
 
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
@@ -16,6 +22,8 @@ export class AdminController {
   constructor(
     private SponsorService: SponsorService,
     private EventService: EventService,
+    private UserService: UserService,
+    private CSVService: CSVService,
   ) {}
 
   @Get('/sponsors')
@@ -49,5 +57,18 @@ export class AdminController {
       events,
       userCounts,
     };
+  }
+
+  @Get('/export/:eventAlias')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventAlias)
+  async exportUsersByEvent(@SelectedEvent() event: EventDocument, @Res() response: Response) {
+    const eventUsers = await this.UserService.getAllUsersByEvent(event);
+    const flattenedUsers = eventUsers.map(user => user.csvFlatten());
+
+    const fileName = `${event.alias}-${moment().format()}.csv`;
+    const csv = this.CSVService.parseJSONToCSV(flattenedUsers);
+    response = this.CSVService.setJSONReturnHeaders(response, fileName);
+    return response.send(csv);
   }
 }
