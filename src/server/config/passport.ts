@@ -28,7 +28,7 @@ const returnMessages = {
   NOT_CONFIRMED: 'You have not yet confirmed this account',
 };
 
-export const ADMIN_JWT_TIMEOUT = 3 * 60 * 60;
+export const ADMIN_JWT_TIMEOUT = Config.IsDev ? 7 * 24 * 60 * 60 : 3 * 60 * 60;
 
 @Service()
 export class PassportStrategy {

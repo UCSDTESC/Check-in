@@ -244,16 +244,6 @@ module.exports = function(app) {
 
     });
 
-  api.get('/admins', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    (_, res) =>
-      Admin.find({deleted: {$ne: true}})
-        .select('username role')
-        .sort({createdAt: -1})
-        .exec()
-        .then(admins => res.json(admins))
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-  );
-
   api.post('/admins/register', requireAuth, roleAuth(roles.ROLE_ADMIN),
     (req, res) => {
       if (getRole(req.body.role) > getRole(roles.ROLE_ADMIN) &&

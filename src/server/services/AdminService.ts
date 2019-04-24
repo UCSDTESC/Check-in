@@ -20,4 +20,11 @@ export default class AdminService {
       checkin: admin.checkin,
     };
   }
+
+  /**
+   * Returns all the admins in the database.
+   */
+  async getAllAdmins() {
+    return this.AdminModel.find();
+  }
 }
