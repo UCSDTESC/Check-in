@@ -154,21 +154,6 @@ module.exports = function(app) {
         .then(() => res.json({success : true}));
     });
 
-  api.get('/admin/columns', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    (_, res) => {
-      let columns = Object.entries(User.schema.paths)
-        .reduce((acc, [key, value]) => {
-          if (!('displayName' in value.options)) {
-            return acc;
-          }
-
-          acc[key] = value.options.displayName;
-          return acc;
-        }, {});
-
-      return res.json(columns);
-    });
-
   api.post('/admin/addSponsor/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
       if (!req.body.sponsor) {
@@ -257,55 +242,6 @@ module.exports = function(app) {
             });
         });
 
-    });
-
-  api.get('/statistics/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    isOrganiser,
-    (req, res) => {
-      return Promise.all(
-        [User.countDocuments({event: req.event}),
-          User.find({
-            event: req.event._id
-          }).distinct('university').exec(),
-          User.aggregate([
-            {
-              $match: {event: req.event._id}
-            },
-            {
-              $group: {_id: '$gender', count: {$sum: 1}}
-            }
-          ]).exec(),
-          User.countDocuments({event: req.event, checkedIn: true}),
-          User.aggregate([
-            {
-              $match: {event: req.event._id}
-            },
-            {
-              $group : {_id: '$status', count: {$sum: 1}}
-            }]).exec(),
-          User.countDocuments(getResumeConditions(req))
-        ])
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(values => {
-          let genders = values[2].reduce((ret, gender) => {
-            ret[gender._id] = gender.count;
-            return ret;
-          }, {});
-
-          let status = values[4].reduce((ret, status) => {
-            ret[status._id] = status.count;
-            return ret;
-          }, {});
-
-          return res.json({
-            count: values[0],
-            universities: values[1].length,
-            genders,
-            checkedIn: values[3],
-            status,
-            resumes: values[5]
-          });
-        });
     });
 
   api.get('/admins', requireAuth, roleAuth(roles.ROLE_ADMIN),

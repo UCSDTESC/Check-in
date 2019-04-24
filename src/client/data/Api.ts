@@ -1,8 +1,8 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
-    TESCEvent, ColumnResponse } from '@Shared/Types';
+    TESCEvent } from '@Shared/Types';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
-import { SuccessResponse } from '@Shared/api/Responses';
+import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';

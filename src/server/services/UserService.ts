@@ -1,5 +1,6 @@
-import { UserModel } from '@Models/User';
+import { UserModel, UserSchema } from '@Models/User';
 import { TESCEvent } from '@Shared/Types';
+import { ColumnResponse } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
 
 @Service()
@@ -39,5 +40,17 @@ export default class UserService {
     return await this.UserModel
       .findByIdAndUpdate(id, { checkedIn : true })
       .exec();
+  }
+
+  /**
+   * Return a mapping of fields to their display names.
+   */
+  getAllDisplayNameFields(): ColumnResponse {
+    return Object.entries((UserSchema as any).paths)
+      .filter(([fieldName, field]: any) => 'displayName' in field.options)
+      .reduce((acc, [fieldName, field]: any) => {
+        acc[fieldName] = field.options.displayName as string;
+        return acc;
+      }, {});
   }
 }

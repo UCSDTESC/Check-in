@@ -59,3 +59,7 @@ export class SuccessResponse {
 
   success: boolean;
 }
+
+export interface ColumnResponse {
+  [accessor: string]: string;
+}

@@ -59,6 +59,13 @@ export class AdminController {
     };
   }
 
+  @Get('/columns')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  async getColumnDisplayNames() {
+    const displayNames = this.UserService.getAllDisplayNameFields();
+    return displayNames;
+  }
+
   @Get('/export/:eventAlias')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(ValidateEventAlias)

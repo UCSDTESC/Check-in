@@ -1,9 +1,5 @@
 import { Role } from './Roles';
 
-export interface ColumnResponse {
-  [accessor: string]: string;
-}
-
 export enum UserStatus {
   Rejected = 'Rejected',
   Unconfirmed = 'Unconfirmed',

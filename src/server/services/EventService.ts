@@ -5,9 +5,10 @@ import { Admin, TESCEvent } from '@Shared/Types';
 import { DocumentQuery, Query, Types } from 'mongoose';
 import { Service, Inject } from 'typedi';
 
-const PUBLIC_EVENT_FIELDS = Object.entries((EventSchema as any).paths)
+const PUBLIC_EVENT_FIELDS: string[] = Object.entries((EventSchema as any).paths)
   .filter(([fieldName, field]: any) => 'public' in field.options)
-  .map(([fieldName, field]: any) => fieldName).join(' ') + ' logo';
+  .map(([fieldName, field]: any) => fieldName);
+PUBLIC_EVENT_FIELDS.push('logo');
 
 /**
  * Defines the result of a summation aggregate
@@ -38,7 +39,7 @@ export default class EventService {
    */
   async getAllPublicEvents() {
     return await this.EventModel.find()
-      .select(PUBLIC_EVENT_FIELDS)
+      .select(PUBLIC_EVENT_FIELDS.join(' '))
       .exec();
   }
 

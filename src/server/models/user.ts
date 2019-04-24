@@ -11,7 +11,7 @@ export type UserDocument = TESCUser & Document & {
 };
 export type UserModel = Model<UserDocument>;
 
-const UserSchema = new Schema({
+export const UserSchema = new Schema({
   event: {
     type: Schema.Types.ObjectId,
     ref: 'Event',
