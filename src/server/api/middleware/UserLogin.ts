@@ -10,7 +10,7 @@ export class UserLogin implements ExpressMiddlewareInterface {
   use(req: express.Request, res: express.Response, next?: express.NextFunction): Promise<passport.Authenticator> {
     return this.authenticate((err, user: AccountDocument, info) => {
       if (err || !user) {
-        return next(new UnauthorizedError(info));
+        return next(new UnauthorizedError(info.message));
       }
 
       req.user = user;

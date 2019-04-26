@@ -11,7 +11,7 @@ export class AdminLogin implements ExpressMiddlewareInterface {
   use(req: express.Request, res: express.Response, next?: express.NextFunction): Promise<passport.Authenticator> {
     return this.authenticate((err, user: AdminDocument, info) => {
       if (err || !user) {
-        return next(new UnauthorizedError(info));
+        return next(new UnauthorizedError(info.message));
       }
 
       user.lastAccessed = new Date();
