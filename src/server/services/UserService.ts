@@ -1,12 +1,23 @@
+import { PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { UserModel, UserSchema } from '@Models/User';
-import { TESCEvent } from '@Shared/Types';
-import { ColumnResponse } from '@Shared/api/Responses';
+import { TESCEvent, TESCAccount } from '@Shared/Types';
+import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
 
 @Service()
 export default class UserService {
   @Inject('UserModel')
   private UserModel: UserModel;
+
+  /**
+   * Create a JWT token for a given user account.
+   * @param user The user account to fetch the JWT for.
+   */
+  getJwtUser(user: TESCAccount): JWTUserAuthToken {
+    return {
+      _id: user._id,
+    };
+  }
 
   /**
    * Get a list of all users signed up for a particular event.
@@ -52,5 +63,17 @@ export default class UserService {
         acc[fieldName] = field.options.displayName as string;
         return acc;
       }, {});
+  }
+
+  /**
+   * Get all the events, with public fields, for a particular account.
+   * @param account The account for which to get events.
+   */
+  async getAccountPublicEvents(account: TESCAccount) {
+    const populatedUsers = await this.UserModel
+      .find({account: account})
+      .populate('event', PUBLIC_EVENT_FIELDS);
+
+    return populatedUsers.map(user => user.event);
   }
 }

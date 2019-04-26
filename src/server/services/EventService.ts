@@ -1,14 +1,9 @@
 import { UserModel } from '@Models/User';
-import { EventModel, EventSchema, EventDocument } from '@Models/event';
+import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/event';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';
 import { Admin, TESCEvent } from '@Shared/Types';
 import { DocumentQuery, Query, Types } from 'mongoose';
 import { Service, Inject } from 'typedi';
-
-const PUBLIC_EVENT_FIELDS: string[] = Object.entries((EventSchema as any).paths)
-  .filter(([fieldName, field]: any) => 'public' in field.options)
-  .map(([fieldName, field]: any) => fieldName);
-PUBLIC_EVENT_FIELDS.push('logo');
 
 /**
  * Defines the result of a summation aggregate

@@ -153,5 +153,10 @@ EventSchema.plugin(crate, {
 
 EventSchema.plugin(mongooseDelete);
 
+export const PUBLIC_EVENT_FIELDS: string[] = Object.entries((EventSchema as any).paths)
+  .filter(([fieldName, field]: any) => 'public' in field.options)
+  .map(([fieldName, field]: any) => fieldName);
+PUBLIC_EVENT_FIELDS.push('logo');
+
 export const RegisterModel = () =>
   Container.set('EventModel', model<EventDocument, EventModel>('Event', EventSchema));
