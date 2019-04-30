@@ -6,6 +6,7 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   devtool: 'eval-source-map',
+  context: path.join(__dirname),
   entry: {
     vendor: [
       '@babel/polyfill'

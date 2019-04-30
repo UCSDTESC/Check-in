@@ -101,7 +101,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
 
   render() {
     const {goToPreviousPage, handleSubmit, pristine, isSubmitting, submitError,
-      emailExists} = this.props;
+           emailExists} = this.props;
     const options = this.props.event.options;
 
     return (

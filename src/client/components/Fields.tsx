@@ -47,7 +47,7 @@ export function errorClass(className: string, touched: boolean, error: boolean) 
 }
 
 export const errorTextInput: React.StatelessComponent<CustomFieldProps> = ({input, className, placeholder, type,
-    meta: {touched, error}}) => {
+                                                                            meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     return (
       <div>
@@ -80,7 +80,7 @@ export const errorRadio: React.StatelessComponent<CustomFieldProps> = ({input, c
   };
 
 export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({input, className, placeholder, maxLength,
-    meta: {touched, error}}) => {
+                                                                           meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     return (
       <div>
@@ -96,7 +96,7 @@ export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({input
   };
 
 export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({input, className,
-  meta: {touched, error}}) => {
+                                                                              meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     const months = [
       'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -122,7 +122,7 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({in
   };
 
 export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
-    meta: {touched, error}}) => {
+                                                                                   meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     const sizes = [
       'X-Small', 'Small', 'Medium', 'Large', 'X-Large', 'XX-Large',
@@ -147,7 +147,7 @@ export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> =
   };
 
 export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
-    meta: {touched, error}}) => {
+                                                                               meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     const genders = [
       'Female', 'Male', 'Non-Binary', 'Transgender',
@@ -170,7 +170,7 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({i
   };
 
 export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
-    meta: {touched, error}}) => {
+                                                                                   meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     const opts = ['American Indian or Alaskan Native', 'Asian / Pacific Islander',
       'Black or African American', 'Hispanic', 'White / Caucasian',
@@ -192,7 +192,7 @@ export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> =
   };
 
 export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
-    meta: {touched, error}}) => {
+                                                                             meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
     const years = [
       '1', '2', '3', '4', '5+', 'Graduate',
@@ -214,7 +214,7 @@ export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({inp
   };
 
 export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({input, className, type,
-    meta: {touched, error}}) => {
+                                                                              meta: {touched, error}}) => {
     const errorClassName = errorClass(className, touched, error);
 
     return (

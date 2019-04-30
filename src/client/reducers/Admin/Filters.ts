@@ -62,7 +62,7 @@ function addFilter(state: FiltersState, action: ActionType<typeof Actions.addFil
   }
 
   return {...state,
-    [action.payload.name]: {
+          [action.payload.name]: {
       displayName: action.payload.displayName,
       enabled: true,
       options: {},
