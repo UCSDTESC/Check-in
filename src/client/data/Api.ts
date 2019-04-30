@@ -1,7 +1,7 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/Types';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest, BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest } from '@Shared/api/Requests';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest, BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest, AddNewOrganiserRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
@@ -357,7 +357,7 @@ export const addNewOrganiser = (eventAlias: string, adminId: string) =>
   promisify<SuccessResponse>(
     request
       .post(`/admin/addOrganiser/${eventAlias}`)
-      .send({ admin: adminId })
+      .send({ organiserId: adminId } as AddNewOrganiserRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)

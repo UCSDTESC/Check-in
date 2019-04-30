@@ -253,4 +253,14 @@ export default class EventService {
     event.sponsors.push(sponsor);
     return event.save();
   }
+
+  /**
+   * Adds an admin to the organiser list for a given event.
+   * @param event The event for which the organiser will be added.
+   * @param organiser The admin that should be added as a organiser.
+   */
+  async addOrganiserToEvent(event: EventDocument, organiser: Admin) {
+    event.organisers.push(organiser);
+    return event.save();
+  }
 }

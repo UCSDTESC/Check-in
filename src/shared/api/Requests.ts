@@ -31,3 +31,7 @@ export interface UpdateEventOptionsRequest {
 export interface AddNewSponsorRequest {
   sponsorId: string;
 }
+
+export interface AddNewOrganiserRequest {
+  organiserId: string;
+}

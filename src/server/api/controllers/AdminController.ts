@@ -9,7 +9,8 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
     DeleteCustomQuestionRequest,
     BulkChangeRequest, 
     UpdateEventOptionsRequest,
-    AddNewSponsorRequest} from '@Shared/api/Requests';
+    AddNewSponsorRequest,
+    AddNewOrganiserRequest} from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
 import * as moment from 'moment';
@@ -144,6 +145,17 @@ export class AdminController {
   async addSponsorToEvent(@SelectedEvent() event: EventDocument, @Body() body: AddNewSponsorRequest) {
     const sponsor = await this.AdminService.getAdminById(body.sponsorId);
     await this.EventService.addSponsorToEvent(event, sponsor);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/addOrganiser/:eventAlias')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(IsOrganiser)
+  @UseBefore(ValidateEventAlias)
+  async addOrganiserToEvent(@SelectedEvent() event: EventDocument, @Body() body: AddNewOrganiserRequest) {
+    const admin = await this.AdminService.getAdminById(body.organiserId);
+    await this.EventService.addOrganiserToEvent(event, admin);
 
     return SuccessResponse.Positive;
   }
