@@ -12,7 +12,7 @@ export const _updateUser = createStandardAction(Types.UPDATE_USER)<TESCUser>();
 // Update the user in the database, and then on the client
 export const updateUser = (user: TESCUser): ApplicationAction<Promise<void>> =>
 (dispatch: ApplicationDispatch) =>
-    Api.updateUser(user._id, user.event.alias, user)
+    Api.updateUser(user.event.alias, user)
       .then(() => {
         dispatch(_updateUser(user));
       })

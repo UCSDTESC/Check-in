@@ -25,7 +25,8 @@ export default class AdminService {
    * Returns all the admins in the database.
    */
   async getAllAdmins() {
-    return this.AdminModel.find();
+    return this.AdminModel
+      .find();
   }
 
   /**
@@ -33,6 +34,8 @@ export default class AdminService {
    * @param adminId The object ID of the admin.
    */
   async getAdminById(adminId: string) {
-    return this.AdminModel.findById(adminId).exec();
+    return this.AdminModel
+      .findById(adminId)
+      .exec();
   }
 }

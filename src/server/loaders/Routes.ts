@@ -48,6 +48,11 @@ export default class RoutesLoader extends Loader {
       ],
       defaultErrorHandler: false,
       classTransformer: false,
+      defaults: {
+        paramOptions: {
+          required: true,
+        },
+      },
     });
 
     // React fallback

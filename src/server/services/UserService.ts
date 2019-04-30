@@ -1,8 +1,7 @@
 import { PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { UserModel, UserSchema } from '@Models/User';
-import { TESCEvent, TESCAccount, UserStatus } from '@Shared/Types';
+import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/Types';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
-import { stat } from 'fs';
 import { Service, Inject } from 'typedi';
 
 @Service()
@@ -84,6 +83,18 @@ export default class UserService {
    * @param status The new status of the users.
    */
   async changeUserStatuses(users: string[], status: UserStatus) {
-    return this.UserModel.updateMany({_id: {$in: users}}, {status: status}).exec();
+    return this.UserModel
+      .updateMany({_id: {$in: users}}, {status: status})
+      .exec();
+  }
+
+  /**
+   * Updates the fields of a given user.
+   * @param user The user to update.
+   */
+  async updateUser(user: TESCUser) {
+    return this.UserModel
+      .findOneAndUpdate({_id: user._id}, user)
+      .exec();
   }
 }

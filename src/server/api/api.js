@@ -40,19 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  api.post('/users/:eventAlias/:userId', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser,
-    (req, res) => {
-
-      User.findByIdAndUpdate(req.params.userId, req.body)
-        .exec()
-        .catch(err => {
-          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-        })
-        .then(() => res.json({success : true}));
-
-    });
-
   api.post('/admin/events', requireAuth,
     roleAuth(roles.ROLE_ADMIN), upload.single('logo'), (req, res) => {
       let event = new Event;
