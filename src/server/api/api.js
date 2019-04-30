@@ -40,23 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  api.post('/admin/update/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    isOrganiser, (req, res) => {
-      if (!req.body.options) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      let options = req.body.options;
-
-      req.event.options = options;
-      return req.event
-        .save()
-        .catch(err => {
-          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-        })
-        .then(() => res.json({success : true}));
-    });
-
   api.post('/admin/addSponsor/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
       if (!req.body.sponsor) {

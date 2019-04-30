@@ -7,7 +7,8 @@ import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import { Admin } from '@Shared/Types';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
     DeleteCustomQuestionRequest,
-    BulkChangeRequest } from '@Shared/api/Requests';
+    BulkChangeRequest, 
+    UpdateEventOptionsRequest} from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
 import * as moment from 'moment';
@@ -119,6 +120,16 @@ export class AdminController {
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   async bulkChangeUsers(@Body() body: BulkChangeRequest) {
     await this.UserService.changeUserStatuses(body.users, body.status);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/update/:eventAlias')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(IsOrganiser)
+  @UseBefore(ValidateEventAlias)
+  async updateEventOptions(@SelectedEvent() event: EventDocument, @Body() body: UpdateEventOptionsRequest) {
+    await this.EventService.updateEventOptions(event, body.options);
 
     return SuccessResponse.Positive;
   }

@@ -1,5 +1,5 @@
 import { QuestionType } from '@Shared/Questions';
-import { Question, UserStatus } from '@Shared/Types';
+import { Question, UserStatus, TESCEventOptions } from '@Shared/Types';
 
 export interface CheckinUserRequest {
   id: string;
@@ -22,4 +22,8 @@ export interface DeleteCustomQuestionRequest {
 export interface BulkChangeRequest {
   users: string[];
   status: UserStatus;
+}
+
+export interface UpdateEventOptionsRequest {
+  options: TESCEventOptions;
 }
