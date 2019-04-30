@@ -1,4 +1,5 @@
-import { TESCEvent, Filter } from '@Shared/Types';
+import { TESCEvent } from '@Shared/ModelTypes';
+import { Filter } from '~/static/Types';
 
 export interface EventsState {
   [EventAlias: string]: TESCEvent;

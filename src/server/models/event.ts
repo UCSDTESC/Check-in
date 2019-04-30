@@ -1,5 +1,5 @@
 import { QuestionType } from '@Shared/Questions';
-import { TESCEvent } from '@Shared/Types';
+import { TESCEvent } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
 import * as crate from 'mongoose-crate';
 import * as S3 from 'mongoose-crate-s3';

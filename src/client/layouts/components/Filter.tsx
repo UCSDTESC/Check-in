@@ -1,7 +1,7 @@
-import { FilterOptions } from '@Shared/Types';
 import React, { FormEvent } from 'react';
 import AutoSuggest from '~/components/AutoSuggest';
 import ToggleSwitch from '~/components/ToggleSwitch';
+import { FilterOptions } from '~/static/Types';
 
 interface FilterProps {
   name: string;

@@ -1,5 +1,5 @@
+import { Question, UserStatus, TESCEventOptions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
-import { Question, UserStatus, TESCEventOptions } from '@Shared/Types';
 
 export interface CheckinUserRequest {
   id: string;

@@ -1,8 +1,8 @@
-import { FilterOptions, Filter, FilterOption } from '@Shared/Types';
 import { handleActions } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 import * as Actions from '~/actions';
 import * as Types from '~/actions/types';
+import { FilterOptions, Filter, FilterOption } from '~/static/Types';
 
 import { FiltersState } from './types';
 

@@ -1,4 +1,4 @@
-import { TESCEvent, FilterOption } from '@Shared/Types';
+import { TESCEvent } from '@Shared/ModelTypes';
 import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
@@ -6,6 +6,7 @@ import { createStandardAction, ActionType } from 'typesafe-actions';
 import * as Api from '~/data/Api';
 import * as UserApi from '~/data/User';
 import { ApplicationState } from '~/reducers';
+import { FilterOption } from '~/static/Types';
 
 import * as Types from './types';
 

@@ -1,5 +1,5 @@
+import { Admin } from '@Shared/ModelTypes';
 import { Role, getRoleRank } from '@Shared/Roles';
-import { Admin } from '@Shared/Types';
 import { JWTAdminAuth, JWTAdminAuthToken } from '@Shared/api/Responses';
 import React from 'react';
 import { NavbarToggler } from 'reactstrap';

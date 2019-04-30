@@ -1,4 +1,4 @@
-import { TESCEvent } from '@Shared/Types';
+import { TESCEvent } from '@Shared/ModelTypes';
 import React from 'react';
 import { Field, Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';

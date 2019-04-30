@@ -4,7 +4,7 @@ import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
 import UserService from '@Services/UserService';
 import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
-import { Admin } from '@Shared/Types';
+import { Admin } from '@Shared/ModelTypes';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
     DeleteCustomQuestionRequest,
     BulkChangeRequest, 

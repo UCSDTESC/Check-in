@@ -1,5 +1,5 @@
+import { CustomQuestions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
-import { CustomQuestions } from '@Shared/Types';
 import React from 'react';
 import { Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';

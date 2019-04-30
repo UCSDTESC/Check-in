@@ -1,5 +1,5 @@
+import { Admin, TESCEvent } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
-import { Admin, TESCEvent } from '@Shared/Types';
 import { Types } from 'mongoose';
 
 export interface EventStatistics {

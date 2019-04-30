@@ -1,7 +1,7 @@
 import { USER_JWT_TIMEOUT } from '@Config/Passport';
 import EventService from '@Services/EventService';
 import UserService from '@Services/UserService';
-import { TESCEvent, TESCUser, TESCAccount } from '@Shared/Types';
+import { TESCEvent, TESCUser, TESCAccount } from '@Shared/ModelTypes';
 import { EventsWithStatisticsResponse, JWTUserAuthToken, JWTUserAuth } from '@Shared/api/Responses';
 import { Response, Request } from 'express-serve-static-core';
 import * as jwt from 'jsonwebtoken';

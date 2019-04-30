@@ -1,4 +1,4 @@
-import { TESCUser } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import * as express from 'express';
 import * as passport from 'passport';
 import { Middleware, ExpressMiddlewareInterface, UnauthorizedError } from 'routing-controllers';

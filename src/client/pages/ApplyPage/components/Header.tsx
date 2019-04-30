@@ -1,4 +1,4 @@
-import { Logo } from '@Shared/Types';
+import { Logo } from '@Shared/ModelTypes';
 import React from 'react';
 
 interface HeaderProps {

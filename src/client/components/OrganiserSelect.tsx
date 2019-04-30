@@ -1,5 +1,5 @@
+import { Admin } from '@Shared/ModelTypes';
 import { Role, getRoleRank } from '@Shared/Roles';
-import { Admin } from '@Shared/Types';
 import React from 'react';
 import { loadAllAdmins } from '~/data/Api';
 

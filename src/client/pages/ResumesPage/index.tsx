@@ -1,4 +1,4 @@
-import { TESCUser, UserStatus } from '@Shared/Types';
+import { TESCUser, UserStatus } from '@Shared/ModelTypes';
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';

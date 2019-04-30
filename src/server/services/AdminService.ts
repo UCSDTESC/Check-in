@@ -1,5 +1,5 @@
 import { AdminModel } from '@Models/admin';
-import { Admin } from '@Shared/Types';
+import { Admin } from '@Shared/ModelTypes';
 import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
 

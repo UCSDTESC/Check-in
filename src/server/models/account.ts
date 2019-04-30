@@ -1,5 +1,5 @@
 import { Config } from '@Config/index';
-import { TESCAccount } from '@Shared/Types';
+import { TESCAccount } from '@Shared/ModelTypes';
 import * as bcrypt from 'bcrypt-nodejs';
 import { HookNextFunction, Model, model, Schema, Document } from 'mongoose';
 import * as mongooseDelete from 'mongoose-delete';

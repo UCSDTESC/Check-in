@@ -1,6 +1,6 @@
+import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
-import { TESCUser, TESCEvent, Question } from '@Shared/Types';
 import UUID from 'node-uuid';
 import React from 'react';
 import { connect } from 'react-redux';

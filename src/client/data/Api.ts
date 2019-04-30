@@ -1,6 +1,6 @@
-import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
-    TESCEvent } from '@Shared/Types';
+    TESCEvent } from '@Shared/ModelTypes';
+import { QuestionType } from '@Shared/Questions';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest,
     BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest,
     AddNewOrganiserRequest } from '@Shared/api/Requests';

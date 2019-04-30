@@ -1,4 +1,4 @@
-import { TESCEvent } from '@Shared/Types';
+import { TESCEvent } from '@Shared/ModelTypes';
 import React from 'react';
 import EventCard from '~/components/EventCard';
 

@@ -1,4 +1,4 @@
-import { TESCUser } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 

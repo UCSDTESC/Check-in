@@ -1,5 +1,5 @@
-import { Column } from '@Shared/Types';
 import React from 'react';
+import { Column } from '~/static/Types';
 
 interface UserListProps {
   available: Column[];

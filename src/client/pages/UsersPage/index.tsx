@@ -1,4 +1,4 @@
-import { Column, TESCUser } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
@@ -8,6 +8,7 @@ import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
 import { loadAllUsers, loadColumns } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
+import { Column } from '~/static/Types';
 
 import { addColumn, updateUser, removeColumn, addAvailableColumns } from './actions';
 import ColumnEditor from './components/ColumnEditor';

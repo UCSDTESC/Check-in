@@ -1,4 +1,4 @@
-import { TESCUser } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import React from 'react';
 
 import Scanner from './Scanner';

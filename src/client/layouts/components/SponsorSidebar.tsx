@@ -1,9 +1,10 @@
-import { Admin, FilterOption } from '@Shared/Types';
+import { Admin } from '@Shared/ModelTypes';
 import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import React from 'react';
 import { Link as RouteLink } from 'react-router-dom';
 import { NavbarToggler } from 'reactstrap';
 import { FiltersState } from '~/reducers/Admin/types';
+import { FilterOption } from '~/static/Types';
 
 import Filter from './Filter';
 import Section from './Section';

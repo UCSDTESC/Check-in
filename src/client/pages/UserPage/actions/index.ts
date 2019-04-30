@@ -1,4 +1,4 @@
-import { TESCUser } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Api from '~/data/User';

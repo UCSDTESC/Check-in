@@ -1,4 +1,4 @@
-import { TESCUser, TESCEvent } from '@Shared/Types';
+import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import { SuccessResponse } from '@Shared/api/Responses';
 import { JWTAdminAuth } from '@Shared/api/Responses';
 import request from 'superagent';

@@ -1,7 +1,7 @@
 import { EventDocument } from '@Models/Event';
 import EventService from '@Services/EventService';
 import UserService from '@Services/UserService';
-import { TESCUser } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import { CheckinUserRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
 import { Get, JsonController, UseBefore, Post, Body } from 'routing-controllers';

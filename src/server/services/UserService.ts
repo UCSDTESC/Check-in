@@ -1,6 +1,6 @@
 import { PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { UserModel, UserSchema } from '@Models/User';
-import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/Types';
+import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
 

@@ -1,4 +1,4 @@
-import { TESCEvent } from '@Shared/Types';
+import { TESCEvent } from '@Shared/ModelTypes';
 import { EventStatistics } from '@Shared/api/Responses';
 import React from 'react';
 

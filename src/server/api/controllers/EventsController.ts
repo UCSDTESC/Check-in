@@ -1,5 +1,5 @@
 import EventService from '@Services/EventService';
-import { TESCEvent } from '@Shared/Types';
+import { TESCEvent } from '@Shared/ModelTypes';
 import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import { SelectedEvent } from 'api/decorators/SelectedEvent';
 import { ValidateEventAlias } from 'api/middleware/ValidateEventAlias';

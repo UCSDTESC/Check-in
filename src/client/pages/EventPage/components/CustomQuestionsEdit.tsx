@@ -1,5 +1,5 @@
+import { Question, CustomQuestions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
-import { Question, CustomQuestions } from '@Shared/Types';
 import React from 'react';
 
 import CustomQuestion from './CustomQuestion';

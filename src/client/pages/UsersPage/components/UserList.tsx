@@ -1,7 +1,8 @@
-import { TESCUser, Column, TESCEvent } from '@Shared/Types';
+import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import React from 'react';
 import ReactTable from 'react-table';
 import User from '~/components/User';
+import { Column } from '~/static/Types';
 
 // tslint:disable-next-line
 const styles = require('react-table/react-table.css');

@@ -1,4 +1,4 @@
-import { TESCUser } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
 import * as crate from 'mongoose-crate';
 import * as S3 from 'mongoose-crate-s3';

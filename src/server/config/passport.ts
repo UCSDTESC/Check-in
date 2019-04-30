@@ -1,6 +1,6 @@
 import { AccountModel } from '@Models/Account';
 import { AdminModel } from '@Models/Admin';
-import { Admin } from '@Shared/Types';
+import { Admin } from '@Shared/ModelTypes';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import { Strategy as LocalStrategy } from 'passport-local';
 import { Service, Inject } from 'typedi';

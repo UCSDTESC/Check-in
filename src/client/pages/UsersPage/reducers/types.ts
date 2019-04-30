@@ -1,4 +1,4 @@
-import { Column } from '@Shared/Types';
+import { Column } from '~/static/Types';
 
 export interface ColumnsState {
   readonly loadedAvailable: boolean;

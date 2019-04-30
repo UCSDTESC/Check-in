@@ -1,7 +1,8 @@
-import { TESCUser, Column } from '@Shared/Types';
+import { TESCUser } from '@Shared/ModelTypes';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Api from '~/data/Api';
+import { Column } from '~/static/Types';
 
 import * as Types from './types';
 

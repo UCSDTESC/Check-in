@@ -1,6 +1,6 @@
 import { Config } from '@Config/index';
+import { Admin } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
-import { Admin } from '@Shared/Types';
 import * as bcrypt from 'bcrypt-nodejs';
 import { HookNextFunction, Model, Schema, Document, model } from 'mongoose';
 import * as mongooseDelete from 'mongoose-delete';

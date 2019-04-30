@@ -3,7 +3,7 @@ import { UserModel } from '@Models/User';
 import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/event';
 import { QuestionType } from '@Shared/Questions';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';
-import { Admin, TESCEvent, Question, TESCEventOptions } from '@Shared/Types';
+import { Admin, TESCEvent, Question, TESCEventOptions } from '@Shared/ModelTypes';
 import { DocumentQuery, Query, Types } from 'mongoose';
 import { Service, Inject } from 'typedi';
 import { ErrorMessage } from 'utils/Errors';

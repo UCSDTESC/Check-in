@@ -1,4 +1,4 @@
-import { TESCEvent, TESCEventOptions } from '@Shared/Types';
+import { TESCEvent, TESCEventOptions } from '@Shared/ModelTypes';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';

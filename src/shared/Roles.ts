@@ -1,4 +1,4 @@
-import { Admin } from './Types';
+import { Admin } from './ModelTypes';
 
 // Administrator Roles
 

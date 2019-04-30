@@ -1,5 +1,5 @@
+import { Admin, TESCEvent } from '@Shared/ModelTypes';
 import { Role, getRoleRank } from '@Shared/Roles';
-import { Admin, TESCEvent } from '@Shared/Types';
 import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import React from 'react';
 

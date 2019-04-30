@@ -1,4 +1,4 @@
-import { Question } from '@Shared/Types';
+import { Question } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
 import * as mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
