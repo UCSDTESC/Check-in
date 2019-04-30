@@ -47,6 +47,14 @@ export default class EventService {
     return this.QuestionModel.findByIdAndUpdate(question._id, question);
   }
 
+  async deleteQuestion(question: Question) {
+    if (!question._id) {
+      throw new Error(ErrorMessage.NO_QUESTION_EXISTS());
+    }
+
+    return this.QuestionModel.findByIdAndDelete(question._id);
+  }
+
   /**
    * Get an event by its associated alias.
    * @param eventAlias The alias associated with the event.
@@ -209,5 +217,20 @@ export default class EventService {
     }
 
     return event.save();
+  }
+
+  /**
+   * Removes an existing custom question from a given event.
+   * @param event The event from which to remove the question.
+   * @param question The question object to delete.
+   * @param type The type of the question that is being removed.
+   */
+  async removeQuestionFromEvent(event: EventDocument, question: Question, type: QuestionType) {
+    const typeKey = `customQuestions.${type}`;
+    return this.EventModel.findOneAndUpdate({_id: event._id}, {
+      $pull: {
+        [typeKey]: question._id,
+      },
+    }).exec();
   }
 }

@@ -40,40 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  api.delete('/admin/customQuestion/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.question || !req.body.type) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      const {question, type} = req.body;
-
-      return Question
-        .delete(question)
-        .exec()
-        .then(() => {
-          const {customQuestions} = req.event;
-
-          switch (type) {
-          case questionTypes.QUESTION_LONG:
-            customQuestions.longText.pull(question._id);
-            break;
-          case questionTypes.QUESTION_SHORT:
-            customQuestions.shortText.pull(question._id);
-            break;
-          case questionTypes.QUESTION_CHECKBOX:
-            customQuestions.checkBox.pull(question._id);
-            break;
-          default:
-            return Errors.respondUserError(res, Errors.INVALID_QUESTION_TYPE);
-          }
-
-          return req.event.save();
-        })
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(() => res.json({success: true}));
-    });
-
   api.post('/admin/bulkChange', requireAuth, roleAuth(roles.ROLE_ADMIN),
     (req, res) => {
       if (!req.body.users || !req.body.status) {

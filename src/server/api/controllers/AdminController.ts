@@ -5,18 +5,18 @@ import SponsorService from '@Services/SponsorService';
 import UserService from '@Services/UserService';
 import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import { Admin, TESCEvent } from '@Shared/Types';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest } from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
-import { SelectedEvent } from 'api/decorators/SelectedEvent';
-import { ValidateEventAlias } from 'api/middleware/ValidateEventAlias';
 import { Response } from 'express';
 import * as moment from 'moment';
-import { Get, JsonController, UseBefore, Res, Post, Body, Put } from 'routing-controllers';
+import { Get, JsonController, UseBefore, Res, Post, Body, Put, Delete } from 'routing-controllers';
 
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
+import { SelectedEvent } from '../decorators/SelectedEvent';
 import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
+import { IsOrganiser } from '../middleware/IsOrganiser';
 import { RoleAuth } from '../middleware/RoleAuth';
-import { IsOrganiser } from 'api/middleware/IsOrganiser';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest } from '@Shared/api/Requests';
+import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
 
 @JsonController('/admin')
 @UseBefore(AdminAuthorisation)
@@ -98,6 +98,17 @@ export class AdminController {
   @UseBefore(ValidateEventAlias)
   async updateCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: UpdateCustomQuestionRequest) {
     await this.EventService.updateQuestion(body.question);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Delete('/customQuestion/:eventAlias')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(IsOrganiser)
+  @UseBefore(ValidateEventAlias)
+  async deleteCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: DeleteCustomQuestionRequest) {
+    await this.EventService.removeQuestionFromEvent(event, body.question, body.type);
+    await this.EventService.deleteQuestion(body.question);
 
     return SuccessResponse.Positive;
   }

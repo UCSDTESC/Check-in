@@ -13,3 +13,8 @@ export interface AddCustomQuestionRequest {
 export interface UpdateCustomQuestionRequest {
   question: Question;
 }
+
+export interface DeleteCustomQuestionRequest {
+  question: Question;
+  type: QuestionType;
+}

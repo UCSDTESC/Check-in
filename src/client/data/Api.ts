@@ -1,7 +1,7 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/Types';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest } from '@Shared/api/Requests';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
@@ -404,7 +404,7 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
   promisify<SuccessResponse>(
     request
       .delete(`/admin/customQuestion/${eventAlias}`)
-      .send({ question, type })
+      .send({ question, type } as DeleteCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
