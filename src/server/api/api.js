@@ -40,21 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  api.put('/admin/customQuestion/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.question) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      const {question} = req.body;
-
-      return Question
-        .findByIdAndUpdate(question._id, question)
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(() => res.json({success : true}));
-    });
-
   api.delete('/admin/customQuestion/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
       if (!req.body.question || !req.body.type) {

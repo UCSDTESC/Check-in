@@ -36,6 +36,18 @@ export default class EventService {
   }
 
   /**
+   * Updates an existing question.
+   * @param question The new question document to write.
+   */
+  async updateQuestion(question: Question) {
+    if (!question._id) {
+      throw new Error(ErrorMessage.NO_QUESTION_EXISTS());
+    }
+
+    return this.QuestionModel.findByIdAndUpdate(question._id, question);
+  }
+
+  /**
    * Get an event by its associated alias.
    * @param eventAlias The alias associated with the event.
    */

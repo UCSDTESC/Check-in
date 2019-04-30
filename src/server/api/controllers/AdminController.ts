@@ -10,13 +10,13 @@ import { SelectedEvent } from 'api/decorators/SelectedEvent';
 import { ValidateEventAlias } from 'api/middleware/ValidateEventAlias';
 import { Response } from 'express';
 import * as moment from 'moment';
-import { Get, JsonController, UseBefore, Res, Post, Body } from 'routing-controllers';
+import { Get, JsonController, UseBefore, Res, Post, Body, Put } from 'routing-controllers';
 
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { RoleAuth } from '../middleware/RoleAuth';
 import { IsOrganiser } from 'api/middleware/IsOrganiser';
-import { AddCustomQuestionRequest } from '@Shared/api/Requests';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest } from '@Shared/api/Requests';
 
 @JsonController('/admin')
 @UseBefore(AdminAuthorisation)
@@ -88,6 +88,16 @@ export class AdminController {
   async addCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: AddCustomQuestionRequest) {
     const newQuestion = await this.EventService.createQuestion(body.question);
     await this.EventService.addQuestionToEvent(event, newQuestion, body.type);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Put('/customQuestion/:eventAlias')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(IsOrganiser)
+  @UseBefore(ValidateEventAlias)
+  async updateCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: UpdateCustomQuestionRequest) {
+    await this.EventService.updateQuestion(body.question);
 
     return SuccessResponse.Positive;
   }

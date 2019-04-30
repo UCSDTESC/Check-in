@@ -1,7 +1,7 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/Types';
-import { AddCustomQuestionRequest } from '@Shared/api/Requests';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
@@ -388,7 +388,7 @@ export const updateCustomQuestion = (eventAlias: string, question: Question) =>
   promisify<SuccessResponse>(
     request
       .put(`/admin/customQuestion/${eventAlias}`)
-      .send({ question })
+      .send({ question } as UpdateCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)
