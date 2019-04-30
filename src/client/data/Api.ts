@@ -1,7 +1,7 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/Types';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest, BulkChangeRequest, UpdateEventOptionsRequest } from '@Shared/api/Requests';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest, BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
@@ -343,7 +343,7 @@ export const addNewSponsor = (eventAlias: string, sponsorId: string) =>
   promisify<SuccessResponse>(
     request
       .post(`/admin/addSponsor/${eventAlias}`)
-      .send({ sponsor: sponsorId })
+      .send({ sponsorId: sponsorId } as AddNewSponsorRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)

@@ -243,4 +243,14 @@ export default class EventService {
     event.options = newOptions;
     return event.save();
   }
+
+  /**
+   * Adds an admin to the sponsor list for a given event.
+   * @param event The event for which the sponsor will be added.
+   * @param sponsor The admin that should be added as a sponsor.
+   */
+  async addSponsorToEvent(event: EventDocument, sponsor: Admin) {
+    event.sponsors.push(sponsor);
+    return event.save();
+  }
 }

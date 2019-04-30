@@ -40,26 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  api.post('/admin/addSponsor/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.sponsor) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      return Admin.findById(req.body.sponsor)
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(sponsor => {
-          req.event.sponsors.push(sponsor);
-          return req.event
-            .save()
-            .catch(err => {
-              return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-            })
-            .then(() => res.json({success : true}));;
-        });
-    });
-
   api.post('/admin/addOrganiser/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
       if (!req.body.admin) {

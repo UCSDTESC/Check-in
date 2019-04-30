@@ -27,3 +27,7 @@ export interface BulkChangeRequest {
 export interface UpdateEventOptionsRequest {
   options: TESCEventOptions;
 }
+
+export interface AddNewSponsorRequest {
+  sponsorId: string;
+}

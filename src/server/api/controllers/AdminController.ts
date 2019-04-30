@@ -8,7 +8,8 @@ import { Admin } from '@Shared/Types';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
     DeleteCustomQuestionRequest,
     BulkChangeRequest, 
-    UpdateEventOptionsRequest} from '@Shared/api/Requests';
+    UpdateEventOptionsRequest,
+    AddNewSponsorRequest} from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
 import * as moment from 'moment';
@@ -20,11 +21,13 @@ import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { IsOrganiser } from '../middleware/IsOrganiser';
 import { RoleAuth } from '../middleware/RoleAuth';
 import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
+import AdminService from '@Services/AdminService';
 
 @JsonController('/admin')
 @UseBefore(AdminAuthorisation)
 export class AdminController {
   constructor(
+    private AdminService: AdminService,
     private SponsorService: SponsorService,
     private EventService: EventService,
     private UserService: UserService,
@@ -130,6 +133,17 @@ export class AdminController {
   @UseBefore(ValidateEventAlias)
   async updateEventOptions(@SelectedEvent() event: EventDocument, @Body() body: UpdateEventOptionsRequest) {
     await this.EventService.updateEventOptions(event, body.options);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/addSponsor/:eventAlias')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(IsOrganiser)
+  @UseBefore(ValidateEventAlias)
+  async addSponsorToEvent(@SelectedEvent() event: EventDocument, @Body() body: AddNewSponsorRequest) {
+    const sponsor = await this.AdminService.getAdminById(body.sponsorId);
+    await this.EventService.addSponsorToEvent(event, sponsor);
 
     return SuccessResponse.Positive;
   }
