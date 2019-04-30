@@ -4,8 +4,10 @@ import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
 import UserService from '@Services/UserService';
 import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
-import { Admin, TESCEvent } from '@Shared/Types';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest } from '@Shared/api/Requests';
+import { Admin } from '@Shared/Types';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
+    DeleteCustomQuestionRequest,
+    BulkChangeRequest } from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
 import * as moment from 'moment';
@@ -109,6 +111,14 @@ export class AdminController {
   async deleteCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: DeleteCustomQuestionRequest) {
     await this.EventService.removeQuestionFromEvent(event, body.question, body.type);
     await this.EventService.deleteQuestion(body.question);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/bulkChange')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  async bulkChangeUsers(@Body() body: BulkChangeRequest) {
+    await this.UserService.changeUserStatuses(body.users, body.status);
 
     return SuccessResponse.Positive;
   }

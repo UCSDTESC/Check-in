@@ -1,7 +1,8 @@
 import { PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { UserModel, UserSchema } from '@Models/User';
-import { TESCEvent, TESCAccount } from '@Shared/Types';
+import { TESCEvent, TESCAccount, UserStatus } from '@Shared/Types';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
+import { stat } from 'fs';
 import { Service, Inject } from 'typedi';
 
 @Service()
@@ -75,5 +76,14 @@ export default class UserService {
       .populate('event', PUBLIC_EVENT_FIELDS);
 
     return populatedUsers.map(user => user.event);
+  }
+
+  /**
+   * Updates all the given users to the new status.
+   * @param users A list of user IDs that will be updated.
+   * @param status The new status of the users.
+   */
+  async changeUserStatuses(users: string[], status: UserStatus) {
+    return this.UserModel.updateMany({_id: {$in: users}}, {status: status}).exec();
   }
 }

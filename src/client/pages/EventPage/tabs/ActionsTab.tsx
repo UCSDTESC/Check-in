@@ -29,7 +29,10 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
     const {event} = this.props;
     const {users, status} = values;
 
-    bulkChange(users, status)
+    // Split users into array
+    const usersSplit = users.split(/\n/);
+
+    bulkChange(usersSplit, status)
       .then(() => {
         this.props.addEventSuccessAlert(event.alias, 'Successfully updated users!', 'Bulk Change');
       })

@@ -40,21 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  api.post('/admin/bulkChange', requireAuth, roleAuth(roles.ROLE_ADMIN),
-    (req, res) => {
-      if (!req.body.users || !req.body.status) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      let users = req.body.users.split(/\n/);
-      let status = req.body.status;
-
-      return User.updateMany({_id: {$in: users}}, {status})
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(() => res.json({success: true}));
-    });
-
   api.post('/admin/update/:eventAlias', requireAuth, roleAuth(roles.ROLE_ADMIN),
     isOrganiser, (req, res) => {
       if (!req.body.options) {

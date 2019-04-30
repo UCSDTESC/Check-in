@@ -1,5 +1,5 @@
 import { QuestionType } from '@Shared/Questions';
-import { Question } from '@Shared/Types';
+import { Question, UserStatus } from '@Shared/Types';
 
 export interface CheckinUserRequest {
   id: string;
@@ -17,4 +17,9 @@ export interface UpdateCustomQuestionRequest {
 export interface DeleteCustomQuestionRequest {
   question: Question;
   type: QuestionType;
+}
+
+export interface BulkChangeRequest {
+  users: string[];
+  status: UserStatus;
 }

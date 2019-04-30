@@ -1,7 +1,7 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/Types';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest } from '@Shared/api/Requests';
+import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest, BulkChangeRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
@@ -281,15 +281,15 @@ export const exportUsers = (eventAlias: string): SuperAgentRequest =>
 
 /**
  * Bulk updates a list of users to all have the same status.
- * @param {String} users A newline-delimited list of User IDs.
+ * @param {String[]} users A list of User IDs.
  * @param {String} status The new status string for all of the users
  * @returns {Promise} A promise of the request.
  */
-export const bulkChange = (users: string, status: string) =>
+export const bulkChange = (users: string[], status: string) =>
   promisify<SuccessResponse>(
     request
       .post('/admin/bulkChange')
-      .send({ users, status })
+      .send({ users, status } as BulkChangeRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
