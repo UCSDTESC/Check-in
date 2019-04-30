@@ -40,39 +40,6 @@ module.exports = function(app) {
     filePrefix: 'resumes/'
   });
 
-  api.post('/admin/customQuestion/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
-      if (!req.body.question || !req.body.type) {
-        return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-      }
-
-      const {question, type} = req.body;
-
-      return new Question(question)
-        .save()
-        .then(newQuestion => {
-          const {customQuestions} = req.event;
-
-          switch (type) {
-          case questionTypes.QUESTION_LONG:
-            customQuestions.longText.push(newQuestion);
-            break;
-          case questionTypes.QUESTION_SHORT:
-            customQuestions.shortText.push(newQuestion);
-            break;
-          case questionTypes.QUESTION_CHECKBOX:
-            customQuestions.checkBox.push(newQuestion);
-            break;
-          default:
-            return Errors.respondUserError(res, Errors.INVALID_QUESTION_TYPE);
-          }
-
-          return req.event.save();
-        })
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then(() => res.json({success : true}));
-    });
-
   api.put('/admin/customQuestion/:eventAlias', requireAuth,
     roleAuth(roles.ROLE_ADMIN), isOrganiser, (req, res) => {
       if (!req.body.question) {

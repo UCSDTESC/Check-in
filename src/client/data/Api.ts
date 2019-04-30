@@ -1,8 +1,9 @@
 import { QuestionType } from '@Shared/Questions';
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/Types';
-import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
+import { AddCustomQuestionRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
+import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
@@ -372,7 +373,7 @@ export const addCustomQuestion = (eventAlias: string, question: Question, type: 
   promisify<SuccessResponse>(
     request
       .post(`/admin/customQuestion/${eventAlias}`)
-      .send({ question, type })
+      .send({ question, type } as AddCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
       .use(nocache)

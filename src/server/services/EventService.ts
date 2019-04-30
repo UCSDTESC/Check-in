@@ -1,9 +1,12 @@
+import { QuestionModel, QuestionDocument } from '@Models/Question';
 import { UserModel } from '@Models/User';
 import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/event';
+import { QuestionType } from '@Shared/Questions';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';
-import { Admin, TESCEvent } from '@Shared/Types';
+import { Admin, TESCEvent, Question } from '@Shared/Types';
 import { DocumentQuery, Query, Types } from 'mongoose';
 import { Service, Inject } from 'typedi';
+import { ErrorMessage } from 'utils/Errors';
 
 /**
  * Defines the result of a summation aggregate
@@ -18,8 +21,19 @@ export default class EventService {
   @Inject('EventModel')
   private EventModel: EventModel;
 
+  @Inject('QuestionModel')
+  private QuestionModel: QuestionModel;
+
   @Inject('UserModel')
   private UserModel: UserModel;
+
+  /**
+   * Create a new question in the database.
+   * @param question The question to create in the database.
+   */
+  async createQuestion(question: Question) {
+    return new this.QuestionModel(question).save();
+  }
 
   /**
    * Get an event by its associated alias.
@@ -157,5 +171,31 @@ export default class EventService {
     }
 
     return (event.sponsors.indexOf(sponsor) !== -1);
+  }
+
+  /**
+   * Adds a custom question to a given event.
+   * @param event The event for which to add the question.
+   * @param question The question that should be added.
+   * @param type The type of question that is being added.
+   */
+  async addQuestionToEvent(event: EventDocument, question: QuestionDocument, type: QuestionType) {
+    const {customQuestions} = event;
+
+    switch (type) {
+    case QuestionType.QUESTION_LONG:
+      customQuestions.longText.push(question);
+      break;
+    case QuestionType.QUESTION_SHORT:
+      customQuestions.shortText.push(question);
+      break;
+    case QuestionType.QUESTION_CHECKBOX:
+      customQuestions.checkBox.push(question);
+      break;
+    default:
+      throw new Error(ErrorMessage.INVALID_QUESTION_TYPE());
+    }
+
+    return event.save();
   }
 }
