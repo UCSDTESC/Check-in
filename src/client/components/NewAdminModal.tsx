@@ -1,4 +1,5 @@
 import { Role } from '@Shared/Roles';
+import { RegisterAdminRequest } from '@Shared/api/Requests';
 import generator from 'generate-password';
 import React from 'react';
 import FA from 'react-fontawesome';
@@ -69,11 +70,7 @@ interface NewAdminModalProps {
   formName?: string;
 }
 
-export interface NewAdminModalFormData {
-  username: string;
-  password: string;
-  role: Role;
-}
+export type NewAdminModalFormData = RegisterAdminRequest;
 
 type Props = InjectedFormProps<NewAdminModalFormData, NewAdminModalProps> & NewAdminModalProps;
 

@@ -4,7 +4,10 @@ import { QuestionType } from '@Shared/Questions';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest,
     BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest,
     AddNewOrganiserRequest,
-    DownloadResumesRequest } from '@Shared/api/Requests';
+    DownloadResumesRequest,
+    DeleteAdminRequest,
+    RegisterAdminRequest,
+    CheckinUserRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
@@ -161,7 +164,7 @@ export const checkinUser = (id: string, eventAlias: string) =>
   promisify<SuccessResponse>(
     request
       .post(`/users/checkin/${eventAlias}`)
-      .send({ id })
+      .send({ id } as CheckinUserRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
@@ -222,8 +225,8 @@ export const registerNewEvent = (event: NewEventFormData) => {
 export const registerAdmin = (admin: NewAdminModalFormData) =>
   promisify<Admin>(
     request
-      .post('/admins/register')
-      .send(admin)
+      .post('/admins')
+      .send(admin as RegisterAdminRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
@@ -236,8 +239,8 @@ export const registerAdmin = (admin: NewAdminModalFormData) =>
 export const deleteAdmin = (adminId: string) =>
   promisify<SuccessResponse>(
     request
-      .post('/admins/delete')
-      .send({ id: adminId })
+      .delete('/admins')
+      .send({ id: adminId } as DeleteAdminRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );

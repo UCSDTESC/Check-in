@@ -1,5 +1,6 @@
-import { AdminModel } from '@Models/admin';
+import { AdminModel, AdminDocument } from '@Models/admin';
 import { Admin } from '@Shared/ModelTypes';
+import { RegisterAdminRequest } from '@Shared/api/Requests';
 import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
 
@@ -30,12 +31,33 @@ export default class AdminService {
   }
 
   /**
-   * Get an admin by the given ID.
+   * Get an admin by a given ID.
    * @param adminId The object ID of the admin.
    */
   async getAdminById(adminId: string) {
     return this.AdminModel
       .findById(adminId)
+      .exec();
+  }
+
+  /**
+   * Registers a new admin in the database.
+   * @param request The request with the new admin information.
+   */
+  async registerAdmin(request: RegisterAdminRequest) {
+    return this.AdminModel
+      .create({
+        ...request,
+      } as AdminDocument);
+  }
+
+  /**
+   * Deletes an admin by a given ID.
+   * @param adminId The object ID of the admin.
+   */
+  async deleteAdmin(adminId: string) {
+    return this.AdminModel
+      .deleteOne({_id: adminId})
       .exec();
   }
 }

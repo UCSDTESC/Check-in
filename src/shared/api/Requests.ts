@@ -1,5 +1,6 @@
 import { Question, UserStatus, TESCEventOptions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
+import { Role } from '@Shared/Roles';
 
 export interface CheckinUserRequest {
   id: string;
@@ -47,4 +48,14 @@ export interface ForgotPasswordRequest {
 export interface ResetPasswordRequest {
   id: string;
   newPassword: string;
+}
+
+export interface RegisterAdminRequest {
+  username: string;
+  password: string;
+  role: Role;
+}
+
+export interface DeleteAdminRequest {
+  id: string;
 }
