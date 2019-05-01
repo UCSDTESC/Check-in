@@ -1,4 +1,4 @@
-import { PUBLIC_EVENT_FIELDS } from '@Models/Event';
+import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
 import { UserModel, UserSchema } from '@Models/User';
 import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
@@ -95,6 +95,26 @@ export default class UserService {
   async updateUser(user: TESCUser) {
     return this.UserModel
       .findOneAndUpdate({_id: user._id}, user)
+      .exec();
+  }
+
+  /**
+   * Get all the applicants, with populated sponsor fields, for a given event.
+   * @param event The event for which to get all applicants.
+   */
+  async getSponsorApplicantsByEvent(event: EventDocument) {
+    return this.UserModel
+      .find({
+        'deleted': {$ne: true},
+        'shareResume': true,
+        'resume': {$exists: true},
+        'resume.size': {$gt: 0},
+        'sanitized': true,
+        'event': event,
+      })
+      .select('firstName lastName university year gender major' +
+      ' resume.url status account')
+      .populate('account')
       .exec();
   }
 }

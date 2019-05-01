@@ -111,7 +111,7 @@
     "redux-thunk": "^2.3.0",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.7.7",
-    "s3-archiver": "^1.0.3",
+    "s3-archiver": "^1.0.4",
     "style-loader": "^0.20.1",
     "superagent": "^3.8.1",
     "superagent-no-cache": "^0.1.1",

@@ -21,6 +21,8 @@ export const ErrorMessage = {
   INVALID_QUESTION_TYPE: () => 'The question type you provided is not supported',
   UNKNOWN_ERROR: () => 'Failed due to unknown error',
   INCORRECT_EMAIL_PASSWORD: () => 'Incorrect email or password',
+  NO_USERS_SELECTED: () => 'There were no users selected',
+  RESUME_ZIPPING_ERROR: () => 'There was an error zipping the resumes',
 
   NO_EVENT_ALIAS: () => 'Tried to fetch event without providing event alias',
   NO_REQUEST_USER: () => 'No user in the request headers',

@@ -7,7 +7,7 @@ import { DatabaseError, ErrorMessage } from '../utils/Errors';
 import { getResumeConditions } from '../utils/Resumes';
 
 @Service()
-export class StatisticsService {
+export default class StatisticsService {
   @Inject('EventModel')
   private EventModel: EventModel;
 

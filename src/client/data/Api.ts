@@ -3,7 +3,8 @@ import { TESCUser, Admin, TESCEventOptions, Question, Download,
 import { QuestionType } from '@Shared/Questions';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest,
     BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest,
-    AddNewOrganiserRequest } from '@Shared/api/Requests';
+    AddNewOrganiserRequest,
+    DownloadResumesRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import request, { SuperAgentRequest } from 'superagent';
@@ -250,7 +251,7 @@ export const downloadResumes = (applicants: string[]) =>
   promisify<Download>(
     request
       .post('/sponsors/download')
-      .send({ applicants })
+      .send({ applicants } as DownloadResumesRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );
@@ -263,7 +264,7 @@ export const downloadResumes = (applicants: string[]) =>
 export const pollDownload = (downloadId: string) =>
   promisify<Download>(
     request
-      .get(`/sponsors/downloads/${downloadId}`)
+      .get(`/sponsors/download/${downloadId}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(apiPrefix)
   );

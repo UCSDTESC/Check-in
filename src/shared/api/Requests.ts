@@ -35,3 +35,7 @@ export interface AddNewSponsorRequest {
 export interface AddNewOrganiserRequest {
   organiserId: string;
 }
+
+export interface DownloadResumesRequest {
+  applicants: string[];
+}

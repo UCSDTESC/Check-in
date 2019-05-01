@@ -30,16 +30,6 @@ module.exports = function(app) {
   require('./auth')(api);
   require('./registration')(api);
 
-  var zipper = new S3Archiver({
-    accessKeyId: process.env.S3_KEY,
-    secretAccessKey: process.env.S3_SECRET,
-    region: 'us-west-1',
-    bucket: process.env.S3_BUCKET
-  }, {
-    folder: 'resumes',
-    filePrefix: 'resumes/'
-  });
-
   api.post('/admin/events', requireAuth,
     roleAuth(roles.ROLE_ADMIN), upload.single('logo'), (req, res) => {
       let event = new Event;
@@ -90,90 +80,6 @@ module.exports = function(app) {
         )
         .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
     }
-  );
-
-  api.get('/sponsors/applicants/:eventAlias', requireAuth,
-    roleAuth(roles.ROLE_SPONSOR), isSponsor, (req, res) =>
-      User.find(getResumeConditions(req),
-        'firstName lastName university year gender major' +
-        ' resume.url status account')
-        .populate('account')
-        .exec()
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR))
-        .then((users) => res.json(users))
-  );
-
-  api.post('/sponsors/download', requireAuth,
-    roleAuth(roles.ROLE_SPONSOR), (req, res) => {
-      return User
-        .find({_id: {$in: req.body.applicants}})
-        .populate('account')
-        .exec()
-        .catch(err => {
-          logging.error(err);
-          return Errors.respondError(res, err, Errors.DATABASE_ERROR);
-        })
-        .then((users) => {
-          if (users.length === 0) {
-            return res.json({'error': true});
-          }
-
-          // Create a list of file names to filter by
-          var fileNames = users.filter(user =>
-            // Ensure a resume has been uploaded
-            (user.resume != null) && (user.resume.name != null)).map(user =>
-            // Map the names of the resumes
-            `resumes/${user.resume.name}`
-          );
-
-          var fileName = req.user.username + '-' +
-            moment().format('YYYYMMDDHHmmss') + '-' +
-            generatePassword(12, false, /[\dA-F]/) + '.zip';
-
-          let newDownload = new Download({
-            fileCount: req.body.applicants.length,
-            adminId: req.user._id
-          });
-
-          newDownload.save(function(err, download) {
-            if (err) {
-              next(err);
-            }
-            res.json(download);
-            logging.info('Zipping started for ', download.fileCount, 'files');
-          });
-
-          zipper.localConfig.finalizing = (archive, finalize) =>
-            exportApplicantInfo(users, archive, finalize);
-
-          return zipper.zipFiles(fileNames, `downloads/${fileName}`, {
-            ACL: 'public-read'
-          }, function(err, result) {
-            if (err) {
-              logging.error(err);
-              newDownload.error = true;
-            } else {
-              newDownload.accessUrl = result.Location;
-            }
-            newDownload.fulfilled = true;
-            return newDownload.save();
-          });
-        })
-        .catch(err => {
-          logging.error(err);
-          return Errors.respondError(res, err, Errors.S3_ERROR);
-        });
-    }
-  );
-
-  api.get('/sponsors/downloads/:id', requireAuth,
-    roleAuth(roles.ROLE_SPONSOR), (req, res) =>
-      Download.findById(req.params.id, function(err, download) {
-        if (err || download.error) {
-          return res.json({'error': true});
-        }
-        return res.json(download);
-      })
   );
 
   // Use API for any API endpoints

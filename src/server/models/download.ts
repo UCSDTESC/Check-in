@@ -13,10 +13,9 @@ const DownloadSchema = new Schema({
     required: [true, 'You must specify how many files are being downloaded'],
   },
   // Declares which administrator called for the download
-  adminId: {
-    type: String,
-    required: [true,
-      'You must specify which administrator started the download'],
+  admin: {
+    type: Schema.Types.ObjectId,
+    ref: 'Admin',
   },
   // The URL where the download can be accessed
   accessUrl: {

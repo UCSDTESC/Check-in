@@ -23,7 +23,7 @@ export type Logo = UploadedFile;
 export interface Download<IDType = string> {
   _id?: IDType;
   fileCount: number;
-  adminId: string;
+  admin: Admin;
   accessUrl?: string;
   error: boolean;
   fulfilled: boolean;

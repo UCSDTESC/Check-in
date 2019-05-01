@@ -58,7 +58,7 @@ gulp.task('nodemon', ['css'], function(cb) {
     exec: './node_modules/.bin/ts-node -P ./src/server/tsconfig.json '+
       '-r tsconfig-paths/register ./src/server/main.ts',
     ext: 'ts',
-    watch: paths.src,
+    watch: paths.server,
     env: {
       'NODE_ENV': 'development',
       'TS_NODE_FILES': 'true',

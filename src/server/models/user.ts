@@ -1,3 +1,4 @@
+import ResumeService from '@Services/ResumeService';
 import { TESCUser } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
 import * as crate from 'mongoose-crate';
@@ -221,7 +222,7 @@ UserSchema.plugin(crate, {
     acl: 'public-read',
     region: 'us-west-1',
     path: (attachment) => {
-      return `resumes/${attachment.name}`;
+      return `${ResumeService.filePrefix}${attachment.name}`;
     },
   }),
   fields: {

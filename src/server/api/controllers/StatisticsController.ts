@@ -1,5 +1,5 @@
 import { EventDocument } from '@Models/event';
-import { StatisticsService } from '@Services/StatisticsService';
+import StatisticsService from '@Services/StatisticsService';
 import { EventStatistics } from '@Shared/api/Responses';
 import { Get, JsonController, UseBefore } from 'routing-controllers';
 

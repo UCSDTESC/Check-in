@@ -1,16 +1,17 @@
 import { EventDocument } from '@Models/Event';
-import { CSVService } from '@Services/CSVService';
+import AdminService from '@Services/AdminService';
+import CSVService from '@Services/CSVService';
 import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
 import UserService from '@Services/UserService';
-import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import { Admin } from '@Shared/ModelTypes';
+import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
     DeleteCustomQuestionRequest,
-    BulkChangeRequest, 
+    BulkChangeRequest,
     UpdateEventOptionsRequest,
     AddNewSponsorRequest,
-    AddNewOrganiserRequest} from '@Shared/api/Requests';
+    AddNewOrganiserRequest } from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
 import * as moment from 'moment';
@@ -22,7 +23,6 @@ import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { IsOrganiser } from '../middleware/IsOrganiser';
 import { RoleAuth } from '../middleware/RoleAuth';
 import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
-import AdminService from '@Services/AdminService';
 
 @JsonController('/admin')
 @UseBefore(AdminAuthorisation)
