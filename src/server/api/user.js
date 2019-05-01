@@ -91,15 +91,4 @@ module.exports = function(app) {
       })
       .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
   });
-
-  userRoute.get('/events', requireAuth, (req, res) => {
-    return User
-      .find({account: req.user})
-      .populate('event', PUBLIC_EVENT_FIELDS)
-      .exec()
-      .then((users) => {
-        let events = users.map((user) => user.event);
-        return res.json(events);
-      });
-  });
 };
