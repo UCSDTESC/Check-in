@@ -1,5 +1,6 @@
+import { Logger } from '@Config/Logging';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
-import { UserModel, UserSchema } from '@Models/User';
+import { UserModel, UserSchema, PUBLIC_USER_FIELDS } from '@Models/User';
 import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
@@ -99,21 +100,15 @@ export default class UserService {
   }
 
   /**
-   * Get all the applicants, with populated sponsor fields, for a given event.
-   * @param event The event for which to get all applicants.
+   * Get a user's application to a given event.
+   * @param event The event associated with the application.
+   * @param account The account that created the application.
    */
-  async getSponsorApplicantsByEvent(event: EventDocument) {
+  async getUserApplication(event: TESCEvent, account: TESCAccount) {
     return this.UserModel
-      .find({
-        'deleted': {$ne: true},
-        'shareResume': true,
-        'resume': {$exists: true},
-        'resume.size': {$gt: 0},
-        'sanitized': true,
-        'event': event,
-      })
-      .select('firstName lastName university year gender major' +
-      ' resume.url status account')
+      .findOne({account: account, event: event})
+      .select(PUBLIC_USER_FIELDS)
+      .populate('event')
       .populate('account')
       .exec();
   }

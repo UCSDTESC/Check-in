@@ -27,7 +27,7 @@ export class SponsorsController {
   @UseBefore(IsSponsor)
   @UseBefore(ValidateEventAlias)
   async getEventApplicants(@SelectedEvent() event: EventDocument, @AuthorisedAdmin() sponsor: Admin) {
-    return await this.UserService.getSponsorApplicantsByEvent(event);
+    return await this.SponsorService.getSponsorApplicantsByEvent(event);
   }
 
   @Post('/download')

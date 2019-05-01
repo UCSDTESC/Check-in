@@ -1,12 +1,18 @@
 import { USER_JWT_TIMEOUT } from '@Config/Passport';
+import { EventDocument } from '@Models/Event';
 import UserService from '@Services/UserService';
+import { TESCAccount } from '@Shared/ModelTypes';
 import { JWTUserAuthToken, JWTUserAuth } from '@Shared/api/Responses';
 import { Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { Get, JsonController, UseBefore, Res, Req, Post } from 'routing-controllers';
 
+import { ErrorMessage } from '../../utils/Errors';
+import { AuthorisedUser } from '../decorators/AuthorisedUser';
+import { SelectedEvent } from '../decorators/SelectedEvent';
 import { UserAuthorisation } from '../middleware/UserAuthorisation';
 import { UserLogin } from '../middleware/UserLogin';
+import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
 
 @JsonController('/user')
 export class UserAuthController {
@@ -39,5 +45,18 @@ export class UserAuthController {
       token: `JWT ${this.generateToken(jwt)}`,
       user: jwt,
     };
+  }
+
+  @Get('/current/:eventAlias')
+  @UseBefore(UserAuthorisation)
+  @UseBefore(ValidateEventAlias)
+  async getApplication(@SelectedEvent() event: EventDocument, @AuthorisedUser() user: TESCAccount) {
+    const application = await this.UserService.getUserApplication(event, user);
+
+    if (!application) {
+      throw new Error(ErrorMessage.USER_NOT_REGISTERED());
+    }
+
+    return application;
   }
 }

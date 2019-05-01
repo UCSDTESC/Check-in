@@ -16,10 +16,12 @@ export const UserSchema = new Schema({
   event: {
     type: Schema.Types.ObjectId,
     ref: 'Event',
+    public: true,
   },
   account: {
     type: Schema.Types.ObjectId,
     ref: 'Account',
+    public: true,
   },
   // Declares the user's first name
   firstName: {
@@ -27,6 +29,7 @@ export const UserSchema = new Schema({
     trim: true,
     required: [true, 'You must have a first name'],
     displayName: 'First Name',
+    public: true,
   },
   // Declares the user's last name
   lastName: {
@@ -34,53 +37,63 @@ export const UserSchema = new Schema({
     trim: true,
     required: [true, 'You must have a last name'],
     displayName: 'Last Name',
+    public: true,
   },
   // Declares the user's birth date
   birthdate: {
     type: Date,
     required: [true, 'You must have a birthdate'],
     displayName: 'Birthdate',
+    public: true,
   },
   // Declares the user's gender
   gender: {
     type: String,
     required: [true, 'You must have a gender'],
     displayName: 'Gender',
+    public: true,
+    editable: true,
   },
   // Declares the user's phone number
   phone: {
     type: String,
     required: [true, 'You must have a phone number'],
     displayName: 'Phone',
+    public: true,
   },
   // Declares which university the user attends
   university: {
     type: String,
     trim: true,
     displayName: 'University',
+    public: true,
   },
   // Declares which high school the user attends
   highSchool: {
     type: String,
     trim: true,
     displayName: 'High School',
+    public: true,
   },
   // Declares the UCSD student ID
   pid: {
     type: String,
     trim: true,
     displayName: 'PID',
+    public: true,
   },
   // Declares which major the user has specified
   major: {
     type: String,
     trim: true,
     displayName: 'Major',
+    public: true,
   },
   // Declares which year the student is currently attending
   year: {
     type: String,
     displayName: 'Year',
+    public: true,
   },
   // Declares the user's Github account name
   github: {
@@ -88,6 +101,8 @@ export const UserSchema = new Schema({
     trim: true,
     required: false,
     displayName: 'Github',
+    public: true,
+    editable: true,
   },
   // Declares the user's personal website link
   website: {
@@ -95,6 +110,8 @@ export const UserSchema = new Schema({
     trim: true,
     required: false,
     displayName: 'Website',
+    public: true,
+    editable: true,
   },
   // Declares whether the user has given permission for their resume to be
   // shared
@@ -102,33 +119,45 @@ export const UserSchema = new Schema({
     type: Boolean,
     default: false,
     displayName: 'Share Resume',
+    public: true,
+    editable: true,
   },
   // Declares the food that the user has requested
   food: {
     type: String,
     trim: true,
     displayName: 'Food',
+    public: true,
+    editable: true,
   },
   // Declares what dietary requirements the user has
   diet: {
     type: String,
     trim: true,
     displayName: 'Diet',
+    public: true,
+    editable: true,
   },
   // Declares the size of the shirt that the user has requested
   shirtSize: {
     type: String,
     displayName: 'Shirt Size',
+    public: true,
+    editable: true,
   },
   travel: {
     // Declares whether the user will be travelling from outside of the state
     outOfState: {
       type: Boolean,
       default: false,
+      public: true,
+      editable: true,
     },
     // Declares which city the user will be travelling from
     city: {
       type: String,
+      public: true,
+      editable: true,
     },
   },
   // Declares the name of the bus that the user can take
@@ -136,12 +165,14 @@ export const UserSchema = new Schema({
     type: String,
     trim: true,
     displayName: 'Available Bus',
+    public: true,
   },
   // Declares whether the user has noted they will be taking the bus
   bussing: {
     type: Boolean,
     default: false,
     displayName: 'Bussing',
+    public: true,
   },
   // Declares the array of teammates that the user has defined
   teammates: [{
@@ -149,6 +180,8 @@ export const UserSchema = new Schema({
     match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
       'You must use a valid email'],
     displayName: 'Teammates',
+    public: true,
+    editable: true,
   }],
   // Declares the user's current application status
   // Rejected, Unconfirmed, Confirmed, Declined, Late, and Waitlisted
@@ -156,6 +189,7 @@ export const UserSchema = new Schema({
     type: String,
     trim: true,
     displayName: 'Status',
+    public: true,
   },
   // Declares that the user has checked into the event on the day
   checkedIn: {
@@ -193,23 +227,29 @@ export const UserSchema = new Schema({
     type: String,
     required: false,
     displayName: 'GPA',
+    public: true,
+    editable: true,
   },
   // Declares the user's major GPA, required by events on an optional basis
   majorGPA: {
     type: String,
     required: false,
     displayName: 'Major GPA',
+    public: true,
+    editable: true,
   },
   // Declares the user's responses to the event's custom questions
   customQuestionResponses: {
     type: Map,
     of: 'String',
+    public: true,
   },
 
   whyEventResponse: {
     type: String,
     required: false,
     displayName: 'Why This Event?',
+    public: true,
   },
 }, {timestamps: true});
 
@@ -252,6 +292,13 @@ UserSchema.method('csvFlatten', function() {
 });
 
 UserSchema.plugin(mongooseDelete);
+
+// Defines the fields which are public to the account
+export const PUBLIC_USER_FIELDS: string[] = Object.entries((UserSchema as any).paths)
+  .filter(([fieldName, field]: any) => 'public' in field.options)
+  .map(([fieldName, field]: any) => fieldName);
+PUBLIC_USER_FIELDS.push('teammates');
+PUBLIC_USER_FIELDS.push('resume');
 
 export const RegisterModel = () =>
   Container.set('UserModel', model<UserDocument, UserModel>('User', UserSchema));

@@ -15,15 +15,6 @@ const User = mongoose.model('User');
 const Event = mongoose.model('Event');
 const Account = mongoose.model('Account');
 
-const editableFields = [
-  'teammates', 'food', 'diet', 'travel', 'shirtSize', 'github', 'website',
-  'shareResume', 'gender', 'gpa', 'majorGPA'
-];
-const readOnlyFields = [
-  'status', 'firstName', 'lastName', 'university', 'email', 'phone', 'resume',
-  'availableBus', 'bussing', 'event', 'account'
-];
-
 module.exports = function(app) {
   const userRoute = express.Router();
 
@@ -31,18 +22,6 @@ module.exports = function(app) {
 
   // Middleware to require login/auth
   const requireAuth = passport.authenticate('userJwt', {session: false});
-
-  /**
-   * Returns an output object that has profile fields of the user.
-   * @param {Object} user The user object to output.
-   */
-  function outputCurrentUser(user) {
-    var outputUser = {};
-    [... editableFields, ...readOnlyFields].forEach(function(field) {
-      outputUser[field] = user[field];
-    });
-    return outputUser;
-  }
 
   userRoute.post('/forgot', function (req, res) {
     if (!req.body.email) {
@@ -92,21 +71,6 @@ module.exports = function(app) {
       return res.json({success: true});
     });
 
-  });
-
-  userRoute.get('/current/:eventAlias', requireAuth, function(req, res) {
-    Event.findOne({alias: req.params.eventAlias})
-      .then((event) => {
-        return User
-          .findOne({account: req.user, event})
-          .populate('event')
-          .populate('account')
-          .exec();
-      })
-      .then(obj => res.json(obj))
-      .catch(() => {
-        return Errors.respondUserError(res, Errors.USER_NOT_REGISTERED);
-      });
   });
 
   userRoute.post('/update/:eventAlias', upload.single('resume'), requireAuth,

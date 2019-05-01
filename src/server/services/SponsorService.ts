@@ -1,5 +1,6 @@
 import { Logger } from '@Config/Logging';
 import { DownloadModel, DownloadDocument } from '@Models/Download';
+import { EventDocument } from '@Models/Event';
 import { UserModel, UserDocument } from '@Models/User';
 import { AdminModel } from '@Models/admin';
 import { Admin, Download } from '@Shared/ModelTypes';
@@ -92,6 +93,26 @@ export default class SponsorService {
   async findDownloadById(downloadId: string) {
     return this.DownloadModel
       .findById(downloadId)
+      .exec();
+  }
+
+  /**
+   * Get all the applicants, with populated sponsor fields, for a given event.
+   * @param event The event for which to get all applicants.
+   */
+  async getSponsorApplicantsByEvent(event: EventDocument) {
+    return this.UserModel
+      .find({
+        'deleted': {$ne: true},
+        'shareResume': true,
+        'resume': {$exists: true},
+        'resume.size': {$gt: 0},
+        'sanitized': true,
+        'event': event,
+      })
+      .select('firstName lastName university year gender major' +
+      ' resume.url status account')
+      .populate('account')
       .exec();
   }
 }
