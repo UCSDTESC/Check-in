@@ -1,21 +1,24 @@
 import { USER_JWT_TIMEOUT } from '@Config/Passport';
+import { Config } from '@Config/index';
+import EmailService from '@Services/EmailService';
 import EventService from '@Services/EventService';
 import UserService from '@Services/UserService';
-import { TESCEvent, TESCUser, TESCAccount } from '@Shared/ModelTypes';
-import { EventsWithStatisticsResponse, JWTUserAuthToken, JWTUserAuth } from '@Shared/api/Responses';
+import { TESCAccount } from '@Shared/ModelTypes';
+import { ResetPasswordRequest, ForgotPasswordRequest } from '@Shared/api/Requests';
+import { JWTUserAuthToken, JWTUserAuth, SuccessResponse } from '@Shared/api/Responses';
 import { Response, Request } from 'express-serve-static-core';
 import * as jwt from 'jsonwebtoken';
-import { Get, JsonController, UseBefore, Param, Res, Post, Req } from 'routing-controllers';
+import { Get, JsonController, UseBefore, Res, Post, Req, Body } from 'routing-controllers';
 
+import { ErrorMessage } from '../../utils/Errors';
 import { AuthorisedUser } from '../decorators/AuthorisedUser';
-import { SelectedEvent } from '../decorators/SelectedEvent';
 import { UserAuthorisation } from '../middleware/UserAuthorisation';
 import { UserLogin } from '../middleware/UserLogin';
-import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
 
 @JsonController('/user')
 export class UserController {
   constructor(
+    private EmailService: EmailService,
     private EventService: EventService,
     private UserService: UserService
   ) {}
@@ -26,7 +29,7 @@ export class UserController {
    * @returns The JWT token signed for that user.
    */
   generateToken(user: JWTUserAuthToken) {
-    return jwt.sign(user, process.env.SESSION_SECRET, {
+    return jwt.sign(user, Config.SessionSecret, {
       expiresIn: USER_JWT_TIMEOUT,
     });
   }
@@ -45,6 +48,24 @@ export class UserController {
       token: `JWT ${this.generateToken(jwt)}`,
       user: jwt,
     };
+  }
+
+  @Post('/forgot')
+  async forgotPassword(@Body() body: ForgotPasswordRequest, @Req() req: Request) {
+    const account = await this.UserService.getAccountByEmail(body.email);
+
+    if (!account) {
+      throw new Error(ErrorMessage.NO_ACCOUNT_EXISTS());
+    }
+
+    await this.EmailService.sendPasswordResetEmail(req, account);
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/reset')
+  async resetPassword(@Body() body: ResetPasswordRequest) {
+    await this.UserService.resetUserPassword(body.id, body.newPassword);
+    return SuccessResponse.Positive;
   }
 
   @Get('/events')

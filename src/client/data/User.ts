@@ -1,4 +1,5 @@
 import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
+import { ResetPasswordRequest, ForgotPasswordRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
 import { JWTAdminAuth } from '@Shared/api/Responses';
 import request from 'superagent';
@@ -51,7 +52,7 @@ export const forgotPassword = (email: string) => {
   return promisify<SuccessResponse>(request
     .post('/forgot')
     .set('Content-Type', 'application/json')
-    .send({email})
+    .send({email} as ForgotPasswordRequest)
     .use(prefix)
     .use(nocache));
 };
@@ -66,7 +67,7 @@ export const resetPassword = (id: string, newPassword: string) => {
   return promisify<SuccessResponse>(request
     .post('/reset')
     .set('Content-Type', 'application/json')
-    .send({id, newPassword})
+    .send({id, newPassword} as ResetPasswordRequest)
     .use(prefix)
     .use(nocache));
 };

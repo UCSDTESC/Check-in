@@ -99,7 +99,7 @@ class Reset extends React.Component<Props, ResetState> {
             <div className="col-12">
               <label>New Password</label>
               <Field
-                name="password"
+                name="newPassword"
                 component="input"
                 type="password"
                 className="form-control sd-form__input-text"
@@ -111,7 +111,7 @@ class Reset extends React.Component<Props, ResetState> {
             <div className="col-12">
               <label>Repeat New Password</label>
               <Field
-                name="passwordRepeat"
+                name="repeatNewPassword"
                 component="input"
                 type="password"
                 className="form-control sd-form__input-text"

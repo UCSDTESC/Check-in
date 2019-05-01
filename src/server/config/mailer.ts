@@ -1,10 +1,10 @@
-import Email from 'email-templates';
-import mailer from 'nodemailer';
+import * as Email from 'email-templates';
+import * as mailer from 'nodemailer';
 import * as path from 'path';
 
 import { Config } from '.';
 
-const EMAIL_PATH = path.join(__dirname, '../../views/emails/');
+const EMAIL_PATH = path.join(__dirname, '../views/emails');
 
 // Node mailer
 const transporter = mailer.createTransport({
@@ -27,7 +27,7 @@ const createEventSender = (event) => ({
   address: Config.Mail.User,
 });
 
-export const createTESCEmail = (event) => new Email({
+export const createTESCEmail = () => new Email({
   message: {
     from: createTESCSender(),
   },

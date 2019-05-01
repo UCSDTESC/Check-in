@@ -23,56 +23,6 @@ module.exports = function(app) {
   // Middleware to require login/auth
   const requireAuth = passport.authenticate('userJwt', {session: false});
 
-  userRoute.post('/forgot', function (req, res) {
-    if (!req.body.email) {
-      return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-    }
-
-    return Account.findOne({email: req.body.email}, function(e, account) {
-      if (e || account === null) {
-        return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
-      }
-
-      return createTESCEmail()
-        .send({
-          template: 'forgot',
-          message: {
-            to: account.email
-          },
-          locals: {
-            'account': account,
-            'resetUrl': req.protocol + '://' + req.get('host') +
-              '/user/reset/' + account._id
-          }
-        })
-        .catch(err => {
-          return Errors.respondError(res, err, Errors.EMAIL_ERROR);
-        })
-        .then(() => {
-          return res.json({success: true});
-        });
-    });
-  });
-
-  userRoute.post('/reset', function(req, res) {
-    if (!req.body.id || !req.body.newPassword) {
-      return Errors.respondUserError(res, Errors.INCORRECT_ARGUMENTS);
-    }
-
-    const password = req.body.newPassword;
-
-    return Account.findById(req.body.id, function(e, user) {
-      if (e || user === null) {
-        return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
-      }
-
-      user.password = password;
-      user.save();
-      return res.json({success: true});
-    });
-
-  });
-
   userRoute.post('/update/:eventAlias', upload.single('resume'), requireAuth,
     function(req, res) {
       var user = req.user;

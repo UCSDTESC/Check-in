@@ -1,3 +1,4 @@
+import { Logger } from '@Config/Logging';
 import { AccountDocument } from '@Models/Account';
 import * as express from 'express';
 import * as passport from 'passport';
@@ -9,7 +10,10 @@ export class UserLogin implements ExpressMiddlewareInterface {
 
   use(req: express.Request, res: express.Response, next?: express.NextFunction): Promise<passport.Authenticator> {
     return this.authenticate((err, user: AccountDocument, info) => {
-      if (err || !user) {
+      if (err) {
+        return next(err);
+      }
+      if (info) {
         return next(new UnauthorizedError(info.message));
       }
 

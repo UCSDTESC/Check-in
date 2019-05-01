@@ -39,3 +39,12 @@ export interface AddNewOrganiserRequest {
 export interface DownloadResumesRequest {
   applicants: string[];
 }
+
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ResetPasswordRequest {
+  id: string;
+  newPassword: string;
+}

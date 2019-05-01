@@ -1,4 +1,5 @@
 import { Logger } from '@Config/Logging';
+import { AccountModel } from '@Models/Account';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
 import { UserModel, UserSchema, PUBLIC_USER_FIELDS } from '@Models/User';
 import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
@@ -7,6 +8,9 @@ import { Service, Inject } from 'typedi';
 
 @Service()
 export default class UserService {
+  @Inject('AccountModel')
+  private AccountModel: AccountModel;
+
   @Inject('UserModel')
   private UserModel: UserModel;
 
@@ -110,6 +114,30 @@ export default class UserService {
       .select(PUBLIC_USER_FIELDS)
       .populate('event')
       .populate('account')
+      .exec();
+  }
+
+  /**
+   * Resets an account password.
+   * @param accountID The ID of the account to reset.
+   * @param newPassword The new password for the account.
+   */
+  async resetUserPassword(accountID: string, newPassword: string) {
+    const account = await this.AccountModel
+      .findOne({_id: accountID})
+      .exec();
+
+    account.password = newPassword;
+    return account.save();
+  }
+
+  /**
+   * Get an account by the registered email.
+   * @param email The email associated with the account.
+   */
+  async getAccountByEmail(email: string) {
+    return this.AccountModel
+      .findOne({email: email})
       .exec();
   }
 }

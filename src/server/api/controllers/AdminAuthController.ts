@@ -1,4 +1,5 @@
 import { ADMIN_JWT_TIMEOUT } from '@Config/Passport';
+import { Config } from '@Config/index';
 import AdminService from '@Services/AdminService';
 import { JWTAdminAuth, JWTAdminAuthToken } from '@Shared/api/Responses';
 import { Response, Request } from 'express';
@@ -20,7 +21,7 @@ export class AdminAuthController {
    * @returns The JWT token signed for that user.
    */
   generateToken(user: JWTAdminAuthToken) {
-    return jwt.sign(user, process.env.SESSION_SECRET, {
+    return jwt.sign(user, Config.SessionSecret, {
       expiresIn: ADMIN_JWT_TIMEOUT,
     });
   }
