@@ -30,19 +30,7 @@ module.exports = function(app) {
   app.use('/user', userRoute);
 
   // Middleware to require login/auth
-  const requireLogin = passport.authenticate('user', {session: false});
   const requireAuth = passport.authenticate('userJwt', {session: false});
-
-  /**
-   * Signs a user with the JWT secret.
-   * @param {Object} user The public user information to sign.
-   * @returns {String} The JWT token signed for that user.
-   */
-  function generateToken(user) {
-    return jwt.sign(user, process.env.SESSION_SECRET, {
-      expiresIn: USER_JWT_TIMEOUT
-    });
-  }
 
   /**
    * Returns an output object that has profile fields of the user.
@@ -55,23 +43,6 @@ module.exports = function(app) {
     });
     return outputUser;
   }
-
-  /**
-   * Used to verify that the JWT Token is still valid.
-   */
-  userRoute.get('/authorised', requireAuth, function (req, res) {
-    return res.sendStatus(200);
-  });
-
-  // Authentication
-  userRoute.post('/login', requireLogin, function (req, res) {
-    var userInfo = setUserInfo(req.user);
-
-    res.status(200).json({
-      token: `JWT ${generateToken(userInfo)}`,
-      user: userInfo
-    });
-  });
 
   userRoute.post('/forgot', function (req, res) {
     if (!req.body.email) {
