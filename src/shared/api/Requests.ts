@@ -59,3 +59,14 @@ export interface RegisterAdminRequest {
 export interface DeleteAdminRequest {
   id: string;
 }
+
+export interface RegisterEventRequest {
+  name: string;
+  alias: string;
+  closeTime: string;
+  homepage: string;
+  email: string;
+  description: string;
+  organisedBy: string;
+  thirdPartyText?: string;
+}

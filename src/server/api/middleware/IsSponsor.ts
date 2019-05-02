@@ -13,13 +13,11 @@ export class IsSponsor implements ExpressMiddlewareInterface {
 
     const eventService = Container.get(EventService);
     const alias = req.params.eventAlias;
-    eventService.isAdminSponsor(alias, req.user)
-    .then((isSponsor) => {
-      if (!isSponsor) {
-        return next(new Error(ErrorMessage.NOT_ORGANISER()));
-      }
+    const isSponsor = await eventService.isAdminSponsor(alias, req.user);
+    if (!isSponsor) {
+      return next(new Error(ErrorMessage.NOT_ORGANISER()));
+    }
 
-      next();
-    });
+    next();
   }
 }

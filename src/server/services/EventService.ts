@@ -1,12 +1,16 @@
+import { Logger } from '@Config/Logging';
 import { QuestionModel, QuestionDocument } from '@Models/Question';
 import { UserModel } from '@Models/User';
 import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/event';
+import { Admin, TESCEvent, Question, TESCEventOptions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';
-import { Admin, TESCEvent, Question, TESCEventOptions } from '@Shared/ModelTypes';
+import { RegisterEventRequest } from '@Shared/api/Requests';
+import { ObjectID } from 'bson';
 import { DocumentQuery, Query, Types } from 'mongoose';
 import { Service, Inject } from 'typedi';
-import { ErrorMessage } from 'utils/Errors';
+
+import { ErrorMessage } from '../utils/Errors';
 
 /**
  * Defines the result of a summation aggregate
@@ -47,6 +51,10 @@ export default class EventService {
     return this.QuestionModel.findByIdAndUpdate(question._id, question);
   }
 
+  /**
+   * Deletes an existing question.
+   * @param question The question to delete.
+   */
   async deleteQuestion(question: Question) {
     if (!question._id) {
       throw new Error(ErrorMessage.NO_QUESTION_EXISTS());
@@ -163,12 +171,14 @@ export default class EventService {
       return false;
     }
 
-    const event = await this.EventModel.findOne({alias: eventAlias});
+    const event: EventDocument = await this.EventModel
+      .findOne({alias: eventAlias})
+      .populate('organisers');
     if (event === null) {
       return false;
     }
 
-    return (event.organisers.indexOf(organiser) !== -1);
+    return (event.organisers.some(org => org._id.toHexString() === organiser._id.toHexString()));
   }
 
   /**
@@ -185,12 +195,14 @@ export default class EventService {
       return this.isAdminOrganiser(eventAlias, sponsor);
     }
 
-    const event = await this.EventModel.findOne({alias: eventAlias});
+    const event: EventDocument = await this.EventModel
+      .findOne({alias: eventAlias})
+      .populate('sponsors');
     if (event === null) {
       return false;
     }
 
-    return (event.sponsors.indexOf(sponsor) !== -1);
+    return (event.sponsors.some(spo => spo._id.toHexString() === sponsor._id.toHexString()));
   }
 
   /**
@@ -262,5 +274,24 @@ export default class EventService {
   async addOrganiserToEvent(event: EventDocument, organiser: Admin) {
     event.organisers.push(organiser);
     return event.save();
+  }
+
+  /**
+   * Creates a new event with given attributes.
+   * @param request The request with the new event parameters.
+   * @param logoPath The file path of the logo to associate with the new event.
+   */
+  async createNewEvent(request: RegisterEventRequest, logoPath: string) {
+    const newEvent = new this.EventModel({
+        ...request,
+      } as TESCEvent);
+
+    try {
+      await newEvent.attach('logo', {path: logoPath});
+    } catch (err) {
+      throw new Error(ErrorMessage.DATABASE_ERROR());
+    }
+
+    return newEvent.save();
   }
 }

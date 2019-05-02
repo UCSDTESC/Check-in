@@ -7,9 +7,11 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQues
     DownloadResumesRequest,
     DeleteAdminRequest,
     RegisterAdminRequest,
-    CheckinUserRequest } from '@Shared/api/Requests';
+    CheckinUserRequest,
+    RegisterEventRequest } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
+import moment from 'moment';
 import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
@@ -190,9 +192,9 @@ export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
   let baseReq = request
     .post(`/register/${eventAlias}`)
     .use(apiPrefix)
-    .send({
+    .field('user', JSON.stringify({
       ...postObject,
-    });
+    }));
 
   if (resume) {
     baseReq = baseReq.attach('resume', user.resume[0]);
@@ -203,14 +205,20 @@ export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
 };
 
 export const registerNewEvent = (event: NewEventFormData) => {
-  const {logo, ...eventWithoutLogo} = event;
+  const {logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields} = event;
+  const closeTime: string = moment(new Date(
+    closeTimeYear,
+    closeTimeMonth,
+    closeTimeDay
+  )).toISOString(true);
   return promisify<TESCEvent>(
     request
       .post('/admin/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .send({
-        ...eventWithoutLogo,
-      })
+      .field('event', JSON.stringify({
+        ...eventWithoutFields,
+        closeTime,
+      } as RegisterEventRequest))
       .attach('logo', logo[0])
       .use(apiPrefix)
       .use(nocache)

@@ -1,12 +1,11 @@
 import * as crypto from 'crypto';
-import * as mime from 'mime';
-import multer from 'multer';
+import { extension } from 'mime';
+import * as multer from 'multer';
 
 const storage = multer.diskStorage({
-  dest: 'public/uploads/',
   filename: (req, file, cb) => {
     return crypto.pseudoRandomBytes(16, (err, raw) =>
-      cb(null, `${raw.toString('hex')}.${mime.getExtension(file.mimetype)}`));
+      cb(null, `${raw.toString('hex')}.${extension(file.mimetype)}`));
   },
 });
 

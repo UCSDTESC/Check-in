@@ -6,9 +6,9 @@ import FileField from '~/components/FileField';
 export interface NewEventFormData {
   name: string;
   alias: string;
-  closeTimeDay: string;
-  closeTimeMonth: string;
-  closeTimeYear: string;
+  closeTimeDay: number;
+  closeTimeMonth: number;
+  closeTimeYear: number;
   homepage: string;
   email: string;
   description: string;

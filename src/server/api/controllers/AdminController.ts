@@ -1,21 +1,25 @@
+import Uploads from '@Config/Uploads';
+import { AdminDocument } from '@Models/Admin';
 import { EventDocument } from '@Models/Event';
 import AdminService from '@Services/AdminService';
 import CSVService from '@Services/CSVService';
 import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
 import UserService from '@Services/UserService';
-import { Admin } from '@Shared/ModelTypes';
+import { Admin, TESCEvent } from '@Shared/ModelTypes';
 import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
     DeleteCustomQuestionRequest,
     BulkChangeRequest,
     UpdateEventOptionsRequest,
     AddNewSponsorRequest,
-    AddNewOrganiserRequest } from '@Shared/api/Requests';
+    AddNewOrganiserRequest,
+    RegisterEventRequest } from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
 import * as moment from 'moment';
-import { Get, JsonController, UseBefore, Res, Post, Body, Put, Delete } from 'routing-controllers';
+import { Get, JsonController, UseBefore, Res, Post, Body, Put,
+  Delete, UploadedFile, BodyParam } from 'routing-controllers';
 
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
 import { SelectedEvent } from '../decorators/SelectedEvent';
@@ -47,7 +51,7 @@ export class AdminController {
 
   @Get('/events')
   @UseBefore(RoleAuth(Role.ROLE_SPONSOR))
-  async getEvents(@AuthorisedAdmin() admin: Admin): Promise<EventsWithStatisticsResponse> {
+  async getEvents(@AuthorisedAdmin() admin: Admin) {
     let events: EventDocument[];
     if (hasRankEqual(admin, Role.ROLE_SPONSOR)) {
       events = await this.EventService.getEventsBySponsor(admin);
@@ -68,6 +72,18 @@ export class AdminController {
     };
   }
 
+  @Post('/events')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  async createNewEvent(@UploadedFile('logo', {options: Uploads}) logo: Express.Multer.File,
+    @BodyParam('event') event: RegisterEventRequest, @AuthorisedAdmin() admin: AdminDocument) {
+    let newEvent = await this.EventService.createNewEvent(event, logo.path);
+
+    if (hasRankEqual(admin, Role.ROLE_ADMIN)) {
+      newEvent = await this.EventService.addOrganiserToEvent(newEvent, admin);
+    }
+    return newEvent;
+  }
+
   @Get('/columns')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   async getColumnDisplayNames() {
@@ -78,7 +94,7 @@ export class AdminController {
   @Get('/export/:eventAlias')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(ValidateEventAlias)
-  async exportUsersByEvent(@SelectedEvent() event: EventDocument, @Res() response: Response) {
+  async exportUsersByEvent(@SelectedEvent() event: TESCEvent, @Res() response: Response) {
     const eventUsers = await this.UserService.getAllUsersByEvent(event);
     const flattenedUsers = eventUsers.map(user => user.csvFlatten());
 

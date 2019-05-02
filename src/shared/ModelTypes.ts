@@ -1,3 +1,5 @@
+import { ObjectID } from 'bson';
+
 import { Role } from './Roles';
 
 export enum UserStatus {
@@ -20,8 +22,8 @@ export type Resume = UploadedFile;
 
 export type Logo = UploadedFile;
 
-export interface Download<IDType = string> {
-  _id?: IDType;
+export interface Download {
+  _id?: string & ObjectID;
   fileCount: number;
   admin: Admin;
   accessUrl?: string;
@@ -30,8 +32,8 @@ export interface Download<IDType = string> {
   deleted?: boolean;
 }
 
-export interface Admin<IDType = string> {
-  _id?: IDType;
+export interface Admin {
+  _id?: string & ObjectID;
   username: string;
   password: string;
   role: Role;
@@ -40,8 +42,8 @@ export interface Admin<IDType = string> {
   deleted?: boolean;
 }
 
-export interface Question<IDType = string> {
-  _id?: IDType;
+export interface Question {
+  _id?: string & ObjectID;
   question: string;
   isRequired: boolean;
   deleted?: boolean;
@@ -71,8 +73,8 @@ export interface TESCEventOptions {
   requireWhyThisEvent: boolean;
 }
 
-export interface TESCEvent<IDType = string> {
-  _id?: IDType;
+export interface TESCEvent {
+  _id?: string & ObjectID;
   name: string;
   alias: string;
   organisers: Admin[];
@@ -91,16 +93,16 @@ export interface TESCEvent<IDType = string> {
   users?: number;
 }
 
-export interface TESCAccount<IDType = string> {
-  _id?: IDType;
+export interface TESCAccount {
+  _id?: string & ObjectID;
   email: string;
   password: string;
   confirmed: boolean;
   deleted?: boolean;
 }
 
-export interface TESCUser<IDType = string> {
-  _id?: IDType;
+export interface TESCUser {
+  _id?: string & ObjectID;
   event?: TESCEvent;
   account?: TESCAccount;
   firstName: string;

@@ -22,13 +22,12 @@ export default class SponsorSelect extends AdminSelect {
     const {admins} = this.state;
     const {onChange, value, exclude} = this.props;
 
-    const excludeIds = exclude.map(sponsor => sponsor._id);
+    const excludeIds: string[] = exclude.map(sponsor => sponsor._id);
     return (
       <StyledSelect
         isSearchable={true}
         isClearable={true}
-        options={admins.filter(option =>
-            excludeIds.indexOf(option.value) === -1)}
+        options={admins.filter(option => excludeIds.includes(option.value))}
         isLoading={admins.length === 0}
         onChange={onChange}
         value={value}

@@ -3,8 +3,8 @@ import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { Link, RouteComponentProps } from 'react-router-dom';
-import { Alert, Nav, NavItem, NavLink, UncontrolledTooltip } from 'reactstrap';
-import { bindActionCreators, AnyAction } from 'redux';
+import { UncontrolledTooltip } from 'reactstrap';
+import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
 import { loadEventStatistics } from '~/data/Api';
@@ -177,6 +177,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
                 href={event.homepage}
               >
                 <h1 className="event-page__title">{event.name}</h1>
+                <h3 className="event-page__description">{event.description}</h3>
               </a>
             </div>
             <div

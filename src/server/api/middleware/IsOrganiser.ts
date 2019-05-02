@@ -13,13 +13,11 @@ export class IsOrganiser implements ExpressMiddlewareInterface {
 
     const eventService = Container.get(EventService);
     const alias = req.params.eventAlias;
-    eventService.isAdminOrganiser(alias, req.user)
-    .then((isOrganiser) => {
-      if (!isOrganiser) {
-        return next(new Error(ErrorMessage.NOT_ORGANISER()));
-      }
+    const isOrganiser = await eventService.isAdminOrganiser(alias, req.user);
+    if (!isOrganiser) {
+      return next(new Error(ErrorMessage.NOT_ORGANISER()));
+    }
 
-      next();
-    });
+    next();
   }
 }
