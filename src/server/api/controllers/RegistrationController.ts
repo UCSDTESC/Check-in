@@ -44,8 +44,6 @@ export class RegistrationController {
     }
 
     const newUser = await this.UserService.createNewUser(existingAccount, event, body);
-    Logger.info(newUser);
-    Logger.info(resume);
     if (newUser && resume) {
       await this.UserService.updateUserResume(newUser, resume);
     }
