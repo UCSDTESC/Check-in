@@ -87,10 +87,11 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
   }
 
   sanitiseValues(values: ApplyPageFormData) {
-    values.birthdateDay = ('00' + values.birthdateDay)
-      .substring(values.birthdateDay.length);
-    values.birthdateYear = ('0000' + values.birthdateYear)
-      .substring(values.birthdateYear.length);
+    values.birthdate = new Date(
+      values.birthdateYear,
+      values.birthdateMonth - 1,
+      values.birthdateDay
+    ).toISOString();
 
     // Check for UCSD institution
     if (values.institution === InstitutionType.UCSD) {
@@ -99,6 +100,29 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     }
     if (values.institution === InstitutionType.HighSchool) {
       values.university = values.highSchool;
+    }
+
+    values.teammates = [];
+
+    if (values.team1) {
+      values.teammates.push(values.team1);
+    }
+    if (values.team2) {
+      values.teammates.push(values.team2);
+    }
+    if (values.team3) {
+      values.teammates.push(values.team3);
+    }
+
+    if (values.outOfState) {
+      values.travel = {
+        outOfState: values.outOfState,
+        city: values.city,
+      };
+    }
+
+    if (values.phone) {
+      values.phone = values.phone.replace(/\D/g, '');
     }
 
     return values;
@@ -129,6 +153,8 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
    * @param {Object} values The validated form data.
    */
   onFinalSubmit = (values: ApplyPageFormData) => {
+    values = this.sanitiseValues(values);
+
     this.setState({
       isSubmitting: true,
     });

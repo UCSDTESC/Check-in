@@ -8,7 +8,8 @@ import * as mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
 
 export type UserDocument = TESCUser & Document & {
-  csvFlatten(): any;
+  csvFlatten: () => any;
+  attach: (name: string, options: any) => Promise<UserDocument>;
 };
 export type UserModel = Model<UserDocument>;
 

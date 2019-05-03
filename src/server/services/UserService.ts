@@ -1,8 +1,9 @@
 import { Logger } from '@Config/Logging';
-import { AccountModel } from '@Models/Account';
+import { AccountModel, AccountDocument } from '@Models/Account';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
-import { UserModel, UserSchema, PUBLIC_USER_FIELDS } from '@Models/User';
+import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument } from '@Models/User';
 import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
+import { RegisterUserRequest } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
 
@@ -134,10 +135,61 @@ export default class UserService {
   /**
    * Get an account by the registered email.
    * @param email The email associated with the account.
+   * @param caseSensitive Determines whether the search is case sensitive.
    */
-  async getAccountByEmail(email: string) {
+  async getAccountByEmail(email: string, caseSensitive: boolean = false) {
+    if (caseSensitive) {
+      return this.AccountModel
+        .findOne({email: email})
+        .exec();
+    }
+
     return this.AccountModel
-      .findOne({email: email})
+      .findOne({email: {
+        $regex: new RegExp(email, 'i'),
+      }})
       .exec();
+  }
+
+  /**
+   * Creates a new account with the given information.
+   * @param email The email to associate with the new account.
+   * @param password The password to associate with the new account.
+   */
+  async createNewAccount(email: string, password: string) {
+    return this.AccountModel
+      .create({
+        email,
+        password,
+      } as AccountDocument);
+  }
+
+  /**
+   * Registers a new user in the database based on the given fields.
+   * @param account The account to associate with the new user.
+   * @param event The event to associate with the new user.
+   * @param request The request data to fill in the user.
+   */
+  async createNewUser(account: AccountDocument, event: EventDocument, request: RegisterUserRequest) {
+    const {customQuestionResponses, ...strippedRequest} = request;
+
+    const newUser = new this.UserModel({
+      account: account,
+      event: event,
+      customQuestionResponses: customQuestionResponses as any,
+      ...strippedRequest,
+    } as TESCUser);
+
+    return newUser.save();
+  }
+
+  /**
+   * Updates the resume on a given user.
+   * @param user The user for which to update.
+   * @param resume The new resume for the given user.
+   */
+  async updateUserResume(user: UserDocument, resume: Express.Multer.File) {
+    await user.attach('resume', {path: resume.path});
+    return user.save();
   }
 }

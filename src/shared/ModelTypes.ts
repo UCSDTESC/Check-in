@@ -131,13 +131,13 @@ export interface TESCUser {
   status?: UserStatus;
   checkedIn?: boolean;
   sanitized?: boolean;
-  race?: boolean;
+  race?: string;
   classRequirement?: boolean;
   extraCurriculars?: string;
   gpa?: string;
   majorGPA?: string;
   customQuestionResponses?: CustomQuestionResponses;
   whyEventResponse?: string;
-  resume: Resume;
+  resume?: Resume;
   deleted?: boolean;
 }

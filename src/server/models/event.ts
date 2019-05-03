@@ -8,7 +8,7 @@ import * as mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type EventDocument = TESCEvent & Document & {
-  attach: (name: string, options: any) => Promise<void>;
+  attach: (name: string, options: any) => Promise<EventDocument>;
 };
 
 export type EventModel = Model<EventDocument>;

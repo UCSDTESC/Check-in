@@ -70,3 +70,48 @@ export interface RegisterEventRequest {
   organisedBy: string;
   thirdPartyText?: string;
 }
+
+export interface RegisterUserPersonalSectionRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  birthdate: string;
+  gender: string;
+  phone: string;
+  major?: string;
+  year?: string;
+  github?: string;
+  website?: string;
+  shareResume: boolean;
+  university?: string;
+  highSchool?: string;
+  pid?: string;
+  gpa?: string;
+  majorGPA?: string;
+  race?: string;
+}
+
+export interface RegisterUserResponseSectionRequest {
+  customQuestionResponses?: Map<string, string>;
+  food?: string;
+  diet?: string;
+  whyEventResponse?: string;
+  travel?: {
+    outOfState?: boolean;
+    city?: string;
+  };
+  extraCurriculars?: string;
+  shirtSize?: string;
+  classRequirement?: boolean;
+  teammates: string[];
+}
+
+export interface RegisterUserUserSectionRequest {
+  provision: boolean;
+  accept: boolean;
+  password?: string;
+  confirmPassword?: string;
+}
+
+export type RegisterUserRequest = RegisterUserPersonalSectionRequest &
+  RegisterUserResponseSectionRequest & RegisterUserUserSectionRequest;

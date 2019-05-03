@@ -1,5 +1,6 @@
 import { CustomQuestions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
+import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
@@ -9,16 +10,9 @@ import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }
 
-export interface ResponseSectionFormData {
-  customQuestionResponses: Map<string, string>;
-  food?: string;
-  diet?: string;
-  whyEventResponse?: string;
-  outOfState: boolean;
+export interface ResponseSectionFormData extends RegisterUserResponseSectionRequest {
+  outOfState?: boolean;
   city?: string;
-  extraCurriculars?: string;
-  shirtSize?: string;
-  classRequirement?: boolean;
   team1?: string;
   team2?: string;
   team3?: string;

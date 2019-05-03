@@ -63,3 +63,7 @@ export class SuccessResponse {
 export interface ColumnResponse {
   [accessor: string]: string;
 }
+
+export interface RegisterUserResponse {
+  email: string;
+}

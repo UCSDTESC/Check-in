@@ -2,7 +2,7 @@ import { Logger } from '@Config/Logging';
 import { QuestionModel, QuestionDocument } from '@Models/Question';
 import { UserModel } from '@Models/User';
 import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/event';
-import { Admin, TESCEvent, Question, TESCEventOptions } from '@Shared/ModelTypes';
+import { Admin, TESCEvent, Question, TESCEventOptions, TESCAccount } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';
 import { RegisterEventRequest } from '@Shared/api/Requests';
@@ -78,6 +78,19 @@ export default class EventService {
     return await this.EventModel.find()
       .select(PUBLIC_EVENT_FIELDS.join(' '))
       .exec();
+  }
+
+  /**
+   * Determines whether an account has already applied for a given event.
+   * @param accountId The account to check for.
+   * @param event The event for which to check for the user.
+   */
+  async accountHasApplied(account: TESCAccount, event: EventDocument) {
+    const user = await this.UserModel
+      .findOne({event: event, account: account})
+      .exec();
+
+    return !!user;
   }
 
   /**
@@ -216,13 +229,12 @@ export default class EventService {
 
     switch (type) {
     case QuestionType.QUESTION_LONG:
-      customQuestions.longText.push(question);
-      break;
     case QuestionType.QUESTION_SHORT:
-      customQuestions.shortText.push(question);
-      break;
     case QuestionType.QUESTION_CHECKBOX:
-      customQuestions.checkBox.push(question);
+      if (!customQuestions[type]) {
+        customQuestions[type] = [];
+      }
+      customQuestions[type].push(question);
       break;
     default:
       throw new Error(ErrorMessage.INVALID_QUESTION_TYPE());

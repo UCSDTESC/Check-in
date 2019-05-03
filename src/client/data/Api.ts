@@ -8,8 +8,9 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQues
     DeleteAdminRequest,
     RegisterAdminRequest,
     CheckinUserRequest,
-    RegisterEventRequest } from '@Shared/api/Requests';
-import { SuccessResponse, ColumnResponse } from '@Shared/api/Responses';
+    RegisterEventRequest,
+    RegisterUserRequest } from '@Shared/api/Requests';
+import { SuccessResponse, ColumnResponse, RegisterUserResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import moment from 'moment';
 import request, { SuperAgentRequest } from 'superagent';
@@ -178,16 +179,8 @@ export const checkinUser = (id: string, eventAlias: string) =>
  * @returns {Promise} A promise of the request.
  */
 export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
-  const { customQuestionResponses, resume } = user;
-  const postObject: ApplyPageFormData = Object.assign({}, user);
-
-  // Ensure it doesn't push an undefined field
-  if (!customQuestionResponses) {
-    delete postObject.customQuestionResponses;
-  }
-  if (resume.length > 0) {
-    delete postObject.resume;
-  }
+  const { resume, ...clearUser } = user;
+  const postObject: RegisterUserRequest = Object.assign({}, clearUser);
 
   let baseReq = request
     .post(`/register/${eventAlias}`)
@@ -197,18 +190,16 @@ export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
     }));
 
   if (resume) {
-    baseReq = baseReq.attach('resume', user.resume[0]);
+    baseReq = baseReq.attach('resume', resume[0]);
   }
-  return promisify<{
-    email: string;
-  }>(baseReq);
+  return promisify<RegisterUserResponse>(baseReq);
 };
 
 export const registerNewEvent = (event: NewEventFormData) => {
   const {logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields} = event;
   const closeTime: string = moment(new Date(
     closeTimeYear,
-    closeTimeMonth,
+    closeTimeMonth - 1,
     closeTimeDay
   )).toISOString(true);
   return promisify<TESCEvent>(

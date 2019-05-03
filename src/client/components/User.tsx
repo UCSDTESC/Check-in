@@ -244,22 +244,19 @@ class User extends React.Component<Props> {
             {event.customQuestions[QuestionType.QUESTION_LONG] &&
               <div className="col-12 col-lg">
                 <h5>Long Text Questions</h5>
-                {this.renderCustomQuestions(event.customQuestions
-                  [QuestionType.QUESTION_LONG])}
+                {this.renderCustomQuestions(event.customQuestions[QuestionType.QUESTION_LONG])}
               </div>
             }
             {event.customQuestions[QuestionType.QUESTION_SHORT] &&
               <div className="col-12 col-lg">
                 <h5>Short Text Questions</h5>
-                {this.renderCustomQuestions(event.customQuestions
-                  [QuestionType.QUESTION_SHORT])}
+                {this.renderCustomQuestions(event.customQuestions[QuestionType.QUESTION_SHORT])}
               </div>
             }
             {event.customQuestions[QuestionType.QUESTION_CHECKBOX] &&
               <div className="col-12 col-lg">
                 <h5>Check Box Questions</h5>
-                {this.renderCustomCheckboxes(event.customQuestions
-                  [QuestionType.QUESTION_CHECKBOX])}
+                {this.renderCustomCheckboxes(event.customQuestions[QuestionType.QUESTION_CHECKBOX])}
               </div>
             }
           </div>

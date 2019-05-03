@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "outDir": "../../dist/server-root",
     "rootDir": ".",
     "sourceMap": true,

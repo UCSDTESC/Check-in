@@ -1,4 +1,5 @@
 import { TESCEventOptions, CustomQuestions, Question, CustomQuestionResponses } from '@Shared/ModelTypes';
+import { QuestionType } from '@Shared/Questions';
 
 import { ApplyPageFormData } from '.';
 
@@ -69,17 +70,10 @@ const createValidator = (options: TESCEventOptions, customQuestions: CustomQuest
   }
 
   const notValid = required.filter(name => !(name in values));
-
-  // for all question types
-  for (const questionType in customQuestions) {
-
-    // Check any questions exist
-    if (!customQuestions[questionType]) {
-      continue;
-    }
+  for (const [questionType, questions] of Object.entries(customQuestions)) {
 
     // get all required questions
-    const requiredQuestions: Question[] = customQuestions[questionType]
+    const requiredQuestions: Question[] = questions
       .filter(x => x.isRequired);
 
     // iterate through required questions
@@ -95,6 +89,10 @@ const createValidator = (options: TESCEventOptions, customQuestions: CustomQuest
 
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
     errors.email = 'Invalid email address';
+  }
+
+  if (values.phone && values.phone.replace(/\D/g, '').length !== 10) {
+    errors.phone = 'Must be 10 digits';
   }
 
   if (values.birthdateDay < 1 || values.birthdateDay > 31) {

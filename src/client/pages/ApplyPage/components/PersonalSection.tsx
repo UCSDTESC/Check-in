@@ -1,4 +1,5 @@
 import { TESCEvent } from '@Shared/ModelTypes';
+import { RegisterUserPersonalSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Field, Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
@@ -18,28 +19,12 @@ export enum InstitutionType {
   HighSchool = 'hs',
 }
 
-export interface PersonalSectionFormData {
-  email: string;
-  firstName: string;
-  lastName: string;
-  birthdateMonth: string;
-  birthdateDay: string;
-  birthdateYear: string;
-  gender: string;
-  phone: string;
-  major: string;
-  year: string;
-  github?: string;
-  website?: string;
-  resume: File[];
-  shareResume: boolean;
+export interface PersonalSectionFormData extends RegisterUserPersonalSectionRequest {
+  birthdateMonth: number;
+  birthdateDay: number;
+  birthdateYear: number;
   institution: InstitutionType;
-  university?: string;
-  highSchool?: string;
-  pid?: string;
-  gpa?: number;
-  majorGPA?: number;
-  race?: string;
+  resume?: File[];
 }
 
 class PersonalSection extends ApplyPageSection<PersonalSectionFormData, PersonalSectionProps> {
@@ -177,9 +162,9 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    */
   showPIDBox(info: any) {
     // TODO: Fix info type
-    const value: InstitutionType = info.institution.input.value;
+    const institution: InstitutionType = info.institution.input.value;
     // Only show for UCSD institution
-    if (value !== InstitutionType.UCSD) {
+    if (institution !== InstitutionType.UCSD) {
       return <span/>;
     }
     return (FormFields.createRow(
@@ -188,6 +173,27 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         FormFields.createInput('pid', 'AXXXXXXXX')
       )
     ));
+  }
+
+  showMajorYearBoxes(info: any) {
+    const institution: InstitutionType = info.institution.input.value;
+
+    if (institution === InstitutionType.HighSchool) {
+      return <span />;
+    }
+
+    return (
+      FormFields.createRow(
+        FormFields.createColumn('col-lg-6',
+          FormFields.createLabel('Major'),
+          FormFields.createMajorPicker()
+        ),
+        FormFields.createColumn('col-lg-6',
+          FormFields.createLabel('Year in School'),
+          FormFields.createYearPicker()
+        )
+      )
+    );
   }
 
   createGPAFields(requireGPA: boolean, requireMajorGPA: boolean) {
@@ -314,16 +320,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
       {this.renderInstitutionOptions(options.allowHighSchool)}
 
-      {FormFields.createRow(
-        FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Major'),
-          FormFields.createMajorPicker()
-        ),
-        FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Year in School'),
-          FormFields.createYearPicker()
-        )
-      )}
+      <Fields names={['institution']} component={this.showMajorYearBoxes} />
 
       {FormFields.createRow(
         FormFields.createColumn('col-lg-6',

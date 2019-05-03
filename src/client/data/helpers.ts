@@ -9,7 +9,7 @@ export function promisify<T>(request: SuperAgentRequest): Promise<T> {
     request.end((err, res) => {
       if (err || (res.body && res.body.error)) {
         if (res.body) {
-          return reject(new Error(res.body.error));
+          return reject(new Error(res.body.message));
         }
         return reject(err);
       }
