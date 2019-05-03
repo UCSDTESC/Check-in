@@ -6,9 +6,9 @@ import EventService from '@Services/EventService';
 import UserService from '@Services/UserService';
 import { TESCEvent, TESCUser } from '@Shared/ModelTypes';
 import { RegisterUserRequest } from '@Shared/api/Requests';
-import { EventsWithStatisticsResponse, RegisterUserResponse } from '@Shared/api/Responses';
-import { Request } from 'express';
-import { Post, JsonController, UseBefore, Param, Body, BodyParam, UploadedFile, Req } from 'routing-controllers';
+import { EventsWithStatisticsResponse, RegisterUserResponse, EmailExistsResponse, SuccessResponse } from '@Shared/api/Responses';
+import { Request, Response } from 'express';
+import { Post, JsonController, UseBefore, Param, Body, BodyParam, UploadedFile, Req, Get, Res } from 'routing-controllers';
 
 import { ErrorMessage } from '../../utils/Errors';
 import { SelectedEvent } from '../decorators/SelectedEvent';
@@ -53,5 +53,21 @@ export class RegistrationController {
     }
 
     return { email: existingAccount.email };
+  }
+
+  @Get('/confirm/:accountId')
+  async confirmEmail(@Param('accountId') accountId: string) {
+    const account = await this.UserService.confirmAccountEmail(accountId);
+    if (!account) {
+      throw new Error(ErrorMessage.NO_USER_EXISTS());
+    }
+
+    return SuccessResponse.Positive;
+  }
+
+  @Get('/verify/:email')
+  async checkEmailExists(@Param('email') email: string): Promise<EmailExistsResponse> {
+    const account = await this.UserService.getAccountByEmail(email);
+    return { exists: !!account };
   }
 }

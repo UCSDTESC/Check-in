@@ -49,7 +49,7 @@ export default class EmailService {
         },
         locals: {
           user: user,
-          confirmUrl: `${request.protocol}://${request.get('host')}/api/confirm/${account._id}`,
+          confirmUrl: `${request.protocol}://${request.get('host')}/user/confirm/${account._id}`,
           event: event,
         },
       });

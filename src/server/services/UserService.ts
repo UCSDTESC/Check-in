@@ -192,4 +192,16 @@ export default class UserService {
     await user.attach('resume', {path: resume.path});
     return user.save();
   }
+
+  /**
+   * Sets the given account to confirmed.
+   * @param accountId The ID associated with the account.
+   */
+  async confirmAccountEmail(accountId: string) {
+    return this.AccountModel
+      .findOneAndUpdate({_id: accountId}, {
+        confirmed: true,
+      })
+      .exec();
+  }
 }

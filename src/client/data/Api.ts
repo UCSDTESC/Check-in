@@ -10,7 +10,7 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQues
     CheckinUserRequest,
     RegisterEventRequest,
     RegisterUserRequest } from '@Shared/api/Requests';
-import { SuccessResponse, ColumnResponse, RegisterUserResponse } from '@Shared/api/Responses';
+import { SuccessResponse, ColumnResponse, RegisterUserResponse, EmailExistsResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import moment from 'moment';
 import request, { SuperAgentRequest } from 'superagent';
@@ -87,9 +87,23 @@ export const loadAllAdmins = () =>
  * @returns {Promise} A promise of the request.
  */
 export const checkUserExists = (email: string) =>
-  promisify<{
-    exists: boolean;
-  }>(request.get(`/verify/${email}`).use(apiPrefix));
+  promisify<EmailExistsResponse>(
+    request
+      .get(`/register/verify/${email}`)
+      .use(apiPrefix)
+  );
+
+/**
+ * Confirms a user account by a given ID.
+ * @param {String} accountId The ID of the user account.
+ * @returns {Promise} A promise of the request.
+ */
+export const confirmAccount = (accountId: string) =>
+  promisify<SuccessResponse>(
+    request
+      .get(`/register/confirm/${accountId}`)
+      .use(apiPrefix)
+  );
 
 /**
  * Request a list of all events that is available to the public.

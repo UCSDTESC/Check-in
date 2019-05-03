@@ -18,6 +18,7 @@ import PrivateUserRoute from './PrivateUserRoute';
 import { ApplicationDispatch } from './actions';
 import AdminLogout from './auth/admin/Logout';
 import { finishAuthorisation, authoriseAdmin, logoutAdmin } from './auth/admin/actions';
+import ConfirmPage from './auth/user/Confirm';;
 import UserLogout from './auth/user/Logout';
 import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
 import AdminLayout from './layouts/admin';
@@ -209,6 +210,10 @@ class Routes extends React.Component<Props> {
         <Route
           path="/user/reset/:id"
           component={this.renderUser(ResetPage)}
+        />
+        <Route
+          path="/user/confirm/:accountId"
+          component={this.renderUser(ConfirmPage)}
         />
 
         <PrivateUserRoute

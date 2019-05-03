@@ -67,3 +67,7 @@ export interface ColumnResponse {
 export interface RegisterUserResponse {
   email: string;
 }
+
+export interface EmailExistsResponse {
+  exists: boolean;
+}
