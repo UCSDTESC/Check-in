@@ -117,3 +117,8 @@ export type RegisterUserRequest = RegisterUserPersonalSectionRequest &
   RegisterUserResponseSectionRequest & RegisterUserUserSectionRequest;
 
 export type UpdateUserRequest = Partial<TESCUser>;
+
+export interface RSVPUserRequest {
+  status: boolean;
+  bussing: boolean;
+}

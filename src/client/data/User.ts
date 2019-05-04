@@ -1,5 +1,5 @@
 import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
-import { ResetPasswordRequest, ForgotPasswordRequest, UpdateUserRequest } from '@Shared/api/Requests';
+import { ResetPasswordRequest, ForgotPasswordRequest, UpdateUserRequest, RSVPUserRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
 import { JWTAdminAuth } from '@Shared/api/Responses';
 import request from 'superagent';
@@ -133,7 +133,7 @@ export const rsvpUser = (eventAlias: string, status: boolean, bussing: boolean) 
     .post(`/rsvp/${eventAlias}`)
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token))
-    .send({status, bussing})
+    .send({status, bussing} as RSVPUserRequest)
     .use(prefix)
     .use(nocache));
 };

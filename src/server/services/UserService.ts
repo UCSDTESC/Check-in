@@ -6,6 +6,7 @@ import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes
 import { RegisterUserRequest } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
+import { ErrorMessage } from 'utils/Errors';
 
 @Service()
 export default class UserService {
@@ -235,5 +236,21 @@ export default class UserService {
         confirmed: true,
       })
       .exec();
+  }
+
+  /**
+   * RSVPs a user that was extended an invitation.
+   * @param user The user who is RSVPing.
+   * @param accept Whether to accept the invitation.
+   * @param acceptBus Whether to accept the bussing option.
+   */
+  async RSVPUser(user: UserDocument, accept: boolean, acceptBus: boolean = false) {
+    if (user.status !== UserStatus.Unconfirmed) {
+      throw new Error(ErrorMessage.PERMISSION_ERROR());
+    }
+
+    user.status = accept ? UserStatus.Confirmed : UserStatus.Declined;
+    user.bussing = user.availableBus && acceptBus;
+    return user.save();
   }
 }
