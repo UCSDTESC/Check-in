@@ -1,4 +1,4 @@
-import { Question, UserStatus, TESCEventOptions } from '@Shared/ModelTypes';
+import { Question, UserStatus, TESCEventOptions, TESCUser } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role } from '@Shared/Roles';
 
@@ -115,3 +115,5 @@ export interface RegisterUserUserSectionRequest {
 
 export type RegisterUserRequest = RegisterUserPersonalSectionRequest &
   RegisterUserResponseSectionRequest & RegisterUserUserSectionRequest;
+
+export type UpdateUserRequest = Partial<TESCUser>;

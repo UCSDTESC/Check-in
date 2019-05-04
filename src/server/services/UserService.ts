@@ -1,7 +1,7 @@
 import { Logger } from '@Config/Logging';
 import { AccountModel, AccountDocument } from '@Models/Account';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
-import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument } from '@Models/User';
+import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument, EDITABLE_USER_FIELDS } from '@Models/User';
 import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
 import { RegisterUserRequest } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
@@ -108,11 +108,17 @@ export default class UserService {
    * Get a user's application to a given event.
    * @param event The event associated with the application.
    * @param account The account that created the application.
+   * @param publicOnly Select only the public fields to return.
    */
-  async getUserApplication(event: TESCEvent, account: TESCAccount) {
-    return this.UserModel
-      .findOne({account: account, event: event})
-      .select(PUBLIC_USER_FIELDS)
+  async getUserApplication(event: TESCEvent, account: TESCAccount, publicOnly: boolean = false) {
+    let query = this.UserModel
+      .findOne({account: account, event: event});
+
+    if (publicOnly) {
+      query = query.select(PUBLIC_USER_FIELDS);
+    }
+
+    return query
       .populate('event')
       .populate('account')
       .exec();
@@ -191,6 +197,32 @@ export default class UserService {
   async updateUserResume(user: UserDocument, resume: Express.Multer.File) {
     await user.attach('resume', {path: resume.path});
     return user.save();
+  }
+
+  /**
+   * Updates a given user with new values that are allowed to be edited by the user.
+   * @param user The user document to update.
+   * @param delta The new field values to set.
+   * @param newResume A new resume to upload.
+   */
+  async updateUserEditables(user: UserDocument, delta: Partial<TESCUser>, newResume?: Express.Multer.File) {
+    // Filter out all the fields that aren't editable
+    const editableDelta: Partial<TESCUser> = {};
+    Object.keys(delta).forEach(field => {
+      if (EDITABLE_USER_FIELDS.includes(field)) {
+        editableDelta[field] = delta[field];
+      }
+    });
+
+    const newUser = await this.UserModel
+      .findOneAndUpdate({_id: user._id}, {$set: editableDelta}, {new: true}).exec();
+
+    if (!newResume) {
+      return newUser;
+    }
+
+    await newUser.attach('resume', {path: newResume.path});
+    return newUser.save();
   }
 
   /**

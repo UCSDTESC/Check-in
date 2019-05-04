@@ -1,5 +1,5 @@
 import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
-import { ResetPasswordRequest, ForgotPasswordRequest } from '@Shared/api/Requests';
+import { ResetPasswordRequest, ForgotPasswordRequest, UpdateUserRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
 import { JWTAdminAuth } from '@Shared/api/Responses';
 import request from 'superagent';
@@ -111,9 +111,9 @@ export const updateUserField = (user: UserProfileFormData, eventAlias: string) =
 
   return promisify<TESCUser>(request
     .post(`/update/${eventAlias}`)
-    .send({
+    .field('user', JSON.stringify({
       ...postObject,
-    })
+    } as UpdateUserRequest))
     .attach('resume', user.newResume ? user.newResume[0] : null)
     .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(prefix)

@@ -301,5 +301,12 @@ export const PUBLIC_USER_FIELDS: string[] = Object.entries((UserSchema as any).p
 PUBLIC_USER_FIELDS.push('teammates');
 PUBLIC_USER_FIELDS.push('resume');
 
+// Defines the fields which are editable by the account user
+export const EDITABLE_USER_FIELDS: string[] = Object.entries((UserSchema as any).paths)
+  .filter(([fieldName, field]: any) => 'editable' in field.options)
+  .map(([fieldName, field]: any) => fieldName);
+EDITABLE_USER_FIELDS.push('teammates');
+EDITABLE_USER_FIELDS.push('resume');
+
 export const RegisterModel = () =>
   Container.set('UserModel', model<UserDocument, UserModel>('User', UserSchema));

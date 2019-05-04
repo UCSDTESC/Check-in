@@ -50,8 +50,8 @@ export class UserAuthController {
   @Get('/current/:eventAlias')
   @UseBefore(UserAuthorisation)
   @UseBefore(ValidateEventAlias)
-  async getApplication(@SelectedEvent() event: EventDocument, @AuthorisedUser() user: TESCAccount) {
-    const application = await this.UserService.getUserApplication(event, user);
+  async getApplication(@SelectedEvent() event: EventDocument, @AuthorisedUser() account: TESCAccount) {
+    const application = await this.UserService.getUserApplication(event, account, true);
 
     if (!application) {
       throw new Error(ErrorMessage.USER_NOT_REGISTERED());

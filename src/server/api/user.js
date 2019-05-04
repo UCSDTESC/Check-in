@@ -23,48 +23,6 @@ module.exports = function(app) {
   // Middleware to require login/auth
   const requireAuth = passport.authenticate('userJwt', {session: false});
 
-  userRoute.post('/update/:eventAlias', upload.single('resume'), requireAuth,
-    function(req, res) {
-      var user = req.user;
-      const delta = req.body;
-      logging.info(`User ${user._id} has updated ${Object.keys(delta).length} `+
-      'fields in their profile');
-
-      // Ensure final delta is only editing editable fields.
-      var updateDelta = {};
-      Object.keys(delta).forEach(function(field) {
-        if (editableFields.indexOf(field) !== -1) {
-          updateDelta[field] = delta[field];
-        }
-      });
-
-      return Event.findOne({alias: req.params.eventAlias})
-        .then((event) => {
-          return User.findOneAndUpdate({account: user, event: event},
-            {$set: updateDelta}, {new: true})
-            .populate('account')
-            .populate('event');
-        })
-        .then((user) => {
-          if (!user) {
-            return Errors.respondUserError(res, Errors.NO_USER_EXISTS);
-          }
-
-          if (req.file) {
-            return user.attach('resume', {path: req.file.path}, (error) =>{
-              if (error) {
-                logging.error(error);
-                return Errors.respondUserError(res, Errors.RESUME_UPDATE_ERROR);
-              }
-              user.save();
-              return res.json(outputCurrentUser(user));
-            });
-          }
-          return res.json(outputCurrentUser(user));
-        })
-        .catch(err => Errors.respondError(res, err, Errors.DATABASE_ERROR));
-    });
-
   userRoute.post('/rsvp/:eventAlias', requireAuth, function(req, res) {
     const user = req.user;
 

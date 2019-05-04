@@ -351,19 +351,21 @@ class UserProfile extends React.Component<Props> {
 
   render() {
     const {user, pristine, submitting, handleSubmit} = this.props;
+    const tPT = user.event.thirdPartyText;
+
     return (
       <form className="user-profile" onSubmit={handleSubmit}>
         <div className="user-profile__header">
           <div className="user-profile__hello row">
             <div
-              className={`order-1 order-md-2 col-md-2 col-lg-4
+              className={`order-1 order-md-2 col-md-12 col-lg-4
               user-profile__status-box`}
             >
               {this.renderUserBussing(user)}
               {this.renderUserStatus(user.status)}
             </div>
 
-            <div className="order-2 order-md-1 col-md-10 col-lg-8">
+            <div className="order-2 order-md-1 col-md-12 col-lg-8">
               <h1>Your {' '}
                 <a
                   href={user.event.homepage}
@@ -374,21 +376,20 @@ class UserProfile extends React.Component<Props> {
                   {user.event.name}
                 </a>
                 {' '} Application</h1>
-              <h5 className="pt-3">{user.event.thirdPartyText}</h5>
+              <h5 className={`pt-3 ${tPT ? 'd-block' : 'd-none'}`}>{tPT}</h5>
             </div>
-
           </div>
-          <div
-            className={`user-profile__apply ${pristine ?
-            'user-profile__apply--hidden' : ''}`}
-          >
-            <input
-              type="submit"
-              value="Update"
-              className="btn rounded-button rounded-button--small mb-3 mb-md-0"
-              disabled={pristine || submitting}
-            />
-          </div>
+        </div>
+        <div
+          className={`user-profile__apply ${pristine ?
+          'user-profile__apply--hidden' : ''}`}
+        >
+          <input
+            type="submit"
+            value="Update"
+            className="btn rounded-button rounded-button--small mb-3 mb-md-0"
+            disabled={pristine || submitting}
+          />
         </div>
 
         <div className="user-profile__form">
