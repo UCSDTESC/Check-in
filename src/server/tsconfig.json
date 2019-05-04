@@ -2,7 +2,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "../../dist/server-root",
-    "rootDir": ".",
+    "rootDir": "../",
     "sourceMap": true,
     "module": "commonjs",
     "target": "es6",

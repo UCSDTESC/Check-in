@@ -20,8 +20,7 @@
     "start": "./node_modules/.bin/gulp",
     "migrate": "./node_modules/.bin/mm migrate",
     "rollback": "./node_modules/.bin/mm down",
-    "heroku-postbuild": "npm run migrate && ./node_modules/.bin/gulp prod --production",
-    "build-server": "tsc -p ./src/server"
+    "heroku-postbuild": "npm run migrate && ./node_modules/.bin/gulp prod --production"
   },
   "homepage": "https://github.com/UCSDTESC/Check-in#readme",
   "dependencies": {
@@ -117,7 +116,7 @@
     "superagent-no-cache": "^0.1.1",
     "superagent-prefix": "0.0.2",
     "throng": "^4.0.0",
-    "ts-node-dev": "^1.0.0-pre.32",
+    "ts-node": "^8.1.0",
     "tsconfig-paths": "^3.8.0",
     "tslint": "^5.15.0",
     "tslint-loader": "^3.5.4",
@@ -171,7 +170,6 @@
     "@types/victory": "^31.0.14",
     "bcrypt-nodejs": "0.0.3",
     "browser-sync": "^2.18.13",
-    "source-map-support": "^0.5.12",
-    "ts-node": "^8.1.0"
+    "source-map-support": "^0.5.12"
   }
 }
