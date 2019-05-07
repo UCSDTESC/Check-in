@@ -18,7 +18,7 @@ import PrivateUserRoute from './PrivateUserRoute';
 import { ApplicationDispatch } from './actions';
 import AdminLogout from './auth/admin/Logout';
 import { finishAuthorisation, authoriseAdmin, logoutAdmin } from './auth/admin/actions';
-import ConfirmPage from './auth/user/Confirm';;
+import ConfirmPage from './auth/user/Confirm';
 import UserLogout from './auth/user/Logout';
 import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
 import AdminLayout from './layouts/admin';
