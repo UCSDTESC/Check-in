@@ -66,7 +66,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: NewAdminModalProps) 
 interface NewAdminModalProps {
   open: boolean;
   toggle: () => void;
-  lockRole?: string;
+  lockRole?: Role;
   formName?: string;
 }
 
@@ -156,6 +156,7 @@ class NewAdminModal extends React.Component<Props, NewAdminModalState> {
                               value={role}
                               className="sd-form__pricing-input sd-form__pricing-input--short"
                               disabled={lockRole ? role !== lockRole : false}
+                              checked={lockRole ? role === lockRole : false}
                             />
                             <label className="sd-form__label sd-form__pricing-label">
                               {role}
