@@ -1,27 +1,5 @@
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:8.9
-      - image: circleci/mongo:3.4-ram
-    environment:
-      - MONGODB_URI: "mongodb://localhost:27017/checkin"
-      - NODE_ENV: "test"
-    steps:
-      - checkout
-      - restore_cache:
-          key: package-cache-{{checksum "package.json"}}
-      - run: 
-          name: Install NPM
-          command: npm install
-      - save_cache:
-          key: package-cache-{{checksum "package.json"}}
-          paths:
-            - node_modules
-      - run:
-          name: Migrate DB
-          command: npm run migrate
-
   test:
     docker:
       - image: circleci/node:8.9
@@ -40,8 +18,11 @@ jobs:
           paths:
             - node_modules
       - run:
-          name: Test
+          name: Test Suite
           command: ./node_modules/.bin/gulp test
+      - run:
+          name: Migrate DB
+          command: npm run migrate
 
   deploy:
     docker:
@@ -65,10 +46,7 @@ workflows:
   version: 2
   test_and_deploy:
     jobs:
-      - build
-      - test:
-          requires:
-            - build
+      - test
       - deploy:
           requires:
             - test

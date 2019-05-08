@@ -24,8 +24,11 @@
   }
 
   &__hello {
-    margin-bottom: 3rem;
     flex: 1;
+
+    @include media-breakpoint-down(md) {
+      margin-bottom: 2rem;
+    }
 
     @include media-breakpoint-down(sm) {
       font-size: 1.75rem;
@@ -45,6 +48,10 @@
       transition: display 0s linear 0.2s, opacity 0.2s linear;
       opacity: 0;
       display: none;
+    }
+
+    @include media-breakpoint-down(md) {
+      margin-bottom: 1rem;
     }
   }
 

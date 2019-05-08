@@ -4,6 +4,7 @@
   &__content {
     flex: 1;
     transition: flex 0.15s linear;
+    min-height: 100vh;
 
     &--logged-out {
       flex: 0;

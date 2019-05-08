@@ -1,1 +1,1 @@
-web: node src/server/index.js
+web: ./node_modules/.bin/ts-node -P ./src/server/tsconfig.json -r tsconfig-paths/register ./src/server/main.ts

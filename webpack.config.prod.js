@@ -9,12 +9,13 @@ const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
+  context: path.join(__dirname),
   entry: {
     vendor: [
       '@babel/polyfill'
     ],
     main: [
-      path.join(__dirname, 'src/assets/js/main.tsx')
+      path.join(__dirname, 'src/client/main.tsx')
     ],
   },
   output: {
@@ -60,7 +61,8 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     alias: {
-      '~': path.join(__dirname, '/src/assets/js')
+      '~': path.join(__dirname, '/src/client'),
+      '@Shared': path.join(__dirname, '/src/shared')
     }
   },
   module: {
