@@ -1,5 +1,5 @@
 import { UserModel } from '@Models/User';
-import { EventModel, EventDocument } from '@Models/event';
+import { EventModel, EventDocument } from '@Models/Event';
 import { EventStatistics } from '@Shared/api/Responses';
 import { Container, Service, Inject } from 'typedi';
 

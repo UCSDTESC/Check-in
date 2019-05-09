@@ -2,7 +2,7 @@ import { Logger } from '@Config/Logging';
 import { DownloadModel, DownloadDocument } from '@Models/Download';
 import { EventDocument } from '@Models/Event';
 import { UserModel, UserDocument } from '@Models/User';
-import { AdminModel } from '@Models/admin';
+import { AdminModel } from '@Models/Admin';
 import { Admin, Download } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
 import moment = require('moment');

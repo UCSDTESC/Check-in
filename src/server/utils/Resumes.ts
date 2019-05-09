@@ -1,4 +1,4 @@
-import { EventDocument } from '@Models/event';
+import { EventDocument } from '@Models/Event';
 
 /**
  * Generate a list of query conditions for all applicants with publicly

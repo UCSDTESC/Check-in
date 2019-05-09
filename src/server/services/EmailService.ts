@@ -1,7 +1,7 @@
 import { Logger } from '@Config/Logging';
 import { createTESCEmail, createEventEmail } from '@Config/Mailer';
 import { UserModel, UserDocument } from '@Models/User';
-import { EventModel } from '@Models/event';
+import { EventModel } from '@Models/Event';
 import { TESCAccount, TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import { Response, Request } from 'express';
 import * as csv from 'fast-csv';

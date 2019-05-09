@@ -1,7 +1,7 @@
 import { Logger } from '@Config/Logging';
 import { QuestionModel, QuestionDocument } from '@Models/Question';
 import { UserModel } from '@Models/User';
-import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/event';
+import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { Admin, TESCEvent, Question, TESCEventOptions, TESCAccount } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';

@@ -1,4 +1,4 @@
-import { AdminModel, AdminDocument } from '@Models/admin';
+import { AdminModel, AdminDocument } from '@Models/Admin';
 import { Admin } from '@Shared/ModelTypes';
 import { RegisterAdminRequest } from '@Shared/api/Requests';
 import { JWTAdminAuthToken } from '@Shared/api/Responses';

@@ -1,6 +1,6 @@
 import { Logger } from '@Config/Logging';
 import { UserModel, UserDocument } from '@Models/User';
-import { EventModel } from '@Models/event';
+import { EventModel } from '@Models/Event';
 import { Response } from 'express';
 import * as csv from 'fast-csv';
 import { Parser } from 'json2csv';
