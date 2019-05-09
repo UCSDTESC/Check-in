@@ -18,8 +18,11 @@ jobs:
           paths:
             - node_modules
       - run:
-          name: Test Suite
+          name: React Test Suite
           command: ./node_modules/.bin/gulp test
+      - run:
+          name: Compile Server Test
+          command: npm run test-server
       - run:
           name: Migrate DB
           command: npm run migrate
