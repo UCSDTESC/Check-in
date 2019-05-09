@@ -2,7 +2,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: circleci/node:10.15
+      - image: circleci/node:8.9
       - image: circleci/mongo:3.4-ram
     environment:
       - MONGODB_URI: "mongodb://localhost:27017/checkin"
@@ -29,7 +29,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/node:10.15
+      - image: circleci/node:8.9
     environment:
       HEROKU_APP_NAME: tesc-checkin
     steps:
