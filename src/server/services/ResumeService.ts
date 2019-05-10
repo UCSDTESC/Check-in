@@ -4,7 +4,7 @@ import { UserDocument } from '@Models/User';
 import { Response } from 'express';
 import { Parser } from 'json2csv';
 import moment = require('moment');
-import * as generatePassword from 'password-generator';
+import { generate } from 'generate-password';
 import * as S3Archiver from 's3-archiver';
 import { Service, Inject } from 'typedi';
 
@@ -48,7 +48,10 @@ export default class ResumeService {
       const S3FileNames = usersWithResumes.map(file => `${ResumeService.filePrefix}${file.resume.name}`);
 
       if (!outputFileName) {
-        outputFileName = `${moment().format('YYYYMMDDHHmmss')}-${generatePassword(12, false, /[\dA-F]/)}.zip`;
+        const fileRandom = generate({
+          length: 12,
+        });
+        outputFileName = `${moment().format('YYYYMMDDHHmmss')}-${fileRandom}.zip`;
       }
 
       zipper.localConfig.finalizing = (archive, finalizing) =>

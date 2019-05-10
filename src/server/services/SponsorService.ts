@@ -6,7 +6,7 @@ import { AdminModel } from '@Models/Admin';
 import { Admin, Download } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
 import moment = require('moment');
-import * as generatePassword from 'password-generator';
+import { generate } from 'generate-password';
 import { Service, Inject } from 'typedi';
 
 import ResumeService from './ResumeService';
@@ -70,8 +70,11 @@ export default class SponsorService {
     Logger.info(`Started zipping [${download._id}] ${users.length} users for ${requester.username}`);
 
     try {
+      const fileRandom = generate({
+        length: 12,
+      });
       const outputFileName =
-        `${requester.username}-${moment().format('YYYYMMDDHHmmss')}-${generatePassword(12, false, /[\dA-F]/)}.zip`;
+        `${requester.username}-${moment().format('YYYYMMDDHHmmss')}-${fileRandom}.zip`;
       const s3ZippedFile: any = await this.ResumeService.startZip(users, outputFileName);
 
       download.accessUrl = s3ZippedFile.Location;

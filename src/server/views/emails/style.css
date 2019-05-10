@@ -29,6 +29,11 @@ h1 {
   margin-bottom: 5px;
 }
 
+.accident-text {
+  font-size: 14px;
+  line-height: 1;
+}
+
 .logo {
   width: 128px;
   height: 128px;
