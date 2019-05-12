@@ -136,38 +136,40 @@ class UsersPage extends React.Component<Props, UsersPageState> {
     }
 
     return (
-      <div className="d-flex flex-column h-100 p-3">
-        <div className="row">
-          <div className="col-12">
-            <h1>
-              <Link to={`/admin/events/${event.alias}`}>
-                {event.name}
-              </Link> Users</h1>
+      <div className="page page--admin users-page d-flex flex-column h-100">
+        <div className="container-fluid">
+          <div className="row">
+            <div className="col-12">
+              <h1>
+                <Link to={`/admin/events/${event.alias}`}>
+                  {event.name}
+                </Link> Users</h1>
+            </div>
+            <div className="col-md-6">
+              <ColumnEditor
+                available={availableColumns}
+                columns={activeColumns}
+                onAddColumn={this.onAddColumn}
+                onDeleteColumn={this.onRemoveColumn}
+              />
+            </div>
+            <div className="col-md-6">
+              <h4>Tools</h4>
+              <button
+                className="btn rounded-button rounded-button--small"
+                onClick={this.loadUsers}
+              >
+                <i className="fa fa-refresh" />&nbsp;Refresh
+              </button>
+            </div>
           </div>
-          <div className="col-md-6">
-            <ColumnEditor
-              available={availableColumns}
-              columns={activeColumns}
-              onAddColumn={this.onAddColumn}
-              onDeleteColumn={this.onRemoveColumn}
-            />
-          </div>
-          <div className="col-md-6">
-            <h4>Tools</h4>
-            <button
-              className="btn rounded-button rounded-button--small"
-              onClick={this.loadUsers}
-            >
-              <i className="fa fa-refresh" />&nbsp;Refresh
-            </button>
-          </div>
+          <UserList
+            users={users}
+            columns={activeColumns}
+            onUserUpdate={this.onUserUpdate}
+            event={event}
+          />
         </div>
-        <UserList
-          users={users}
-          columns={activeColumns}
-          onUserUpdate={this.onUserUpdate}
-          event={event}
-        />
       </div>
     );
   }
