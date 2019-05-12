@@ -13,7 +13,7 @@ export interface TabPage {
   icon: string;
   name: string;
   anchor: string;
-  render: (props: Props) => JSX.Element;
+  render: () => JSX.Element;
 }
 
 export interface TabularPageState extends AlertPageState {
@@ -38,7 +38,7 @@ export default class TabularPage<P extends Props, S extends TabularPageState> ex
       return;
     }
 
-    const {activeTab} = this.state;
+    const { activeTab } = this.state;
     hash = hash.substring(1);
 
     if (hash !== activeTab.anchor) {
@@ -46,7 +46,7 @@ export default class TabularPage<P extends Props, S extends TabularPageState> ex
       if (matchingTab === undefined) {
         return;
       }
-      this.setState({activeTab: matchingTab});
+      this.setState({ activeTab: matchingTab });
     }
   };
 
@@ -55,8 +55,8 @@ export default class TabularPage<P extends Props, S extends TabularPageState> ex
   }
 
   renderActiveTab() {
-    const {activeTab} = this.state;
-    return activeTab.render(this.props);
+    const { activeTab } = this.state;
+    return activeTab.render();
   }
 }
 
@@ -67,7 +67,7 @@ interface TabularPageNavProps {
 
 export class TabularPageNav extends React.Component<TabularPageNavProps> {
   render() {
-    const {tabPages, activeTab, children} = this.props;
+    const { tabPages, activeTab, children } = this.props;
 
     return (
       <div className="row tab-page__container">

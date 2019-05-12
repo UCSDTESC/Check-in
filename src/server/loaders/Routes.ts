@@ -12,7 +12,7 @@ export default class RoutesLoader extends Loader {
   public static async initialiseLoader(app: express.Application) {
 
     // Development Hot-Middleware
-    if (Config.NodeEnv === 'development') {
+    if (Config.IsDev) {
       const webpack = require('webpack');
       const webpackConfig = require('../../../webpack.config.js');
 

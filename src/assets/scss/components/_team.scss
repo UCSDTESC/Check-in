@@ -1,0 +1,136 @@
+.team {
+  $confirmed-color: $default-green;
+  $rejected-color: $default-red;
+  $waitlisted-color: $default-blue;
+  $unconfirmed-color: $default-purple;
+  $unmatching-color: $default-yellow;
+  
+  $status-colors: (
+    "confirmed": $confirmed-color,
+    "rejected": $rejected-color,
+    "waitlisted": $waitlisted-color,
+    "unconfirmed": $unconfirmed-color,
+    "unmatched": $unmatching-color,
+  );
+  
+  $status-light-colors: (
+    "confirmed": lighten($confirmed-color, 40%),
+    "rejected": lighten($rejected-color, 25%),
+    "waitlisted": lighten($waitlisted-color, 25%),
+    "unconfirmed": lighten($unconfirmed-color, 25%),
+    "unmatched": lighten($unmatching-color, 21%),
+  );
+  
+  $status-text: (
+    "confirmed": 'Confirmed',
+    "rejected": 'Rejected',
+    "waitlisted": 'Waitlisted',
+    "unconfirmed": 'Admitted',
+    "unmatched": 'Mixed',
+  );
+  
+  @mixin status-highlight-border($status, $color) {
+    color: $color;
+    border-color: $color;
+    background-color: map-get($status-light-colors, $status);
+  }
+  
+  flex: 1 0 auto;
+  max-width: 18rem;
+  border-color: $admin-blue;
+  margin: 0.5rem;
+  
+  @mixin modifier-elements($status, $color, $light-color, $text) {
+    &--#{$status} {
+      border-color: $color;
+      
+      .team__title {
+        color: $color;
+      }
+      
+      .team__indicator {
+        @include status-highlight-border($status, $color); 
+        
+        &::before {
+          text-align: center;
+          width: 100%;
+          content: $text;
+        }
+      }
+      
+      .team__member {
+        background-color: $color;
+      }
+    }
+  }
+
+  @each $status, $color in $status-colors {
+    @include modifier-elements($status, $color,
+      map-get($status-light-colors, $status),
+      map-get($status-text, $status)
+    );
+  }
+
+  &__container {
+    background: $white;
+    display: flex;
+    flex-basis: 15rem;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+    justify-content: space-evenly;
+  }
+  
+  &__card {
+    padding: 1rem;
+  }
+  
+  &__title {
+    color: $admin-blue;
+    display: flex;
+    align-items: center;
+  }
+  
+  &__name {
+    flex-grow: 1;
+  }
+  
+  &__indicator {
+    font-size: 0.8rem;
+    border-radius: 0.2rem;
+    border: 2px solid;
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  &__member {
+    border: 2px solid $white;
+    border-radius: 100%;
+    height: 3rem;
+    width: 3rem;
+    font-size: 0.9rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: $white;
+    
+    &:hover {
+      cursor: pointer;
+    }
+    
+    &:not(:first-child) {
+      margin-left: -0.8rem;
+    }
+    
+    @mixin status-background-color($status, $color) {
+      &--#{$status} {
+        background-color: $color !important;
+      }
+    }
+    
+    @each $status, $color in $status-colors {
+      @include status-background-color($status, $color);
+    }
+  }
+}

@@ -1,0 +1,44 @@
+.teams-filters {
+  background: $white;
+  padding: 1rem;
+  
+  &--secondary {
+    background: $admin-background-blue;
+  }
+  
+  &--border {
+    border-bottom: 1px solid $medium-gray;
+  }
+  
+  &__button {
+    border: 1px solid $primary-color;
+    background: $white;
+    
+    &:hover {
+      color: $white;
+      background: $primary-color;
+    }
+    
+    &--active, &--new {
+      color: $white;
+      background: $primary-color;
+    }
+    
+    &--new {     
+      &::before {
+        content: "\F067";
+        font-family: 'FontAwesome';
+      }
+    }
+  }
+  
+  &__filter {
+    border: 1px solid $primary-color;
+    background: $white;
+    
+    &::before {
+      content: "\F00D";
+      font-family: 'FontAwesome';
+    }
+  }
+}

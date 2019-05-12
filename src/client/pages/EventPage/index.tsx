@@ -1,3 +1,5 @@
+import { TESCTeam, UserStatus } from '@Shared/ModelTypes';
+import { ObjectID } from 'bson';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
@@ -12,14 +14,17 @@ import { ApplicationState } from '~/reducers';
 
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
 
-import { addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert,
-  addEventDangerAlert } from './actions';
+import {
+  addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert,
+  addEventDangerAlert
+} from './actions';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
 import ActionsTab from './tabs/ActionsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
+import TeamsTab from './tabs/TeamsTab';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -54,6 +59,7 @@ export type Props = RouteProps & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & EventPageProps;
 
 interface EventPageState extends TabularPageState {
+  teams: TESCTeam[];
 }
 
 class EventPage extends TabularPage<Props, EventPageState> {
@@ -62,31 +68,67 @@ class EventPage extends TabularPage<Props, EventPageState> {
       icon: 'wrench',
       name: 'Actions',
       anchor: 'actions',
-      render: this.renderActions,
+      render: this.renderActions.bind(this),
     } as TabPage,
     {
       icon: 'bar-chart',
       name: 'Statistics',
       anchor: 'statistics',
-      render: this.renderStatistics,
+      render: this.renderStatistics.bind(this),
     } as TabPage,
+    {
+      icon: 'users',
+      name: 'Teams',
+      anchor: 'teams',
+      render: this.renderTeams.bind(this),
+    },
     {
       icon: 'star',
       name: 'Administrators',
       anchor: 'administrators',
-      render: this.renderAdministrators,
+      render: this.renderAdministrators.bind(this),
     } as TabPage,
     {
       icon: 'cog',
       name: 'Settings',
       anchor: 'settings',
-      render: this.renderSettings,
+      render: this.renderSettings.bind(this),
     } as TabPage,
   ];
 
   state: Readonly<EventPageState> = {
     activeTab: this.tabPages[0],
     alerts: [],
+    teams: [{
+      _id: 'abc123' as any,
+      code: 'ABCD',
+      name: 'Test Team',
+      teammates: [{
+        firstName: 'Mitch',
+        lastName: 'Jones',
+        status: UserStatus.Confirmed,
+      } as any,
+      {
+        firstName: 'Davie',
+        lastName: 'Jones',
+        status: UserStatus.Unconfirmed,
+      } as any],
+    },
+    {
+      _id: 'abc124' as any,
+      code: 'ABCE',
+      name: 'Test Team 2',
+      teammates: [{
+        firstName: 'George',
+        lastName: 'Jones',
+        status: UserStatus.Unconfirmed,
+      } as any,
+      {
+        firstName: 'Buff',
+        lastName: 'Jones',
+        status: UserStatus.Unconfirmed,
+      } as any],
+    }],
   };
 
   /**
@@ -94,13 +136,13 @@ class EventPage extends TabularPage<Props, EventPageState> {
    * @param {Date} timestamp The timestamp key associated with the alert.
    */
   dismissAlert = (timestamp: Date) => {
-    const {event, removeEventAlert} = this.props;
+    const { event, removeEventAlert } = this.props;
     removeEventAlert(event.alias, timestamp);
   };
 
   componentDidMount() {
     super.componentDidMount();
-    const {eventAlias} = this.props.match.params;
+    const { eventAlias } = this.props.match.params;
 
     loadEventStatistics(eventAlias)
       .then(res => {
@@ -121,37 +163,46 @@ class EventPage extends TabularPage<Props, EventPageState> {
    * Renders the event tab for actions.
    * @returns {Component} The action tab.
    */
-  renderActions(props: Props) {
-    return (<ActionsTab {...props} />);
+  renderActions() {
+    return (<ActionsTab {...this.props} />);
   }
 
   /**
    * Renders the event tab for statistics.
    * @returns {Component} The statistics tab.
    */
-  renderStatistics(props: Props) {
-    return (<StatisticsTab {...props} />);
+  renderStatistics() {
+    return (<StatisticsTab {...this.props} />);
+  }
+
+  /**
+   * Renders the event tab for editing teams.
+   * @returns {Component} The teams tab.
+   */
+  renderTeams() {
+    const { teams } = this.state;
+    return (<TeamsTab teams={teams} {...this.props} />);
   }
 
   /**
    * Renders the event tab for administrators.
    * @returns {Component} The administrators tab.
    */
-  renderAdministrators(props: Props) {
-    return (<AdministratorsTab {...props} />);
+  renderAdministrators() {
+    return (<AdministratorsTab {...this.props} />);
   }
 
   /**
    * Renders the event tab for settings.
    * @returns {Component} The settings tab.
    */
-  renderSettings(props: Props) {
-    return (<SettingsTab {...props} />);
+  renderSettings() {
+    return (<SettingsTab {...this.props} />);
   }
 
   render() {
-    const {event, statistics, alerts} = this.props;
-    const {activeTab} = this.state;
+    const { event, statistics, alerts } = this.props;
+    const { activeTab } = this.state;
     if (!event || !statistics) {
       return (
         <Loading />
@@ -192,7 +243,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
                 View All Users
               </Link>
 
-              <CheckinStatistics event={event} statistics={statistics}/>
+              <CheckinStatistics event={event} statistics={statistics} />
               <ResumeStatistics
                 event={event}
                 statistics={statistics}
@@ -214,18 +265,18 @@ class EventPage extends TabularPage<Props, EventPageState> {
             activeTab={activeTab}
           >
             {isThirdParty &&
-            <div className="ml-auto event-page__third-party my-auto">
-                  Third Party Event
+              <div className="ml-auto event-page__third-party my-auto">
+                Third Party Event
               <span className="m-2">
-                <FA name="question-circle" id={'ThirdPartyTooltip'} />
-                <UncontrolledTooltip
-                  placement="right"
-                  target={'ThirdPartyTooltip'}
-                >
-                  This event is not run by TESC.
-                </UncontrolledTooltip>
-              </span>
-            </div>}
+                  <FA name="question-circle" id={'ThirdPartyTooltip'} />
+                  <UncontrolledTooltip
+                    placement="right"
+                    target={'ThirdPartyTooltip'}
+                  >
+                    This event is not run by TESC.
+                  </UncontrolledTooltip>
+                </span>
+              </div>}
           </TabularPageNav>
 
           {this.renderActiveTab()}

@@ -11,6 +11,13 @@ export enum UserStatus {
   Waitlisted = 'Waitlisted',
 }
 
+export interface TESCTeam {
+  _id?: string & ObjectID;
+  name: string;
+  code: string;
+  teammates: TESCUser[];
+}
+
 export interface UploadedFile {
   name: string;
   size: number;

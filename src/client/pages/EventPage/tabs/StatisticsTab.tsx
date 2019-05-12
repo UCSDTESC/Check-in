@@ -1,5 +1,6 @@
 import { EventStatistics } from '@Shared/api/Responses';
 import React from 'react';
+import Loading from '~/components/Loading';
 
 import EventStatisticsCharts from '../components/EventStatisticsCharts';
 import GenderStatistics from '../components/GenderStatistics';
@@ -13,9 +14,9 @@ interface StatisticsTabProps {
 export default class StatisticsTab extends EventPageTab<StatisticsTabProps> {
 
   render() {
-    const {event, statistics} = this.props;
-    if (statistics === null) {
-      return <></>;
+    const { event, statistics } = this.props;
+    if (!statistics) {
+      return <Loading />;
     }
 
     return (
