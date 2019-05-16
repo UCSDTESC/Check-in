@@ -2,9 +2,9 @@ import { TESCEvent } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { ObjectID } from 'bson';
 import { Model, Schema, Document, model } from 'mongoose';
-import * as crate from 'mongoose-crate';
-import * as S3 from 'mongoose-crate-s3';
-import * as mongooseDelete from 'mongoose-delete';
+import crate from 'mongoose-crate';
+import S3 from 'mongoose-crate-s3';
+import mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type EventDocument = TESCEvent & Document & {

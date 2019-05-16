@@ -1,5 +1,5 @@
 import * as bodyParser from 'body-parser';
-import * as compression from 'compression';
+import compression from 'compression';
 import * as express from 'express';
 import * as path from 'path';
 

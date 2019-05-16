@@ -1,10 +1,10 @@
 import ResumeService from '@Services/ResumeService';
 import { TESCUser } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
-import * as crate from 'mongoose-crate';
-import * as S3 from 'mongoose-crate-s3';
-import * as mongooseDelete from 'mongoose-delete';
-import * as mongooseSanitizer from 'mongoose-sanitizer';
+import crate from 'mongoose-crate';
+import S3 from 'mongoose-crate-s3';
+import mongooseDelete from 'mongoose-delete';
+import mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
 
 export type UserDocument = TESCUser & Document & {

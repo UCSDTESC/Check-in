@@ -4,7 +4,7 @@ import { UserDocument } from '@Models/User';
 import { Response } from 'express';
 import { Parser } from 'json2csv';
 import moment = require('moment');
-import * as generatePassword from 'password-generator';
+import generatePassword from 'password-generator';
 import * as S3Archiver from 's3-archiver';
 import { Service, Inject } from 'typedi';
 

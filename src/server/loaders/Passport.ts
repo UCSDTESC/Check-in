@@ -1,6 +1,6 @@
 import { PassportStrategy } from '@Config/Passport';
-import * as express from 'express';
-import * as passport from 'passport';
+import express from 'express';
+import passport from 'passport';
 import { Container } from 'typedi';
 
 import Loader from './Loader';

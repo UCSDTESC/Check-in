@@ -17,7 +17,7 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
     RegisterEventRequest } from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
-import * as moment from 'moment';
+import moment from 'moment';
 import { Get, JsonController, UseBefore, Res, Post, Body, Put,
   Delete, UploadedFile, BodyParam } from 'routing-controllers';
 

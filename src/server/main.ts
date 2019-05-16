@@ -1,9 +1,9 @@
-import * as express from 'express';
+import express from 'express';
 // tslint:disable-next-line:no-import-side-effect
 import 'reflect-metadata';
 // tslint:disable-next-line:no-import-side-effect no-submodule-imports
 import 'source-map-support/register';
-import * as throng from 'throng';
+import throng from 'throng';
 
 import { Config } from './config';
 import { Logger } from './config/Logging';

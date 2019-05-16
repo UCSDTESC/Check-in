@@ -5,6 +5,7 @@ import ExpressLoader from './Express';
 import MongooseLoader from './Mongoose';
 import PassportLoader from './Passport';
 import RoutesLoader from './Routes';
+import SwaggerLoader from './Swagger';
 
 export default class ApplicationLoader {
   public static async InitialiseLoaders(app: express.Application) {
@@ -16,6 +17,8 @@ export default class ApplicationLoader {
     await PassportLoader.initialiseLoader(app);
     Logger.info('Initialised Passport');
 
+    await SwaggerLoader.initialiseLoader(app);
+    Logger.info('Initialised API Docs');
     await RoutesLoader.initialiseLoader(app);
     Logger.info('Initialised Routes');
 

@@ -1,6 +1,6 @@
 import { Question } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
-import * as mongooseDelete from 'mongoose-delete';
+import mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type QuestionDocument = Question & Document;

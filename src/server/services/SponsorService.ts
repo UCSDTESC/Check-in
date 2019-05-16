@@ -1,12 +1,12 @@
 import { Logger } from '@Config/Logging';
+import { AdminModel } from '@Models/Admin';
 import { DownloadModel, DownloadDocument } from '@Models/Download';
 import { EventDocument } from '@Models/Event';
 import { UserModel, UserDocument } from '@Models/User';
-import { AdminModel } from '@Models/Admin';
 import { Admin, Download } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
 import moment = require('moment');
-import * as generatePassword from 'password-generator';
+import generatePassword from 'password-generator';
 import { Service, Inject } from 'typedi';
 
 import ResumeService from './ResumeService';

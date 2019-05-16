@@ -1,7 +1,7 @@
 import { Config } from '@Config/index';
 import { RegisterModels } from '@Models/index';
-import * as express from 'express';
-import * as mongoose from 'mongoose';
+import express from 'express';
+import mongoose from 'mongoose';
 
 import Loader from './Loader';
 

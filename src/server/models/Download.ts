@@ -1,6 +1,6 @@
 import { Download } from '@Shared/ModelTypes';
 import { Model, Schema, model, Document } from 'mongoose';
-import * as mongooseDelete from 'mongoose-delete';
+import mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type DownloadDocument = Download & Document;

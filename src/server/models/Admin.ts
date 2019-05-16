@@ -3,8 +3,8 @@ import { Admin } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
 import * as bcrypt from 'bcrypt-nodejs';
 import { HookNextFunction, Model, Schema, Document, model } from 'mongoose';
-import * as mongooseDelete from 'mongoose-delete';
-import * as mongooseSanitizer from 'mongoose-sanitizer';
+import mongooseDelete from 'mongoose-delete';
+import mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
 
 export type AdminDocument = Admin & Document & {

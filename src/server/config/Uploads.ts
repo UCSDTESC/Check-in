@@ -1,6 +1,6 @@
 import * as crypto from 'crypto';
 import { extension } from 'mime';
-import * as multer from 'multer';
+import multer from 'multer';
 
 const storage = multer.diskStorage({
   filename: (req, file, cb) => {
