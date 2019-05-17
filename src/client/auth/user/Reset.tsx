@@ -30,9 +30,9 @@ class Reset extends React.Component<Props, ResetState> {
     isErrorVisible: false,
   };
 
-  componentDidReceiveProps(newProps: Props) {
+  componentDidUpdate(newProps: Props) {
     // Show error message if new one appears
-    if (newProps.errorMessage) {
+    if (this.props.errorMessage !== newProps.errorMessage) {
       this.setState({
         isErrorVisible: true,
       });

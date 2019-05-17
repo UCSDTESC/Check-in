@@ -82,7 +82,6 @@
     "passport": "^0.4.0",
     "passport-jwt": "^3.0.1",
     "passport-local": "^1.0.0",
-    "password-generator": "^2.2.0",
     "popper.js": "^1.12.9",
     "pug": "^2.0.0-rc.4",
     "react": "^16.0.0",

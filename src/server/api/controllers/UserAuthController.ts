@@ -58,13 +58,15 @@ export class UserAuthController {
       throw new Error(ErrorMessage.NO_ACCOUNT_EXISTS());
     }
 
-    await this.EmailService.sendPasswordResetEmail(req, account);
+    const newReset = await this.UserService.createAccountReset(account);
+
+    await this.EmailService.sendPasswordResetEmail(req, account, newReset);
     return SuccessResponse.Positive;
   }
 
   @Post('/reset')
   async resetPassword(@Body() body: ResetPasswordRequest) {
-    await this.UserService.resetUserPassword(body.id, body.newPassword);
+    await this.UserService.resetUserPassword(body.resetString, body.newPassword);
     return SuccessResponse.Positive;
   }
 

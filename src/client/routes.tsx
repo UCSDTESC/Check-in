@@ -208,7 +208,7 @@ class Routes extends React.Component<Props> {
           component={this.renderUser(ForgotPage)}
         />
         <Route
-          path="/user/reset/:id"
+          path="/user/reset/:resetString"
           component={this.renderUser(ResetPage)}
         />
         <Route

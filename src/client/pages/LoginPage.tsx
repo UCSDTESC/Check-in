@@ -45,6 +45,14 @@ class LoginPage extends AlertPage<Props, LoginPageState> {
         } as PageAlert],
         redirectToReferrer: this.state.redirectToReferrer,
       };
+    } else if (props.location.hash === '#reset') {
+      this.state = {
+        alerts: [...this.state.alerts, {
+          type: AlertType.Success,
+          message: 'You have successfully reset your password',
+        } as PageAlert],
+        redirectToReferrer: this.state.redirectToReferrer,
+      };
     }
   }
 

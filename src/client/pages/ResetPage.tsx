@@ -1,5 +1,5 @@
 import React from 'react';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import Reset, { ResetFormData } from '~/auth/user/Reset';
 import { resetPassword } from '~/data/User';
 
@@ -9,7 +9,7 @@ interface ResetPageState {
 }
 
 type Props = RouteComponentProps<{
-  id: string;
+  resetString: string;
 }>;
 
 class ResetPage extends React.Component<Props, ResetPageState> {
@@ -33,8 +33,11 @@ class ResetPage extends React.Component<Props, ResetPageState> {
       };
     }
 
-    return resetPassword(this.props.match.params.id, values.newPassword)
-      .then(() => this.setState({success: 'Your password has been reset'}))
+    return resetPassword(this.props.match.params.resetString, values.newPassword)
+      .then(() => {
+        this.setState({success: 'Your password has been reset'});
+        this.props.history.push('/login#reset');
+      })
       .catch((e) => this.setState({error: e.message}));
   }
 
@@ -49,4 +52,4 @@ class ResetPage extends React.Component<Props, ResetPageState> {
   }
 }
 
-export default ResetPage;
+export default withRouter(ResetPage);
