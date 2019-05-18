@@ -16,9 +16,9 @@ The entry point to the code is in [main.tsx](https://github.com/UCSDTESC/Check-i
 ├── README.md
     * 😊
 ├── actions
-    * This directory holds application-level [Redux Actions](https://redux.js.org/basics/actions).
+    * This directory holds application-level Redux Actions.
 ├── auth
-    * This directory holds the components, [Redux Actions](https://redux.js.org/basics/actions) and [Redux Reducers](https://redux.js.org/basics/reducers) related to the login/logout functionality of both users and admins.
+    * This directory holds the components, Redux Actions and Redux Reducers related to the login/logout functionality of both users and admins.
 ├── components
     * Components that are required "globally" or in multiple places in the application are put here. Things like the Navbar, Footer, iOS Switch, Loading spinners etc. go here.
 ├── data
@@ -30,7 +30,7 @@ The entry point to the code is in [main.tsx](https://github.com/UCSDTESC/Check-i
 ├── pages
     * Each `XYZPage` in the `pages` directory is linked to a specific page of the app. Each page is it’s own directory with an `index.tsx` file in it that defines that page. Each page can also define Redux Actions, Reducers and Components that it will use in `XYZPage/actions`, `XYZPage/reducers` and `XYZPage/components
 ├── reducers
-    * This directory holds application-level [Redux Reducers](https://redux.js.org/basics/reducers).
+    * This directory holds application-level Redux Reducers.
 ├── routes.tsx
     * This directory defines react-router-dom's routes for the application. 
 ├── static
