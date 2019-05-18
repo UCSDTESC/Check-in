@@ -10,4 +10,3 @@ export enum UserStatus {
 export function isAcceptableStatus(status: UserStatus): boolean {
   return new Set([UserStatus.Unconfirmed, UserStatus.Confirmed]).has(status);
 }
-  

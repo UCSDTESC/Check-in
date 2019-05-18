@@ -1,5 +1,7 @@
 import { ObjectID } from 'bson';
+
 import { UserStatus } from '@Shared/UserStatus';
+
 import { Role } from './Roles';
 
 export interface AccountPasswordReset {

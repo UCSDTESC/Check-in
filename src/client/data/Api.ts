@@ -1,3 +1,9 @@
+import moment from 'moment';
+import request, { SuperAgentRequest } from 'superagent';
+import nocache from 'superagent-no-cache';
+import pref from 'superagent-prefix';
+import Cookies from 'universal-cookie';
+
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
@@ -9,15 +15,14 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQues
     RegisterAdminRequest,
     CheckinUserRequest,
     RegisterEventRequest,
-    RegisterUserRequest, 
-    AcceptanceEmailRequest} from '@Shared/api/Requests';
-import { SuccessResponse, ColumnResponse, RegisterUserResponse, EmailExistsResponse } from '@Shared/api/Responses';
-import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
-import moment from 'moment';
-import request, { SuperAgentRequest } from 'superagent';
-import nocache from 'superagent-no-cache';
-import pref from 'superagent-prefix';
-import Cookies from 'universal-cookie';
+    RegisterUserRequest,
+    AcceptanceEmailRequest } from '@Shared/api/Requests';
+import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse,
+  SuccessResponse,
+  ColumnResponse,
+  RegisterUserResponse,
+  EmailExistsResponse } from '@Shared/api/Responses';
+
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
 import { ApplyPageFormData } from '~/pages/ApplyPage';
 import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
@@ -429,7 +434,7 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
       .use(nocache)
   );
 
-export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) => 
+export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) =>
   promisify<{}>(
     request
       .post(`/email/acceptance/${event.alias}`)
@@ -437,4 +442,4 @@ export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) =>
       .send({userEmail: user.account.email} as AcceptanceEmailRequest)
       .use(apiPrefix)
       .use(nocache)
-  );  
+  );

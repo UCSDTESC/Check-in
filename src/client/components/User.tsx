@@ -7,7 +7,7 @@ import React from 'react';
 import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
-import {sendAcceptanceEmail} from '~/data/Api';
+import { sendAcceptanceEmail } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 
 import CheckboxButton from './CheckboxButton';
@@ -151,13 +151,16 @@ class User extends React.Component<Props> {
             <h3>User <small>{user._id}</small></h3>
           </div>
           <div className="col-md-6 d-flex flex-row-reverse">
-            {isAcceptableStatus(user.status) && <button className={`btn px-2 w-auto 
-                rounded-button rounded-button--small`}
-              onClick={() => this.onSendAcceptance(user, event)}
+            {isAcceptableStatus(user.status) &&
+              <button
+                className={`btn px-2 w-auto
+                  rounded-button rounded-button--small`}
+                onClick={() => this.onSendAcceptance(user, event)}
               >
               <FA name="envelope" className="mr-2" />
                 Send Acceptance
-              </button>}
+              </button>
+            }
           </div>
         </div>
         <form onSubmit={handleSubmit}>

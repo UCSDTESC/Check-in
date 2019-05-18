@@ -8,10 +8,8 @@ import EmailService from '@Services/EmailService';
 import { Role } from '@Shared/Roles';
 import { AcceptanceEmailRequest } from '@Shared/api/Requests'
 import { EventDocument } from '@Models/Event';
-import { Post, JsonController, UseBefore, Param, Body } from 'routing-controllers';
+import { Post, JsonController, UseBefore, Req, Body } from 'routing-controllers';
 import { Request } from 'express';
-import { BodyParam, Req } from 'routing-controllers';
-import { TESCAccount } from '@Shared/ModelTypes';
 import { Admin } from '@Shared/ModelTypes';
 import { SuccessResponse } from '@Shared/api/Responses';
 

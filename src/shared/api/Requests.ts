@@ -3,7 +3,6 @@ import { QuestionType } from '@Shared/Questions';
 import { Role } from '@Shared/Roles';
 import { UserStatus } from '@Shared/UserStatus';
 
-
 export interface CheckinUserRequest {
   id: string;
 }
@@ -126,5 +125,5 @@ export interface RSVPUserRequest {
 }
 
 export interface AcceptanceEmailRequest {
-  userEmail: string
+  userEmail: string;
 }
