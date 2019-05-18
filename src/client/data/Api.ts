@@ -9,7 +9,8 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQues
     RegisterAdminRequest,
     CheckinUserRequest,
     RegisterEventRequest,
-    RegisterUserRequest } from '@Shared/api/Requests';
+    RegisterUserRequest, 
+    AcceptanceEmailRequest} from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse, RegisterUserResponse, EmailExistsResponse } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import moment from 'moment';
@@ -427,3 +428,13 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
       .use(apiPrefix)
       .use(nocache)
   );
+
+export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) => 
+  promisify<{}>(
+    request
+      .post(`/email/acceptance/${event.alias}`)
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .send({userEmail: user.account.email} as AcceptanceEmailRequest)
+      .use(apiPrefix)
+      .use(nocache)
+  );  

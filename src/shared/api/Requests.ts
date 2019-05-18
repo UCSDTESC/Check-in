@@ -1,6 +1,8 @@
-import { Question, UserStatus, TESCEventOptions, TESCUser } from '@Shared/ModelTypes';
+import { Question, TESCEventOptions, TESCUser } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role } from '@Shared/Roles';
+import { UserStatus } from '@Shared/UserStatus';
+
 
 export interface CheckinUserRequest {
   id: string;
@@ -121,4 +123,8 @@ export type UpdateUserRequest = Partial<TESCUser>;
 export interface RSVPUserRequest {
   status: boolean;
   bussing: boolean;
+}
+
+export interface AcceptanceEmailRequest {
+  userEmail: string
 }

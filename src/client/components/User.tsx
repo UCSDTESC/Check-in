@@ -1,10 +1,13 @@
 import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
+import { UserStatus, isAcceptableStatus } from '@Shared/UserStatus';
 import UUID from 'node-uuid';
 import React from 'react';
+import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
+import {sendAcceptanceEmail} from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 
 import CheckboxButton from './CheckboxButton';
@@ -135,11 +138,28 @@ class User extends React.Component<Props> {
     );
   }
 
+  onSendAcceptance(user: TESCUser, event: TESCEvent) {
+    return sendAcceptanceEmail(user, event);
+  }
+
   render() {
     const {handleSubmit, pristine, reset, submitting, event, user} = this.props;
     return (
       <div>
-        <h3>User <small>{this.props.user._id}</small></h3>
+        <div className="row">
+          <div className="col-md-6">
+            <h3>User <small>{user._id}</small></h3>
+          </div>
+          <div className="col-md-6 d-flex flex-row-reverse">
+            {isAcceptableStatus(user.status) && <button className={`btn px-2 w-auto 
+                rounded-button rounded-button--small`}
+              onClick={() => this.onSendAcceptance(user, event)}
+              >
+              <FA name="envelope" className="mr-2" />
+                Send Acceptance
+              </button>}
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-6">

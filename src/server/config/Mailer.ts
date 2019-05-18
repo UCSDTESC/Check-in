@@ -1,3 +1,4 @@
+import * as sendgrid from '@sendgrid/mail';
 import * as Email from 'email-templates';
 import * as mailer from 'nodemailer';
 import * as path from 'path';
@@ -5,6 +6,8 @@ import * as path from 'path';
 import { Config } from '.';
 
 const EMAIL_PATH = path.join(__dirname, '../views/emails');
+
+sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Node mailer
 const transporter = mailer.createTransport({
@@ -58,3 +61,6 @@ export const createEventEmail = (event) => new Email({
   },
   transport: transporter,
 });
+
+export const sendAcceptanceEmail = (msg) => 
+  sendgrid.send(msg)

@@ -2,7 +2,9 @@ import { AccountModel, AccountDocument } from '@Models/Account';
 import { AccountResetModel } from '@Models/AccountReset';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
 import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument, EDITABLE_USER_FIELDS } from '@Models/User';
-import { TESCEvent, TESCAccount, UserStatus, TESCUser, AccountPasswordReset } from '@Shared/ModelTypes';
+import { TESCEvent, TESCAccount, TESCUser, AccountPasswordReset } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
+
 import { RegisterUserRequest } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { generate } from 'generate-password';

@@ -1,8 +1,10 @@
-import { TESCUser, TESCEvent, UserStatus } from '@Shared/ModelTypes';
+import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
 import { CustomFieldProps } from '~/components/Fields';
 import FileField from '~/components/FileField';
+import { UserStatus } from '@Shared/UserStatus';
+
 
 export interface UserProfileFormData {
   gender: string;
