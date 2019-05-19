@@ -7,6 +7,7 @@ import * as Types from '../actions/types';
 
 const initialState: Admin[] = [];
 
+//Tell redux what to do when it sees ADD_ADMINS and REPLACE_ADMINS
 export default handleActions({
   [Types.ADD_ADMINS]: (state, action: ActionType<typeof addAdmins>) => ([
     ...state,

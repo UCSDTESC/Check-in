@@ -2,8 +2,14 @@ import { Logo } from '@Shared/ModelTypes';
 import React from 'react';
 
 interface HeaderProps {
+
+  //Name of the event
   name: string;
+
+  //Logo of the event 
   logo: Logo;
+
+  //Description of the event
   description: string;
 }
 

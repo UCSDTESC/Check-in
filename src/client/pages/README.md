@@ -2,6 +2,7 @@
 
 An `XYZPage` in this directory implements a page in the application. Any `XYZPage` can define redux actions in `XYZPage/actions`, reducers in `XYZPage/reducers` or components it uses in `XYZPage/components`.
 
+# Directory Tree
 ```
 ├── AdminsPage
     * [Admin with role Developer only] It shows a list of all admins in the system.
