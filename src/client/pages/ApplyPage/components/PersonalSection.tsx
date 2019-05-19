@@ -9,7 +9,11 @@ import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
+
+  //function to be called when the email changes, to check if the user exists in the database
   onEmailChange: (newEmail: string) => void;
+
+  //the current event being applied to
   event: TESCEvent;
 }
 
@@ -19,6 +23,9 @@ export enum InstitutionType {
   HighSchool = 'hs',
 }
 
+/**
+ * Override defined form data to track the data in the way the UI shows it.
+ */
 export interface PersonalSectionFormData extends RegisterUserPersonalSectionRequest {
   birthdateMonth: number;
   birthdateDay: number;
@@ -28,6 +35,13 @@ export interface PersonalSectionFormData extends RegisterUserPersonalSectionRequ
 }
 
 class PersonalSection extends ApplyPageSection<PersonalSectionFormData, PersonalSectionProps> {
+
+
+  /**
+   * Create the email component of the application.
+   * Use onBlur to check if the email exists when the user takes their focus off this field.
+   * @returns {Component} 
+   */
   createEmailField() {
     return (
       <Field
@@ -256,6 +270,10 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     );
   }
 
+  /**
+   * Creates the dropdown for a user to declare their race / ethnicity.
+   * @returns {Component}
+   */
   createDiversityOptions() {
     return (FormFields.createRow(
       FormFields.createColumn('col-md-6',

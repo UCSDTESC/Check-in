@@ -35,6 +35,7 @@ export const AlertPageAbove: React.StatelessComponent = (props) => {
  * Allows for extension with bootstrap alerts in the state.
  */
 export default class AlertPage<P, S extends AlertPageState> extends React.Component<P, S> {
+
   /**
    * Creates a new alert to render to the top of the screen.
    * @param {String} message The message to display in the alert.
@@ -52,7 +53,7 @@ export default class AlertPage<P, S extends AlertPageState> extends React.Compon
   }
 
   /**
-   * Creates a new error alert if there was a login error.
+   * Creates a new error alert if there was an error.
    * @param {PageAlert} alert The alert to display.
    * @param {String} key The given key for the element map.
    * @param {Boolean} container Determines whether the alert is wrapped in a container.
@@ -75,12 +76,21 @@ export default class AlertPage<P, S extends AlertPageState> extends React.Compon
     }
   }
 
+  /**
+   * Empties the alerts in the state.
+   */
   clearAlerts = () => {
     this.setState({
       alerts: [],
     });
   };
 
+  /**
+   * Show the alerts currently in state.
+   * @param {Boolean} container Determines whether the alert is wrapped in a container.
+   * @param {className} Override the alert with a different className.
+   * @returns {Component}
+   */
   renderAlerts = (container: boolean = false, className: string = 'alert-page__alert') => {
     return (
       <AlertPageAbove>

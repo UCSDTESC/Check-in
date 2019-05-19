@@ -46,7 +46,12 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     return <span />;
   }
 
-  // TODO: Make into a statically-typed method
+  /**
+   * Render the custom questions for this event, given the type of question to be rendered
+   * TODO: Make into a statically-typed method
+   * @param {CustomQuestions} customQuestions the custom questions of this event 
+   * @param {QuestionType} type The type of question to be rendered
+   */
   renderCustomQuestions(customQuestions: CustomQuestions, type: QuestionType) {
     let inputField: (fieldName: string, value: any, ...otherArgs: any[]) => JSX.Element | JSX.Element[] = null;
 
