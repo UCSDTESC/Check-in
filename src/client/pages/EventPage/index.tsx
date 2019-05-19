@@ -29,6 +29,8 @@ import EventForm, { EventFormData } from '../../components/EventForm';
 import createValidator from '../NewEventPage/validate';
 
 type RouteProps = RouteComponentProps<{
+
+  //the eventAlias for the event we want to render the dashboard for
   eventAlias: string;
 }>;
 
@@ -59,6 +61,15 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
 interface EventPageProps extends TabularPageProps {
 }
 
+/**
+ * This component receives props in 3 ways - 
+ * 1) The explicit props provied to it by EventPageProps
+ * 2) The redux state provided to it by mapStateToProps
+ * 3) The dispatch functions provided to it by mapDispatchToProps
+ * 
+ * So, the props of this component is the union of the return types of mapStateToProps,
+ * mapDispatchToProps and EventPageProps
+ */
 export type Props = RouteProps & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & EventPageProps;
 
@@ -66,6 +77,12 @@ interface EventPageState extends TabularPageState {
   teams: TESCTeam[];
 }
 
+/**
+ * This page renders the main page for an event.
+ * It has tabs and links to the other pages related to this event.
+ * 
+ * This component is extending from TabularPage, which has the tabbing functionality abstracted away
+ */
 class EventPage extends TabularPage<Props, EventPageState> {
   tabPages: Readonly<TabPage[]> = [
     {

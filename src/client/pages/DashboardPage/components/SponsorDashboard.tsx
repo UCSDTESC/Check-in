@@ -4,6 +4,8 @@ import React from 'react';
 import EventList from './EventList';
 
 interface SponsorDashboardProps {
+
+  //events that this sponsor is allowed to see
   events: TESCEvent[];
 }
 
