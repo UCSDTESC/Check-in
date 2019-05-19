@@ -12,10 +12,23 @@ interface AdministratorsTabProps {
 }
 
 interface AdminReference {
+
+  //the database ID of an admin
   _id: string;
+
+  //the username of an admin
   username: string;
 }
 
+/**
+ * View Administrators in this event
+ * 
+ * This tab currently has:
+ *  - View current organizers
+ *  - View current sponsors
+ *  - Create a new sponsor
+ *  - Create a new organizer
+ */
 export default class AdministratorsTab extends EventPageTab<AdministratorsTabProps> {
   /**
    * Parses from a react-select element into an admin object.
