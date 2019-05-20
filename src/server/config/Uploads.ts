@@ -1,4 +1,4 @@
-import * as crypto from 'crypto';
+import crypto from 'crypto';
 import { extension } from 'mime';
 import multer from 'multer';
 
@@ -12,5 +12,5 @@ const storage = multer.diskStorage({
 export default multer({
   storage,
   // 5MB file size
-  limits: {fileSize: 5 * 1024 * 1024},
+  limits: { fileSize: 5 * 1024 * 1024 },
 });

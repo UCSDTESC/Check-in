@@ -14,6 +14,9 @@ let browserSync = gutil.env.production ?
   undefined : require('browser-sync').create();
 
 const paths = {
+  'api-docs': [
+    'src/server/**/*.yaml',
+  ],
   server: [
     'src/server/**/*.ts',
     'src/shared/**/*.ts',
@@ -33,7 +36,7 @@ gulp.task('css', function () {
     .pipe(autoprefixer('last 4 version'))
     .pipe(gulp.dest('src/assets/public/css'))
     .pipe(cssnano())
-    .pipe(rename({suffix: '.min'}))
+    .pipe(rename({ suffix: '.min' }))
     .pipe(gulpif(!gutil.env.production, sourcemaps.write()))
     .pipe(gulp.dest('src/assets/public/css'));
 
@@ -43,7 +46,7 @@ gulp.task('css', function () {
   return stream;
 });
 
-gulp.task('tslint', function() {
+gulp.task('tslint', function () {
   return gulp.src(paths.ts)
     .pipe(tslint({
       formatter: 'stylish'
@@ -53,33 +56,33 @@ gulp.task('tslint', function() {
     }));
 });
 
-gulp.task('nodemon', ['css'], function(cb) {
+gulp.task('nodemon', ['css'], function (cb) {
   return nodemon({
-    exec: './node_modules/.bin/ts-node -P ./src/server/tsconfig.json '+
+    exec: './node_modules/.bin/ts-node -P ./src/server/tsconfig.json ' +
       '-r tsconfig-paths/register ./src/server/main.ts',
-    ext: 'ts',
-    watch: paths.server,
+    ext: 'ts yaml',
+    watch: [...paths.server, ...paths["api-docs"]],
     env: {
       'NODE_ENV': 'development',
       'TS_NODE_FILES': 'true',
       'PORT': 3000
     }
   })
-    .once('start', function() {
+    .once('start', function () {
       cb();
     })
-    .on('restart', function() {
+    .on('restart', function () {
       gulp.start('css');
     });
 });
 
-gulp.task('webpack', ['tslint'], function() {
+gulp.task('webpack', ['tslint'], function () {
   gulp.src('src/client/main.tsx')
     .pipe(webpackStream(require('./webpack.config.prod.js'), webpack))
     .pipe(gulp.dest('src/assets/public/js'));
 });
 
-gulp.task('browser-sync', ['nodemon'], function() {
+gulp.task('browser-sync', ['nodemon'], function () {
   browserSync.init(null, {
     port: 8000,
     proxy: {

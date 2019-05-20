@@ -13,6 +13,29 @@ export type AdminDocument = Admin & Document & {
 
 export type AdminModel = Model<AdminDocument>;
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Admin:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         username:
+ *           type: string
+ *           required: true
+ *         password:
+ *           type: string
+ *           required: true
+ *         role:
+ *           type: string
+ *           enum: [Admin, Developer, Sponsor, Member]
+ *         checkin:
+ *           type: boolean
+ *           default: false
+ */
+
 const AdminSchema = new Schema({
   username: {
     type: String,
@@ -29,7 +52,7 @@ const AdminSchema = new Schema({
   role: {
     type: String,
     enum: [Role.ROLE_ADMIN, Role.ROLE_DEVELOPER,
-      Role.ROLE_SPONSOR, Role.ROLE_MEMBER],
+    Role.ROLE_SPONSOR, Role.ROLE_MEMBER],
     default: Role.ROLE_MEMBER,
   },
   // Admin solely defined to check-in users
@@ -46,9 +69,9 @@ const AdminSchema = new Schema({
   lastAccessed: {
     type: Date,
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
-AdminSchema.pre<AdminDocument>('save', function(next: HookNextFunction) {
+AdminSchema.pre<AdminDocument>('save', function (next: HookNextFunction) {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
   const SALT_FACTOR = Config.SaltRounds;
@@ -73,7 +96,7 @@ AdminSchema.pre<AdminDocument>('save', function(next: HookNextFunction) {
   });
 });
 
-AdminSchema.method('comparePassword', function(candidatePassword: string,
+AdminSchema.method('comparePassword', function (candidatePassword: string,
   cb: (err: Error, isMatch?: boolean) => void) {
   // tslint:disable-next-line:no-invalid-this
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {

@@ -15,8 +15,23 @@ import { RoleAuth } from '../middleware/RoleAuth';
 export class AdminsController {
   constructor(
     private AdminService: AdminService
-  ) {}
+  ) { }
 
+  /**
+   * @swagger
+   * '/admins':
+   *   get:
+   *     summary: Get all admins
+   *     responses:
+   *       '200':
+   *         description: A list of all admins.
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: array
+   *               items:
+   *                 $ref: '#/components/schemas/Admin'
+   */
   @Get('/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   async getAllAdmins() {

@@ -8,14 +8,35 @@ import Loader from './Loader';
 export default class SwaggerLoader extends Loader {
   static options = {
     swaggerDefinition: {
-      // Like the one described here: https://swagger.io/specification/#infoObject
+      openapi: '3.0.0',
       info: {
         title: 'TESC Events User API',
-        version: '1.0.0',
         description: 'API for user information for the TESC Events website.',
+        version: '1.0.0',
+        contact: {
+          email: 'hello@tesc.ucsd.edu',
+        },
       },
+      components: {
+        securitySchemes: {
+          APIAuthorizationHeader: {
+            type: 'apiKey',
+            in: 'header',
+            name: 'Authorization',
+          },
+        },
+      },
+      security: [{
+        APIAuthorizationHeader: [],
+      }],
+      servers: [{
+        url: 'https://api.tesc.events/v2',
+      }],
     },
-    apis: [path.join(__dirname, '../api/documentation/*.yaml'), path.join(__dirname, '../api/controllers/*.ts')],
+    apis: [
+      path.join(__dirname, '../api/controllers/*.ts'),
+      path.join(__dirname, '../models/*.ts'),
+    ],
   };
 
   public static async initialiseLoader(app: express.Application) {

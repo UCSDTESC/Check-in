@@ -12,6 +12,23 @@ export type AccountDocument = TESCAccount & Document & {
 
 export type AccountModel = Model<AccountDocument>;
 
+/**
+ * @swagger
+ * components:
+ *  schemas:
+ *    User:
+ *      type: object
+ *      properties:
+ *        id:
+ *          type: integer
+ *          format: int64
+ *        name:
+ *          type: string
+ *      required:
+ *        - id
+ *        - name
+ */
+
 const AccountSchema = new Schema({
   // Declares the user's email address
   email: {
@@ -34,9 +51,9 @@ const AccountSchema = new Schema({
     type: Boolean,
     default: false,
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
-AccountSchema.pre<AccountDocument>('save', function(next: HookNextFunction) {
+AccountSchema.pre<AccountDocument>('save', function (next: HookNextFunction) {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
   const SALT_FACTOR = Config.SaltRounds;
@@ -61,7 +78,7 @@ AccountSchema.pre<AccountDocument>('save', function(next: HookNextFunction) {
   });
 });
 
-AccountSchema.method('comparePassword', function(candidatePassword: string,
+AccountSchema.method('comparePassword', function (candidatePassword: string,
   cb: (err: Error, isMatch?: boolean) => void) {
   // tslint:disable-next-line:no-invalid-this
   bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
