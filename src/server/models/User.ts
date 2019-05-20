@@ -1,5 +1,5 @@
 import ResumeService from '@Services/ResumeService';
-import { TESCUser } from '@Shared/ModelTypes';
+import { TESCUser, UserStatus } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
 import crate from 'mongoose-crate';
 import S3 from 'mongoose-crate-s3';
@@ -12,6 +12,118 @@ export type UserDocument = TESCUser & Document & {
   attach: (name: string, options: any) => Promise<UserDocument>;
 };
 export type UserModel = Model<UserDocument>;
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     UserStatus:
+ *       type: string
+ *       enum: [Rejected, Unconfirmed, Confirmed, Declined, Late, Waitlisted]
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     User:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         account:
+ *           $ref: '#/components/schemas/Account'
+ *           required: true
+ *         event:
+ *           $ref: '#/components/schemas/Event'
+ *           required: true
+ *         firstName:
+ *           type: string
+ *         lastName:
+ *           type: string
+ *         birthdate:
+ *           type: string
+ *           format: date-time
+ *         gender:
+ *           type: string
+ *         phone:
+ *           type: string
+ *         university:
+ *           type: string
+ *         highSchool:
+ *           type: string
+ *         pid:
+ *           type: string
+ *           description: A student ID.
+ *         major:
+ *           type: string
+ *         year:
+ *           type: string
+ *           description: The year the student is currently attending.
+ *         github:
+ *           type: string
+ *         website:
+ *           type: string
+ *         shareResume:
+ *           type: boolean
+ *           description: Indicates whether the student has given sponsors access to their resume.
+ *         food:
+ *           type: string
+ *           description: Food options that the student says they prefer.
+ *         diet:
+ *           type: string
+ *           description: The dietary requirements of the student.
+ *         shirtSize:
+ *           type: string
+ *         travel:
+ *           type: object
+ *           properties:
+ *             outOfState:
+ *               type: boolean
+ *             city:
+ *               type: string
+ *         availableBus:
+ *           type: string
+ *           description: The name of the bus the student has available to them.
+ *         bussing:
+ *           type: boolean
+ *           description: Indicates whether the student has chosen to take the bus option.
+ *         teammates:
+ *           type: array
+ *           description: The emails of teammates the student has indicated.
+ *           items:
+ *             type: string
+ *             format: email
+ *           minItems: 0
+ *           maxItems: 4
+ *           uniqueItems: true
+ *         status:
+ *           $ref: '#/components/schemas/UserStatus'
+ *         checkedIn:
+ *           type: boolean
+ *         sanitized:
+ *           type: booelan
+ *           description: Indicates whether the student information is ready for sponsors.
+ *         race:
+ *           type: string
+ *           description: Required by certains events hosted by MLH.
+ *         extraCurriculars:
+ *           type: string
+ *           description: A list of the student's extra curricular activities.
+ *         gpa:
+ *           type: string
+ *         majorGPA:
+ *           type: string
+ *           description: The name of the bus the student has available to them.
+ *         whyEventResponse:
+ *           type: string
+ *           description: The response to the 'Why {eventName}?' question.
+ *         customQuestionResponses:
+ *           type: object
+ *           description: A mapping of the custom question ID property to the student's responses.
+ *           additionProperties:
+ *             type: string
+ */
 
 export const UserSchema = new Schema({
   event: {
@@ -191,6 +303,7 @@ export const UserSchema = new Schema({
     trim: true,
     displayName: 'Status',
     public: true,
+    enum: Object.values(UserStatus),
   },
   // Declares that the user has checked into the event on the day
   checkedIn: {
@@ -252,7 +365,7 @@ export const UserSchema = new Schema({
     displayName: 'Why This Event?',
     public: true,
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
 UserSchema.plugin(mongooseSanitizer);
 UserSchema.plugin(crate, {
@@ -271,7 +384,7 @@ UserSchema.plugin(crate, {
   },
 });
 
-UserSchema.method('csvFlatten', function() {
+UserSchema.method('csvFlatten', function () {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
   const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
@@ -280,7 +393,7 @@ UserSchema.method('csvFlatten', function() {
     'bussing', 'teammates', 'status', 'checkedIn'];
 
   const autoFilled: any = autoFill.reduce((acc, val) => {
-    return Object.assign(acc, {[val]: user[val]});
+    return Object.assign(acc, { [val]: user[val] });
   }, {});
 
   autoFilled.outOfState = user.travel.outOfState;

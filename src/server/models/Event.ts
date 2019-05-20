@@ -13,6 +13,112 @@ export type EventDocument = TESCEvent & Document & {
 
 export type EventModel = Model<EventDocument>;
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     EventOptions:
+ *       type: object
+ *       properties:
+ *         allowHighSchool:
+ *           type: boolean
+ *           default: false
+ *         mlhProvisions:
+ *           type: boolean
+ *           default: false
+ *         allowOutOfState:
+ *           type: boolean
+ *           default: false
+ *         foodOption:
+ *           type: boolean
+ *           default: false
+ *         requireResume:
+ *           type: boolean
+ *           default: false
+ *         allowTeammates:
+ *           type: boolean
+ *           default: false
+ *         requireDiversityOption:
+ *           type: boolean
+ *           default: false
+ *         requireClassRequirement:
+ *           type: boolean
+ *           default: false
+ *         requireExtraCurriculars:
+ *           type: boolean
+ *           default: false
+ *         requireGPA:
+ *           type: boolean
+ *           default: false
+ *         requireMajorGPA:
+ *           type: boolean
+ *           default: false
+ *         requireWhyThisEvent:
+ *           type: boolean
+ *           default: false
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Event:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ *           required: true
+ *         alias:
+ *           type: boolean
+ *           required: true
+ *           description: The URL alias for the event.
+ *           example: my-event-name
+ *         organisers:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Admin'
+ *         sponsors:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Admin'
+ *         closeTime:
+ *           type: string
+ *           required: true
+ *           description: The time the event registration closes.
+ *           format: date-time
+ *         homepage:
+ *           type: string
+ *           required: true
+ *           format: uri
+ *         description:
+ *           type: string
+ *           required: true
+ *           description: A one-line description of the event.
+ *         email:
+ *           type: string
+ *           format: email
+ *           required: true
+ *           description: An organiser contact email.
+ *         checkinWaiver:
+ *           type: string
+ *           required: true
+ *           format: uri
+ *           description: A link to the waiver to show at check-in.
+ *         thirdPartyText:
+ *           type: string
+ *           required: true
+ *           description: A sentence that describes who is running the event.
+ *           example: This event is run by ABC Co.
+ *         organisedBy:
+ *           type: string
+ *           default: TESC
+ *           description: The acronym of the group organising the event.
+ *         options:
+ *           $ref: '#/components/schemas/EventOptions'
+ */
+
 export const EventSchema = new Schema({
   name: {
     type: String,
@@ -137,7 +243,7 @@ export const EventSchema = new Schema({
       ref: 'Question',
     }],
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
 EventSchema.plugin(crate, {
   storage: new S3({

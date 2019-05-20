@@ -17,6 +17,15 @@ export type AdminModel = Model<AdminDocument>;
  * @swagger
  * components:
  *   schemas:
+ *     AdminRole:
+ *       type: string
+ *       enum: [Admin, Developer, Sponsor, Member]
+ */
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
  *     Admin:
  *       type: object
  *       properties:
@@ -28,12 +37,13 @@ export type AdminModel = Model<AdminDocument>;
  *         password:
  *           type: string
  *           required: true
+ *           format: password
  *         role:
- *           type: string
- *           enum: [Admin, Developer, Sponsor, Member]
+ *           $ref: '#/components/schemas/AdminRole'
  *         checkin:
  *           type: boolean
  *           default: false
+ *           description: Determines whether the admin account is only for checking in users
  */
 
 const AdminSchema = new Schema({
@@ -51,23 +61,13 @@ const AdminSchema = new Schema({
   },
   role: {
     type: String,
-    enum: [Role.ROLE_ADMIN, Role.ROLE_DEVELOPER,
-    Role.ROLE_SPONSOR, Role.ROLE_MEMBER],
+    enum: Object.values(Role),
     default: Role.ROLE_MEMBER,
   },
   // Admin solely defined to check-in users
   checkin: {
     type: Boolean,
     default: false,
-  },
-  resetPasswordToken: {
-    type: String,
-  },
-  resetPasswordExpires: {
-    type: Date,
-  },
-  lastAccessed: {
-    type: Date,
   },
 }, { timestamps: true });
 

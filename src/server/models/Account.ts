@@ -15,18 +15,24 @@ export type AccountModel = Model<AccountDocument>;
 /**
  * @swagger
  * components:
- *  schemas:
- *    User:
- *      type: object
- *      properties:
- *        id:
- *          type: integer
- *          format: int64
- *        name:
- *          type: string
- *      required:
- *        - id
- *        - name
+ *   schemas:
+ *     Account:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         email:
+ *           type: string
+ *           required: true
+ *           format: email
+ *         password:
+ *           type: string
+ *           required: true
+ *           format: password
+ *         confirmed:
+ *           type: boolean
+ *           default: false
+ *           description: Indicates that the account email has been confirmed.
  */
 
 const AccountSchema = new Schema({

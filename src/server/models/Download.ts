@@ -6,6 +6,34 @@ import { Container } from 'typedi';
 export type DownloadDocument = Download & Document;
 export type DownloadModel = Model<DownloadDocument>;
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Download:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         fileCount:
+ *           type: integer
+ *           required: true
+ *           description: The number of files included in the download.
+ *         admin:
+ *           $ref: '#/components/schemas/Admin'
+ *           required: true
+ *         accessUrl:
+ *           type: string
+ *           description: The public URL where the download can be accessed.
+ *           format: uri
+ *         error:
+ *           type: boolean
+ *           description: Indicates whether there was an error during the download process.
+ *         fulfilled:
+ *           type: boolean
+ *           description: Indicates whether the download has been fulfilled.
+ */
+
 const DownloadSchema = new Schema({
   // Declares how many files were included in the download
   fileCount: {
@@ -32,7 +60,7 @@ const DownloadSchema = new Schema({
     default: false,
     required: [true, 'You must specify whether the download has been fulfilled'],
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
 DownloadSchema.plugin(mongooseDelete);
 
