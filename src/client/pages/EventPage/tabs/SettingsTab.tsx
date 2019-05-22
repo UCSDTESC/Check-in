@@ -1,8 +1,10 @@
 import { TESCEventOptions, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import React from 'react';
-import { updateOptions, addCustomQuestion, updateCustomQuestion,
-  deleteCustomQuestion } from '~/data/Api';
+import {
+  updateOptions, addCustomQuestion, updateCustomQuestion,
+  deleteCustomQuestion
+} from '~/data/AdminApi';
 
 import CustomQuestionsEdit from '../components/CustomQuestionsEdit';
 import EventOptionsEdit from '../components/EventOptionsEdit';
@@ -26,7 +28,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
    * @param {Object} options The new options to send to the server.
    */
   onOptionsUpdate = (options: TESCEventOptions) => {
-    const {event, addEventSuccessAlert, addEventDangerAlert} = this.props;
+    const { event, addEventSuccessAlert, addEventDangerAlert } = this.props;
 
     updateOptions(event.alias, options)
       .then(() => {
@@ -52,7 +54,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
   };
 
   onAddCustomQuestion = (type: QuestionType, question: Question) => {
-    const {event, loadAllAdminEvents, addEventDangerAlert} = this.props;
+    const { event, loadAllAdminEvents, addEventDangerAlert } = this.props;
 
     this.startCustomQuestionsLoading();
 
@@ -66,7 +68,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
   };
 
   onUpdateCustomQuestion = (question: Question) => {
-    const {event, loadAllAdminEvents, addEventDangerAlert} = this.props;
+    const { event, loadAllAdminEvents, addEventDangerAlert } = this.props;
 
     this.startCustomQuestionsLoading();
 
@@ -80,7 +82,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
   };
 
   onDeleteCustomQuestion = (type: QuestionType, question: Question) => {
-    const {event, loadAllAdminEvents, addEventDangerAlert} = this.props;
+    const { event, loadAllAdminEvents, addEventDangerAlert } = this.props;
 
     this.startCustomQuestionsLoading();
 
@@ -94,8 +96,8 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
   };
 
   render() {
-    const {event} = this.props;
-    const {customQuestionsRequests} = this.state;
+    const { event } = this.props;
+    const { customQuestionsRequests } = this.state;
 
     return (
       <div className="tab-page__contents">

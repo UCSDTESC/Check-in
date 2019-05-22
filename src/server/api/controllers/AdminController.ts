@@ -8,21 +8,25 @@ import SponsorService from '@Services/SponsorService';
 import UserService from '@Services/UserService';
 import { Admin, TESCEvent } from '@Shared/ModelTypes';
 import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest,
-    DeleteCustomQuestionRequest,
-    BulkChangeRequest,
-    UpdateEventOptionsRequest,
-    AddNewSponsorRequest,
-    AddNewOrganiserRequest,
-    RegisterEventRequest } from '@Shared/api/Requests';
+import {
+  AddCustomQuestionRequest, UpdateCustomQuestionRequest,
+  DeleteCustomQuestionRequest,
+  BulkChangeRequest,
+  UpdateEventOptionsRequest,
+  AddNewSponsorRequest,
+  AddNewOrganiserRequest,
+  RegisterEventRequest
+} from '@Shared/api/Requests';
 import { GetSponsorsResponse, EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Response } from 'express';
 import * as moment from 'moment';
-import { Get, JsonController, UseBefore, Res, Post, Body, Put,
-  Delete, UploadedFile, BodyParam } from 'routing-controllers';
+import {
+  Get, JsonController, UseBefore, Res, Post, Body, Put,
+  Delete, UploadedFile, BodyParam
+} from 'routing-controllers';
 
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
-import { SelectedEvent } from '../decorators/SelectedEvent';
+import { SelectedEventAlias } from '../decorators/SelectedEventAlias';
 import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { IsOrganiser } from '../middleware/IsOrganiser';
 import { RoleAuth } from '../middleware/RoleAuth';
@@ -37,7 +41,7 @@ export class AdminController {
     private EventService: EventService,
     private UserService: UserService,
     private CSVService: CSVService,
-  ) {}
+  ) { }
 
   @Get('/sponsors')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
@@ -74,7 +78,7 @@ export class AdminController {
 
   @Post('/events')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
-  async createNewEvent(@UploadedFile('logo', {options: Uploads}) logo: Express.Multer.File,
+  async createNewEvent(@UploadedFile('logo', { options: Uploads }) logo: Express.Multer.File,
     @BodyParam('event') event: RegisterEventRequest, @AuthorisedAdmin() admin: AdminDocument) {
     let newEvent = await this.EventService.createNewEvent(event, logo.path);
 
@@ -94,7 +98,7 @@ export class AdminController {
   @Get('/export/:eventAlias')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(ValidateEventAlias)
-  async exportUsersByEvent(@SelectedEvent() event: TESCEvent, @Res() response: Response) {
+  async exportUsersByEvent(@SelectedEventAlias() event: TESCEvent, @Res() response: Response) {
     const eventUsers = await this.UserService.getAllUsersByEvent(event);
     const flattenedUsers = eventUsers.map(user => user.csvFlatten());
 
@@ -108,7 +112,7 @@ export class AdminController {
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(IsOrganiser)
   @UseBefore(ValidateEventAlias)
-  async addCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: AddCustomQuestionRequest) {
+  async addCustomQuestion(@SelectedEventAlias() event: EventDocument, @Body() body: AddCustomQuestionRequest) {
     const newQuestion = await this.EventService.createQuestion(body.question);
     await this.EventService.addQuestionToEvent(event, newQuestion, body.type);
 
@@ -119,7 +123,7 @@ export class AdminController {
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(IsOrganiser)
   @UseBefore(ValidateEventAlias)
-  async updateCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: UpdateCustomQuestionRequest) {
+  async updateCustomQuestion(@SelectedEventAlias() event: EventDocument, @Body() body: UpdateCustomQuestionRequest) {
     await this.EventService.updateQuestion(body.question);
 
     return SuccessResponse.Positive;
@@ -129,7 +133,7 @@ export class AdminController {
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(IsOrganiser)
   @UseBefore(ValidateEventAlias)
-  async deleteCustomQuestion(@SelectedEvent() event: EventDocument, @Body() body: DeleteCustomQuestionRequest) {
+  async deleteCustomQuestion(@SelectedEventAlias() event: EventDocument, @Body() body: DeleteCustomQuestionRequest) {
     await this.EventService.removeQuestionFromEvent(event, body.question, body.type);
     await this.EventService.deleteQuestion(body.question);
 
@@ -148,7 +152,7 @@ export class AdminController {
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(IsOrganiser)
   @UseBefore(ValidateEventAlias)
-  async updateEventOptions(@SelectedEvent() event: EventDocument, @Body() body: UpdateEventOptionsRequest) {
+  async updateEventOptions(@SelectedEventAlias() event: EventDocument, @Body() body: UpdateEventOptionsRequest) {
     await this.EventService.updateEventOptions(event, body.options);
 
     return SuccessResponse.Positive;
@@ -158,7 +162,7 @@ export class AdminController {
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(IsOrganiser)
   @UseBefore(ValidateEventAlias)
-  async addSponsorToEvent(@SelectedEvent() event: EventDocument, @Body() body: AddNewSponsorRequest) {
+  async addSponsorToEvent(@SelectedEventAlias() event: EventDocument, @Body() body: AddNewSponsorRequest) {
     const sponsor = await this.AdminService.getAdminById(body.sponsorId);
     await this.EventService.addSponsorToEvent(event, sponsor);
 
@@ -169,7 +173,7 @@ export class AdminController {
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(IsOrganiser)
   @UseBefore(ValidateEventAlias)
-  async addOrganiserToEvent(@SelectedEvent() event: EventDocument, @Body() body: AddNewOrganiserRequest) {
+  async addOrganiserToEvent(@SelectedEventAlias() event: EventDocument, @Body() body: AddNewOrganiserRequest) {
     const admin = await this.AdminService.getAdminById(body.organiserId);
     await this.EventService.addOrganiserToEvent(event, admin);
 

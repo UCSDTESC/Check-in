@@ -6,7 +6,7 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { UncontrolledAlert } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { ApplicationDispatch } from '~/actions';
-import { registerNewEvent } from '~/data/Api';
+import { registerNewEvent } from '~/data/AdminApi';
 
 import { addEventSuccessAlert } from '../EventPage/actions';
 
@@ -36,12 +36,12 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
   createNewEvent = (event: NewEventFormData) => {
     registerNewEvent(event)
       .then((res: TESCEvent) => {
-        this.setState({err: null});
+        this.setState({ err: null });
         this.props.addEventSuccessAlert(res.alias, `Successfully Created ${res.name}`, 'Create Event');
         this.props.history.push('/admin/events/' + res.alias);
       })
       .catch((err) => {
-        this.setState({err: err.message});
+        this.setState({ err: err.message });
       });
   }
 
@@ -63,7 +63,7 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
             <NewEventForm
               validate={validator}
               onSubmit={this.createNewEvent}
-              initialValues={{organisedBy: 'TESC'}}
+              initialValues={{ organisedBy: 'TESC' }}
             />
           </div>
         </div>

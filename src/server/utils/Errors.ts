@@ -24,6 +24,7 @@ export const ErrorMessage = {
   INCORRECT_EMAIL_PASSWORD: () => 'Incorrect email or password',
   NO_USERS_SELECTED: () => 'There were no users selected',
   RESUME_ZIPPING_ERROR: () => 'There was an error zipping the resumes',
+  EXPECTED_QUERY_PARAM: param => `Expected query parameter not provided '${param}'`,
 
   NO_EVENT_ALIAS: () => 'Tried to fetch event without providing event alias',
   NO_REQUEST_USER: () => 'No user in the request headers',

@@ -7,13 +7,15 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadEventStatistics } from '~/data/Api';
+import { loadEventStatistics } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
 
-import { addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert,
-  addEventDangerAlert } from './actions';
+import {
+  addEventAlert, removeEventAlert, updateEventStatistics, addEventSuccessAlert,
+  addEventDangerAlert
+} from './actions';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
 import ActionsTab from './tabs/ActionsTab';
@@ -94,13 +96,13 @@ class EventPage extends TabularPage<Props, EventPageState> {
    * @param {Date} timestamp The timestamp key associated with the alert.
    */
   dismissAlert = (timestamp: Date) => {
-    const {event, removeEventAlert} = this.props;
+    const { event, removeEventAlert } = this.props;
     removeEventAlert(event.alias, timestamp);
   };
 
   componentDidMount() {
     super.componentDidMount();
-    const {eventAlias} = this.props.match.params;
+    const { eventAlias } = this.props.match.params;
 
     loadEventStatistics(eventAlias)
       .then(res => {
@@ -150,8 +152,8 @@ class EventPage extends TabularPage<Props, EventPageState> {
   }
 
   render() {
-    const {event, statistics, alerts} = this.props;
-    const {activeTab} = this.state;
+    const { event, statistics, alerts } = this.props;
+    const { activeTab } = this.state;
     if (!event || !statistics) {
       return (
         <Loading />
@@ -192,7 +194,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
                 View All Users
               </Link>
 
-              <CheckinStatistics event={event} statistics={statistics}/>
+              <CheckinStatistics event={event} statistics={statistics} />
               <ResumeStatistics
                 event={event}
                 statistics={statistics}
@@ -214,18 +216,18 @@ class EventPage extends TabularPage<Props, EventPageState> {
             activeTab={activeTab}
           >
             {isThirdParty &&
-            <div className="ml-auto event-page__third-party my-auto">
-                  Third Party Event
+              <div className="ml-auto event-page__third-party my-auto">
+                Third Party Event
               <span className="m-2">
-                <FA name="question-circle" id={'ThirdPartyTooltip'} />
-                <UncontrolledTooltip
-                  placement="right"
-                  target={'ThirdPartyTooltip'}
-                >
-                  This event is not run by TESC.
+                  <FA name="question-circle" id={'ThirdPartyTooltip'} />
+                  <UncontrolledTooltip
+                    placement="right"
+                    target={'ThirdPartyTooltip'}
+                  >
+                    This event is not run by TESC.
                 </UncontrolledTooltip>
-              </span>
-            </div>}
+                </span>
+              </div>}
           </TabularPageNav>
 
           {this.renderActiveTab()}

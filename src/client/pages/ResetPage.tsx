@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-dom';
 import Reset, { ResetFormData } from '~/auth/user/Reset';
-import { resetPassword } from '~/data/User';
+import { resetPassword } from '~/data/UserApi';
 
 interface ResetPageState {
   error: string;
@@ -27,15 +27,15 @@ class ResetPage extends React.Component<Props, ResetPageState> {
     }
 
     if (values.newPassword !== values.repeatNewPassword) {
-      this.setState({error: 'Your new passwords didn\'t match'});
+      this.setState({ error: 'Your new passwords didn\'t match' });
       return {
         repeatNewPassword: 'Your new passwords didn\'t match',
       };
     }
 
     return resetPassword(this.props.match.params.id, values.newPassword)
-      .then(() => this.setState({success: 'Your password has been reset'}))
-      .catch((e) => this.setState({error: e.message}));
+      .then(() => this.setState({ success: 'Your password has been reset' }))
+      .catch((e) => this.setState({ error: e.message }));
   }
 
   render() {

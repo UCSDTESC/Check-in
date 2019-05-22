@@ -6,7 +6,7 @@ import { CheckinUserRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
 import { Get, JsonController, UseBefore, Post, Body } from 'routing-controllers';
 
-import { SelectedEvent } from '../decorators/SelectedEvent';
+import { SelectedEventAlias } from '../decorators/SelectedEventAlias';
 import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { IsOrganiser } from '../middleware/IsOrganiser';
 import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
@@ -17,12 +17,12 @@ export class UsersController {
   constructor(
     private UserService: UserService,
     private EventService: EventService
-  ) {}
+  ) { }
 
   @Get('/:eventAlias')
   @UseBefore(IsOrganiser)
   @UseBefore(ValidateEventAlias)
-  async get(@SelectedEvent() event: EventDocument): Promise<TESCUser[]> {
+  async get(@SelectedEventAlias() event: EventDocument): Promise<TESCUser[]> {
     const users = await this.UserService.getAllUsersByEvent(event);
 
     return users;

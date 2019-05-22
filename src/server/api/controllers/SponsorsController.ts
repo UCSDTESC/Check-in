@@ -9,7 +9,7 @@ import { Get, JsonController, UseBefore, Post, Body, Res, Param } from 'routing-
 
 import { ErrorMessage } from '../../utils/Errors';
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
-import { SelectedEvent } from '../decorators/SelectedEvent';
+import { SelectedEventAlias } from '../decorators/SelectedEventAlias';
 import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
 import { IsSponsor } from '../middleware/IsSponsor';
 import { RoleAuth } from '../middleware/RoleAuth';
@@ -21,12 +21,12 @@ export class SponsorsController {
   constructor(
     private SponsorService: SponsorService,
     private UserService: UserService,
-  ) {}
+  ) { }
 
   @Get('/applicants/:eventAlias')
   @UseBefore(IsSponsor)
   @UseBefore(ValidateEventAlias)
-  async getEventApplicants(@SelectedEvent() event: EventDocument, @AuthorisedAdmin() sponsor: Admin) {
+  async getEventApplicants(@SelectedEventAlias() event: EventDocument, @AuthorisedAdmin() sponsor: Admin) {
     return await this.SponsorService.getSponsorApplicantsByEvent(event);
   }
 

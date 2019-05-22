@@ -16,7 +16,7 @@ import { UserAuthorisation } from '../middleware/UserAuthorisation';
 import { UserLogin } from '../middleware/UserLogin';
 import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
 import Uploads from '@Config/Uploads';
-import { SelectedEvent } from '../decorators/SelectedEvent';
+import { SelectedEventAlias } from '../decorators/SelectedEventAlias';
 import { EventDocument } from '@Models/Event';
 import { UserDocument } from '@Models/User';
 
@@ -24,7 +24,7 @@ import { UserDocument } from '@Models/User';
 export class UserController {
   constructor(
     private UserService: UserService
-  ) {}
+  ) { }
 
   @Get('/events')
   @UseBefore(UserAuthorisation)
@@ -37,8 +37,8 @@ export class UserController {
   @UseBefore(ValidateEventAlias)
   async updateUser(
     @AuthorisedUser() account: TESCAccount,
-    @UploadedFile('resume', {options: Uploads, required: false}) resume: Express.Multer.File,
-    @SelectedEvent() event: EventDocument,
+    @UploadedFile('resume', { options: Uploads, required: false }) resume: Express.Multer.File,
+    @SelectedEventAlias() event: EventDocument,
     @BodyParam('user') body: UpdateUserRequest): Promise<TESCUser> {
     const user = await this.UserService.getUserApplication(event, account);
     await this.UserService.updateUserEditables(user, body, resume);
@@ -49,7 +49,7 @@ export class UserController {
   @Post('/rsvp/:eventAlias')
   @UseBefore(UserAuthorisation)
   @UseBefore(ValidateEventAlias)
-  async userRSVP(@SelectedEvent() event: EventDocument, @AuthorisedUser() account: TESCAccount,
+  async userRSVP(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount,
     @Body() body: RSVPUserRequest) {
     const user = await this.UserService.getUserApplication(event, account);
 

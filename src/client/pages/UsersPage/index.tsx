@@ -6,7 +6,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadAllUsers, loadColumns } from '~/data/Api';
+import { loadAllUsers, loadColumns } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 import { Column } from '~/static/Types';
 
@@ -50,7 +50,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
   };
 
   componentDidMount() {
-    const {event, loadedAvailableColumns} = this.props;
+    const { event, loadedAvailableColumns } = this.props;
 
     if (!event) {
       showLoading();
@@ -91,14 +91,14 @@ class UsersPage extends React.Component<Props, UsersPageState> {
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    const {showLoading, hideLoading} = this.props;
+    const { showLoading, hideLoading } = this.props;
     const eventAlias = this.props.match.params.eventAlias;
 
     showLoading();
     loadAllUsers(eventAlias)
       .then((res: TESCUser[]) => {
         hideLoading();
-        return this.setState({users: res});
+        return this.setState({ users: res });
       });
   }
 
@@ -108,7 +108,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
   onUserUpdate = (user: TESCUser) => {
     this.props.updateUser(user)
       .then(() => {
-        const {users} = this.state;
+        const { users } = this.state;
 
         this.setState({
           users: [
@@ -126,8 +126,8 @@ class UsersPage extends React.Component<Props, UsersPageState> {
     this.props.removeColumn(column)
 
   render() {
-    const {event, activeColumns, availableColumns} = this.props;
-    const {users} = this.state;
+    const { event, activeColumns, availableColumns } = this.props;
+    const { users } = this.state;
 
     if (!event) {
       return (

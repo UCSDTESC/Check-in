@@ -1,26 +1,26 @@
 import React from 'react';
-import { loadSponsors } from '~/data/Api';
+import { loadSponsors } from '~/data/AdminApi';
 
 import AdminSelect from './AdminSelect';
 import StyledSelect from './StyledSelect';
 
 export default class SponsorSelect extends AdminSelect {
   componentDidMount() {
-      loadSponsors()
+    loadSponsors()
       .then(sponsors => this.setState({
         // Map them into the required react-select format
         admins: sponsors
-        .map(sponsor => ({
-          value: sponsor._id,
-          label: sponsor.username,
-        })),
+          .map(sponsor => ({
+            value: sponsor._id,
+            label: sponsor.username,
+          })),
       }))
       .catch(console.error);
   }
 
   render() {
-    const {admins} = this.state;
-    const {onChange, value, exclude} = this.props;
+    const { admins } = this.state;
+    const { onChange, value, exclude } = this.props;
 
     const excludeIds: string[] = exclude.map(sponsor => sponsor._id);
     return (

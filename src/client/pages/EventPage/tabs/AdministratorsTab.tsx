@@ -1,7 +1,7 @@
 import React from 'react';
 import { AdminSelectType } from '~/components/AdminSelect';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
-import { addNewSponsor, addNewOrganiser, registerAdmin } from '~/data/Api';
+import { addNewSponsor, addNewOrganiser, registerAdmin } from '~/data/AdminApi';
 
 import OrganiserList from '../components/OrganiserList';
 import SponsorList from '../components/SponsorList';
@@ -35,7 +35,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
    * @param {Object} newSponsor The new admin object to add as a sponsor.
    */
   onAddNewSponsor = (newSponsor: AdminReference) => {
-    const {event, addEventDangerAlert, loadAllAdminEvents} = this.props;
+    const { event, addEventDangerAlert, loadAllAdminEvents } = this.props;
 
     return addNewSponsor(event.alias, newSponsor._id)
       .then(loadAllAdminEvents)
@@ -48,7 +48,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
    * @param {Object} newSponsor The new admin object to add as a organiser.
    */
   onAddNewOrganiser = (newOrganiser: AdminReference) => {
-    const {event, addEventDangerAlert, loadAllAdminEvents} = this.props;
+    const { event, addEventDangerAlert, loadAllAdminEvents } = this.props;
 
     return addNewOrganiser(event.alias, newOrganiser._id)
       .then(loadAllAdminEvents)
@@ -62,7 +62,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
    * @param {Object} newSponsor The new admin object to add as a sponsor.
    */
   registerNewSponsor = (newAdmin: NewAdminModalFormData) => {
-    const {event, addEventDangerAlert} = this.props;
+    const { event, addEventDangerAlert } = this.props;
 
     return registerAdmin(newAdmin)
       .then((admin) => this.onAddNewSponsor({
@@ -78,7 +78,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
    * @param {Object} newSponsor The new admin object to add as a organiser.
    */
   registerNewOrganiser = (newAdmin: NewAdminModalFormData) => {
-    const {event, addEventDangerAlert} = this.props;
+    const { event, addEventDangerAlert } = this.props;
 
     return registerAdmin(newAdmin)
       .then((admin) => this.onAddNewOrganiser({
@@ -89,7 +89,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
   };
 
   render() {
-    const {event} = this.props;
+    const { event } = this.props;
 
     return (
       <div className="tab-page__contents">

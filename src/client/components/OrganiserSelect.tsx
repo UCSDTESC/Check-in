@@ -1,7 +1,7 @@
 import { Admin } from '@Shared/ModelTypes';
 import { Role, getRoleRank } from '@Shared/Roles';
 import React from 'react';
-import { loadAllAdmins } from '~/data/Api';
+import { loadAllAdmins } from '~/data/AdminApi';
 
 import AdminSelect from './AdminSelect';
 import StyledSelect from './StyledSelect';
@@ -12,8 +12,8 @@ export default class OrganiserSelect extends AdminSelect {
       .then(admins => admins.filter(admin => getRoleRank(admin.role) ===
         getRoleRank(Role.ROLE_ADMIN)))
       .then(admins => this.setState({
-          // Map them into the required react-select format
-          admins: admins
+        // Map them into the required react-select format
+        admins: admins
           .map((admin: Admin) => ({
             value: admin._id,
             label: admin.username,
@@ -23,8 +23,8 @@ export default class OrganiserSelect extends AdminSelect {
   }
 
   render() {
-    const {admins} = this.state;
-    const {onChange, value, exclude} = this.props;
+    const { admins } = this.state;
+    const { onChange, value, exclude } = this.props;
 
     const excludeIds: string[] = exclude.map(sponsor => sponsor._id);
     return (

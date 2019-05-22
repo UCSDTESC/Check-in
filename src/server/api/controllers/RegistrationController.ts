@@ -9,7 +9,7 @@ import { Request } from 'express';
 import { Post, JsonController, UseBefore, Param, BodyParam, UploadedFile, Req, Get } from 'routing-controllers';
 
 import { ErrorMessage } from '../../utils/Errors';
-import { SelectedEvent } from '../decorators/SelectedEvent';
+import { SelectedEventAlias } from '../decorators/SelectedEventAlias';
 import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
 
 @JsonController('/register')
@@ -18,13 +18,13 @@ export class RegistrationController {
     private EmailService: EmailService,
     private EventService: EventService,
     private UserService: UserService,
-  ) {}
+  ) { }
 
   @Post('/:eventAlias')
   @UseBefore(ValidateEventAlias)
   async registerNewUser(
-    @UploadedFile('resume', {options: Uploads, required: false}) resume: Express.Multer.File,
-    @SelectedEvent() event: EventDocument,
+    @UploadedFile('resume', { options: Uploads, required: false }) resume: Express.Multer.File,
+    @SelectedEventAlias() event: EventDocument,
     @BodyParam('user') body: RegisterUserRequest,
     @Req() request: Request
   ): Promise<RegisterUserResponse> {

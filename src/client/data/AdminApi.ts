@@ -1,16 +1,19 @@
-import { TESCUser, Admin, TESCEventOptions, Question, Download,
-    TESCEvent } from '@Shared/ModelTypes';
+import {
+  TESCUser, Admin, TESCEventOptions, Question, Download,
+  TESCEvent
+} from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest,
-    BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest,
-    AddNewOrganiserRequest,
-    DownloadResumesRequest,
-    DeleteAdminRequest,
-    RegisterAdminRequest,
-    CheckinUserRequest,
-    RegisterEventRequest,
-    RegisterUserRequest } from '@Shared/api/Requests';
-import { SuccessResponse, ColumnResponse, RegisterUserResponse, EmailExistsResponse } from '@Shared/api/Responses';
+import { ADMIN_API_PREFIX } from '@Shared/api/Paths';
+import {
+  AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest,
+  BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest,
+  AddNewOrganiserRequest,
+  DownloadResumesRequest,
+  RegisterAdminRequest,
+  CheckinUserRequest,
+  RegisterEventRequest
+} from '@Shared/api/Requests';
+import { SuccessResponse, ColumnResponse, JWTAdminAuth } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import moment from 'moment';
 import request, { SuperAgentRequest } from 'superagent';
@@ -18,15 +21,12 @@ import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import Cookies from 'universal-cookie';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
-import { ApplyPageFormData } from '~/pages/ApplyPage';
 import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
 import CookieTypes from '~/static/Cookies';
 
 import { promisify } from './helpers';
 
-const API_URL_PREFIX = '/api';
-
-const apiPrefix = pref(API_URL_PREFIX);
+const adminApiPrefix = pref(ADMIN_API_PREFIX);
 const cookies = new Cookies();
 
 /**
@@ -36,11 +36,26 @@ const cookies = new Cookies();
 export const authorised = () =>
   promisify<{}>(
     request
-      .get('/auth/authorised')
+      .get('/authorised')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
+
+/**
+ * Requests a login for the given administrator.
+ * @param  {String} username The username of the login.
+ * @param  {String} password The password of the login.
+ * @returns {Object} A superagent request object.
+ */
+export const login = (username: string, password: string) => {
+  return promisify<JWTAdminAuth>(request
+    .post('/login')
+    .set('Content-Type', 'application/json')
+    .send({ username, password })
+    .use(adminApiPrefix)
+    .use(nocache));
+};
 
 /**
  * Request a list of all users.
@@ -52,7 +67,7 @@ export const loadAllUsers = (alias: string) =>
     request
       .get(`/users/${alias}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -65,7 +80,7 @@ export const loadEventStatistics = (alias: string) =>
     request
       .get(`/statistics/${alias}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -77,55 +92,7 @@ export const loadAllAdmins = () =>
     request
       .get('/admins')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
-      .use(nocache)
-  );
-
-/**
- * Checks whether the email is already in use.
- * @param {String} email The user email.
- * @returns {Promise} A promise of the request.
- */
-export const checkUserExists = (email: string) =>
-  promisify<EmailExistsResponse>(
-    request
-      .get(`/register/verify/${email}`)
-      .use(apiPrefix)
-  );
-
-/**
- * Confirms a user account by a given ID.
- * @param {String} accountId The ID of the user account.
- * @returns {Promise} A promise of the request.
- */
-export const confirmAccount = (accountId: string) =>
-  promisify<SuccessResponse>(
-    request
-      .get(`/register/confirm/${accountId}`)
-      .use(apiPrefix)
-  );
-
-/**
- * Request a list of all events that is available to the public.
- * @returns {Promise} A promise of the request.
- */
-export const loadAllPublicEvents = () =>
-  promisify<EventsWithStatisticsResponse>(
-    request
-      .get('/events')
-      .use(apiPrefix)
-      .use(nocache)
-  );
-
-/**
- * Requests event information based on a given event alias.
- * @param {String} eventAlias The event alias.
- */
-export const loadEventByAlias = (eventAlias: string) =>
-  promisify<TESCEvent>(
-    request
-      .get(`/events/${eventAlias}`)
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -138,7 +105,7 @@ export const loadAllEvents = () =>
     request
       .get('/admin/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -152,7 +119,7 @@ export const loadAllApplicants = (eventAlias: string) =>
     request
       .get(`/sponsors/applicants/${eventAlias}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -168,7 +135,7 @@ export const updateUser = (eventAlias: string, user: TESCUser) =>
       .post(`/users/${eventAlias}`)
       .send(user)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -183,34 +150,11 @@ export const checkinUser = (id: string, eventAlias: string) =>
       .post(`/users/checkin/${eventAlias}`)
       .send({ id } as CheckinUserRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
-/**
- * Request to register a new user.
- * @param {String} eventAlias The alias for the event to register for.
- * @param  {Object} user The user fields to register.
- * @returns {Promise} A promise of the request.
- */
-export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
-  const { resume, ...clearUser } = user;
-  const postObject: RegisterUserRequest = Object.assign({}, clearUser);
-
-  let baseReq = request
-    .post(`/register/${eventAlias}`)
-    .use(apiPrefix)
-    .field('user', JSON.stringify({
-      ...postObject,
-    }));
-
-  if (resume) {
-    baseReq = baseReq.attach('resume', resume[0]);
-  }
-  return promisify<RegisterUserResponse>(baseReq);
-};
-
 export const registerNewEvent = (event: NewEventFormData) => {
-  const {logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields} = event;
+  const { logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields } = event;
   const closeTime: string = moment(new Date(
     closeTimeYear,
     closeTimeMonth - 1,
@@ -225,7 +169,7 @@ export const registerNewEvent = (event: NewEventFormData) => {
         closeTime,
       } as RegisterEventRequest))
       .attach('logo', logo[0])
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 };
@@ -241,7 +185,7 @@ export const registerAdmin = (admin: NewAdminModalFormData) =>
       .post('/admins')
       .send(admin as RegisterAdminRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -252,10 +196,9 @@ export const registerAdmin = (admin: NewAdminModalFormData) =>
 export const deleteAdmin = (adminId: string) =>
   promisify<SuccessResponse>(
     request
-      .delete('/admins')
-      .send({ id: adminId } as DeleteAdminRequest)
+      .delete(`/admins/${adminId}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -269,7 +212,7 @@ export const downloadResumes = (applicants: string[]) =>
       .post('/sponsors/download')
       .send({ applicants } as DownloadResumesRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -282,7 +225,7 @@ export const pollDownload = (downloadId: string) =>
     request
       .get(`/sponsors/download/${downloadId}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -295,7 +238,7 @@ export const exportUsers = (eventAlias: string): SuperAgentRequest =>
   request
     .get(`/admin/export/${eventAlias}`)
     .set('Authorization', cookies.get(CookieTypes.admin.token))
-    .use(apiPrefix);
+    .use(adminApiPrefix);
 
 /**
  * Bulk updates a list of users to all have the same status.
@@ -309,7 +252,7 @@ export const bulkChange = (users: string[], status: string) =>
       .post('/admin/bulkChange')
       .send({ users, status } as BulkChangeRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -324,7 +267,7 @@ export const updateOptions = (eventAlias: string, options: TESCEventOptions) =>
       .post(`/admin/update/${eventAlias}`)
       .send({ options } as UpdateEventOptionsRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
   );
 
 /**
@@ -336,7 +279,7 @@ export const loadColumns = () =>
     request
       .get('/admin/columns')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -349,7 +292,7 @@ export const loadSponsors = () =>
     request
       .get('/admin/sponsors')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -363,7 +306,7 @@ export const addNewSponsor = (eventAlias: string, sponsorId: string) =>
       .post(`/admin/addSponsor/${eventAlias}`)
       .send({ sponsorId: sponsorId } as AddNewSponsorRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -377,7 +320,7 @@ export const addNewOrganiser = (eventAlias: string, adminId: string) =>
       .post(`/admin/addOrganiser/${eventAlias}`)
       .send({ organiserId: adminId } as AddNewOrganiserRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -393,7 +336,7 @@ export const addCustomQuestion = (eventAlias: string, question: Question, type: 
       .post(`/admin/customQuestion/${eventAlias}`)
       .send({ question, type } as AddCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -408,7 +351,7 @@ export const updateCustomQuestion = (eventAlias: string, question: Question) =>
       .put(`/admin/customQuestion/${eventAlias}`)
       .send({ question } as UpdateCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );
 
@@ -424,6 +367,6 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
       .delete(`/admin/customQuestion/${eventAlias}`)
       .send({ question, type } as DeleteCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(apiPrefix)
+      .use(adminApiPrefix)
       .use(nocache)
   );

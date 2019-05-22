@@ -6,7 +6,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Loading from '~/components/Loading';
 import NavHeader from '~/components/NavHeader';
-import { registerUser, loadEventByAlias, checkUserExists } from '~/data/Api';
+import { registerUser, loadEventByAlias, checkUserExists } from '~/data/UserApi';
 
 import Header from './components/Header';
 import PersonalSection, { PersonalSectionFormData, InstitutionType } from './components/PersonalSection';
@@ -48,8 +48,10 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     const {eventAlias} = this.props.match.params;
     loadEventByAlias(eventAlias)
       .then((res) => {
+        // Take the first (and only event) from the response
+        const thisEvent = res.events[0];
         this.setState({
-          event: (res as TESCEvent),
+          event: thisEvent,
         });
       })
       .catch((err) => {

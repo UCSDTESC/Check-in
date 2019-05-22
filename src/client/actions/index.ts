@@ -3,8 +3,9 @@ import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { createStandardAction, ActionType } from 'typesafe-actions';
-import * as Api from '~/data/Api';
-import * as UserApi from '~/data/User';
+import User from '~/components/User';
+import * as AdminApi from '~/data/AdminApi';
+import * as UserApi from '~/data/UserApi';
 import { ApplicationState } from '~/reducers';
 import { FilterOption } from '~/static/Types';
 
@@ -65,7 +66,7 @@ const mapUserCountIntoEvents = (response: EventsWithStatisticsResponse): TESCEve
 export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
-      Api.loadAllEvents()
+      AdminApi.loadAllEvents()
         .then(res => {
           const mapped = mapUserCountIntoEvents(res);
           dispatch(replaceAdminEvents(mapped));
@@ -77,7 +78,7 @@ export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
 export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
-      Api.loadAllPublicEvents()
+      UserApi.loadAllPublicEvents()
         .then(res => {
           const mapped = mapUserCountIntoEvents(res);
           dispatch(replaceEvents(mapped));

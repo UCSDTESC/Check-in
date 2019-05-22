@@ -1,21 +1,21 @@
 import { AdminDocument } from '@Models/Admin';
 import AdminService from '@Services/AdminService';
 import { Role, getRoleRank } from '@Shared/Roles';
-import { RegisterAdminRequest, DeleteAdminRequest } from '@Shared/api/Requests';
+import { RegisterAdminRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore, Post, Body, Delete } from 'routing-controllers';
+import { Get, JsonController, UseBefore, Post, Body, Delete, Param } from 'routing-controllers';
 
-import { ErrorMessage } from '../../utils/Errors';
-import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
-import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
-import { RoleAuth } from '../middleware/RoleAuth';
+import { ErrorMessage } from '../../../utils/Errors';
+import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
+import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
+import { RoleAuth } from '../../middleware/RoleAuth';
 
 @JsonController('/admins')
 @UseBefore(AdminAuthorisation)
 export class AdminsController {
   constructor(
     private AdminService: AdminService
-  ) {}
+  ) { }
 
   @Get('/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
@@ -35,10 +35,10 @@ export class AdminsController {
     return newAdmin;
   }
 
-  @Delete('/')
+  @Delete('/:adminId')
   @UseBefore(RoleAuth(Role.ROLE_DEVELOPER))
-  async deleteAdmin(@Body() body: DeleteAdminRequest) {
-    await this.AdminService.deleteAdmin(body.id);
+  async deleteAdmin(@Param('adminId') adminId: string) {
+    await this.AdminService.deleteAdmin(adminId);
     return SuccessResponse.Positive;
   }
 }

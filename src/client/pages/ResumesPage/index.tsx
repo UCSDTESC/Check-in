@@ -5,7 +5,7 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { RouteComponentProps } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { ApplicationDispatch } from '~/actions';
-import { loadAllApplicants } from '~/data/Api';
+import { loadAllApplicants } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 import { applyResumeFilter } from '~/static/ResumeFilter';
 
@@ -41,10 +41,10 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
     isCompacted: false,
   };
 
-  toggleCompacted = () => this.setState({isCompacted: !this.state.isCompacted});
+  toggleCompacted = () => this.setState({ isCompacted: !this.state.isCompacted });
 
   componentDidMount() {
-    const {showLoading, hideLoading, replaceApplicants} = this.props;
+    const { showLoading, hideLoading, replaceApplicants } = this.props;
 
     showLoading();
 
@@ -63,8 +63,8 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
   }
 
   render() {
-    const {applicants} = this.props;
-    const {isCompacted} = this.state;
+    const { applicants } = this.props;
+    const { isCompacted } = this.state;
 
     return (
       <div className="resume-body">

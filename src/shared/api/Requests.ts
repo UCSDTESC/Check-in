@@ -56,10 +56,6 @@ export interface RegisterAdminRequest {
   role: Role;
 }
 
-export interface DeleteAdminRequest {
-  id: string;
-}
-
 export interface RegisterEventRequest {
   name: string;
   alias: string;

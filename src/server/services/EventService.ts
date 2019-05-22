@@ -1,7 +1,7 @@
 import { Logger } from '@Config/Logging';
+import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { QuestionModel, QuestionDocument } from '@Models/Question';
 import { UserModel } from '@Models/User';
-import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { Admin, TESCEvent, Question, TESCEventOptions, TESCAccount } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';
@@ -87,7 +87,7 @@ export default class EventService {
    */
   async accountHasApplied(account: TESCAccount, event: EventDocument) {
     const user = await this.UserModel
-      .findOne({event: event, account: account})
+      .findOne({ event: event, account: account })
       .exec();
 
     return !!user;
@@ -119,7 +119,7 @@ export default class EventService {
    * @param sponsor The admin in the sponsor list for the events.
    */
   async getEventsBySponsor(sponsor: Admin): Promise<EventDocument[]> {
-    return this.getPopulatedEvents(true, this.EventModel.find({sponsors: sponsor}));
+    return this.getPopulatedEvents(true, this.EventModel.find({ sponsors: sponsor }));
   }
 
   /**
@@ -127,16 +127,19 @@ export default class EventService {
    * @param organiser The admin in the organiser list for the events.
    */
   async getEventsByOrganiser(organiser: Admin): Promise<EventDocument[]> {
-    return this.getPopulatedEvents(true, this.EventModel.find({organisers: organiser}));
+    return this.getPopulatedEvents(true, this.EventModel.find({ organisers: organiser }));
   }
 
   /**
    * Get the event associated with the given alias with populated fields that are publicly accessible.
-   * @param eventAlias The alias to query.
+   * @param eventId The event ID to query.
    */
-  async getPublicPopulatedEventByAlias(eventAlias: string) {
-    const query = this.EventModel.findOne({alias: eventAlias});
-    return await this.getPopulatedEvents(false, query);
+  async getPublicPopulatedEvents(eventId?: string) {
+    if (eventId) {
+      const query = this.EventModel.findOne({ _id: eventId });
+      return await this.getPopulatedEvents(false, query);
+    }
+    return await this.getPopulatedEvents(false, this.EventModel.find());
   }
 
   /**
@@ -185,7 +188,7 @@ export default class EventService {
     }
 
     const event: EventDocument = await this.EventModel
-      .findOne({alias: eventAlias})
+      .findOne({ alias: eventAlias })
       .populate('organisers');
     if (event === null) {
       return false;
@@ -209,7 +212,7 @@ export default class EventService {
     }
 
     const event: EventDocument = await this.EventModel
-      .findOne({alias: eventAlias})
+      .findOne({ alias: eventAlias })
       .populate('sponsors');
     if (event === null) {
       return false;
@@ -225,19 +228,19 @@ export default class EventService {
    * @param type The type of question that is being added.
    */
   async addQuestionToEvent(event: EventDocument, question: QuestionDocument, type: QuestionType) {
-    const {customQuestions} = event;
+    const { customQuestions } = event;
 
     switch (type) {
-    case QuestionType.QUESTION_LONG:
-    case QuestionType.QUESTION_SHORT:
-    case QuestionType.QUESTION_CHECKBOX:
-      if (!customQuestions[type]) {
-        customQuestions[type] = [];
-      }
-      customQuestions[type].push(question);
-      break;
-    default:
-      throw new Error(ErrorMessage.INVALID_QUESTION_TYPE());
+      case QuestionType.QUESTION_LONG:
+      case QuestionType.QUESTION_SHORT:
+      case QuestionType.QUESTION_CHECKBOX:
+        if (!customQuestions[type]) {
+          customQuestions[type] = [];
+        }
+        customQuestions[type].push(question);
+        break;
+      default:
+        throw new Error(ErrorMessage.INVALID_QUESTION_TYPE());
     }
 
     return event.save();
@@ -251,7 +254,7 @@ export default class EventService {
    */
   async removeQuestionFromEvent(event: EventDocument, question: Question, type: QuestionType) {
     const typeKey = `customQuestions.${type}`;
-    return this.EventModel.findOneAndUpdate({_id: event._id}, {
+    return this.EventModel.findOneAndUpdate({ _id: event._id }, {
       $pull: {
         [typeKey]: question._id,
       },
@@ -295,11 +298,11 @@ export default class EventService {
    */
   async createNewEvent(request: RegisterEventRequest, logoPath: string) {
     const newEvent = new this.EventModel({
-        ...request,
-      } as TESCEvent);
+      ...request,
+    } as TESCEvent);
 
     try {
-      await newEvent.attach('logo', {path: logoPath});
+      await newEvent.attach('logo', { path: logoPath });
     } catch (err) {
       throw new Error(ErrorMessage.DATABASE_ERROR());
     }

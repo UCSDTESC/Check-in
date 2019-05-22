@@ -11,7 +11,7 @@ import { Get, JsonController, UseBefore, Res, Req, Post, Body } from 'routing-co
 
 import { ErrorMessage } from '../../utils/Errors';
 import { AuthorisedUser } from '../decorators/AuthorisedUser';
-import { SelectedEvent } from '../decorators/SelectedEvent';
+import { SelectedEventAlias } from '../decorators/SelectedEventAlias';
 import { UserAuthorisation } from '../middleware/UserAuthorisation';
 import { UserLogin } from '../middleware/UserLogin';
 import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
@@ -21,7 +21,7 @@ export class UserAuthController {
   constructor(
     private EmailService: EmailService,
     private UserService: UserService
-  ) {}
+  ) { }
 
   /**
    * Signs a user with the JWT secret.
@@ -71,7 +71,7 @@ export class UserAuthController {
   @Get('/current/:eventAlias')
   @UseBefore(UserAuthorisation)
   @UseBefore(ValidateEventAlias)
-  async getApplication(@SelectedEvent() event: EventDocument, @AuthorisedUser() account: TESCAccount) {
+  async getApplication(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount) {
     const application = await this.UserService.getUserApplication(event, account, true);
 
     if (!application) {
