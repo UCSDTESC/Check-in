@@ -19,8 +19,10 @@ export class AdminsController {
 
   /**
    * @swagger
-   * '/admins':
+   * '/admin/admins':
    *   get:
+   *     tags:
+   *       - Admins
    *     summary: Get all admins
    *     responses:
    *       '200':
