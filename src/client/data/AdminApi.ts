@@ -103,7 +103,7 @@ export const loadAllAdmins = () =>
 export const loadAllEvents = () =>
   promisify<EventsWithStatisticsResponse>(
     request
-      .get('/admin/events')
+      .get('/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
@@ -162,7 +162,7 @@ export const registerNewEvent = (event: NewEventFormData) => {
   )).toISOString(true);
   return promisify<TESCEvent>(
     request
-      .post('/admin/events')
+      .post('/events')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .field('event', JSON.stringify({
         ...eventWithoutFields,
@@ -236,7 +236,7 @@ export const pollDownload = (downloadId: string) =>
  */
 export const exportUsers = (eventAlias: string): SuperAgentRequest =>
   request
-    .get(`/admin/export/${eventAlias}`)
+    .get(`/export/${eventAlias}`)
     .set('Authorization', cookies.get(CookieTypes.admin.token))
     .use(adminApiPrefix);
 
@@ -249,7 +249,7 @@ export const exportUsers = (eventAlias: string): SuperAgentRequest =>
 export const bulkChange = (users: string[], status: string) =>
   promisify<SuccessResponse>(
     request
-      .post('/admin/bulkChange')
+      .post('/bulkChange')
       .send({ users, status } as BulkChangeRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
@@ -264,8 +264,8 @@ export const bulkChange = (users: string[], status: string) =>
 export const updateOptions = (eventAlias: string, options: TESCEventOptions) =>
   promisify<SuccessResponse>(
     request
-      .post(`/admin/update/${eventAlias}`)
-      .send({ options } as UpdateEventOptionsRequest)
+      .put(`/events`)
+      .send({ alias: eventAlias, options } as UpdateEventOptionsRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
   );
@@ -277,7 +277,7 @@ export const updateOptions = (eventAlias: string, options: TESCEventOptions) =>
 export const loadColumns = () =>
   promisify<ColumnResponse>(
     request
-      .get('/admin/columns')
+      .get('/columns')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
@@ -290,7 +290,7 @@ export const loadColumns = () =>
 export const loadSponsors = () =>
   promisify<GetSponsorsResponse>(
     request
-      .get('/admin/sponsors')
+      .get('/sponsors')
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
@@ -303,7 +303,7 @@ export const loadSponsors = () =>
 export const addNewSponsor = (eventAlias: string, sponsorId: string) =>
   promisify<SuccessResponse>(
     request
-      .post(`/admin/addSponsor/${eventAlias}`)
+      .post(`/addSponsor/${eventAlias}`)
       .send({ sponsorId: sponsorId } as AddNewSponsorRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
@@ -317,7 +317,7 @@ export const addNewSponsor = (eventAlias: string, sponsorId: string) =>
 export const addNewOrganiser = (eventAlias: string, adminId: string) =>
   promisify<SuccessResponse>(
     request
-      .post(`/admin/addOrganiser/${eventAlias}`)
+      .post(`/addOrganiser/${eventAlias}`)
       .send({ organiserId: adminId } as AddNewOrganiserRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
@@ -333,7 +333,7 @@ export const addNewOrganiser = (eventAlias: string, adminId: string) =>
 export const addCustomQuestion = (eventAlias: string, question: Question, type: QuestionType) =>
   promisify<SuccessResponse>(
     request
-      .post(`/admin/customQuestion/${eventAlias}`)
+      .post(`/customQuestion/${eventAlias}`)
       .send({ question, type } as AddCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
@@ -348,7 +348,7 @@ export const addCustomQuestion = (eventAlias: string, question: Question, type: 
 export const updateCustomQuestion = (eventAlias: string, question: Question) =>
   promisify<SuccessResponse>(
     request
-      .put(`/admin/customQuestion/${eventAlias}`)
+      .put(`/customQuestion/${eventAlias}`)
       .send({ question } as UpdateCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
@@ -364,7 +364,7 @@ export const updateCustomQuestion = (eventAlias: string, question: Question) =>
 export const deleteCustomQuestion = (eventAlias: string, question: Question, type: QuestionType) =>
   promisify<SuccessResponse>(
     request
-      .delete(`/admin/customQuestion/${eventAlias}`)
+      .delete(`/customQuestion/${eventAlias}`)
       .send({ question, type } as DeleteCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)

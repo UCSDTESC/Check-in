@@ -1,4 +1,4 @@
-import { Question, UserStatus, TESCEventOptions, TESCUser } from '@Shared/ModelTypes';
+import { Question, UserStatus, TESCEventOptions, TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role } from '@Shared/Roles';
 
@@ -26,6 +26,7 @@ export interface BulkChangeRequest {
 }
 
 export interface UpdateEventOptionsRequest {
+  alias: string;
   options: TESCEventOptions;
 }
 
@@ -39,6 +40,10 @@ export interface AddNewOrganiserRequest {
 
 export interface DownloadResumesRequest {
   applicants: string[];
+}
+
+export interface ExportUsersRequest {
+  alias: string;
 }
 
 export interface ForgotPasswordRequest {
