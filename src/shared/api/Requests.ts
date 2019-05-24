@@ -7,15 +7,18 @@ export interface CheckinUserRequest {
 }
 
 export interface AddCustomQuestionRequest {
+  alias: string;
   question: Question;
   type: QuestionType;
 }
 
 export interface UpdateCustomQuestionRequest {
+  alias: string;
   question: Question;
 }
 
 export interface DeleteCustomQuestionRequest {
+  alias: string;
   question: Question;
   type: QuestionType;
 }

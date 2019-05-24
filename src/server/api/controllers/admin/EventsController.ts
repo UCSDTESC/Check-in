@@ -12,8 +12,10 @@ import Uploads from '@Config/Uploads';
 import { RegisterEventRequest, UpdateEventOptionsRequest } from '@Shared/api/Requests';
 import { AdminDocument } from '@Models/Admin';
 import { ErrorMessage } from 'utils/Errors';
+import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 
 @JsonController('/events')
+@UseBefore(AdminAuthorisation)
 export class EventsController {
   constructor(
     private EventService: EventService

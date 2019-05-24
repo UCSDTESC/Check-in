@@ -78,7 +78,7 @@ export const loadAllUsers = (alias: string) =>
 export const loadEventStatistics = (alias: string) =>
   promisify<EventStatistics>(
     request
-      .get(`/statistics/${alias}`)
+      .get(`/statistics?alias=${alias}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
   );
@@ -333,8 +333,8 @@ export const addNewOrganiser = (eventAlias: string, adminId: string) =>
 export const addCustomQuestion = (eventAlias: string, question: Question, type: QuestionType) =>
   promisify<SuccessResponse>(
     request
-      .post(`/customQuestion/${eventAlias}`)
-      .send({ question, type } as AddCustomQuestionRequest)
+      .post(`/customQuestion`)
+      .send({ alias: eventAlias, question, type } as AddCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
@@ -348,8 +348,8 @@ export const addCustomQuestion = (eventAlias: string, question: Question, type: 
 export const updateCustomQuestion = (eventAlias: string, question: Question) =>
   promisify<SuccessResponse>(
     request
-      .put(`/customQuestion/${eventAlias}`)
-      .send({ question } as UpdateCustomQuestionRequest)
+      .put(`/customQuestion`)
+      .send({ alias: eventAlias, question } as UpdateCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
@@ -364,8 +364,8 @@ export const updateCustomQuestion = (eventAlias: string, question: Question) =>
 export const deleteCustomQuestion = (eventAlias: string, question: Question, type: QuestionType) =>
   promisify<SuccessResponse>(
     request
-      .delete(`/customQuestion/${eventAlias}`)
-      .send({ question, type } as DeleteCustomQuestionRequest)
+      .delete(`/customQuestion`)
+      .send({ alias: eventAlias, question, type } as DeleteCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
