@@ -26,6 +26,9 @@ interface AdminListState {
   columns: DisplayColumnMap;
 }
 
+/**
+ * This component renders a list of admins on the admins page
+ */
 export default class AdminList extends React.Component<AdminListProps, AdminListState> {
   state: Readonly<AdminListState> = {
     columns: {

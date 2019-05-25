@@ -4,11 +4,21 @@ import FA from 'react-fontawesome';
 import ToggleSwitch from '~/components/ToggleSwitch';
 
 interface CustomQuestionProps {
+
+  //the question this component describes
   question: Question;
+
+  //callback for the delete question button
   onDelete: () => void;
+
+  //callback for the questions' required switch toggle
   onChangeRequired: (newRequired: boolean) => void;
 }
 
+/**
+ * This component renders a custom question on ./SettingsTab.tsx 
+ * It handles the functionality for toggling the required field, and deleting the question.
+ */
 class CustomQuestion extends React.Component<CustomQuestionProps> {
 
   render() {

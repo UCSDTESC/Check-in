@@ -14,6 +14,9 @@ interface AdminDashboardProps {
   user: JWTAdminAuthToken;
 }
 
+/**
+ * This is the admin dashboard. It is primarily a wrapper around EventList for now.
+ */
 export default class AdminDashboard extends React.Component<AdminDashboardProps> {
 
   render() {

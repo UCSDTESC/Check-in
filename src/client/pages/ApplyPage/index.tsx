@@ -45,7 +45,7 @@ interface ApplyPageState {
 export type ApplyPageFormData = PersonalSectionFormData & ResponseSectionFormData & UserSectionFormData;
 
 /**
- * This page is the application for an event. It implements a multi page form.
+ * This page is the application for an event. It implements a multi page application form.
  */
 class ApplyPage extends React.Component<Props, ApplyPageState> {
   state: Readonly<ApplyPageState> = {

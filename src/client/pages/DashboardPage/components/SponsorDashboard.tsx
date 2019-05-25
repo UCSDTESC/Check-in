@@ -9,6 +9,10 @@ interface SponsorDashboardProps {
   events: TESCEvent[];
 }
 
+/**
+ * This is the sponsor's event list. It uses EventList's resumeLink prop to 
+ * enforce a link to the sponsor portal on clicking the card.
+ */
 export default class SponsorDashboard extends React.Component<SponsorDashboardProps> {
   render() {
     const {events} = this.props;
