@@ -6,6 +6,9 @@ import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 interface SubmittedSectionProps extends ApplyPageSectionProps {
 }
 
+/**
+ * This is the application success page
+ */
 class SubmittedSection extends ApplyPageSection<{}, SubmittedSectionProps> {
   renderTeamCode = (info: WrappedFieldProps) => (
     <div className="row justify-content-center mb-3">

@@ -16,6 +16,10 @@ interface EventListProps {
   canCreate?: boolean;
 }
 
+/**
+ * This component renders the cards for events on DashboardPage.
+ * It also has an "Add Event" button if the user is capable of user creation.
+ */
 export default class EventList extends React.Component<EventListProps> {
   render() {
     const { events, resumeLink, canCreate } = this.props;

@@ -18,6 +18,9 @@ export interface UserSectionFormData {
   confirmPassword?: string;
 }
 
+/**
+ * This is the 3rd page of the application. It handles tesc.events account creation and MLH provisions
+ */
 class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps> {
   /**
    * Create a checkbox to accept the Code of Conduct.

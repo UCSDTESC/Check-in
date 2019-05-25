@@ -34,8 +34,10 @@ export interface PersonalSectionFormData extends RegisterUserPersonalSectionRequ
   resume?: File[];
 }
 
+/**
+ * This is the first page of the event application. This handles the user's personal details.
+ */
 class PersonalSection extends ApplyPageSection<PersonalSectionFormData, PersonalSectionProps> {
-
 
   /**
    * Create the email component of the application.

@@ -21,6 +21,9 @@ export interface ResponseSectionFormData extends RegisterUserResponseSectionRequ
   city?: string;
 }
 
+/**
+ * This is the second page of the application. It handles the user's response to event-specific questions
+ */
 class ResponseSection extends ApplyPageSection<ResponseSectionFormData, ResponseSectionProps, ResponseSectionState> {
   state: Readonly<ResponseSectionState> = {
     teamState: undefined,

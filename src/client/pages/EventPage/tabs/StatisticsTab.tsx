@@ -12,6 +12,12 @@ interface StatisticsTabProps {
   statistics: EventStatistics | null;
 }
 
+/**
+ * This is the tab that shows the user statistics for an event. This tab currently has:
+ * 
+ * - Status Breakdown Piechart
+ * - Gender Breakdown Piechart
+ */
 export default class StatisticsTab extends EventPageTab<StatisticsTabProps> {
 
   render() {
