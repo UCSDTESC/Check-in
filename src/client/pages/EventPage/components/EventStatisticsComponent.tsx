@@ -7,6 +7,9 @@ interface EventStatisticsComponentProps {
   statistics: EventStatistics | null;
 }
 
+/**
+ * This is an abstraction that is used by statistics components to provide an event and statistics prop to them.
+ */
 export default class EventStatisticsComponent<P = {}, S = {}> extends
   React.Component<P & EventStatisticsComponentProps, S> {
 

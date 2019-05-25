@@ -6,6 +6,9 @@ interface CurrentEventProps {
   events: TESCEvent[];
 }
 
+/**
+ * This component shows all upcoming events with open applications
+ */
 export default class CurrentEvents extends React.Component<CurrentEventProps> {
   render() {
     const { events } = this.props;
