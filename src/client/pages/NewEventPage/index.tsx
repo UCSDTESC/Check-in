@@ -28,12 +28,22 @@ interface NewEventPageState {
   err: Error;
 }
 
+/**
+ * This page holds the form to create a new event in the system
+ */
 class NewEventPage extends React.Component<Props, NewEventPageState> {
   state: Readonly<NewEventPageState> = {
     err: null,
   };
 
+  /**
+   * Create a new event in the system
+   * 
+   * @param {NewEventFormData} event the event to be created
+   */
   createNewEvent = (event: EventFormData) => {
+
+    //send event to API
     registerNewEvent(event)
       .then((res: TESCEvent) => {
         this.setState({ err: null });

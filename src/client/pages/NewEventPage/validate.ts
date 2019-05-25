@@ -1,5 +1,7 @@
+/**
+ * New Event Form validator (Redux Form)
+ */
 const createValidator = (requireLogo = true, allowPastDates = false) => (values: any) => {
-  console.log(values)
   const errors: any = {};
 
   const required = ['name', 'alias', 'closeTimeMonth', 'closeTimeDay',
