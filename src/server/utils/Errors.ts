@@ -17,6 +17,7 @@ export const ErrorMessage = {
   EMAIL_IN_USE: () => 'This email has already been used',
   USER_NOT_REGISTERED: () => 'This user is not registered for this event',
   USER_ALREADY_REGISTERED: () => 'This account has already registered for this event',
+  CANNOT_REGISTER: () => 'You cannot register for this event',
   RESUME_UPDATE_ERROR: () => 'There was an error updating your resume',
   NO_STATUS_SENT: () => 'There was no status sent in the request',
   INSTITUTION_NOT_PROVIDED: () => 'You must provide a University or High School',

@@ -77,7 +77,8 @@ export const loadAllUsers = (eventId: string) =>
 export const loadEventStatistics = (alias: string) =>
   promisify<EventStatistics>(
     request
-      .get(`/statistics?alias=${alias}`)
+      .get(`/statistics`)
+      .query({ alias: alias })
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
   );

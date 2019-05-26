@@ -2,11 +2,12 @@ import { Logger } from '@Config/Logging';
 import { EventModel, EventSchema, EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/Event';
 import { QuestionModel, QuestionDocument } from '@Models/Question';
 import { UserModel } from '@Models/User';
-import { Admin, TESCEvent, Question, TESCEventOptions, TESCAccount } from '@Shared/ModelTypes';
+import { Admin, TESCEvent, Question, TESCEventOptions, TESCAccount, TESCUser } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role, hasRankAtLeast, hasRankEqual } from '@Shared/Roles';
 import { RegisterEventRequest } from '@Shared/api/Requests';
 import { ObjectID } from 'bson';
+import moment = require('moment');
 import { DocumentQuery, Query, Types } from 'mongoose';
 import { Service, Inject } from 'typedi';
 
@@ -316,5 +317,13 @@ export default class EventService {
     }
 
     return newEvent.save();
+  }
+
+  /**
+   * Determines whether an event's registration is still publicly open.
+   * @param event The event for which to check.
+   */
+  async isRegistrationOpen(event: EventDocument) {
+    return (!moment(event.closeTime).isBefore());
   }
 }

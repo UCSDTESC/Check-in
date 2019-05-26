@@ -2,7 +2,9 @@ import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import { USER_API_PREFIX } from '@Shared/api/Paths';
 import {
   ResetPasswordRequest, ForgotPasswordRequest, UpdateUserRequest, RSVPUserRequest,
-  RegisterUserRequest
+  RegisterUserRequest,
+  RegisterUserFields,
+  EmailExistsRequest
 } from '@Shared/api/Requests';
 import {
   SuccessResponse, EmailExistsResponse, EventsWithStatisticsResponse,
@@ -84,8 +86,9 @@ export const resetPassword = (id: string, newPassword: string) => {
  * @returns {Promise} A promise of the request.
  */
 export const getCurrentUser = (eventAlias: string) => {
-  return promisify<TESCUser>(request
-    .get(`/current/${eventAlias}`)
+  return promisify<TESCUser[]>(request
+    .get(`/user`)
+    .query({ alias: eventAlias })
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(userApiPrefix)
@@ -96,9 +99,9 @@ export const getCurrentUser = (eventAlias: string) => {
  * Get a list of events for which the user has applied.
  * @returns {Promise} A promise of the request.
  */
-export const getUserEvents = () => {
+export const getAccountEvents = (accountId: string) => {
   return promisify<TESCEvent[]>(request
-    .get('/events')
+    .get(`/account/${accountId}/events`)
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token))
     .use(userApiPrefix));
@@ -152,7 +155,8 @@ export const rsvpUser = (eventAlias: string, status: boolean, bussing: boolean) 
 export const checkUserExists = (email: string) =>
   promisify<EmailExistsResponse>(
     request
-      .get(`/register/verify/${email}`)
+      .post(`/account/exists`)
+      .send({ email } as EmailExistsRequest)
       .use(userApiPrefix)
   );
 
@@ -164,7 +168,7 @@ export const checkUserExists = (email: string) =>
 export const confirmAccount = (accountId: string) =>
   promisify<SuccessResponse>(
     request
-      .get(`/register/confirm/${accountId}`)
+      .post(`/account/${accountId}/confirm`)
       .use(userApiPrefix)
   );
 
@@ -201,14 +205,17 @@ export const loadEventByAlias = (eventAlias: string) =>
  */
 export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
   const { resume, ...clearUser } = user;
-  const postObject: RegisterUserRequest = Object.assign({}, clearUser);
+  const postObject: RegisterUserFields = Object.assign({}, clearUser);
 
   let baseReq = request
-    .post(`/register/${eventAlias}`)
+    .post(`/user`)
     .use(userApiPrefix)
     .field('user', JSON.stringify({
-      ...postObject,
-    }));
+      alias: eventAlias,
+      user: {
+        ...postObject,
+      },
+    } as RegisterUserRequest));
 
   if (resume) {
     baseReq = baseReq.attach('resume', resume[0]);

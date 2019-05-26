@@ -14,7 +14,7 @@ export const getCurrentUser = (eventAlias: string): ApplicationAction<Promise<{}
     new Promise((resolve, reject) => {
       Api.getCurrentUser(eventAlias)
         .then((user) => {
-          dispatch(updateCurrentUser(user));
+          dispatch(updateCurrentUser(user[0]));
           resolve();
         })
         .catch(reject);

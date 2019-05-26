@@ -87,10 +87,10 @@ export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
         .catch(reject);
     });
 
-export const loadUserEvents = (): ApplicationAction<Promise<{}>> =>
+export const loadAccountEvents = (accountId: string): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
-      UserApi.getUserEvents()
+      UserApi.getAccountEvents(accountId)
         .then(res => {
           dispatch(replaceUserEvents(res));
           return resolve();

@@ -75,6 +75,10 @@ export interface RegisterEventRequest {
   thirdPartyText?: string;
 }
 
+export interface EmailExistsRequest {
+  email: string;
+}
+
 export interface RegisterUserPersonalSectionRequest {
   email: string;
   firstName: string;
@@ -117,8 +121,13 @@ export interface RegisterUserUserSectionRequest {
   confirmPassword?: string;
 }
 
-export type RegisterUserRequest = RegisterUserPersonalSectionRequest &
+export type RegisterUserFields = RegisterUserPersonalSectionRequest &
   RegisterUserResponseSectionRequest & RegisterUserUserSectionRequest;
+
+export type RegisterUserRequest = {
+  alias: string;
+  user: RegisterUserFields;
+};
 
 export type UpdateUserRequest = Partial<TESCUser>;
 

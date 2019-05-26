@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { bindActionCreators } from 'redux';
-import { loadAllPublicEvents, loadUserEvents, ApplicationDispatch } from '~/actions';
+import { loadAllPublicEvents, loadAccountEvents, ApplicationDispatch } from '~/actions';
 import Hero from '~/components/Hero';
 import { ApplicationState } from '~/reducers';
 
@@ -13,6 +13,7 @@ import UserEvents from './components/UserEvents';
 const mapStateToProps = (state: ApplicationState) => {
   return {
     events: state.events,
+    user: state.user.auth.user,
     userEvents: state.user.events,
     authenticated: state.user.auth.authenticated,
   };
@@ -22,7 +23,7 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
   showLoading,
   hideLoading,
   loadAllPublicEvents,
-  loadUserEvents,
+  loadAccountEvents,
 }, dispatch);
 
 interface HomePageProps {
@@ -44,8 +45,10 @@ class HomePage extends React.Component<Props> {
    * Ensures the user is authenticated before trying to load their events.
    */
   optionalLoadUserEvents = () => {
-    if (this.props.authenticated) {
-      return this.props.loadUserEvents();
+    const { authenticated, user, loadAccountEvents } = this.props;
+
+    if (authenticated) {
+      return loadAccountEvents(user._id);
     }
     return true;
   }
@@ -60,14 +63,14 @@ class HomePage extends React.Component<Props> {
 
   currentEvents(events: TESCEvent[], small: boolean = false) {
     return (
-    <div className={small ? 'col-md-8' : 'col-12'}>
-      <CurrentEvents events={events} />
-    </div>
+      <div className={small ? 'col-md-8' : 'col-12'}>
+        <CurrentEvents events={events} />
+      </div>
     );
   }
 
   render() {
-    const {events, userEvents} = this.props;
+    const { events, userEvents } = this.props;
 
     const showSidebar = Object.values(userEvents).length > 0;
 
