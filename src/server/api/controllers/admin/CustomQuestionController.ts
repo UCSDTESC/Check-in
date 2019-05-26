@@ -15,7 +15,7 @@ import { ErrorMessage } from 'utils/Errors';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminDocument } from '@Models/Admin';
 import { Admin } from '@Shared/ModelTypes';
-import { AdminAuthorisation } from 'api/middleware/AdminAuthorisation';
+import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 
 @JsonController('/customQuestion')
 @UseBefore(AdminAuthorisation)

@@ -29,9 +29,8 @@ export class UsersController {
   }
 
   @Post('/')
-  async updateUser(@AuthorisedAdmin() admin: Admin,
-    @SelectedEventAlias() event: EventDocument, @Body() body: TESCUser) {
-    await this.EventService.isAdminOrganiser(event.alias, admin);
+  async updateUser(@AuthorisedAdmin() admin: Admin, @Body() body: TESCUser) {
+    await this.EventService.isAdminOrganiser(body.event.alias, admin);
     await this.UserService.updateUser(body);
     return SuccessResponse.Positive;
   }

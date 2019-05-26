@@ -52,16 +52,16 @@ class UsersPage extends React.Component<Props, UsersPageState> {
   componentDidMount() {
     const { event, loadedAvailableColumns } = this.props;
 
-    if (!event) {
-      showLoading();
+    showLoading();
 
+    if (!event) {
       this.props.loadAllAdminEvents()
         .catch(console.error)
+        .then(this.loadUsers)
         .finally(hideLoading);
-    }
-
-    if (!this.state.users.length) {
-      this.loadUsers();
+    } else if (!this.state.users.length) {
+      this.loadUsers()
+        .finally(hideLoading);
     }
 
     if (!loadedAvailableColumns) {
@@ -91,13 +91,10 @@ class UsersPage extends React.Component<Props, UsersPageState> {
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    const { showLoading, hideLoading } = this.props;
     const { event } = this.props;
 
-    showLoading();
-    loadAllUsers(event._id)
+    return loadAllUsers(event._id)
       .then((res: TESCUser[]) => {
-        hideLoading();
         return this.setState({ users: res });
       });
   }

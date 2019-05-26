@@ -11,7 +11,7 @@ import { ErrorMessage } from 'utils/Errors';
 import CSVService from '@Services/CSVService';
 
 @JsonController('/export')
-export class ColumnsController {
+export class ExportController {
   constructor(
     private UserService: UserService,
     private EventService: EventService,

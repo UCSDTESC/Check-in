@@ -123,14 +123,13 @@ export const loadAllSponsorUsers = (eventId: string) =>
 
 /**
  * Request an update for a given user.
- * @param  {String} eventAlias The alias of the event the user belongs to.
  * @param  {Object} user The new user object to save.
  * @returns {Promise} A promise of the request.
  */
-export const updateUser = (eventAlias: string, user: TESCUser) =>
+export const updateUser = (user: TESCUser) =>
   promisify<SuccessResponse>(
     request
-      .post(`/users/${eventAlias}`)
+      .post(`/users`)
       .send(user)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
