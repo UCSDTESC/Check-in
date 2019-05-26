@@ -40,10 +40,10 @@ export class UserController {
     @UploadedFile('resume', { options: Uploads, required: false }) resume: Express.Multer.File,
     @SelectedEventAlias() event: EventDocument,
     @BodyParam('user') body: UpdateUserRequest): Promise<TESCUser> {
-    const user = await this.UserService.getUserApplication(event, account);
+    const user = (await this.UserService.getUserApplication(account, event))[0];
     await this.UserService.updateUserEditables(user, body, resume);
 
-    return await this.UserService.getUserApplication(event, account, true);
+    return (await this.UserService.getUserApplication(account, event, true))[0];
   }
 
   @Post('/rsvp/:eventAlias')
@@ -51,9 +51,9 @@ export class UserController {
   @UseBefore(ValidateEventAlias)
   async userRSVP(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount,
     @Body() body: RSVPUserRequest) {
-    const user = await this.UserService.getUserApplication(event, account);
+    const user = (await this.UserService.getUserApplication(account, event))[0];
 
     await this.UserService.RSVPUser(user, body.status, body.bussing);
-    return await this.UserService.getUserApplication(event, account, true);
+    return await this.UserService.getUserApplication(account, event, true);
   }
 }
