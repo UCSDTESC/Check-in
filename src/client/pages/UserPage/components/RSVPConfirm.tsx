@@ -16,6 +16,9 @@ interface RSVPConfirmState {
   status: boolean;
 }
 
+/**
+ * 
+ */
 export default class RSVPConfirm extends React.Component<RSVPConfirmProps, RSVPConfirmState> {
   state: Readonly<RSVPConfirmState> = {
     page: 0,

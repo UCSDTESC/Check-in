@@ -1,4 +1,4 @@
-import { TESCUser } from '@Shared/ModelTypes';
+ import { TESCUser } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 import React from 'react';
 import { connect } from 'react-redux';
@@ -38,18 +38,30 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
 interface ResumesPageProps {
 }
 
-type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & ResumesPageProps;
+// the props of this event are the union of the react-router data, redux actions and dispatch, and the 
+// regular props of the component
+type Props = RouteComponentProps<{
+  eventAlias: string;
+}> & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & ResumesPageProps;
 
 interface ResumesPageState {
+
+  //boolean to track compact state
   isCompacted: boolean;
 }
 
+/**
+ * This is the sponsor tool that shows a list of applicants to an event and their resumes
+ */
 class ResumesPage extends React.Component<Props, ResumesPageState> {
   state: Readonly<ResumesPageState> = {
     isCompacted: false,
   };
 
-  toggleCompacted = () => this.setState({ isCompacted: !this.state.isCompacted });
+  /**
+   * Toggle to compact react state
+   */
+  toggleCompacted = () => this.setState({isCompacted: !this.state.isCompacted});
 
   componentDidMount() {
     const { showLoading, hideLoading } = this.props;
