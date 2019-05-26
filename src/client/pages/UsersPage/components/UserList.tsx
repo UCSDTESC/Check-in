@@ -1,9 +1,10 @@
 import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
-import AlertPage, { AlertPageState, PageAlert, AlertType } from '../../AlertPage';
 import React from 'react';
 import ReactTable from 'react-table';
 import User from '~/components/User';
 import { Column } from '~/static/Types';
+
+import AlertPage, { AlertPageState, PageAlert, AlertType } from '../../AlertPage';
 
 // tslint:disable-next-line
 const styles = require('react-table/react-table.css');
@@ -12,7 +13,7 @@ interface UserListProps {
   users: TESCUser[];
   columns: Column[];
   event: TESCEvent;
-  createAlert: (message: string, type: AlertType, title: string) => void; 
+  createAlert: (message: string, type: AlertType, title: string) => void;
   onUserUpdate: (newUser: TESCUser) => void;
 }
 

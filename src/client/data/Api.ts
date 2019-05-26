@@ -1,9 +1,3 @@
-import moment from 'moment';
-import request, { SuperAgentRequest } from 'superagent';
-import nocache from 'superagent-no-cache';
-import pref from 'superagent-prefix';
-import Cookies from 'universal-cookie';
-
 import { TESCUser, Admin, TESCEventOptions, Question, Download,
     TESCEvent } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
@@ -22,7 +16,11 @@ import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse,
   ColumnResponse,
   RegisterUserResponse,
   EmailExistsResponse } from '@Shared/api/Responses';
-
+import moment from 'moment';
+import request, { SuperAgentRequest } from 'superagent';
+import nocache from 'superagent-no-cache';
+import pref from 'superagent-prefix';
+import Cookies from 'universal-cookie';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
 import { ApplyPageFormData } from '~/pages/ApplyPage';
 import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
@@ -437,7 +435,7 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
 export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) =>
   promisify<SuccessResponse>(
     request
-      .post(`/email/acceptance/${event.alias}`)
+      .post(`/emails/acceptance/${event.alias}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .send({userEmail: user.account.email} as AcceptanceEmailRequest)
       .use(apiPrefix)

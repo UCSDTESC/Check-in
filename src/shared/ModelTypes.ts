@@ -1,6 +1,5 @@
-import { ObjectID } from 'bson';
-
 import { UserStatus } from '@Shared/UserStatus';
+import { ObjectID } from 'bson';
 
 import { Role } from './Roles';
 

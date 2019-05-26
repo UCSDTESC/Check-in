@@ -2,7 +2,6 @@ import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
 import { UserStatus, isAcceptableStatus } from '@Shared/UserStatus';
-import { AlertType } from '../pages/AlertPage';
 import UUID from 'node-uuid';
 import React from 'react';
 import FA from 'react-fontawesome';
@@ -10,6 +9,8 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { sendAcceptanceEmail } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
+
+import { AlertType } from '../pages/AlertPage';
 
 import CheckboxButton from './CheckboxButton';
 
@@ -148,16 +149,16 @@ class User extends React.Component<Props> {
             `Successfully sent acceptance email to ${user.account.email}`,
             AlertType.Success,
             'UsersPage'
-          )
+          );
         })
         .catch(() => {
           this.props.createAlert(
             `Something went wrong when sending acceptance email to ${user.account.email}`,
             AlertType.Danger,
             'UsersPage'
-          )
+          );
         })
-    )
+    );
   }
 
   render() {

@@ -1,6 +1,4 @@
 import { TESCUser } from '@Shared/ModelTypes';
-import AlertPage, { AlertPageState, PageAlert, AlertType } from '../AlertPage';
-
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
@@ -11,6 +9,8 @@ import Loading from '~/components/Loading';
 import { loadAllUsers, loadColumns } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 import { Column } from '~/static/Types';
+
+import AlertPage, { AlertPageState, PageAlert, AlertType } from '../AlertPage';
 
 import { addColumn, updateUser, removeColumn, addAvailableColumns } from './actions';
 import ColumnEditor from './components/ColumnEditor';
@@ -49,7 +49,7 @@ interface UsersPageState extends AlertPageState {
 class UsersPage extends AlertPage<Props, UsersPageState> {
   state: Readonly<UsersPageState> = {
     users: [],
-    alerts: []
+    alerts: [],
   };
 
   componentDidMount() {
@@ -117,7 +117,7 @@ class UsersPage extends AlertPage<Props, UsersPageState> {
           `Successfully updated ${user.account.email}'s ${this.props.event.name} Application`,
           AlertType.Success,
           'UsersPage'
-        )
+        );
 
         this.setState({
           users: [
@@ -127,8 +127,8 @@ class UsersPage extends AlertPage<Props, UsersPageState> {
         });
       })
       .catch(() => {
-        this.createAlert(`Something went wrong with user update`, AlertType.Danger, 'UsersPage')
-      })
+        this.createAlert(`Something went wrong with user update`, AlertType.Danger, 'UsersPage');
+      });
   }
 
   onAddColumn = (column: Column) =>

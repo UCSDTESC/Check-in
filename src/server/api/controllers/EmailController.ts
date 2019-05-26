@@ -13,7 +13,7 @@ import { Request } from 'express';
 import { Admin } from '@Shared/ModelTypes';
 import { SuccessResponse } from '@Shared/api/Responses';
 
-@JsonController('/email')
+@JsonController('/emails')
 @UseBefore(AdminAuthorisation)
 export class EmailController {
   constructor(
