@@ -1,5 +1,5 @@
 import EventService from '@Services/EventService';
-import { TESCEvent, Admin } from '@Shared/ModelTypes';
+import { TESCEvent, Admin, TESCUser } from '@Shared/ModelTypes';
 import { EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Get, JsonController, UseBefore, Param, QueryParam, Post, UploadedFile, BodyParam, Put, Body, BadRequestError } from 'routing-controllers';
 
@@ -16,13 +16,15 @@ import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { ValidateEventID } from '../..//middleware/ValidateEventID';
 import { SelectedEventID } from '../..//decorators/SelectedEventID';
 import AdminService from '@Services/AdminService';
+import UserService from '@Services/UserService';
 
 @JsonController('/events')
 @UseBefore(AdminAuthorisation)
 export class EventsController {
   constructor(
     private AdminService: AdminService,
-    private EventService: EventService
+    private EventService: EventService,
+    private UserService: UserService,
   ) { }
 
   @Get('/')
@@ -91,5 +93,14 @@ export class EventsController {
     await this.EventService.addOrganiserToEvent(event, organiser);
 
     return SuccessResponse.Positive;
+  }
+
+  @Get('/:eventId/users')
+  @UseBefore(ValidateEventID)
+  async get(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument): Promise<TESCUser[]> {
+    await this.EventService.isAdminOrganiser(event.alias, admin);
+    const users = await this.UserService.getAllUsersByEvent(event);
+
+    return users;
   }
 }

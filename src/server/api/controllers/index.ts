@@ -4,6 +4,7 @@ import { CustomQuestionController } from './admin/CustomQuestionController';
 import { EventsController as AdminEventsController } from './admin/EventsController';
 import { SponsorsController } from './admin/SponsorsController';
 import { StatisticsController } from './admin/StatisticsController';
+import { UsersController } from './admin/UsersController';
 import { EventsController as UserEventsController } from './user/EventsController';
 
 export const AdminControllers = [
@@ -13,6 +14,7 @@ export const AdminControllers = [
   CustomQuestionController,
   SponsorsController,
   StatisticsController,
+  UsersController,
 ];
 
 export const UserControllers = [

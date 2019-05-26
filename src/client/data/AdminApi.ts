@@ -59,13 +59,12 @@ export const login = (username: string, password: string) => {
 
 /**
  * Request a list of all users.
- * @param {String} alias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadAllUsers = (alias: string) =>
+export const loadAllUsers = (eventId: string) =>
   promisify<TESCUser[]>(
     request
-      .get(`/users/${alias}`)
+      .get(`/events/${eventId}/users`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
   );

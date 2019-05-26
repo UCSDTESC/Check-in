@@ -124,10 +124,11 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
    */
   loadUsers = () => {
     const { showLoading, hideLoading, addUsers } = this.props;
+    const { event } = this.props;
 
     showLoading();
 
-    loadAllUsers(this.props.match.params.eventAlias)
+    loadAllUsers(event._id)
       .then(res => {
         hideLoading();
         return addUsers(res);

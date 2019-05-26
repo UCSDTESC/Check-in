@@ -92,10 +92,10 @@ class UsersPage extends React.Component<Props, UsersPageState> {
    */
   loadUsers = () => {
     const { showLoading, hideLoading } = this.props;
-    const eventAlias = this.props.match.params.eventAlias;
+    const { event } = this.props;
 
     showLoading();
-    loadAllUsers(eventAlias)
+    loadAllUsers(event._id)
       .then((res: TESCUser[]) => {
         hideLoading();
         return this.setState({ users: res });

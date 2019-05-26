@@ -30,7 +30,6 @@ export default class RoutesLoader extends Loader {
           modules: false,
         },
         watchOptions: {
-          poll: true,
         },
       }));
 
