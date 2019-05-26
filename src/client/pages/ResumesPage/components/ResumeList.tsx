@@ -3,8 +3,14 @@ import React from 'react';
 import ToggleSwitch from '~/components/ToggleSwitch';
 
 interface ResumeListProps {
+
+  //callback for when the compact state toggle is clicked
   onCompactChange: () => void;
+
+  //the compacted state
   isCompacted: boolean;
+
+  //the users to render
   applicants: TESCUser[];
 }
 
@@ -13,11 +19,16 @@ interface ColumnMap {
 }
 
 interface ResumeListState {
+
+  //columns shown on screen
   columns: ColumnMap;
   smallColumns: string[];
   mediumColumns: string[];
 }
 
+/**
+ * This is the resume list that is rendered in the sponsor tool
+ */
 class ResumeList extends React.Component<ResumeListProps, ResumeListState> {
   state: Readonly<ResumeListState> = {
     columns: {
