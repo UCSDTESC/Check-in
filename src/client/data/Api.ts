@@ -435,7 +435,7 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
   );
 
 export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) =>
-  promisify<{}>(
+  promisify<SuccessResponse>(
     request
       .post(`/email/acceptance/${event.alias}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))

@@ -13,6 +13,10 @@ export const Config = {
   MongoDBURI: process.env.MONGODB_URI,
   SaltRounds: Number(process.env.SALT_ROUNDS),
   SessionSecret: process.env.SESSION_SECRET,
+  SendGrid: {
+    Key: process.env.SENDGRID_API_KEY,
+    AcceptanceEmailID: process.env.SENDGRID_ACCEPTANCE_EMAIL_ID
+  },
 
   S3: {
     Key: process.env.S3_KEY,

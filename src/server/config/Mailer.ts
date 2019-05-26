@@ -7,7 +7,7 @@ import { Config } from '.';
 
 const EMAIL_PATH = path.join(__dirname, '../views/emails');
 
-sendgrid.setApiKey(process.env.SENDGRID_API_KEY);
+sendgrid.setApiKey(Config.SendGrid.Key);
 
 // Node mailer
 const transporter = mailer.createTransport({

@@ -1,7 +1,7 @@
+import { Config } from '@Config/index.ts';
 import { Logger } from '@Config/Logging';
 import { createTESCEmail, createEventEmail, sendAcceptanceEmail } from '@Config/Mailer';
 import { Admin, TESCAccount, TESCUser, TESCEvent, AccountPasswordReset } from '@Shared/ModelTypes';
-
 import { Request } from 'express';
 import { Service } from 'typedi';
 
@@ -62,7 +62,7 @@ export default class EmailService {
   async sendEventAcceptanceEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
     Logger.info(`Sending acceptance email to ${userEmail} for event ${event.alias} by ${admin.username}`);
 
-    const ACCEPTANCE_EMAIL_TEMPLATE_ID = process.env.SENDGRID_ACCEPTANCE_EMAIL_ID;
+    const ACCEPTANCE_EMAIL_TEMPLATE_ID = Config.SendGrid.AcceptanceEmailID
 
     const msg = {
       to: userEmail,

@@ -1,4 +1,5 @@
 import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
+import AlertPage, { AlertPageState, PageAlert, AlertType } from '../../AlertPage';
 import React from 'react';
 import ReactTable from 'react-table';
 import User from '~/components/User';
@@ -11,6 +12,7 @@ interface UserListProps {
   users: TESCUser[];
   columns: Column[];
   event: TESCEvent;
+  createAlert: (message: string, type: AlertType, title: string) => void; 
   onUserUpdate: (newUser: TESCUser) => void;
 }
 
@@ -22,6 +24,7 @@ class UserList extends React.Component<UserListProps> {
         event={this.props.event}
         initialValues={row}
         onSubmit={this.props.onUserUpdate}
+        createAlert={this.props.createAlert}
       />
     </div>
   );

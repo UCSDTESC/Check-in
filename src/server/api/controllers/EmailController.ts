@@ -28,7 +28,7 @@ export class EmailController {
     @Req() request: Request,
     @SelectedEvent() event: EventDocument,
     @Body() body: AcceptanceEmailRequest
-  ): Promise<any> {
+  ): Promise<SuccessResponse> {
     const sendGridResponse = await this.EmailService.sendEventAcceptanceEmail(request, admin, event, body.userEmail);
     const {statusCode, statusMessage} = sendGridResponse[0];
 
@@ -36,8 +36,6 @@ export class EmailController {
       Logger.error(`Sendgrid Send API Call Failed - returned statusCode ${statusCode} and statusMessage ${statusMessage}`);
       return SuccessResponse.Negative;
     }
-    else {
-      return SuccessResponse.Positive
-    }
+    return SuccessResponse.Positive
   }
 }

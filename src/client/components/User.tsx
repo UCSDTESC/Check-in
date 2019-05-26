@@ -2,6 +2,7 @@ import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
 import { UserStatus, isAcceptableStatus } from '@Shared/UserStatus';
+import { AlertType } from '../pages/AlertPage';
 import UUID from 'node-uuid';
 import React from 'react';
 import FA from 'react-fontawesome';
@@ -21,6 +22,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: UserProps) => ({
 interface UserProps {
   user: TESCUser;
   event: TESCEvent;
+  createAlert: (message: string, type: AlertType, title: string) => void;
 }
 
 // TODO: Create unified User form data that allows for easy extensibility of
@@ -139,7 +141,23 @@ class User extends React.Component<Props> {
   }
 
   onSendAcceptance(user: TESCUser, event: TESCEvent) {
-    return sendAcceptanceEmail(user, event);
+    return (
+      sendAcceptanceEmail(user, event)
+        .then((success) => {
+          this.props.createAlert(
+            `Successfully sent acceptance email to ${user.account.email}`,
+            AlertType.Success,
+            'UsersPage'
+          )
+        })
+        .catch(() => {
+          this.props.createAlert(
+            `Something went wrong when sending acceptance email to ${user.account.email}`,
+            AlertType.Danger,
+            'UsersPage'
+          )
+        })
+    )
   }
 
   render() {

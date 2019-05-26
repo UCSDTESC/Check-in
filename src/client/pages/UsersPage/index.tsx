@@ -1,4 +1,6 @@
 import { TESCUser } from '@Shared/ModelTypes';
+import AlertPage, { AlertPageState, PageAlert, AlertType } from '../AlertPage';
+
 import React from 'react';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
@@ -40,13 +42,14 @@ type RouteProps = RouteComponentProps<{
 
 type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & UsersPageProps;
 
-interface UsersPageState {
+interface UsersPageState extends AlertPageState {
   users: TESCUser[];
 }
 
-class UsersPage extends React.Component<Props, UsersPageState> {
+class UsersPage extends AlertPage<Props, UsersPageState> {
   state: Readonly<UsersPageState> = {
     users: [],
+    alerts: []
   };
 
   componentDidMount() {
@@ -110,13 +113,22 @@ class UsersPage extends React.Component<Props, UsersPageState> {
       .then(() => {
         const {users} = this.state;
 
+        this.createAlert(
+          `Successfully updated ${user.account.email}'s ${this.props.event.name} Application`,
+          AlertType.Success,
+          'UsersPage'
+        )
+
         this.setState({
           users: [
             ...users.filter((curr) => curr._id !== user._id),
             user,
           ],
         });
-      });
+      })
+      .catch(() => {
+        this.createAlert(`Something went wrong with user update`, AlertType.Danger, 'UsersPage')
+      })
   }
 
   onAddColumn = (column: Column) =>
@@ -137,6 +149,11 @@ class UsersPage extends React.Component<Props, UsersPageState> {
 
     return (
       <div className="d-flex flex-column h-100 p-3">
+        <div className="align-self-top">
+          <div className="container">
+            {this.renderAlerts(true)}
+          </div>
+        </div>
         <div className="row">
           <div className="col-12">
             <h1>
@@ -166,6 +183,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
           users={users}
           columns={activeColumns}
           onUserUpdate={this.onUserUpdate}
+          createAlert={this.createAlert}
           event={event}
         />
       </div>
