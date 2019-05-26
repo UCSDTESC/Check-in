@@ -2,6 +2,7 @@ import { AdminsController } from './admin/AdminsController';
 import { AuthController } from './admin/AuthController';
 import { CustomQuestionController } from './admin/CustomQuestionController';
 import { EventsController as AdminEventsController } from './admin/EventsController';
+import { ResumesController } from './admin/ResumesController';
 import { SponsorsController } from './admin/SponsorsController';
 import { StatisticsController } from './admin/StatisticsController';
 import { UsersController } from './admin/UsersController';
@@ -12,6 +13,7 @@ export const AdminControllers = [
   AuthController,
   AdminEventsController,
   CustomQuestionController,
+  ResumesController,
   SponsorsController,
   StatisticsController,
   UsersController,

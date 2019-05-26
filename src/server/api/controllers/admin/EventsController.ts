@@ -17,6 +17,7 @@ import { ValidateEventID } from '../..//middleware/ValidateEventID';
 import { SelectedEventID } from '../..//decorators/SelectedEventID';
 import AdminService from '@Services/AdminService';
 import UserService from '@Services/UserService';
+import SponsorService from '@Services/SponsorService';
 
 @JsonController('/events')
 @UseBefore(AdminAuthorisation)
@@ -24,6 +25,7 @@ export class EventsController {
   constructor(
     private AdminService: AdminService,
     private EventService: EventService,
+    private SponsorService: SponsorService,
     private UserService: UserService,
   ) { }
 
@@ -96,11 +98,33 @@ export class EventsController {
   }
 
   @Get('/:eventId/users')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(ValidateEventID)
   async get(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument): Promise<TESCUser[]> {
-    await this.EventService.isAdminOrganiser(event.alias, admin);
-    const users = await this.UserService.getAllUsersByEvent(event);
+    let users: TESCUser[];
+    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
+    const isSponsor = await this.EventService.isAdminSponsor(event.alias, admin);
+    if (isOrganiser) {
+      users = await this.UserService.getAllUsersByEvent(event);
+    } else if (isSponsor) {
+      users = await this.SponsorService.getSponsorApplicantsByEvent(event);
+    } else {
+      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+    }
 
     return users;
+  }
+
+  @Get('/:eventId/sponsor-users')
+  @UseBefore(RoleAuth(Role.ROLE_SPONSOR))
+  @UseBefore(ValidateEventID)
+  async getSponsorUsers(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument): Promise<TESCUser[]> {
+    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
+    const isSponsor = await this.EventService.isAdminSponsor(event.alias, admin);
+    if (isSponsor || isOrganiser) {
+      return await this.SponsorService.getSponsorApplicantsByEvent(event);
+    }
+
+    throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
   }
 }

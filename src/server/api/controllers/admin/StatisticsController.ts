@@ -8,8 +8,10 @@ import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { IsOrganiser } from '../../middleware/IsOrganiser';
 import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 import EventService from '@Services/EventService';
-import { AuthorisedAdmin } from 'api/decorators/AuthorisedAdmin';
+import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { Admin } from '@Shared/ModelTypes';
+import { RoleAuth } from '../../middleware/RoleAuth';
+import { Role } from '@Shared/Roles';
 
 @JsonController('/statistics')
 @UseBefore(AdminAuthorisation)
@@ -20,6 +22,7 @@ export class StatisticsController {
   ) { }
 
   @Get('/')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   async get(@AuthorisedAdmin() admin: Admin, @SelectedEventAlias() event: EventDocument): Promise<EventStatistics> {
     await this.EventService.isAdminOrganiser(event.alias, admin);
     return this.StatisticsService.getEventStatistics(event);

@@ -110,13 +110,12 @@ export const loadAllEvents = () =>
 
 /**
  * Request a list of all applicants.
- * @param {String} eventAlias The event alias.
  * @returns {Promise} A promise of the request.
  */
-export const loadAllApplicants = (eventAlias: string) =>
+export const loadAllSponsorUsers = (eventId: string) =>
   promisify<TESCUser[]>(
     request
-      .get(`/sponsors/applicants/${eventAlias}`)
+      .get(`/events/${eventId}/sponsor-users`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
@@ -208,7 +207,7 @@ export const deleteAdmin = (adminId: string) =>
 export const downloadResumes = (applicants: string[]) =>
   promisify<Download>(
     request
-      .post('/sponsors/download')
+      .post('/resumes')
       .send({ applicants } as DownloadResumesRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
@@ -222,7 +221,7 @@ export const downloadResumes = (applicants: string[]) =>
 export const pollDownload = (downloadId: string) =>
   promisify<Download>(
     request
-      .get(`/sponsors/download/${downloadId}`)
+      .get(`/resumes/${downloadId}`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
   );
