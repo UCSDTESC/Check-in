@@ -21,13 +21,6 @@ export class UsersController {
     private EventService: EventService
   ) { }
 
-  @Post('/checkin/:eventAlias')
-  @UseBefore(IsOrganiser)
-  async checkinUser(@Body() request: CheckinUserRequest): Promise<SuccessResponse> {
-    await this.UserService.checkinUserById(request.id);
-    return SuccessResponse.Positive;
-  }
-
   @Post('/')
   async updateUser(@AuthorisedAdmin() admin: Admin, @Body() body: TESCUser) {
     await this.EventService.isAdminOrganiser(body.event.alias, admin);

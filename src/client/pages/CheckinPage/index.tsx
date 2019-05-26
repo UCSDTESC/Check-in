@@ -94,15 +94,15 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     super.componentDidMount();
     const { users, event } = this.props;
 
-    if (!users.length) {
-      this.loadUsers();
-    }
+    showLoading();
 
     if (!event) {
-      showLoading();
-
       this.props.loadAllAdminEvents()
         .catch(console.error)
+        .then(this.loadUsers)
+        .finally(hideLoading);
+    } else {
+      this.loadUsers()
         .finally(hideLoading);
     }
   }
@@ -123,16 +123,11 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    const { showLoading, hideLoading, addUsers } = this.props;
+    const { addUsers } = this.props;
     const { event } = this.props;
 
-    showLoading();
-
-    loadAllUsers(event._id)
-      .then(res => {
-        hideLoading();
-        return addUsers(res);
-      });
+    return loadAllUsers(event._id)
+      .then(addUsers);
   }
 
   validateUser = (user: TESCUser) =>
@@ -164,7 +159,7 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
 
       this.validateUser(user)
         .then(() =>
-          this.props.userCheckin(user, event.alias)
+          this.props.userCheckin(user, event._id)
         )
         .then(() => resolve(user))
         .catch(reject);

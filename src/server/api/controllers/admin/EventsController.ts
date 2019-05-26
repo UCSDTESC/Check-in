@@ -9,7 +9,7 @@ import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { EventDocument } from '@Models/Event';
 import Uploads from '@Config/Uploads';
-import { RegisterEventRequest, UpdateEventOptionsRequest, AddSponsorRequest, AddOrganiserRequest } from '@Shared/api/Requests';
+import { RegisterEventRequest, UpdateEventOptionsRequest, AddSponsorRequest, AddOrganiserRequest, CheckinUserRequest } from '@Shared/api/Requests';
 import { AdminDocument } from '@Models/Admin';
 import { ErrorMessage } from 'utils/Errors';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
@@ -126,5 +126,19 @@ export class EventsController {
     }
 
     throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+  }
+
+  @Post('/:eventId/checkin')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventID)
+  async checkinUser(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument,
+    @Body() request: CheckinUserRequest): Promise<SuccessResponse> {
+    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
+    if (!isOrganiser) {
+      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+    }
+
+    await this.UserService.checkinUserById(request.id);
+    return SuccessResponse.Positive;
   }
 }
