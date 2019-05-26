@@ -1,7 +1,7 @@
 import React from 'react';
 import { AdminSelectType } from '~/components/AdminSelect';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
-import { addNewSponsor, addNewOrganiser, registerAdmin } from '~/data/AdminApi';
+import { addSponsor, addOrganiser, registerAdmin } from '~/data/AdminApi';
 
 import OrganiserList from '../components/OrganiserList';
 import SponsorList from '../components/SponsorList';
@@ -37,7 +37,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
   onAddNewSponsor = (newSponsor: AdminReference) => {
     const { event, addEventDangerAlert, loadAllAdminEvents } = this.props;
 
-    return addNewSponsor(event.alias, newSponsor._id)
+    return addSponsor(event._id, newSponsor._id)
       .then(loadAllAdminEvents)
       .catch(err => addEventDangerAlert(event.alias, err.message,
         `Error Adding ${newSponsor.username}`));
@@ -50,7 +50,7 @@ export default class AdministratorsTab extends EventPageTab<AdministratorsTabPro
   onAddNewOrganiser = (newOrganiser: AdminReference) => {
     const { event, addEventDangerAlert, loadAllAdminEvents } = this.props;
 
-    return addNewOrganiser(event.alias, newOrganiser._id)
+    return addOrganiser(event._id, newOrganiser._id)
       .then(loadAllAdminEvents)
       .catch(err => addEventDangerAlert(event.alias, err.message,
         `Error Adding ${newOrganiser.username}`));

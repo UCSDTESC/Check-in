@@ -33,11 +33,11 @@ export interface UpdateEventOptionsRequest {
   options: TESCEventOptions;
 }
 
-export interface AddNewSponsorRequest {
+export interface AddSponsorRequest {
   sponsorId: string;
 }
 
-export interface AddNewOrganiserRequest {
+export interface AddOrganiserRequest {
   organiserId: string;
 }
 

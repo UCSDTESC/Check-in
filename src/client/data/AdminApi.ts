@@ -6,8 +6,8 @@ import { QuestionType } from '@Shared/Questions';
 import { ADMIN_API_PREFIX } from '@Shared/api/Paths';
 import {
   AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest,
-  BulkChangeRequest, UpdateEventOptionsRequest, AddNewSponsorRequest,
-  AddNewOrganiserRequest,
+  BulkChangeRequest, UpdateEventOptionsRequest, AddSponsorRequest,
+  AddOrganiserRequest,
   DownloadResumesRequest,
   RegisterAdminRequest,
   CheckinUserRequest,
@@ -300,11 +300,11 @@ export const loadSponsors = () =>
  * Request to add a new sponsor to an event.
  * @returns {Promise} A promise of the request.
  */
-export const addNewSponsor = (eventAlias: string, sponsorId: string) =>
+export const addSponsor = (eventId: string, sponsorId: string) =>
   promisify<SuccessResponse>(
     request
-      .post(`/addSponsor/${eventAlias}`)
-      .send({ sponsorId: sponsorId } as AddNewSponsorRequest)
+      .post(`/events/${eventId}/sponsors`)
+      .send({ sponsorId: sponsorId } as AddSponsorRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)
@@ -314,11 +314,11 @@ export const addNewSponsor = (eventAlias: string, sponsorId: string) =>
  * Request to add a new organiser to an event.
  * @returns {Promise} A promise of the request.
  */
-export const addNewOrganiser = (eventAlias: string, adminId: string) =>
+export const addOrganiser = (eventId: string, adminId: string) =>
   promisify<SuccessResponse>(
     request
-      .post(`/addOrganiser/${eventAlias}`)
-      .send({ organiserId: adminId } as AddNewOrganiserRequest)
+      .post(`/events/${eventId}/organisers`)
+      .send({ organiserId: adminId } as AddOrganiserRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)

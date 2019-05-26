@@ -64,6 +64,14 @@ export default class EventService {
   }
 
   /**
+   * Get an event by its associated objectID.
+   * @param eventId The object ID associated with the event.
+   */
+  async getEventById(eventId: string) {
+    return await this.EventModel.findById(eventId);
+  }
+
+  /**
    * Get an event by its associated alias.
    * @param eventAlias The alias associated with the event.
    */

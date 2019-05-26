@@ -1,7 +1,9 @@
+import { Logger } from '@Config/Logging';
+import AdminService from '@Services/AdminService';
 import SponsorService from '@Services/SponsorService';
 import { Role } from '@Shared/Roles';
-import { GetSponsorsResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore } from 'routing-controllers';
+import { GetSponsorsResponse, SuccessResponse } from '@Shared/api/Responses';
+import { Get, JsonController, UseBefore, Post, Body } from 'routing-controllers';
 
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
@@ -10,6 +12,7 @@ import { RoleAuth } from '../../middleware/RoleAuth';
 @UseBefore(AdminAuthorisation)
 export class SponsorsController {
   constructor(
+    private AdminService: AdminService,
     private SponsorService: SponsorService
   ) { }
 

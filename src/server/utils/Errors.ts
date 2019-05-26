@@ -7,6 +7,7 @@ export const ErrorMessage = {
   EMAIL_ERROR: () => 'An error occurred with the email server',
   PERMISSION_ERROR: () => 'You do not have permission to perform that action',
   S3_ERROR: () => 'There was an error with the resume server',
+  NO_ID_EXISTS: eventId => `Could not find event by the given ID '${eventId}'`,
   NO_ALIAS_EXISTS: alias => `Could not find event by the given alias '${alias}'`,
   NO_USER_EXISTS: () => 'Could not find a user by that identifier',
   NO_ACCOUNT_EXISTS: () => 'Could not find an account by that email',

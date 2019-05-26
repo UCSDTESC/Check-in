@@ -9,15 +9,19 @@ import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { EventDocument } from '@Models/Event';
 import Uploads from '@Config/Uploads';
-import { RegisterEventRequest, UpdateEventOptionsRequest } from '@Shared/api/Requests';
+import { RegisterEventRequest, UpdateEventOptionsRequest, AddSponsorRequest, AddOrganiserRequest } from '@Shared/api/Requests';
 import { AdminDocument } from '@Models/Admin';
 import { ErrorMessage } from 'utils/Errors';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
+import { ValidateEventID } from '../..//middleware/ValidateEventID';
+import { SelectedEventID } from '../..//decorators/SelectedEventID';
+import AdminService from '@Services/AdminService';
 
 @JsonController('/events')
 @UseBefore(AdminAuthorisation)
 export class EventsController {
   constructor(
+    private AdminService: AdminService,
     private EventService: EventService
   ) { }
 
@@ -65,6 +69,26 @@ export class EventsController {
     }
 
     await this.EventService.updateEventOptions(event, body.options);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/:eventId/sponsors')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventID)
+  async addSponsor(@SelectedEventID() event: EventDocument, @Body() body: AddSponsorRequest) {
+    const sponsor = await this.AdminService.getAdminById(body.sponsorId);
+    await this.EventService.addSponsorToEvent(event, sponsor);
+
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/:eventId/organisers')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventID)
+  async addOrganiser(@SelectedEventID() event: EventDocument, @Body() body: AddOrganiserRequest) {
+    const organiser = await this.AdminService.getAdminById(body.organiserId);
+    await this.EventService.addOrganiserToEvent(event, organiser);
 
     return SuccessResponse.Positive;
   }
