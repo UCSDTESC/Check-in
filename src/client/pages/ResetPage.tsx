@@ -12,6 +12,9 @@ type Props = RouteComponentProps<{
   resetString: string;
 }>;
 
+/**
+ * Password Reset Page
+ */
 class ResetPage extends React.Component<Props, ResetPageState> {
   state: Readonly<ResetPageState> = {
     error: '',

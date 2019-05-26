@@ -1,6 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+/**
+ * The 404 Page of the application
+ */
 class NotFoundPage extends React.Component {
   render() {
     return (
