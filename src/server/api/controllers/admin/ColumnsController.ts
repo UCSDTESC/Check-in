@@ -1,5 +1,4 @@
 import UserService from '@Services/UserService';
-import { Role } from '@Shared/Roles';
 import { Get, JsonController, UseBefore } from 'routing-controllers';
 
 @JsonController('/columns')

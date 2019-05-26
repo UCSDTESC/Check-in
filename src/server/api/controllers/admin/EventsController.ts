@@ -1,23 +1,28 @@
-import EventService from '@Services/EventService';
-import { TESCEvent, Admin, TESCUser } from '@Shared/ModelTypes';
-import { EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore, Param, QueryParam, Post, UploadedFile, BodyParam, Put, Body, BadRequestError } from 'routing-controllers';
-
-import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
-import { RoleAuth } from '../../middleware/RoleAuth';
-import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
-import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
-import { EventDocument } from '@Models/Event';
 import Uploads from '@Config/Uploads';
-import { RegisterEventRequest, UpdateEventOptionsRequest, AddSponsorRequest, AddOrganiserRequest, CheckinUserRequest } from '@Shared/api/Requests';
 import { AdminDocument } from '@Models/Admin';
-import { ErrorMessage } from 'utils/Errors';
-import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
-import { ValidateEventID } from '../..//middleware/ValidateEventID';
-import { SelectedEventID } from '../..//decorators/SelectedEventID';
+import { EventDocument } from '@Models/Event';
 import AdminService from '@Services/AdminService';
-import UserService from '@Services/UserService';
+import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
+import UserService from '@Services/UserService';
+import { TESCEvent, Admin, TESCUser } from '@Shared/ModelTypes';
+import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
+import {
+  RegisterEventRequest, UpdateEventOptionsRequest, AddSponsorRequest, AddOrganiserRequest,
+  CheckinUserRequest
+} from '@Shared/api/Requests';
+import { EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
+import {
+  Get, JsonController, UseBefore, Param, QueryParam, Post, UploadedFile,
+  BodyParam, Put, Body, BadRequestError
+} from 'routing-controllers';
+import { ErrorMessage } from 'utils/Errors';
+
+import { SelectedEventID } from '../..//decorators/SelectedEventID';
+import { ValidateEventID } from '../..//middleware/ValidateEventID';
+import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
+import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
+import { RoleAuth } from '../../middleware/RoleAuth';
 
 @JsonController('/events')
 @UseBefore(AdminAuthorisation)

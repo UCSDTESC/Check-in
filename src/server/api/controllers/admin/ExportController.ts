@@ -1,14 +1,14 @@
+import CSVService from '@Services/CSVService';
+import EventService from '@Services/EventService';
 import UserService from '@Services/UserService';
 import { Role } from '@Shared/Roles';
-import { Get, JsonController, UseBefore, Body, Post, Res, BadRequestError } from 'routing-controllers';
-
-import { RoleAuth } from '../../middleware/RoleAuth';
 import { ExportUsersRequest } from '@Shared/api/Requests';
 import { Response } from 'express-serve-static-core';
 import moment = require('moment');
-import EventService from '@Services/EventService';
+import { Get, JsonController, UseBefore, Body, Post, Res, BadRequestError } from 'routing-controllers';
 import { ErrorMessage } from 'utils/Errors';
-import CSVService from '@Services/CSVService';
+
+import { RoleAuth } from '../../middleware/RoleAuth';
 
 @JsonController('/export')
 export class ExportController {

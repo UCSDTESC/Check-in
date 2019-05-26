@@ -1,4 +1,5 @@
 import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
+import { USER_API_PREFIX } from '@Shared/api/Paths';
 import {
   ResetPasswordRequest, ForgotPasswordRequest, UpdateUserRequest, RSVPUserRequest,
   RegisterUserRequest
@@ -17,7 +18,6 @@ import { UserProfileFormData } from '~/pages/UserPage/components/UserProfile';
 import CookieTypes from '~/static/Cookies';
 
 import { promisify } from './helpers';
-import { USER_API_PREFIX } from '@Shared/api/Paths';
 
 const userApiPrefix = pref(USER_API_PREFIX);
 const cookies = new Cookies();

@@ -1,13 +1,14 @@
 import { Logger } from '@Config/Logging';
+import { AdminModel } from '@Models/Admin';
 import { DownloadModel, DownloadDocument } from '@Models/Download';
 import { EventDocument } from '@Models/Event';
 import { UserModel, UserDocument } from '@Models/User';
-import { AdminModel } from '@Models/Admin';
 import { Admin, Download } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
 import moment = require('moment');
 import * as generatePassword from 'password-generator';
 import { Service, Inject } from 'typedi';
+import { getResumeConditions, RESUME_FIELDS } from 'utils/Resumes';
 
 import ResumeService from './ResumeService';
 
@@ -24,13 +25,13 @@ export default class SponsorService {
 
   constructor(
     private ResumeService: ResumeService
-  ) {}
+  ) { }
 
   /**
    * Get a list of all sponsors.
    */
   async getAllSponsors() {
-    return await this.AdminModel.find({role: Role.ROLE_SPONSOR}).exec();
+    return await this.AdminModel.find({ role: Role.ROLE_SPONSOR }).exec();
   }
 
   /**
@@ -39,7 +40,7 @@ export default class SponsorService {
    */
   async getSelectedUsers(userIDs: string[]) {
     return await this.UserModel
-      .find({_id: {$in: userIDs}})
+      .find({ _id: { $in: userIDs } })
       .populate('account')
       .exec();
   }
@@ -102,16 +103,8 @@ export default class SponsorService {
    */
   async getSponsorApplicantsByEvent(event: EventDocument) {
     return this.UserModel
-      .find({
-        'deleted': {$ne: true},
-        'shareResume': true,
-        'resume': {$exists: true},
-        'resume.size': {$gt: 0},
-        'sanitized': true,
-        'event': event,
-      })
-      .select('firstName lastName university year gender major' +
-      ' resume.url status account')
+      .find(getResumeConditions(event))
+      .select(RESUME_FIELDS)
       .populate('account')
       .exec();
   }

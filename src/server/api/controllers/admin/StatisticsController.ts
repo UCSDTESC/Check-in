@@ -1,17 +1,17 @@
 import { EventDocument } from '@Models/Event';
+import EventService from '@Services/EventService';
 import StatisticsService from '@Services/StatisticsService';
+import { Admin } from '@Shared/ModelTypes';
+import { Role } from '@Shared/Roles';
 import { EventStatistics } from '@Shared/api/Responses';
 import { Get, JsonController, UseBefore } from 'routing-controllers';
 
+import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { IsOrganiser } from '../../middleware/IsOrganiser';
-import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
-import EventService from '@Services/EventService';
-import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
-import { Admin } from '@Shared/ModelTypes';
 import { RoleAuth } from '../../middleware/RoleAuth';
-import { Role } from '@Shared/Roles';
+import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 
 @JsonController('/statistics')
 @UseBefore(AdminAuthorisation)

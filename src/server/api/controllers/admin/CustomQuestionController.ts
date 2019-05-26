@@ -1,21 +1,18 @@
-import UserService from '@Services/UserService';
-import { Get, JsonController, UseBefore, Body, Post, Res, BadRequestError, Put, Delete } from 'routing-controllers';
-
-import EventService from '@Services/EventService';
-import CSVService from '@Services/CSVService';
-import { RoleAuth } from '../../middleware/RoleAuth';
-import { Role } from '@Shared/Roles';
-import { IsOrganiser } from '../../middleware/IsOrganiser';
-import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
-import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
-import { EventDocument } from '@Models/Event';
-import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQuestionRequest } from '@Shared/api/Requests';
-import { SuccessResponse } from '@Shared/api/Responses';
-import { ErrorMessage } from 'utils/Errors';
-import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminDocument } from '@Models/Admin';
+import EventService from '@Services/EventService';
 import { Admin } from '@Shared/ModelTypes';
+import { Role } from '@Shared/Roles';
+import {
+  AddCustomQuestionRequest, UpdateCustomQuestionRequest,
+  DeleteCustomQuestionRequest
+} from '@Shared/api/Requests';
+import { SuccessResponse } from '@Shared/api/Responses';
+import { Get, JsonController, UseBefore, Body, Post, Put, Delete } from 'routing-controllers';
+import { ErrorMessage } from 'utils/Errors';
+
+import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
+import { RoleAuth } from '../../middleware/RoleAuth';
 
 @JsonController('/customQuestion')
 @UseBefore(AdminAuthorisation)

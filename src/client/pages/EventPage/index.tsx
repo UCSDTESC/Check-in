@@ -225,7 +225,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
                     target={'ThirdPartyTooltip'}
                   >
                     This event is not run by TESC.
-                </UncontrolledTooltip>
+                  </UncontrolledTooltip>
                 </span>
               </div>}
           </TabularPageNav>

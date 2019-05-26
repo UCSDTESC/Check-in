@@ -1,16 +1,16 @@
 import { Logger } from '@Config/Logging';
 import AdminService from '@Services/AdminService';
 import SponsorService from '@Services/SponsorService';
+import { Admin, Download } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
+import { DownloadResumesRequest } from '@Shared/api/Requests';
 import { GetSponsorsResponse, SuccessResponse } from '@Shared/api/Responses';
 import { Get, JsonController, UseBefore, Post, Body, Param } from 'routing-controllers';
+import { ErrorMessage } from 'utils/Errors';
 
+import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
-import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
-import { Admin, Download } from '@Shared/ModelTypes';
-import { DownloadResumesRequest } from '@Shared/api/Requests';
-import { ErrorMessage } from 'utils/Errors';
 
 @JsonController('/resumes')
 @UseBefore(AdminAuthorisation)
