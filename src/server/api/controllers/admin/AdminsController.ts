@@ -10,6 +10,9 @@ import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
 
+/**
+ * Handles all the logic for managing admin accounts.
+ */
 @JsonController('/admins')
 @UseBefore(AdminAuthorisation)
 export class AdminsController {

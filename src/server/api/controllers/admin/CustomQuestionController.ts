@@ -14,6 +14,10 @@ import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
 
+/**
+ * Handles all of the logic for event application forms' custom questions and
+ * responses.
+ */
 @JsonController('/customQuestion')
 @UseBefore(AdminAuthorisation)
 export class CustomQuestionController {

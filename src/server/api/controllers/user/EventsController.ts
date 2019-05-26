@@ -8,6 +8,9 @@ import { ErrorMessage } from '../../../utils/Errors';
 import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
 import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 
+/**
+ * Handles all of the logic for fetching public event information.
+ */
 @JsonController('/events')
 export class EventsController {
   constructor(

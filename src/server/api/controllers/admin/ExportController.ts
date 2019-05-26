@@ -10,6 +10,9 @@ import { ErrorMessage } from 'utils/Errors';
 
 import { RoleAuth } from '../../middleware/RoleAuth';
 
+/**
+ * Handles all of the logic for exporting user information.
+ */
 @JsonController('/export')
 export class ExportController {
   constructor(

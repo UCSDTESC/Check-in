@@ -12,6 +12,9 @@ import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
 
+/**
+ * Handles all of the logic for downloading user resumes.
+ */
 @JsonController('/resumes')
 @UseBefore(AdminAuthorisation)
 export class ResumesController {

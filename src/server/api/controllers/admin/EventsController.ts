@@ -24,6 +24,10 @@ import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
 
+/**
+ * Handles all of the logic for fetching and modifying information about particular events
+ * and its associated users and admins.
+ */
 @JsonController('/events')
 @UseBefore(AdminAuthorisation)
 export class EventsController {

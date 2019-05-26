@@ -9,6 +9,9 @@ import { Get, JsonController, UseBefore, Res, Req, Post } from 'routing-controll
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { AdminLogin } from '../../middleware/AdminLogin';
 
+/**
+ * Handles all of the logic for admin authentication.
+ */
 @JsonController()
 export class AuthController {
   constructor(

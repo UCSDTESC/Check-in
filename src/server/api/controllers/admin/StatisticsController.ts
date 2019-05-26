@@ -13,6 +13,9 @@ import { IsOrganiser } from '../../middleware/IsOrganiser';
 import { RoleAuth } from '../../middleware/RoleAuth';
 import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 
+/**
+ * Handles all of the logic for fetching event registration information.
+ */
 @JsonController('/statistics')
 @UseBefore(AdminAuthorisation)
 export class StatisticsController {

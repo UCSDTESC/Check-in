@@ -8,6 +8,9 @@ import { Get, JsonController, UseBefore, Post, Body } from 'routing-controllers'
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
 
+/**
+ * Handles all of the logic for managing sponsor information.
+ */
 @JsonController('/sponsors')
 @UseBefore(AdminAuthorisation)
 export class SponsorsController {
