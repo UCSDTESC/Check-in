@@ -1,24 +1,14 @@
-import { USER_JWT_TIMEOUT } from '@Config/Passport';
-import { Config } from '@Config/index';
-import EmailService from '@Services/EmailService';
-import EventService from '@Services/EventService';
+import Uploads from '@Config/Uploads';
+import { EventDocument } from '@Models/Event';
 import UserService from '@Services/UserService';
 import { TESCAccount, TESCUser } from '@Shared/ModelTypes';
-import { ResetPasswordRequest, ForgotPasswordRequest, RegisterUserRequest, UpdateUserRequest, RSVPUserRequest } from '@Shared/api/Requests';
-import { JWTUserAuthToken, JWTUserAuth, SuccessResponse } from '@Shared/api/Responses';
-import { Response, Request } from 'express-serve-static-core';
-import * as jwt from 'jsonwebtoken';
+import { UpdateUserRequest, RSVPUserRequest } from '@Shared/api/Requests';
 import { Get, JsonController, UseBefore, Res, Post, Req, Body, UploadedFile, BodyParam } from 'routing-controllers';
 
-import { ErrorMessage } from '../../utils/Errors';
 import { AuthorisedUser } from '../decorators/AuthorisedUser';
-import { UserAuthorisation } from '../middleware/UserAuthorisation';
-import { UserLogin } from '../middleware/UserLogin';
-import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
-import Uploads from '@Config/Uploads';
 import { SelectedEventAlias } from '../decorators/SelectedEventAlias';
-import { EventDocument } from '@Models/Event';
-import { UserDocument } from '@Models/User';
+import { UserAuthorisation } from '../middleware/UserAuthorisation';
+import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
 
 @JsonController('/user')
 export class UserController {

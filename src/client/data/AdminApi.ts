@@ -246,7 +246,7 @@ export const exportUsers = (eventAlias: string): SuperAgentRequest =>
 export const bulkChange = (users: string[], status: string) =>
   promisify<SuccessResponse>(
     request
-      .post('/bulkChange')
+      .patch('/users')
       .send({ users, status } as BulkChangeRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)

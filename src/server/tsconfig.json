@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "baseUrl": "./",
+    "baseUrl": ".",
     "outDir": "../../dist/server-root",
     "rootDir": "../",
     "sourceMap": true,
@@ -10,14 +10,29 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "paths": {
-      "@Shared/*": ["../shared/*"],
-      "@Config/*": ["./config/*"],
-      "@Models/*": ["./models/*"],
-      "@Services/*": ["./services/*"]
+      "@Shared/*": [
+        "../shared/*"
+      ],
+      "@Config/*": [
+        "./config/*"
+      ],
+      "@Models/*": [
+        "./models/*"
+      ],
+      "@Services/*": [
+        "./services/*"
+      ]
     },
-    "lib": ["es6"],
+    "lib": [
+      "es6"
+    ],
   },
-  "include": ["./**/*.ts", "../shared/**/*.ts"]
+  "include": [
+    "./**/*.ts",
+    "../shared/**/*.ts"
+  ]
 }
