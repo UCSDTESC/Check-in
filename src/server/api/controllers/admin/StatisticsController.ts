@@ -9,9 +9,7 @@ import { Get, JsonController, UseBefore } from 'routing-controllers';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
-import { IsOrganiser } from '../../middleware/IsOrganiser';
 import { RoleAuth } from '../../middleware/RoleAuth';
-import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 
 /**
  * Handles all of the logic for fetching event registration information.
