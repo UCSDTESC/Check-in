@@ -70,12 +70,11 @@ class UserPage extends AlertPage<Props, UserPageState> {
    */
   updateUser = (newUser: UserProfileFormData) => {
     const { updateCurrentUser } = this.props;
-    const { eventAlias } = this.props.match.params;
     const oldUser = this.props.user;
     // Delta is all the changed fields in the form
     const delta = diff(oldUser, newUser);
 
-    updateUserField(delta, eventAlias)
+    updateUserField(delta)
       .then((newUser) => {
         updateCurrentUser(newUser);
         this.createAlert('You have successfully updated your profile',
@@ -101,7 +100,7 @@ class UserPage extends AlertPage<Props, UserPageState> {
       return;
     }
 
-    rsvpUser(this.props.match.params.eventAlias, status, bussing)
+    rsvpUser(user._id, status, bussing)
       .then((newUser) => {
         updateCurrentUser(newUser);
         this.createAlert(`You have successfully RSVPed to ${user.event.name}`,

@@ -111,7 +111,7 @@ export const getAccountEvents = (accountId: string) => {
  * Updates a field for a given user.
  * @returns {Promise} A promise of the request.
  */
-export const updateUserField = (user: UserProfileFormData, eventAlias: string) => {
+export const updateUserField = (user: UserProfileFormData) => {
   const postObject: UserProfileFormData = Object.assign({}, user);
 
   if (user.newResume) {
@@ -119,7 +119,7 @@ export const updateUserField = (user: UserProfileFormData, eventAlias: string) =
   }
 
   return promisify<TESCUser>(request
-    .post(`/update/${eventAlias}`)
+    .put(`/user`)
     .field('user', JSON.stringify({
       ...postObject,
     } as UpdateUserRequest))
@@ -131,15 +131,15 @@ export const updateUserField = (user: UserProfileFormData, eventAlias: string) =
 
 /**
  * RSVPs the current user.
- * @param {String} eventAlias The alias of the event to RSVP.
+ * @param {String} userId The ID of the user to RSVP.
  * @param {Boolean} status True if the user is confirming their spot.
  * @param {Boolean} bussing True if the user is taking the bus, null if the user
  * wasn't offered a seat.
  * @returns {Promise} A promise of the request.
  */
-export const rsvpUser = (eventAlias: string, status: boolean, bussing: boolean) => {
+export const rsvpUser = (userId: string, status: boolean, bussing: boolean) => {
   return promisify<TESCUser>(request
-    .post(`/rsvp/${eventAlias}`)
+    .post(`/user/${userId}/rsvp`)
     .set('Content-Type', 'application/json')
     .set('Authorization', cookies.get(CookieTypes.user.token))
     .send({ status, bussing } as RSVPUserRequest)

@@ -1,12 +1,12 @@
-import { Logger } from '@Config/Logging';
 import { AccountModel, AccountDocument } from '@Models/Account';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
 import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument, EDITABLE_USER_FIELDS } from '@Models/User';
 import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
-import { RegisterUserRequest, RegisterUserFields } from '@Shared/api/Requests';
+import { RegisterUserFields } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { Service, Inject } from 'typedi';
-import { ErrorMessage } from 'utils/Errors';
+
+import { ErrorMessage } from '../utils/Errors';
 
 @Service()
 export default class UserService {
@@ -167,6 +167,15 @@ export default class UserService {
         },
       })
       .exec();
+  }
+
+  /**
+   * Get a user by the registered ID.
+   * @param userId The ID associated with the user.
+   */
+  async getUserById(userId: string) {
+    return this.UserModel
+      .findById(userId);
   }
 
   /**

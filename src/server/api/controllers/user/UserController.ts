@@ -1,23 +1,24 @@
 import { Logger } from '@Config/Logging';
 import Uploads from '@Config/Uploads';
+import { EventDocument } from '@Models/Event';
+import { UserDocument } from '@Models/User';
 import EmailService from '@Services/EmailService';
 import EventService from '@Services/EventService';
 import UserService from '@Services/UserService';
-import { RegisterUserRequest } from '@Shared/api/Requests';
+import { TESCAccount, TESCUser } from '@Shared/ModelTypes';
+import { RegisterUserRequest, UpdateUserRequest, RSVPUserRequest } from '@Shared/api/Requests';
 import { RegisterUserResponse } from '@Shared/api/Responses';
 import { Request } from 'express-serve-static-core';
 import {
   Get, JsonController, Post, UploadedFile,
-  BodyParam, Req, BadRequestError, UseBefore
+  BodyParam, Req, BadRequestError, UseBefore, Put, Body
 } from 'routing-controllers';
 
 import { ErrorMessage } from '../../../utils/Errors';
-import { UserAuthorisation } from 'api/middleware/UserAuthorisation';
-import { ValidateEventAlias } from 'api/middleware/ValidateEventAlias';
-import { SelectedEventAlias } from 'api/decorators/SelectedEventAlias';
-import { EventDocument } from '@Models/Event';
-import { AuthorisedUser } from 'api/decorators/AuthorisedUser';
-import { TESCAccount } from '@Shared/ModelTypes';
+import { AuthorisedUser } from '../../decorators/AuthorisedUser';
+import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
+import { SelectedUserID } from '../../decorators/SelectedUserID';
+import { UserAuthorisation } from '../../middleware/UserAuthorisation';
 
 /**
  * Handles all of the logic for user event registrations.
@@ -32,7 +33,7 @@ export class UserController {
 
   @Get('/')
   @UseBefore(UserAuthorisation)
-  async get(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount) {
+  async get(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount): Promise<TESCUser[]> {
     const application = await this.UserService.getUserApplication(account, event, true);
 
     if (!application) {
@@ -86,5 +87,35 @@ export class UserController {
     Logger.info(`Registration successful for '${body.user.email}' to '${body.alias}'`);
 
     return { email: existingAccount.email } as RegisterUserResponse;
+  }
+
+  @Put('/')
+  @UseBefore(UserAuthorisation)
+  async updateUser(
+    @AuthorisedUser() account: TESCAccount,
+    @UploadedFile('resume', { options: Uploads, required: false }) resume: Express.Multer.File,
+    @BodyParam('user') body: UpdateUserRequest): Promise<TESCUser> {
+    const event = body.event;
+    const user = (await this.UserService.getUserApplication(account, event))[0];
+    if (!user) {
+      throw new BadRequestError(ErrorMessage.NO_USER_EXISTS());
+    }
+
+    await this.UserService.updateUserEditables(user, body, resume);
+
+    return (await this.UserService.getUserApplication(account, event, true))[0];
+  }
+
+  @Post('/:userId/rsvp')
+  @UseBefore(UserAuthorisation)
+  async userRSVP(@SelectedUserID() user: UserDocument, @AuthorisedUser() account: TESCAccount,
+    @Body() body: RSVPUserRequest): Promise<TESCUser> {
+    if (user.account._id.toString() !== account._id.toString()) {
+      throw new BadRequestError(ErrorMessage.NO_USER_EXISTS());
+    }
+
+    await this.UserService.RSVPUser(user, body.status, body.bussing);
+    const newUsers = await this.UserService.getUserApplication(account, user.event, true);
+    return newUsers[0];
   }
 }
