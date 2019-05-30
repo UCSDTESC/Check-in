@@ -1,17 +1,23 @@
-import { Logger } from '@Config/Logging';
 import { AccountModel, AccountDocument } from '@Models/Account';
+import { AccountResetModel } from '@Models/AccountReset';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
 import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument, EDITABLE_USER_FIELDS } from '@Models/User';
-import { TESCEvent, TESCAccount, UserStatus, TESCUser } from '@Shared/ModelTypes';
+import { TESCEvent, TESCAccount, UserStatus, TESCUser, AccountPasswordReset } from '@Shared/ModelTypes';
 import { RegisterUserRequest } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
+import { generate } from 'generate-password';
+import * as moment from 'moment';
 import { Service, Inject } from 'typedi';
-import { ErrorMessage } from 'utils/Errors';
+
+import { ErrorMessage } from '../utils/Errors';
 
 @Service()
 export default class UserService {
   @Inject('AccountModel')
   private AccountModel: AccountModel;
+
+  @Inject('AccountResetModel')
+  private AccountResetModel: AccountResetModel;
 
   @Inject('UserModel')
   private UserModel: UserModel;
@@ -126,17 +132,25 @@ export default class UserService {
   }
 
   /**
-   * Resets an account password.
-   * @param accountID The ID of the account to reset.
+   * Resets an account password by a given reset string.
+   * @param resetString The string associated with the reset.
    * @param newPassword The new password for the account.
    */
-  async resetUserPassword(accountID: string, newPassword: string) {
-    const account = await this.AccountModel
-      .findOne({_id: accountID})
+  async resetUserPassword(resetString: string, newPassword: string) {
+    const reset = await this.AccountResetModel
+      .findOne({resetString})
+      .populate('account')
       .exec();
 
-    account.password = newPassword;
-    return account.save();
+    if (!reset || !reset.valid || moment(reset.expires).isBefore(moment())) {
+      throw new Error(ErrorMessage.INVALID_RESET());
+    }
+
+    reset.valid = false;
+
+    reset.account.password = newPassword;
+    await (reset.account as AccountDocument).save();
+    return reset.save();
   }
 
   /**
@@ -252,5 +266,30 @@ export default class UserService {
     user.status = accept ? UserStatus.Confirmed : UserStatus.Declined;
     user.bussing = user.availableBus && acceptBus;
     return user.save();
+  }
+
+  /**
+   *
+   * @param account The account for which to reset.
+   * @param expires Optionally, the time at which the reset expires.
+   */
+  async createAccountReset(account: AccountDocument, expires?: Date) {
+    if (!expires) {
+      // By default give the user one day to reset
+      expires = moment().add(1, 'days').toDate();
+    }
+
+    const resetString = generate({
+      length: 16,
+      numbers: true,
+    }).toUpperCase();
+
+    return this.AccountResetModel
+      .create({
+        account,
+        resetString,
+        expires,
+        valid: true,
+      } as AccountPasswordReset);
   }
 }

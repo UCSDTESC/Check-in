@@ -1,21 +1,18 @@
 import { Logger } from '@Config/Logging';
 import { createTESCEmail, createEventEmail } from '@Config/Mailer';
-import { UserModel, UserDocument } from '@Models/User';
-import { EventModel } from '@Models/Event';
-import { TESCAccount, TESCUser, TESCEvent } from '@Shared/ModelTypes';
-import { Response, Request } from 'express';
-import * as csv from 'fast-csv';
-import { Parser } from 'json2csv';
-import { Service, Inject } from 'typedi';
+import { TESCAccount, TESCUser, TESCEvent, AccountPasswordReset } from '@Shared/ModelTypes';
+import { Request } from 'express';
+import { Service } from 'typedi';
 
 @Service()
 export default class EmailService {
   /**
    * Sends an email with a link to reset an account password.
-   * @param reuqest The web request associated with the email.
+   * @param request The web request associated with the email.
    * @param account The account associated with the request.
+   * @param reset The reset model associated with the account.
    */
-  async sendPasswordResetEmail(request: Request, account: TESCAccount) {
+  async sendPasswordResetEmail(request: Request, account: TESCAccount, reset: AccountPasswordReset) {
     Logger.info(`Sending forgot password email for ${account.email} [${account._id}]`);
 
     return createTESCEmail()
@@ -26,7 +23,7 @@ export default class EmailService {
         },
         locals: {
           account: account,
-          resetUrl: `${request.protocol}://${request.get('host')}/user/reset/${account._id}`,
+          resetUrl: `${request.protocol}://${request.get('host')}/user/reset/${reset.resetString}`,
         },
       });
   }

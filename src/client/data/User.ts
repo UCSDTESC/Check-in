@@ -59,15 +59,15 @@ export const forgotPassword = (email: string) => {
 
 /**
  * Resets the password for the given user.
- * @param {String} id The ID of the account to reset.
+ * @param {String} resetString The reset string associated with the request.
  * @param {String} newPassword The new password to associate with the user.
  * @returns {Promise} A promise of the request.
  */
-export const resetPassword = (id: string, newPassword: string) => {
+export const resetPassword = (resetString: string, newPassword: string) => {
   return promisify<SuccessResponse>(request
     .post('/reset')
     .set('Content-Type', 'application/json')
-    .send({id, newPassword} as ResetPasswordRequest)
+    .send({resetString, newPassword} as ResetPasswordRequest)
     .use(prefix)
     .use(nocache));
 };

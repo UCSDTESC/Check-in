@@ -11,6 +11,14 @@ export enum UserStatus {
   Waitlisted = 'Waitlisted',
 }
 
+export interface AccountPasswordReset {
+  _id?: string & ObjectID;
+  account: TESCAccount;
+  resetString: string;
+  expires: Date;
+  valid: boolean;
+}
+
 export interface TESCTeam {
   _id?: string & ObjectID;
   name: string;
