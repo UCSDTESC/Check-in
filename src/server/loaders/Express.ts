@@ -8,7 +8,7 @@ import Loader from './Loader';
 export default class ExpressLoader extends Loader {
   public static async initialiseLoader(app: express.Application) {
     app.use(compression());
-    app.use(bodyParser.json({type: 'application/json', limit: '50mb'}));
+    app.use(bodyParser.json({ type: 'application/json', limit: '50mb' }));
     app.use(bodyParser.urlencoded({
       extended: true,
       limit: '50mb',

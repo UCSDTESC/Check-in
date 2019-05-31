@@ -9,6 +9,7 @@ export enum UserStatus {
   Declined = 'Declined',
   Late = 'Late',
   Waitlisted = 'Waitlisted',
+  NoStatus = 'None',
 }
 
 export interface AccountPasswordReset {

@@ -28,6 +28,7 @@
       &::before {
         content: "\F067";
         font-family: 'FontAwesome';
+        margin-right: 0.1rem;
       }
     }
   }
@@ -39,6 +40,7 @@
     &::before {
       content: "\F00D";
       font-family: 'FontAwesome';
+      margin-right: 0.1rem;
     }
   }
 }

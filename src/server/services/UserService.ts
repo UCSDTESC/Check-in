@@ -3,7 +3,7 @@ import { AccountResetModel } from '@Models/AccountReset';
 import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
 import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument, EDITABLE_USER_FIELDS } from '@Models/User';
 import { TESCEvent, TESCAccount, UserStatus, TESCUser, AccountPasswordReset } from '@Shared/ModelTypes';
-import { RegisterUserRequest } from '@Shared/api/Requests';
+import { RegisterUserRequest, RegisterUserFields } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
 import { generate } from 'generate-password';
 import * as moment from 'moment';
@@ -138,7 +138,7 @@ export default class UserService {
    */
   async resetUserPassword(resetString: string, newPassword: string) {
     const reset = await this.AccountResetModel
-      .findOne({resetString})
+      .findOne({ resetString })
       .populate('account')
       .exec();
 

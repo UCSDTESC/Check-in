@@ -1,5 +1,5 @@
 import ResumeService from '@Services/ResumeService';
-import { TESCUser } from '@Shared/ModelTypes';
+import { TESCUser, UserStatus } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
 import * as crate from 'mongoose-crate';
 import * as S3 from 'mongoose-crate-s3';
@@ -188,9 +188,12 @@ export const UserSchema = new Schema({
   // Rejected, Unconfirmed, Confirmed, Declined, Late, and Waitlisted
   status: {
     type: String,
+    required: true,
     trim: true,
     displayName: 'Status',
     public: true,
+    enum: Object.keys(UserStatus),
+    default: UserStatus.NoStatus,
   },
   // Declares that the user has checked into the event on the day
   checkedIn: {
@@ -252,7 +255,7 @@ export const UserSchema = new Schema({
     displayName: 'Why This Event?',
     public: true,
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
 UserSchema.plugin(mongooseSanitizer);
 UserSchema.plugin(crate, {
@@ -271,7 +274,7 @@ UserSchema.plugin(crate, {
   },
 });
 
-UserSchema.method('csvFlatten', function() {
+UserSchema.method('csvFlatten', function () {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
   const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
@@ -280,7 +283,7 @@ UserSchema.method('csvFlatten', function() {
     'bussing', 'teammates', 'status', 'checkedIn'];
 
   const autoFilled: any = autoFill.reduce((acc, val) => {
-    return Object.assign(acc, {[val]: user[val]});
+    return Object.assign(acc, { [val]: user[val] });
   }, {});
 
   autoFilled.outOfState = user.travel.outOfState;

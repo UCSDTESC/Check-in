@@ -1,11 +1,6 @@
-import { TESCTeam, UserStatus, TESCUser } from '@Shared/ModelTypes';
+import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
 import React from 'react';
-
-enum TeamStatusEnum {
-  Unmatched = 'Unmatched',
-}
-
-export type TeamStatus = UserStatus | TeamStatusEnum;
+import { getTeamStatus, getStatusIndicatorText } from '~/static/Teams';
 
 interface TeamCardProps {
   team: TESCTeam;
@@ -31,36 +26,11 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
     return `${user.firstName[0]}${user.lastName[0]}`;
   }
 
-  /**
-   * Get the text that should be in the team status indicator.
-   */
-  getStatusIndicatorText = (status: TeamStatus) => {
-    if (status !== TeamStatusEnum.Unmatched) {
-      return `All ${status}`;
-    }
-    return 'Different Statuses';
-  }
-
-  /**
-   * Determine the team status given the list of teammates.
-   */
-  getTeamStatus = (teammates: TESCUser[]): TeamStatus => {
-    const initialStatus = teammates[0].status;
-
-    for (const user of teammates) {
-      if (user.status !== initialStatus) {
-        return TeamStatusEnum.Unmatched;
-      }
-    }
-
-    return initialStatus;
-  }
-
   render() {
     const { team, isSelected, onSelect } = this.props;
 
     const teamLeader = team.teammates[0];
-    const teamStatus = this.getTeamStatus(team.teammates);
+    const teamStatus = getTeamStatus(team.teammates);
 
     return (
       <div className={`team team--${teamStatus.toLowerCase()} card`} onClick={() => onSelect(team)}>
@@ -77,7 +47,7 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
               className="team__indicator"
               data-toggle="tooltip"
               data-placement="right"
-              title={this.getStatusIndicatorText(teamStatus)}
+              title={getStatusIndicatorText(teamStatus)}
               data-offset="0, 8"
             />
           </h2>
