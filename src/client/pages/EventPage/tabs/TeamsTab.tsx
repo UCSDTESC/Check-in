@@ -14,18 +14,20 @@ interface TeamsTabProps {
 
 interface TeamsTabState {
   selectedTeams: Set<string>;
+  filteredTeams: Set<string>;
 }
 
 export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState> {
-  state: Readonly<TeamsTabState> = {
-    selectedTeams: new Set<string>(),
-  };
-
   admittedTeams: Set<string> = new Set();
   notAdmittedTeams: Set<string> = new Set();
 
   constructor(props: TeamsTabProps & any) {
     super(props);
+
+    this.state = {
+      selectedTeams: new Set<string>(),
+      filteredTeams: new Set<string>(props.teams.map((team: TESCTeam) => team._id)),
+    };
 
     this.constructAdmitted(props.teams);
     this.constructNotAdmitted(props.teams);
@@ -72,6 +74,27 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
    */
   areTeamSetsEqual = (a: Set<string>, b: Set<string>) => a.size === b.size && [...a].every(value => b.has(value));
 
+  /**
+   * Clears the admitted/not admitted filters.
+   */
+  clearFilters = () => {
+    this.setState({
+      filteredTeams: new Set<string>(this.props.teams.map((team: TESCTeam) => team._id)),
+    });
+  };
+
+  /**
+   * Changes the filtered set to a new set.
+   */
+  filterSet = (newSet: Set<string>) => {
+    this.setState({
+      filteredTeams: newSet,
+    });
+  }
+
+  /**
+   * Changes the selected set to a new set.
+   */
   selectSet = (newSet: Set<string>) => {
     this.setState({
       selectedTeams: newSet,
@@ -135,17 +158,17 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   }
 
   renderSelectButtons = (teams: TESCTeam[]) => {
-    const { selectedTeams } = this.state;
+    const { filteredTeams } = this.state;
 
     const baseClasses = ['btn', 'teams-filters__button'];
     const allTeamsClasses = classNames(baseClasses, {
-      'teams-filters__button--active': selectedTeams.size === teams.length,
+      'teams-filters__button--active': filteredTeams.size === teams.length,
     });
     const admittedTeamsClasses = classNames(baseClasses, {
-      'teams-filters__button--active': this.areTeamSetsEqual(selectedTeams, this.admittedTeams),
+      'teams-filters__button--active': this.areTeamSetsEqual(filteredTeams, this.admittedTeams),
     });
     const notAdmittedTeamsClasses = classNames(baseClasses, {
-      'teams-filters__button--active': this.areTeamSetsEqual(selectedTeams, this.notAdmittedTeams),
+      'teams-filters__button--active': this.areTeamSetsEqual(filteredTeams, this.notAdmittedTeams),
     });
 
     return (
@@ -154,23 +177,23 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
           <button
             type="button"
             className={allTeamsClasses}
-            onClick={() => this.selectAll()}
+            onClick={() => this.clearFilters()}
           >
-            Select All Teams ({teams.length})
+            All Teams ({teams.length})
           </button>
           <button
             type="button"
             className={admittedTeamsClasses}
-            onClick={() => this.selectSet(this.admittedTeams)}
+            onClick={() => this.filterSet(this.admittedTeams)}
           >
-            Select Admitted ({this.admittedTeams.size})
+            Admitted ({this.admittedTeams.size})
           </button>
           <button
             type="button"
             className={notAdmittedTeamsClasses}
-            onClick={() => this.selectSet(this.notAdmittedTeams)}
+            onClick={() => this.filterSet(this.notAdmittedTeams)}
           >
-            Select Not Admitted ({this.notAdmittedTeams.size})
+            Not Admitted ({this.notAdmittedTeams.size})
           </button>
         </div>
       </div>
@@ -179,8 +202,9 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
   render() {
     const { teams } = this.props;
+    const { filteredTeams } = this.state;
 
-    if (!teams) {
+    if (!filteredTeams && !this.props.teams) {
       return <Loading />;
     }
 
@@ -204,9 +228,16 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
         </div>
 
         <div className="team__container">
-          {teams.map(team =>
-            <TeamCard key={team._id} team={team} isSelected={this.isTeamSelected(team)} onSelect={this.onTeamSelect} />
-          )}
+          {teams
+            .filter(team => filteredTeams.has(team._id))
+            .map(team =>
+              <TeamCard
+                key={team._id}
+                team={team}
+                isSelected={this.isTeamSelected(team)}
+                onSelect={this.onTeamSelect}
+              />
+            )}
         </div>
       </>
     );
