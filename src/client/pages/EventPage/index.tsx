@@ -130,7 +130,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
         firstName: 'Buff',
         lastName: 'Jones',
         status: UserStatus.Unconfirmed,
-        university: 'USC',
+        university: 'San Diego State University',
       } as any],
     }],
   };

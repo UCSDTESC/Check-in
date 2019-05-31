@@ -2,7 +2,8 @@ import { TESCUser } from '@Shared/ModelTypes';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
 import * as Api from '~/data/AdminApi';
-import { Column } from '~/static/Types';
+
+import { AutofillColumn } from '..';
 
 import * as Types from './types';
 
@@ -20,6 +21,5 @@ export const updateUser = (user: TESCUser): ApplicationAction<Promise<void>> =>
       .catch(console.error);
 
 // Columns
-export const addColumn = createStandardAction(Types.ADD_COLUMN)<Column>();
-export const removeColumn = createStandardAction(Types.REMOVE_COLUMN)<Column>();
-export const addAvailableColumns = createStandardAction(Types.ADD_AVAILABLE_COLUMNS)<Column[]>();
+export const addColumn = createStandardAction(Types.ADD_COLUMN)<AutofillColumn>();
+export const removeColumn = createStandardAction(Types.REMOVE_COLUMN)<AutofillColumn>();

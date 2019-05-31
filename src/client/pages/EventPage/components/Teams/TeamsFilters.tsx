@@ -35,7 +35,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
 
     this.state = {
       activeFilters: [
-        new StringFilter('university', StringOperation.STARTS_WITH, 'The University'),
+        new StringFilter('university', StringOperation.CONTAINS, 'San Diego'),
       ],
       admittedSelection: AdmittedSelectOption.ALL,
       showNewFilterMenu: false,

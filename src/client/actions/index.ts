@@ -1,5 +1,5 @@
 import { TESCEvent } from '@Shared/ModelTypes';
-import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
+import { EventsWithStatisticsResponse, ColumnResponse } from '@Shared/api/Responses';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { createStandardAction, ActionType } from 'typesafe-actions';
@@ -7,7 +7,7 @@ import User from '~/components/User';
 import * as AdminApi from '~/data/AdminApi';
 import * as UserApi from '~/data/UserApi';
 import { ApplicationState } from '~/reducers';
-import { FilterOption } from '~/static/Types';
+import { FilterOption, ColumnDefinitions } from '~/static/Types';
 
 import * as Types from './types';
 
@@ -50,6 +50,9 @@ export const replaceEvents = createStandardAction(Types.REPLACE_EVENTS)<TESCEven
 export const addAdminEvent = createStandardAction(Types.ADD_ADMIN_EVENT)<TESCEvent>();
 export const addAdminEvents = createStandardAction(Types.ADD_ADMIN_EVENTS)<TESCEvent[]>();
 export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENTS)<TESCEvent[]>();
+
+// Available Columns
+export const replaceAvailableColumns = createStandardAction(Types.REPLACE_AVAILABLE_COLUMNS)<ColumnDefinitions>();
 
 export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, Action>;
 export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
@@ -94,6 +97,17 @@ export const loadAccountEvents = (accountId: string): ApplicationAction<Promise<
         .then(res => {
           dispatch(replaceUserEvents(res));
           return resolve();
+        })
+        .catch(reject);
+    });
+
+export const loadAvailableColumns = (): ApplicationAction<Promise<ColumnDefinitions>> =>
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      AdminApi.loadColumns()
+        .then(res => {
+          dispatch(replaceAvailableColumns(res));
+          return resolve(res);
         })
         .catch(reject);
     });

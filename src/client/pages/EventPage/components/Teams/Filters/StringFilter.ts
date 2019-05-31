@@ -6,6 +6,7 @@ export enum StringOperation {
   STARTS_WITH,
   ENDS_WITH,
   EQUALS,
+  CONTAINS,
 }
 
 type StringFilterOperationFn = (team: TESCTeam, property: keyof TESCUser, input: string) => boolean;
@@ -21,7 +22,10 @@ const StringFilterOperations: Map<StringOperation, StringFilterOperationFn> = ne
     return team.teammates.every(member => member[prop].toString().toLowerCase().endsWith(input));
   }],
   [StringOperation.EQUALS, (team: TESCTeam, prop: keyof TESCUser, input: string) => {
-    return team.teammates.every(member => member[prop].toString().toLowerCase() === input.toLowerCase());
+    return team.teammates.every(member => member[prop].toString().toLowerCase() === input);
+  }],
+  [StringOperation.CONTAINS, (team: TESCTeam, prop: keyof TESCUser, input: string) => {
+    return team.teammates.every(member => member[prop].toString().toLowerCase().includes(input));
   }],
 ]);
 
@@ -58,6 +62,7 @@ export default class StringFilter implements BaseFilter {
       [StringOperation.ENDS_WITH, `${memberProperty} ends with "${input}"`],
       [StringOperation.EQUALS, `${memberProperty} is "${input}"`],
       [StringOperation.STARTS_WITH, `${memberProperty} starts with "${input}"`],
+      [StringOperation.CONTAINS, `${memberProperty} contains "${input}"`],
     ]);
 
     return displays.get(this.operation);
