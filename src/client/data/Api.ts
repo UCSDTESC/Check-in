@@ -441,3 +441,13 @@ export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) =>
       .use(apiPrefix)
       .use(nocache)
   );
+
+  export const sendRejectionEmail = (user: TESCUser, event: TESCEvent) =>
+  promisify<SuccessResponse>(
+    request
+      .post(`/emails/rejection/${event.alias}`)
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .send({userEmail: user.account.email} as AcceptanceEmailRequest)
+      .use(apiPrefix)
+      .use(nocache)
+  );

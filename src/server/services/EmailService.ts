@@ -1,6 +1,6 @@
 import { Config } from '@Config/index.ts';
 import { Logger } from '@Config/Logging';
-import { createTESCEmail, createEventEmail, sendAcceptanceEmail } from '@Config/Mailer';
+import { createTESCEmail, createEventEmail, sendAcceptanceEmail, sendRejectionEmail } from '@Config/Mailer';
 import { Admin, TESCAccount, TESCUser, TESCEvent, AccountPasswordReset } from '@Shared/ModelTypes';
 import { Request } from 'express';
 import { Service } from 'typedi';
@@ -61,18 +61,17 @@ export default class EmailService {
    */
   async sendEventAcceptanceEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
     Logger.info(`Sending acceptance email to ${userEmail} for event ${event.alias} by ${admin.username}`);
+    return sendAcceptanceEmail(userEmail, event);
+  }
 
-    const ACCEPTANCE_EMAIL_TEMPLATE_ID = Config.SendGrid.AcceptanceEmailID
-
-    const msg = {
-      to: userEmail,
-      from: 'no-reply@tesc.events',
-      templateId: ACCEPTANCE_EMAIL_TEMPLATE_ID,
-      dynamic_template_data: {
-        event,
-      }
-    };
-
-    return sendAcceptanceEmail(msg)
+  /**
+   * Sends an email with a link to confirm the user's account.
+   * @param request The web request associated with the email.
+   * @param account The account associated with the request.
+   * @param event The event associated with the request.
+   */
+  async sendEventRejectionEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
+    Logger.info(`Sending rejection email to ${userEmail} for event ${event.alias} by ${admin.username}`);
+    return sendRejectionEmail(userEmail, event)
   }
 }
