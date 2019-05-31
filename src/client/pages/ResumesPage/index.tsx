@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import { ApplicationDispatch, loadAllAdminEvents } from '~/actions';
 import { loadAllSponsorUsers } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { applyResumeFilter } from '~/static/ResumeFilter';
+import { applyResumeFilter } from '~/static/Resumes';
 
 import { replaceApplicants, replaceFiltered } from './actions';
 import ResumeList from './components/ResumeList';

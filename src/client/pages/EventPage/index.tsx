@@ -107,11 +107,13 @@ class EventPage extends TabularPage<Props, EventPageState> {
         firstName: 'Mitch',
         lastName: 'Jones',
         status: UserStatus.Confirmed,
+        university: 'The University of California, San Diego',
       } as any,
       {
         firstName: 'Davie',
         lastName: 'Jones',
         status: UserStatus.Unconfirmed,
+        university: 'The University of California, San Diego',
       } as any],
     },
     {
@@ -122,11 +124,13 @@ class EventPage extends TabularPage<Props, EventPageState> {
         firstName: 'George',
         lastName: 'Jones',
         status: UserStatus.Unconfirmed,
+        university: 'The University of California, San Diego',
       } as any,
       {
         firstName: 'Buff',
         lastName: 'Jones',
         status: UserStatus.Unconfirmed,
+        university: 'USC',
       } as any],
     }],
   };

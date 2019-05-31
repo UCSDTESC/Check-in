@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import Loading from '~/components/Loading';
 import { downloadResumes, pollDownload } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { applyResumeFilter } from '~/static/ResumeFilter';
+import { applyResumeFilter } from '~/static/Resumes';
 
 import {
   toggleFilter, filterOptionActions, selectAllOptions,

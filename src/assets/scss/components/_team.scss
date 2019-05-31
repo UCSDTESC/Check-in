@@ -3,7 +3,7 @@
   $rejected-color: $default-red;
   $waitlisted-color: $default-blue;
   $unconfirmed-color: $default-purple;
-  $unmatching-color: $default-yellow;
+  $unmatching-color: darken($default-yellow, 10%);
   
   $status-colors: (
     "confirmed": $confirmed-color,
@@ -18,7 +18,7 @@
     "rejected": lighten($rejected-color, 25%),
     "waitlisted": lighten($waitlisted-color, 25%),
     "unconfirmed": lighten($unconfirmed-color, 25%),
-    "unmatched": lighten($unmatching-color, 21%),
+    "unmatched": lighten($unmatching-color, 28%),
   );
   
   $status-text: (
@@ -69,7 +69,6 @@
       }
 
       .team__select {
-        border-radius: $global-radius;
         border-color: $color;
 
         &:checked {
@@ -92,7 +91,6 @@
     flex-basis: 15rem;
     flex-wrap: wrap;
     padding: 0.5rem;
-    justify-content: space-evenly;
   }
   
   &__card {
@@ -109,6 +107,7 @@
   &__select {
     top: 0;
     margin-right: 1rem !important;
+    border-radius: $global-radius;
   }
   
   &__name {
@@ -117,6 +116,7 @@
   
   &__indicator {
     font-size: 0.8rem;
+    font-weight: bold;
     border-radius: 0.2rem;
     border: 2px solid;  
     padding: 0.25rem;

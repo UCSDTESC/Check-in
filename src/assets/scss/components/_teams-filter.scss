@@ -19,14 +19,28 @@
       background: $primary-color;
     }
     
-    &--active, &--new {
+    &--active {
       color: $white;
       background: $primary-color;
     }
     
-    &--new {     
+    &--new-closed {
+      color: $white;
+      background: $primary-color;
+
       &::before {
-        content: "\F067";
+        content: "\F0D7";
+        font-family: 'FontAwesome';
+        margin-right: 0.1rem;
+      }
+    }
+
+    &--new-open {
+      color: $primary-color;
+      background: $white;
+
+      &::before {
+        content: "\F0D8";
         font-family: 'FontAwesome';
         margin-right: 0.1rem;
       }
@@ -36,11 +50,20 @@
   &__filter {
     border: 1px solid $primary-color;
     background: $white;
-    
+  }
+
+  &__filter-delete {
+    margin-right: 0.2rem;
+    border-radius: $global-radius;
+    padding: 3px 6px;
+
     &::before {
-      content: "\F00D";
-      font-family: 'FontAwesome';
-      margin-right: 0.1rem;
+      vertical-align: middle;
+    }
+
+    &:hover {
+      background: $primary-color;
+      color: $white;
     }
   }
 }
