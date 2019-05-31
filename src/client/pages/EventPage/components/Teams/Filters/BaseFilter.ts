@@ -7,6 +7,11 @@ export default interface BaseFilter {
   memberProperty: keyof TESCUser;
 
   /**
+   * The display name for the user column.
+   */
+  memberPropertyDisplayName: string;
+
+  /**
    * Returns the text to display describing the filter.
    */
   getDisplayText(): string;

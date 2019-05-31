@@ -7,7 +7,7 @@ import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { UncontrolledTooltip } from 'reactstrap';
 import { bindActionCreators } from 'redux';
-import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
+import { loadAllAdminEvents, ApplicationDispatch, loadAvailableColumns } from '~/actions';
 import Loading from '~/components/Loading';
 import { loadEventStatistics } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
@@ -33,6 +33,7 @@ type RouteProps = RouteComponentProps<{
 const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
   const eventAlias = ownProps.match.params.eventAlias;
   return {
+    columns: state.admin.availableColumns,
     event: state.admin.events[eventAlias],
     statistics: eventAlias in state.admin.eventStatistics ?
       state.admin.eventStatistics[eventAlias] : null,
@@ -45,6 +46,7 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
   showLoading,
   hideLoading,
   loadAllAdminEvents,
+  loadAvailableColumns,
   updateEventStatistics,
   addEventAlert,
   removeEventAlert,
@@ -146,6 +148,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
 
   componentDidMount() {
     super.componentDidMount();
+    const { columns } = this.props;
     const { eventAlias } = this.props.match.params;
 
     loadEventStatistics(eventAlias)
@@ -160,6 +163,10 @@ class EventPage extends TabularPage<Props, EventPageState> {
       this.props.loadAllAdminEvents()
         .catch(console.error)
         .finally(hideLoading);
+    }
+
+    if (Object.keys(columns).length === 0) {
+      this.props.loadAvailableColumns();
     }
   }
 

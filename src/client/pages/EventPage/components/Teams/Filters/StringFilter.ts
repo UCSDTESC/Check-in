@@ -33,20 +33,13 @@ export default class StringFilter implements BaseFilter {
   input: string;
   operation: StringOperation;
   memberProperty: keyof TESCUser;
+  memberPropertyDisplayName: string;
 
-  constructor(prop: keyof TESCUser, op: StringOperation, input: string) {
+  constructor(prop: keyof TESCUser, propertyDisplay: string, op: StringOperation, input: string) {
     this.memberProperty = prop;
+    this.memberPropertyDisplayName = propertyDisplay;
     this.operation = op;
     this.input = input;
-  }
-
-  setInput(op: StringOperation, input: string) {
-    this.operation = op;
-    this.input = input;
-  }
-
-  setOperation(op: StringOperation) {
-    this.operation = op;
   }
 
   applyFilter(input: TESCTeam[]): TESCTeam[] {
@@ -56,13 +49,13 @@ export default class StringFilter implements BaseFilter {
   }
 
   getDisplayText() {
-    const { input, memberProperty } = this;
+    const { input, memberPropertyDisplayName: dn } = this;
 
     const displays: Map<StringOperation, string> = new Map([
-      [StringOperation.ENDS_WITH, `${memberProperty} ends with "${input}"`],
-      [StringOperation.EQUALS, `${memberProperty} is "${input}"`],
-      [StringOperation.STARTS_WITH, `${memberProperty} starts with "${input}"`],
-      [StringOperation.CONTAINS, `${memberProperty} contains "${input}"`],
+      [StringOperation.ENDS_WITH, `${dn} ends with "${input}"`],
+      [StringOperation.EQUALS, `${dn} is "${input}"`],
+      [StringOperation.STARTS_WITH, `${dn} starts with "${input}"`],
+      [StringOperation.CONTAINS, `${dn} contains "${input}"`],
     ]);
 
     return displays.get(this.operation);

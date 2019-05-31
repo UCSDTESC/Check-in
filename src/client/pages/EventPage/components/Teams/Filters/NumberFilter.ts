@@ -41,10 +41,12 @@ export default class NumberFilter implements BaseFilter {
   input1: number;
   input2: number;
   memberProperty: keyof TESCUser;
+  memberPropertyDisplayName: string;
   operation: NumberOperation;
 
-  constructor(prop: keyof TESCUser, op: NumberOperation, input1: number, input2?: number) {
+  constructor(prop: keyof TESCUser, propertyDisplayName: string, op: NumberOperation, input1: number, input2?: number) {
     this.memberProperty = prop;
+    this.memberPropertyDisplayName = propertyDisplayName;
     this.operation = op;
     this.input1 = input1;
     this.input2 = input2;
@@ -67,15 +69,15 @@ export default class NumberFilter implements BaseFilter {
   }
 
   getDisplayText() {
-    const { input1, input2, memberProperty } = this;
+    const { input1, input2, memberPropertyDisplayName: dn } = this;
 
     const displays: Map<NumberOperation, string> = new Map([
-      [NumberOperation.EQUAL, `${memberProperty} is ${input1}`],
-      [NumberOperation.GT, `${memberProperty} > ${input1}`],
-      [NumberOperation.GTE, `${memberProperty} >= ${input1}`],
-      [NumberOperation.LT, `${memberProperty} < ${input1}`],
-      [NumberOperation.LTE, `${memberProperty} <= ${input1}`],
-      [NumberOperation.BETWEEN, `${memberProperty} between ${input1} and ${input2}`],
+      [NumberOperation.EQUAL, `${dn} is ${input1}`],
+      [NumberOperation.GT, `${dn} > ${input1}`],
+      [NumberOperation.GTE, `${dn} >= ${input1}`],
+      [NumberOperation.LT, `${dn} < ${input1}`],
+      [NumberOperation.LTE, `${dn} <= ${input1}`],
+      [NumberOperation.BETWEEN, `${dn} between ${input1} and ${input2}`],
     ]);
 
     return displays.get(this.operation);

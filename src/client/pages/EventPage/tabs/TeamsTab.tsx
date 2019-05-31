@@ -103,7 +103,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   }
 
   render() {
-    const { teams } = this.props;
+    const { teams, columns } = this.props;
     const { filteredTeams } = this.state;
 
     if (!filteredTeams && !this.props.teams) {
@@ -112,7 +112,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
     return (
       <>
-        <TeamsFilters teams={teams} onFilteredChanged={this.onFilteredChange} />
+        <TeamsFilters teams={teams} onFilteredChanged={this.onFilteredChange} columns={columns} />
 
         <div className="team__container">
           {teams

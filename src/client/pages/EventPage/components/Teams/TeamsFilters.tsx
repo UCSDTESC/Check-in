@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { TeamStatus, getTeamStatus } from '~/static/Teams';
+import { ColumnDefinitions } from '~/static/Types';
 
 import BaseFilter from './Filters/BaseFilter';
 import NumberFilter, { NumberOperation } from './Filters/NumberFilter';
@@ -16,6 +17,7 @@ enum AdmittedSelectOption {
 
 interface TeamsFiltersProps {
   teams: TESCTeam[];
+  columns: ColumnDefinitions;
 
   onFilteredChanged: (newFiltered: Set<string>) => void;
 }
@@ -35,7 +37,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
 
     this.state = {
       activeFilters: [
-        new StringFilter('university', StringOperation.CONTAINS, 'San Diego'),
+        new StringFilter('university', 'University', StringOperation.CONTAINS, 'San Diego'),
       ],
       admittedSelection: AdmittedSelectOption.ALL,
       showNewFilterMenu: false,
