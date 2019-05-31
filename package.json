@@ -39,7 +39,7 @@
     "babel-preset-react-hmre": "^1.1.1",
     "babel-preset-stage-0": "^6.24.1",
     "body-parser": "^1.18.2",
-    "bootstrap": "^4.2.1",
+    "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
     "compression": "^1.7.2",
     "crypto": "^1.0.1",
@@ -65,7 +65,7 @@
     "gulp-tslint": "^8.1.4",
     "gulp-uglify": "^3.0.0",
     "gulp-util": "^3.0.8",
-    "jquery": "^3.3.1",
+    "jquery": "^3.4.1",
     "json2csv": "^4.0.2",
     "jsonwebtoken": "^8.1.1",
     "mime": "^1.6.0",
@@ -171,7 +171,7 @@
     "@types/universal-cookie": "^2.1.0",
     "@types/victory": "^31.0.14",
     "bcrypt-nodejs": "0.0.3",
-    "browser-sync": "^2.18.13",
+    "browser-sync": "^2.26.5",
     "source-map-support": "^0.5.12"
   }
 }
