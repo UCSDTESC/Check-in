@@ -1,32 +1,40 @@
 .team {
   $confirmed-color: $default-green;
   $rejected-color: $default-red;
+  $late-color: $default-red;
   $waitlisted-color: $default-blue;
   $unconfirmed-color: $default-purple;
   $unmatching-color: darken($default-yellow, 10%);
+  $none-color: $medium-gray;
   
   $status-colors: (
     "confirmed": $confirmed-color,
     "rejected": $rejected-color,
+    "late": $late-color,
     "waitlisted": $waitlisted-color,
     "unconfirmed": $unconfirmed-color,
     "unmatched": $unmatching-color,
+    "none": $none-color,
   );
   
   $status-light-colors: (
     "confirmed": lighten($confirmed-color, 40%),
     "rejected": lighten($rejected-color, 25%),
+    "late": lighten($late-color, 25%),
     "waitlisted": lighten($waitlisted-color, 25%),
     "unconfirmed": lighten($unconfirmed-color, 25%),
     "unmatched": lighten($unmatching-color, 28%),
+    "none": lighten($none-color, 10%),
   );
   
   $status-text: (
     "confirmed": 'Confirmed',
     "rejected": 'Rejected',
+    "late": 'Late',
     "waitlisted": 'Waitlisted',
     "unconfirmed": 'Admitted',
     "unmatched": 'Mixed',
+    "none": 'No Status',
   );
   
   @mixin status-highlight-border($status, $color) {

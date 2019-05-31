@@ -125,13 +125,13 @@ class EventPage extends TabularPage<Props, EventPageState> {
       teammates: [{
         firstName: 'George',
         lastName: 'Jones',
-        status: UserStatus.Unconfirmed,
+        status: UserStatus.NoStatus,
         university: 'The University of California, San Diego',
       } as any,
       {
         firstName: 'Buff',
         lastName: 'Jones',
-        status: UserStatus.Unconfirmed,
+        status: UserStatus.NoStatus,
         university: 'San Diego State University',
       } as any],
     }],

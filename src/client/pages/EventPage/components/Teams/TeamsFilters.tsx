@@ -6,6 +6,7 @@ import { TeamStatus, getTeamStatus } from '~/static/Teams';
 import { ColumnDefinitions } from '~/static/Types';
 
 import BaseFilter from './Filters/BaseFilter';
+import EnumFilter, { EnumOperation } from './Filters/EnumFilter';
 import NumberFilter, { NumberOperation } from './Filters/NumberFilter';
 import StringFilter, { StringOperation } from './Filters/StringFilter';
 
@@ -38,6 +39,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
     this.state = {
       activeFilters: [
         new StringFilter('university', 'University', StringOperation.CONTAINS, 'San Diego'),
+        new EnumFilter<UserStatus>('status', 'Status', EnumOperation.INCLUDES, UserStatus.Late, UserStatus.NoStatus),
       ],
       admittedSelection: AdmittedSelectOption.ALL,
       showNewFilterMenu: false,
