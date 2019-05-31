@@ -8,20 +8,20 @@ import { JWTUserAuthToken, JWTUserAuth, SuccessResponse } from '@Shared/api/Resp
 import { Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { Get, JsonController, UseBefore, Res, Req, Post, Body } from 'routing-controllers';
+import { ErrorMessage } from 'utils/Errors';
 
-import { ErrorMessage } from '../../utils/Errors';
-import { AuthorisedUser } from '../decorators/AuthorisedUser';
-import { SelectedEvent } from '../decorators/SelectedEvent';
-import { UserAuthorisation } from '../middleware/UserAuthorisation';
-import { UserLogin } from '../middleware/UserLogin';
-import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
+import { AuthorisedUser } from '../../decorators/AuthorisedUser';
+import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
+import { UserAuthorisation } from '../../middleware/UserAuthorisation';
+import { UserLogin } from '../../middleware/UserLogin';
+import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 
-@JsonController('/user')
-export class UserAuthController {
+@JsonController()
+export class AuthController {
   constructor(
     private EmailService: EmailService,
     private UserService: UserService
-  ) {}
+  ) { }
 
   /**
    * Signs a user with the JWT secret.
@@ -68,18 +68,5 @@ export class UserAuthController {
   async resetPassword(@Body() body: ResetPasswordRequest) {
     await this.UserService.resetUserPassword(body.resetString, body.newPassword);
     return SuccessResponse.Positive;
-  }
-
-  @Get('/current/:eventAlias')
-  @UseBefore(UserAuthorisation)
-  @UseBefore(ValidateEventAlias)
-  async getApplication(@SelectedEvent() event: EventDocument, @AuthorisedUser() account: TESCAccount) {
-    const application = await this.UserService.getUserApplication(event, account, true);
-
-    if (!application) {
-      throw new Error(ErrorMessage.USER_NOT_REGISTERED());
-    }
-
-    return application;
   }
 }

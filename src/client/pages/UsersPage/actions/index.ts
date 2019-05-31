@@ -1,7 +1,7 @@
 import { TESCUser } from '@Shared/ModelTypes';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
-import * as Api from '~/data/Api';
+import * as Api from '~/data/AdminApi';
 import { Column } from '~/static/Types';
 
 import * as Types from './types';
@@ -12,8 +12,8 @@ export const _updateUser = createStandardAction(Types.UPDATE_USER)<TESCUser>();
 
 // Update the user in the database, and then on the client
 export const updateUser = (user: TESCUser): ApplicationAction<Promise<void>> =>
-(dispatch: ApplicationDispatch) =>
-    Api.updateUser(user.event.alias, user)
+  (dispatch: ApplicationDispatch) =>
+    Api.updateUser(user)
       .then(() => {
         dispatch(_updateUser(user));
       })

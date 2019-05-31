@@ -9,7 +9,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadEventStatistics } from '~/data/Api';
+import { loadEventStatistics } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';

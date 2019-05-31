@@ -1,5 +1,5 @@
 import React from 'react';
-import { exportUsers, bulkChange } from '~/data/Api';
+import { exportUsers, bulkChange } from '~/data/AdminApi';
 
 import BulkChange, { BulkChangeFormData } from '../components/BulkChange';
 
@@ -14,7 +14,7 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
     exportUsers(eventAlias)
       .end((err, res) => {
         // Download as file
-        const blob = new Blob([res.text], {type: 'text/csv;charset=utf-8;'});
+        const blob = new Blob([res.text], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
         link.href = url;
@@ -26,8 +26,8 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
   }
 
   onBulkChange = (values: BulkChangeFormData) => {
-    const {event} = this.props;
-    const {users, status} = values;
+    const { event } = this.props;
+    const { users, status } = values;
 
     // Split users into array
     const usersSplit = users.split(/\n/);
@@ -59,7 +59,7 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />
           </div>
-          <div className="col-lg-4 col-md-6"/>
+          <div className="col-lg-4 col-md-6" />
         </div>
       </div>
     );

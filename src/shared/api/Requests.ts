@@ -1,4 +1,4 @@
-import { Question, UserStatus, TESCEventOptions, TESCUser } from '@Shared/ModelTypes';
+import { Question, UserStatus, TESCEventOptions, TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role } from '@Shared/Roles';
 
@@ -7,15 +7,18 @@ export interface CheckinUserRequest {
 }
 
 export interface AddCustomQuestionRequest {
+  alias: string;
   question: Question;
   type: QuestionType;
 }
 
 export interface UpdateCustomQuestionRequest {
+  alias: string;
   question: Question;
 }
 
 export interface DeleteCustomQuestionRequest {
+  alias: string;
   question: Question;
   type: QuestionType;
 }
@@ -26,19 +29,24 @@ export interface BulkChangeRequest {
 }
 
 export interface UpdateEventOptionsRequest {
+  alias: string;
   options: TESCEventOptions;
 }
 
-export interface AddNewSponsorRequest {
+export interface AddSponsorRequest {
   sponsorId: string;
 }
 
-export interface AddNewOrganiserRequest {
+export interface AddOrganiserRequest {
   organiserId: string;
 }
 
 export interface DownloadResumesRequest {
   applicants: string[];
+}
+
+export interface ExportUsersRequest {
+  alias: string;
 }
 
 export interface ForgotPasswordRequest {
@@ -56,10 +64,6 @@ export interface RegisterAdminRequest {
   role: Role;
 }
 
-export interface DeleteAdminRequest {
-  id: string;
-}
-
 export interface RegisterEventRequest {
   name: string;
   alias: string;
@@ -69,6 +73,10 @@ export interface RegisterEventRequest {
   description: string;
   organisedBy: string;
   thirdPartyText?: string;
+}
+
+export interface EmailExistsRequest {
+  email: string;
 }
 
 export interface RegisterUserPersonalSectionRequest {
@@ -113,8 +121,13 @@ export interface RegisterUserUserSectionRequest {
   confirmPassword?: string;
 }
 
-export type RegisterUserRequest = RegisterUserPersonalSectionRequest &
+export type RegisterUserFields = RegisterUserPersonalSectionRequest &
   RegisterUserResponseSectionRequest & RegisterUserUserSectionRequest;
+
+export type RegisterUserRequest = {
+  alias: string;
+  user: RegisterUserFields;
+};
 
 export type UpdateUserRequest = Partial<TESCUser>;
 

@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
 import NavHeader from '~/components/NavHeader';
-import { updateUserField, rsvpUser } from '~/data/User';
+import { updateUserField, rsvpUser } from '~/data/UserApi';
 import { ApplicationState } from '~/reducers';
 
 import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
@@ -48,8 +48,8 @@ class UserPage extends AlertPage<Props, UserPageState> {
   componentDidMount() {
     document.body.classList.add('user-page__body');
 
-    const {showLoading, hideLoading, getCurrentUser} = this.props;
-    const {eventAlias} = this.props.match.params;
+    const { showLoading, hideLoading, getCurrentUser } = this.props;
+    const { eventAlias } = this.props.match.params;
 
     showLoading();
 
@@ -69,13 +69,12 @@ class UserPage extends AlertPage<Props, UserPageState> {
    * @param {UserProfileFormData} newUser The new user object to update to.
    */
   updateUser = (newUser: UserProfileFormData) => {
-    const {updateCurrentUser} = this.props;
-    const {eventAlias} = this.props.match.params;
+    const { updateCurrentUser } = this.props;
     const oldUser = this.props.user;
     // Delta is all the changed fields in the form
     const delta = diff(oldUser, newUser);
 
-    updateUserField(delta, eventAlias)
+    updateUserField(delta)
       .then((newUser) => {
         updateCurrentUser(newUser);
         this.createAlert('You have successfully updated your profile',
@@ -87,7 +86,7 @@ class UserPage extends AlertPage<Props, UserPageState> {
       });
   }
 
-  toggleRSVP = () => this.setState({showRSVP: !this.state.showRSVP});
+  toggleRSVP = () => this.setState({ showRSVP: !this.state.showRSVP });
 
   /**
    * Requests that the server RSVP the current user with the given values.
@@ -96,12 +95,12 @@ class UserPage extends AlertPage<Props, UserPageState> {
    * option exists.
    */
   userRSVP = (status: boolean, bussing: boolean) => {
-    const {user, updateCurrentUser} = this.props;
+    const { user, updateCurrentUser } = this.props;
     if (user.status !== UserStatus.Unconfirmed) {
       return;
     }
 
-    rsvpUser(this.props.match.params.eventAlias, status, bussing)
+    rsvpUser(user._id, status, bussing)
       .then((newUser) => {
         updateCurrentUser(newUser);
         this.createAlert(`You have successfully RSVPed to ${user.event.name}`,
@@ -114,8 +113,8 @@ class UserPage extends AlertPage<Props, UserPageState> {
   }
 
   render() {
-    const {alerts, showRSVP} = this.state;
-    const {user} = this.props;
+    const { alerts, showRSVP } = this.state;
+    const { user } = this.props;
 
     if (!user || !user.event) {
       return <Loading />;

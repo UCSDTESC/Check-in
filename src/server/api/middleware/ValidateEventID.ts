@@ -6,17 +6,17 @@ import { isNullOrUndefined } from 'util';
 
 import { ErrorMessage } from '../../utils/Errors';
 
-export class ValidateEventAlias implements ExpressMiddlewareInterface {
+export class ValidateEventID implements ExpressMiddlewareInterface {
   async use(req: express.Request, res: express.Response, next?: express.NextFunction) {
     const eventService = Container.get(EventService);
-    if (!req.query || !req.query.alias) {
+    if (!req.params || !req.params.eventId) {
       return next(new BadRequestError(ErrorMessage.NO_EVENT_ALIAS()));
     }
 
-    const alias = req.query.alias;
-    const event = await eventService.getEventByAlias(alias);
+    const eventId = req.params.eventId;
+    const event = await eventService.getEventById(eventId);
     if (isNullOrUndefined(event)) {
-      return next(new Error(ErrorMessage.NO_ALIAS_EXISTS(alias)));
+      return next(new Error(ErrorMessage.NO_ID_EXISTS(eventId)));
     }
     next();
   }

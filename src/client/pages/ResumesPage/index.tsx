@@ -4,33 +4,40 @@ import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { RouteComponentProps } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { ApplicationDispatch } from '~/actions';
-import { loadAllApplicants } from '~/data/Api';
+import { ApplicationDispatch, loadAllAdminEvents } from '~/actions';
+import { loadAllSponsorUsers } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 import { applyResumeFilter } from '~/static/ResumeFilter';
 
 import { replaceApplicants, replaceFiltered } from './actions';
 import ResumeList from './components/ResumeList';
 
-const mapStateToProps = (state: ApplicationState) => ({
-  applicants: applyResumeFilter(state.admin.filters,
-    state.admin.resumes.applicants),
-  totalApplicants: state.admin.resumes.applicants.length,
-});
+type RouteProps = RouteComponentProps<{
+  eventAlias: string;
+}>;
+
+const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
+  const eventAlias = ownProps.match.params.eventAlias;
+  return {
+    event: state.admin.events[eventAlias],
+    applicants: applyResumeFilter(state.admin.filters,
+      state.admin.resumes.applicants),
+    totalApplicants: state.admin.resumes.applicants.length,
+  };
+};
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   replaceApplicants,
   showLoading,
   hideLoading,
   replaceFiltered,
+  loadAllAdminEvents,
 }, dispatch);
 
 interface ResumesPageProps {
 }
 
-type Props = RouteComponentProps<{
-  eventAlias: string;
-}> & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & ResumesPageProps;
+type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & ResumesPageProps;
 
 interface ResumesPageState {
   isCompacted: boolean;
@@ -41,20 +48,28 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
     isCompacted: false,
   };
 
-  toggleCompacted = () => this.setState({isCompacted: !this.state.isCompacted});
+  toggleCompacted = () => this.setState({ isCompacted: !this.state.isCompacted });
 
   componentDidMount() {
-    const {showLoading, hideLoading, replaceApplicants} = this.props;
+    const { showLoading, hideLoading } = this.props;
 
     showLoading();
 
-    loadAllApplicants(this.props.match.params.eventAlias)
-      .then((res: TESCUser[]) => {
-        hideLoading();
-        return replaceApplicants(res);
-      })
-      .catch(console.error);
+    if (!this.props.event) {
+      this.props.loadAllAdminEvents()
+        .catch(console.error)
+        .then(this.loadApplicants)
+        .finally(hideLoading);
+    } else {
+      this.loadApplicants()
+        .finally(hideLoading);
+    }
   }
+
+  loadApplicants = () =>
+    loadAllSponsorUsers(this.props.event._id)
+      .then(this.props.replaceApplicants)
+      .catch(console.error);
 
   componentDidUpdate(prevProps: Props) {
     if (prevProps.applicants.length !== this.props.applicants.length) {
@@ -63,8 +78,8 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
   }
 
   render() {
-    const {applicants} = this.props;
-    const {isCompacted} = this.state;
+    const { applicants } = this.props;
+    const { isCompacted } = this.state;
 
     return (
       <div className="resume-body">

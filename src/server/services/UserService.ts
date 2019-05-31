@@ -37,7 +37,7 @@ export default class UserService {
    * @param event The event to poll.
    */
   async getAllUsersByEvent(event: TESCEvent) {
-    const query = this.UserModel.find({event: event});
+    const query = this.UserModel.find({ event: event });
 
     return await query
       .populate('account')
@@ -62,7 +62,7 @@ export default class UserService {
    */
   async checkinUserById(id: string) {
     return await this.UserModel
-      .findByIdAndUpdate(id, { checkedIn : true })
+      .findByIdAndUpdate(id, { checkedIn: true })
       .exec();
   }
 
@@ -84,7 +84,7 @@ export default class UserService {
    */
   async getAccountPublicEvents(account: TESCAccount) {
     const populatedUsers = await this.UserModel
-      .find({account: account})
+      .find({ account: account })
       .populate('event', PUBLIC_EVENT_FIELDS);
 
     return populatedUsers.map(user => user.event);
@@ -97,7 +97,7 @@ export default class UserService {
    */
   async changeUserStatuses(users: string[], status: UserStatus) {
     return this.UserModel
-      .updateMany({_id: {$in: users}}, {status: status})
+      .updateMany({ _id: { $in: users } }, { status: status })
       .exec();
   }
 
@@ -107,19 +107,19 @@ export default class UserService {
    */
   async updateUser(user: TESCUser) {
     return this.UserModel
-      .findOneAndUpdate({_id: user._id}, user)
+      .findOneAndUpdate({ _id: user._id }, user)
       .exec();
   }
 
   /**
    * Get a user's application to a given event.
-   * @param event The event associated with the application.
    * @param account The account that created the application.
+   * @param event The event associated with the application.
    * @param publicOnly Select only the public fields to return.
    */
-  async getUserApplication(event: TESCEvent, account: TESCAccount, publicOnly: boolean = false) {
+  async getUserApplication(account: TESCAccount, event?: TESCEvent, publicOnly: boolean = false) {
     let query = this.UserModel
-      .findOne({account: account, event: event});
+      .find({ account: account, ...event && { event: event } });
 
     if (publicOnly) {
       query = query.select(PUBLIC_USER_FIELDS);
@@ -154,6 +154,15 @@ export default class UserService {
   }
 
   /**
+   * Gets an account by the registered ID.
+   * @param accountId The ID of the account to fetch.
+   */
+  async getAccountById(accountId: string) {
+    return this.AccountModel
+      .findOne({ _id: accountId });
+  }
+
+  /**
    * Get an account by the registered email.
    * @param email The email associated with the account.
    * @param caseSensitive Determines whether the search is case sensitive.
@@ -161,15 +170,26 @@ export default class UserService {
   async getAccountByEmail(email: string, caseSensitive: boolean = false) {
     if (caseSensitive) {
       return this.AccountModel
-        .findOne({email: email})
+        .findOne({ email: email })
         .exec();
     }
 
     return this.AccountModel
-      .findOne({email: {
-        $regex: new RegExp(email, 'i'),
-      }})
+      .findOne({
+        email: {
+          $regex: new RegExp(email, 'i'),
+        },
+      })
       .exec();
+  }
+
+  /**
+   * Get a user by the registered ID.
+   * @param userId The ID associated with the user.
+   */
+  async getUserById(userId: string) {
+    return this.UserModel
+      .findById(userId);
   }
 
   /**
@@ -191,8 +211,8 @@ export default class UserService {
    * @param event The event to associate with the new user.
    * @param request The request data to fill in the user.
    */
-  async createNewUser(account: AccountDocument, event: EventDocument, request: RegisterUserRequest) {
-    const {customQuestionResponses, ...strippedRequest} = request;
+  async createNewUser(account: AccountDocument, event: EventDocument, request: RegisterUserFields) {
+    const { customQuestionResponses, ...strippedRequest } = request;
 
     const newUser = new this.UserModel({
       account: account,
@@ -210,7 +230,7 @@ export default class UserService {
    * @param resume The new resume for the given user.
    */
   async updateUserResume(user: UserDocument, resume: Express.Multer.File) {
-    await user.attach('resume', {path: resume.path});
+    await user.attach('resume', { path: resume.path });
     return user.save();
   }
 
@@ -230,13 +250,13 @@ export default class UserService {
     });
 
     const newUser = await this.UserModel
-      .findOneAndUpdate({_id: user._id}, {$set: editableDelta}, {new: true}).exec();
+      .findOneAndUpdate({ _id: user._id }, { $set: editableDelta }, { new: true }).exec();
 
     if (!newResume) {
       return newUser;
     }
 
-    await newUser.attach('resume', {path: newResume.path});
+    await newUser.attach('resume', { path: newResume.path });
     return newUser.save();
   }
 
@@ -246,7 +266,7 @@ export default class UserService {
    */
   async confirmAccountEmail(accountId: string) {
     return this.AccountModel
-      .findOneAndUpdate({_id: accountId}, {
+      .findOneAndUpdate({ _id: accountId }, {
         confirmed: true,
       })
       .exec();
