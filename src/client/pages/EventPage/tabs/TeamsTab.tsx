@@ -10,7 +10,38 @@ interface TeamsTabProps {
   teams: TESCTeam[];
 }
 
-export default class TeamsTab extends EventPageTab<TeamsTabProps> {
+interface TeamsTabState {
+  selectedTeams: string[];
+}
+
+export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState> {
+  state: Readonly<TeamsTabState> = {
+    selectedTeams: [],
+  };
+
+  /**
+   * Determines whether a given team is selected.
+   */
+  isTeamSelected = (team: TESCTeam) =>
+    this.state.selectedTeams.includes(team._id);
+
+  /**
+   * Handles a team card being selected.
+   */
+  onTeamSelect = (team: TESCTeam) => {
+    if (!this.isTeamSelected(team)) {
+      this.setState({
+        selectedTeams: [
+          ...this.state.selectedTeams,
+          team._id,
+        ],
+      });
+    } else {
+      this.setState({
+        selectedTeams: this.state.selectedTeams.filter(teamId => team._id !== teamId),
+      });
+    }
+  }
 
   render() {
     const { teams } = this.props;
@@ -64,7 +95,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps> {
 
         <div className="team__container">
           {teams.map(team =>
-            <TeamCard key={team._id} team={team} />
+            <TeamCard key={team._id} team={team} isSelected={this.isTeamSelected(team)} onSelect={this.onTeamSelect} />
           )}
         </div>
       </>

@@ -9,26 +9,14 @@ export type TeamStatus = UserStatus | TeamStatusEnum;
 
 interface TeamCardProps {
   team: TESCTeam;
+  isSelected: boolean;
+  onSelect: (team: TESCTeam) => void;
 }
 
 interface TeamCardState {
-  isSelected: boolean;
 }
 
 export default class TeamCard extends React.Component<TeamCardProps, TeamCardState> {
-  state: Readonly<TeamCardState> = {
-    isSelected: false,
-  };
-
-  /**
-   * Toggle the select state of the card.
-   */
-  toggleSelectCard = () => {
-    this.setState({
-      isSelected: !this.state.isSelected,
-    });
-  }
-
   /**
    * Get a user's full name.
    */
@@ -69,20 +57,19 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
   }
 
   render() {
-    const { team } = this.props;
-    const { isSelected } = this.state;
+    const { team, isSelected, onSelect } = this.props;
 
     const teamLeader = team.teammates[0];
     const teamStatus = this.getTeamStatus(team.teammates);
 
     return (
-      <div className={`team team--${teamStatus.toLowerCase()} card`}>
-        <div className="card-body team__card">
+      <div className={`team team--${teamStatus.toLowerCase()} card`} onClick={() => onSelect(team)}>
+        <div className="card-header">
           <h2 className="team__title card-title">
             <input
               className="sd-form__input-checkbox team__select"
               type="checkbox"
-              onChange={this.toggleSelectCard}
+              onChange={() => onSelect(team)}
               checked={isSelected}
             />
             <span className="team__name">{team.code}</span>
@@ -94,6 +81,8 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
               data-offset="0, 8"
             />
           </h2>
+        </div>
+        <div className="card-body team__card">
           <h6 className="team__subtitle card-subtitle mb-2 text-muted">
             Leader: {this.getUserFullName(teamLeader)}
           </h6>
