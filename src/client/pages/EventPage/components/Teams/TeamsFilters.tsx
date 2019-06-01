@@ -9,6 +9,7 @@ import BaseFilter from './Filters/BaseFilter';
 import EnumFilter, { EnumOperation } from './Filters/EnumFilter';
 import NumberFilter, { NumberOperation } from './Filters/NumberFilter';
 import StringFilter, { StringOperation } from './Filters/StringFilter';
+import SelectAllCheckbox, { CheckboxState } from './SelectAllCheckbox';
 
 enum AdmittedSelectOption {
   ALL,
@@ -19,8 +20,10 @@ enum AdmittedSelectOption {
 interface TeamsFiltersProps {
   teams: TESCTeam[];
   columns: ColumnDefinitions;
+  selectAllState: CheckboxState;
 
   onFilteredChanged: (newFiltered: Set<string>) => void;
+  onSelectAll: () => void;
 }
 
 interface TeamsFiltersState {
@@ -216,7 +219,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
   }
 
   render() {
-    const { teams } = this.props;
+    const { teams, onSelectAll, selectAllState } = this.props;
     const { activeFilters } = this.state;
 
     const newFilterButtonClass = classNames(
@@ -234,7 +237,13 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
 
         <div className="row teams-filters teams-filters--secondary teams-filters--border">
           <div className="btn-group mr-2">
-            <button type="button" className="btn teams-filters__button">Select All</button>
+            <button type="button" className="btn teams-filters__button" onClick={onSelectAll} >
+              <SelectAllCheckbox
+                className="teams-filters__checkbox sd-form__input-checkbox"
+                onClick={onSelectAll}
+                state={selectAllState}
+              />
+            </button>
             <button
               type="button"
               className="btn teams-filters__button dropdown-toggle dropdown-toggle-split"
@@ -242,7 +251,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
               aria-haspopup="true"
               aria-expanded="false"
             >
-              <span className="sr-only">Toggle Dropdown</span>
+              <span className="sr-only">Toggle Select Dropdown</span>
             </button>
             <div className="dropdown-menu">
               <a className="dropdown-item" href="#">Select Admitted</a>

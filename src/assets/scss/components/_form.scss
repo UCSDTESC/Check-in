@@ -212,6 +212,10 @@
       &:checked {
         background-color: $accent-green;
       }
+
+      &:indeterminate {
+        background-color: $medium-gray;
+      }
     }
 
     &--error {

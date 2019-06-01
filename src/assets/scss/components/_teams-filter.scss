@@ -66,4 +66,12 @@
       color: $white;
     }
   }
+
+  &__checkbox {
+    border-radius: $global-radius;
+
+    &:checked {
+      background-color: $tesc-blue;
+    }
+  }
 }
