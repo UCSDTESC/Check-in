@@ -141,19 +141,19 @@ class User extends React.Component<Props> {
     );
   }
 
-  onSendAcceptance(user: TESCUser, event: TESCEvent) {
+  onSendAcceptance(user: TESCUser) {
     return (
-      sendAcceptanceEmail(user, event)
+      sendAcceptanceEmail(user)
         .then((success) => {
           this.props.createAlert(
-            `Successfully sent acceptance email to ${user.account.email}`,
+            `Successfully sent acceptance email to '${user.account.email}'`,
             AlertType.Success,
             'UsersPage'
           );
         })
         .catch(() => {
           this.props.createAlert(
-            `Something went wrong when sending acceptance email to ${user.account.email}`,
+            `Something went wrong when sending acceptance email to '${user.account.email}'`,
             AlertType.Danger,
             'UsersPage'
           );
@@ -161,19 +161,19 @@ class User extends React.Component<Props> {
     );
   }
 
-  onSendRejection(user: TESCUser, event: TESCEvent) {
+  onSendRejection(user: TESCUser) {
     return (
-      sendRejectionEmail(user, event)
+      sendRejectionEmail(user)
         .then((success) => {
           this.props.createAlert(
-            `Successfully sent rejection email to ${user.account.email}`,
+            `Successfully sent rejection email to '${user.account.email}'`,
             AlertType.Success,
             'UsersPage'
           );
         })
         .catch(() => {
           this.props.createAlert(
-            `Something went wrong when sending rejection email to ${user.account.email}`,
+            `Something went wrong when sending rejection email to '${user.account.email}'`,
             AlertType.Danger,
             'UsersPage'
           );
@@ -181,18 +181,18 @@ class User extends React.Component<Props> {
     );
   }
 
-  onSendWaitlist(user: TESCUser, event: TESCEvent) {
-    sendWaitlistEmail(user, event)
+  onSendWaitlist(user: TESCUser) {
+    sendWaitlistEmail(user)
       .then((success) => {
         this.props.createAlert(
-          `Successfully sent waitlist email to ${user.account.email}`,
+          `Successfully sent waitlist email to '${user.account.email}'`,
           AlertType.Success,
           'UsersPage'
         );
       })
       .catch(() => {
         this.props.createAlert(
-          `Something went wrong when sending waitlist email to ${user.account.email}`,
+          `Something went wrong when sending waitlist email to '${user.account.email}'`,
           AlertType.Danger,
           'UsersPage'
         );
@@ -212,7 +212,7 @@ class User extends React.Component<Props> {
               <button
                 className={`btn px-2 w-auto
                   rounded-button rounded-button--small`}
-                onClick={() => this.onSendAcceptance(user, event)}
+                onClick={() => this.onSendAcceptance(user)}
               >
               <FA name="envelope" className="mr-2" />
                 Send Acceptance
@@ -222,7 +222,7 @@ class User extends React.Component<Props> {
               <button
                 className={`btn px-2 w-auto
                   rounded-button rounded-button--small`}
-                onClick={() => this.onSendRejection(user, event)}
+                onClick={() => this.onSendRejection(user)}
               >
               <FA name="envelope" className="mr-2" />
                 Send Rejection
@@ -232,7 +232,7 @@ class User extends React.Component<Props> {
               <button
                 className={`btn px-2 w-auto
                   rounded-button rounded-button--small`}
-                onClick={() => this.onSendWaitlist(user, event)}
+                onClick={() => this.onSendWaitlist(user)}
               >
               <FA name="envelope" className="mr-2" />
                 Send Waitlist Email

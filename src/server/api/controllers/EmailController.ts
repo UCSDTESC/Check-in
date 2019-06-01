@@ -1,77 +1,92 @@
 import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
-import { SelectedEvent } from '../decorators/SelectedEvent';
 import {AdminAuthorisation} from '../middleware/AdminAuthorisation';
 import { RoleAuth } from '../middleware/RoleAuth';
-import { ValidateEventAlias } from '../middleware/ValidateEventAlias';
 import { Logger } from '@Config/Logging';
 import EmailService from '@Services/EmailService';
 import { Role } from '@Shared/Roles';
-import { AcceptanceEmailRequest } from '@Shared/api/Requests'
-import { EventDocument } from '@Models/Event';
-import { Post, JsonController, UseBefore, Req, Body } from 'routing-controllers';
+
+import { Post, JsonController, UseBefore, Req, Body, BodyParam, InternalServerError } from 'routing-controllers';
 import { Request } from 'express';
-import { Admin } from '@Shared/ModelTypes';
+import { Admin, TESCUser } from '@Shared/ModelTypes';
 import { SuccessResponse } from '@Shared/api/Responses';
+import EventService from '@Services/EventService';
+import { ErrorMessage } from 'utils/Errors';
 
 @JsonController('/emails')
 @UseBefore(AdminAuthorisation)
 export class EmailController {
   constructor(
-    private EmailService: EmailService
+    private EmailService: EmailService,
+    private EventService: EventService
   ) {}
 
-  @Post('/acceptance/:eventAlias')
+  @Post('/acceptance/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
-  @UseBefore(ValidateEventAlias)
   async sendAcceptanceEmail(
     @AuthorisedAdmin() admin: Admin,
     @Req() request: Request,
-    @SelectedEvent() event: EventDocument,
-    @Body() body: AcceptanceEmailRequest
+    @BodyParam('user') forUser: TESCUser
   ): Promise<SuccessResponse> {
-    const sendGridResponse = await this.EmailService.sendEventAcceptanceEmail(request, admin, event, body.userEmail);
+    const isOrganiser = await this.EventService.isAdminOrganiser(forUser.event.alias, admin);
+
+    if(!isOrganiser) {
+      Logger.error(ErrorMessage.NOT_ORGANISER())
+      return SuccessResponse.Negative
+    }
+      
+    const sendGridResponse = await this.EmailService.sendEventAcceptanceEmail(request, admin, forUser.event, forUser);
     const {statusCode, statusMessage} = sendGridResponse[0];
 
     if (statusCode >= 400) {
-      Logger.error(`Sendgrid Send API Call Failed - returned statusCode ${statusCode} and statusMessage ${statusMessage}`);
+      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${statusCode}' and statusMessage '${statusMessage}'`);
       return SuccessResponse.Negative;
     }
     return SuccessResponse.Positive
   }
 
-  @Post('/rejection/:eventAlias')
+  @Post('/rejection/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
-  @UseBefore(ValidateEventAlias)
   async sendRejectionEmail(
     @AuthorisedAdmin() admin: Admin,
     @Req() request: Request,
-    @SelectedEvent() event: EventDocument,
-    @Body() body: AcceptanceEmailRequest
+    @BodyParam('user') forUser: TESCUser
   ): Promise<SuccessResponse> {
-    const sendGridResponse = await this.EmailService.sendEventRejectionEmail(request, admin, event, body.userEmail);
+    const isOrganiser = await this.EventService.isAdminOrganiser(forUser.event.alias, admin);
+   
+    if(!isOrganiser) {
+      Logger.error(ErrorMessage.NOT_ORGANISER())
+      return SuccessResponse.Negative
+    }
+
+    const sendGridResponse = await this.EmailService.sendEventRejectionEmail(request, admin, forUser.event, forUser);
     const {statusCode, statusMessage} = sendGridResponse[0];
 
     if (statusCode >= 400) {
-      Logger.error(`Sendgrid Send API Call Failed - returned statusCode ${statusCode} and statusMessage ${statusMessage}`);
+      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${statusCode}' and statusMessage '${statusMessage}'`);
       return SuccessResponse.Negative;
     }
     return SuccessResponse.Positive
   }
 
-  @Post('/waitlist/:eventAlias')
+  @Post('/waitlist/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
-  @UseBefore(ValidateEventAlias)
   async sendWaitlistEmail(
     @AuthorisedAdmin() admin: Admin,
     @Req() request: Request,
-    @SelectedEvent() event: EventDocument,
-    @Body() body: AcceptanceEmailRequest
+    @BodyParam('user') forUser: TESCUser
   ): Promise<SuccessResponse> {
-    const sendGridResponse = await this.EmailService.sendEventWaitlistEmail(request, admin, event, body.userEmail);
+    const isOrganiser = await this.EventService.isAdminOrganiser(forUser.event.alias, admin);
+
+    if(!isOrganiser) {
+      Logger.error(ErrorMessage.NOT_ORGANISER())
+      return SuccessResponse.Negative
+    }
+
+    const sendGridResponse = await this.EmailService.sendEventWaitlistEmail(request, admin, forUser.event, forUser);
     const {statusCode, statusMessage} = sendGridResponse[0];
 
     if (statusCode >= 400) {
-      Logger.error(`Sendgrid Send API Call Failed - returned statusCode ${statusCode} and statusMessage ${statusMessage}`);
+      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${statusCode}' and statusMessage '${statusMessage}'`);
       return SuccessResponse.Negative;
     }
     return SuccessResponse.Positive

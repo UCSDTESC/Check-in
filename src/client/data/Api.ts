@@ -10,7 +10,7 @@ import { AddCustomQuestionRequest, UpdateCustomQuestionRequest, DeleteCustomQues
     CheckinUserRequest,
     RegisterEventRequest,
     RegisterUserRequest,
-    AcceptanceEmailRequest } from '@Shared/api/Requests';
+    StatusEmailRequest } from '@Shared/api/Requests';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse,
   SuccessResponse,
   ColumnResponse,
@@ -432,32 +432,32 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
       .use(nocache)
   );
 
-export const sendAcceptanceEmail = (user: TESCUser, event: TESCEvent) =>
+export const sendAcceptanceEmail = (user: TESCUser) =>
   promisify<SuccessResponse>(
     request
-      .post(`/emails/acceptance/${event.alias}`)
+      .post(`/emails/acceptance`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .send({userEmail: user.account.email} as AcceptanceEmailRequest)
+      .send({user} as StatusEmailRequest)
       .use(apiPrefix)
       .use(nocache)
   );
 
-export const sendRejectionEmail = (user: TESCUser, event: TESCEvent) =>
+export const sendRejectionEmail = (user: TESCUser) =>
   promisify<SuccessResponse>(
     request
-      .post(`/emails/rejection/${event.alias}`)
+      .post(`/emails/rejection`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .send({userEmail: user.account.email} as AcceptanceEmailRequest)
+      .send({user} as StatusEmailRequest)
       .use(apiPrefix)
       .use(nocache)
   );
 
-export const sendWaitlistEmail = (user: TESCUser, event: TESCEvent) =>
+export const sendWaitlistEmail = (user: TESCUser) =>
   promisify<SuccessResponse>(
     request
-      .post(`/emails/waitlist/${event.alias}`)
+      .post(`/emails/waitlist/`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .send({userEmail: user.account.email} as AcceptanceEmailRequest)
+      .send({user} as StatusEmailRequest)
       .use(apiPrefix)
       .use(nocache)
   );

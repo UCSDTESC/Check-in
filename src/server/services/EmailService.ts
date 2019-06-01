@@ -58,35 +58,35 @@ export default class EmailService {
   }
 
   /**
-   * Sends an email with a link to confirm the user's account.
+   * Sends an acceptance to the user.
    * @param request The web request associated with the email.
-   * @param account The account associated with the request.
+   * @param admin The admin making the request.
    * @param event The event associated with the request.
    */
-  async sendEventAcceptanceEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
-    Logger.info(`Sending acceptance email to ${userEmail} for event ${event.alias} by ${admin.username}`);
-    return sendAcceptanceEmail(userEmail, event);
+  async sendEventAcceptanceEmail(request: Request, admin: Admin, event: TESCEvent, user: TESCUser) {
+    Logger.info(`Sending acceptance email to '${user.account.email}' for event '${event.alias}' by '${admin.username}'`);
+    return sendAcceptanceEmail(user.account.email, event);
+  }
+
+  /**
+   * Sends a rejection to the user
+   * @param request The web request associated with the email.
+   * @param admin The admin making the request.
+   * @param event The event associated with the request.
+   */
+  async sendEventRejectionEmail(request: Request, admin: Admin, event: TESCEvent, user: TESCUser) {
+    Logger.info(`Sending rejection email to '${user.account.email}' for event '${event.alias}' by '${admin.username}'`);
+    return sendRejectionEmail(user.account.email, event)
   }
 
   /**
    * Sends an email with a link to confirm the user's account.
    * @param request The web request associated with the email.
-   * @param account The account associated with the request.
+   * @param admin The admin making the request.
    * @param event The event associated with the request.
    */
-  async sendEventRejectionEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
-    Logger.info(`Sending rejection email to ${userEmail} for event ${event.alias} by ${admin.username}`);
-    return sendRejectionEmail(userEmail, event)
-  }
-
-  /**
-   * Sends an email with a link to confirm the user's account.
-   * @param request The web request associated with the email.
-   * @param account The account associated with the request.
-   * @param event The event associated with the request.
-   */
-  async sendEventWaitlistEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
-    Logger.info(`Sending waitlist email to ${userEmail} for event ${event.alias} by ${admin.username}`);
-    return sendWaitlistEmail(userEmail, event)
+  async sendEventWaitlistEmail(request: Request, admin: Admin, event: TESCEvent, user: TESCUser) {
+    Logger.info(`Sending waitlist email to '${user.account.email}' for event '${event.alias}' by '${admin.username}'`);
+    return sendWaitlistEmail(user.account.email, event)
   }
 }

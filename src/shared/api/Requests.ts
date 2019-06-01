@@ -124,6 +124,6 @@ export interface RSVPUserRequest {
   bussing: boolean;
 }
 
-export interface AcceptanceEmailRequest {
-  userEmail: string;
+export interface StatusEmailRequest {
+  user: TESCUser;
 }
