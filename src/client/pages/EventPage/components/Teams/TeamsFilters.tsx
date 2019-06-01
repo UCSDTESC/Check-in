@@ -236,28 +236,11 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
         </div>
 
         <div className="row teams-filters teams-filters--secondary teams-filters--border">
-          <div className="btn-group mr-2">
-            <button type="button" className="btn teams-filters__button" onClick={onSelectAll} >
-              <SelectAllCheckbox
-                className="teams-filters__checkbox sd-form__input-checkbox"
-                onClick={onSelectAll}
-                state={selectAllState}
-              />
-            </button>
-            <button
-              type="button"
-              className="btn teams-filters__button dropdown-toggle dropdown-toggle-split"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <span className="sr-only">Toggle Select Dropdown</span>
-            </button>
-            <div className="dropdown-menu">
-              <a className="dropdown-item" href="#">Select Admitted</a>
-              <a className="dropdown-item" href="#">Select Not Admitted</a>
-            </div>
-          </div>
+          <SelectAllCheckbox
+            className="teams-filters__checkbox sd-form__input-checkbox mr-2"
+            onClick={onSelectAll}
+            state={selectAllState}
+          />
 
           <button className={newFilterButtonClass} type="button" onClick={this.toggleNewFilterMenu}>
             New Filter

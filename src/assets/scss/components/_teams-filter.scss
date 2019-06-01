@@ -1,6 +1,8 @@
 .teams-filters {
   background: $white;
   padding: 1rem;
+  display: flex;
+  align-items: center;
   
   &--secondary {
     background: $admin-background-blue;
@@ -69,6 +71,7 @@
 
   &__checkbox {
     border-radius: $global-radius;
+    margin-bottom: 0.5rem !important;
 
     &:checked {
       background-color: $tesc-blue;
