@@ -1,6 +1,10 @@
-import { Config } from '@Config/index.ts';
 import { Logger } from '@Config/Logging';
-import { createTESCEmail, createEventEmail, sendAcceptanceEmail, sendRejectionEmail } from '@Config/Mailer';
+import { 
+  createTESCEmail, 
+  createEventEmail, 
+  sendAcceptanceEmail, 
+  sendRejectionEmail,
+  sendWaitlistEmail } from '@Config/Mailer';
 import { Admin, TESCAccount, TESCUser, TESCEvent, AccountPasswordReset } from '@Shared/ModelTypes';
 import { Request } from 'express';
 import { Service } from 'typedi';
@@ -73,5 +77,16 @@ export default class EmailService {
   async sendEventRejectionEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
     Logger.info(`Sending rejection email to ${userEmail} for event ${event.alias} by ${admin.username}`);
     return sendRejectionEmail(userEmail, event)
+  }
+
+  /**
+   * Sends an email with a link to confirm the user's account.
+   * @param request The web request associated with the email.
+   * @param account The account associated with the request.
+   * @param event The event associated with the request.
+   */
+  async sendEventWaitlistEmail(request: Request, admin: Admin, event: TESCEvent, userEmail: string) {
+    Logger.info(`Sending waitlist email to ${userEmail} for event ${event.alias} by ${admin.username}`);
+    return sendWaitlistEmail(userEmail, event)
   }
 }

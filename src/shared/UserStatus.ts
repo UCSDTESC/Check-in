@@ -14,3 +14,7 @@ export function isAcceptableStatus(status: UserStatus): boolean {
 export function isRejectableStatus(status: UserStatus): boolean {
   return new Set<UserStatus>([UserStatus.Late, UserStatus.Rejected]).has(status);
 }
+
+export function isWaitlistableStatus(status: UserStatus): boolean {
+  return status === UserStatus.Waitlisted
+}

@@ -57,4 +57,23 @@ export class EmailController {
     }
     return SuccessResponse.Positive
   }
+
+  @Post('/waitlist/:eventAlias')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventAlias)
+  async sendWaitlistEmail(
+    @AuthorisedAdmin() admin: Admin,
+    @Req() request: Request,
+    @SelectedEvent() event: EventDocument,
+    @Body() body: AcceptanceEmailRequest
+  ): Promise<SuccessResponse> {
+    const sendGridResponse = await this.EmailService.sendEventWaitlistEmail(request, admin, event, body.userEmail);
+    const {statusCode, statusMessage} = sendGridResponse[0];
+
+    if (statusCode >= 400) {
+      Logger.error(`Sendgrid Send API Call Failed - returned statusCode ${statusCode} and statusMessage ${statusMessage}`);
+      return SuccessResponse.Negative;
+    }
+    return SuccessResponse.Positive
+  }
 }

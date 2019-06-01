@@ -16,7 +16,8 @@ export const Config = {
   SendGrid: {
     Key: process.env.SENDGRID_API_KEY,
     AcceptanceEmailID: process.env.SENDGRID_ACCEPTANCE_EMAIL_ID,
-    RejectionEmailID: process.env.SENDGRID_REJECTION_EMAIL_ID
+    RejectionEmailID: process.env.SENDGRID_REJECTION_EMAIL_ID,
+    WaitlistEmailID: process.env.SENDGRID_WAITLIST_EMAIL_ID
   },
 
   S3: {

@@ -92,3 +92,18 @@ export const sendRejectionEmail = (to: string, event: TESCEvent) => {
 
   return sendgrid.send(msg)
 }
+
+export const sendWaitlistEmail = (to: string, event: TESCEvent) => {
+  const WAITLIST_EMAIL_ID = Config.SendGrid.WaitlistEmailID
+
+  const msg = {
+    to,
+    from: 'no-reply@tesc.ucsd.edu',
+    templateId: WAITLIST_EMAIL_ID,
+    dynamic_template_data: {
+      event
+    }
+  }
+
+  return sendgrid.send(msg)
+}
