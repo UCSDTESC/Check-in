@@ -417,7 +417,7 @@ export const updateCustomQuestion = (eventAlias: string, question: Question) =>
   );
 
 /**
- * Delet a custom question from a given event.
+ * Delete a custom question from a given event.
  * @param {String} eventAlias The alias for the event.
  * @param {Object} question The existing question to delete.
  * @param {QuestionType} type The question type.
@@ -432,6 +432,10 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
       .use(nocache)
   );
 
+/**
+ * Send an acceptance email to a user
+ * @param {TESCUser} user The user to send the email to
+ */
 export const sendAcceptanceEmail = (user: TESCUser) =>
   promisify<SuccessResponse>(
     request
@@ -442,6 +446,10 @@ export const sendAcceptanceEmail = (user: TESCUser) =>
       .use(nocache)
   );
 
+/**
+ * Send a rejection email to a user
+ * @param {TESCUser} user The user to send the email to
+ */
 export const sendRejectionEmail = (user: TESCUser) =>
   promisify<SuccessResponse>(
     request
@@ -452,6 +460,10 @@ export const sendRejectionEmail = (user: TESCUser) =>
       .use(nocache)
   );
 
+/**
+ * Send an waitlist email to a user
+ * @param {TESCUser} user The user to send the email to
+ */
 export const sendWaitlistEmail = (user: TESCUser) =>
   promisify<SuccessResponse>(
     request
