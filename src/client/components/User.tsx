@@ -196,7 +196,7 @@ class User extends React.Component<Props> {
           AlertType.Danger,
           'UsersPage'
         );
-      })
+      });
   }
 
   render() {
@@ -218,7 +218,7 @@ class User extends React.Component<Props> {
                 Send Acceptance
               </button>
             }
-            {isRejectableStatus(user.status) && 
+            {isRejectableStatus(user.status) &&
               <button
                 className={`btn px-2 w-auto
                   rounded-button rounded-button--small`}
@@ -228,7 +228,7 @@ class User extends React.Component<Props> {
                 Send Rejection
               </button>
             }
-            {isWaitlistableStatus(user.status) && 
+            {isWaitlistableStatus(user.status) &&
               <button
                 className={`btn px-2 w-auto
                   rounded-button rounded-button--small`}
