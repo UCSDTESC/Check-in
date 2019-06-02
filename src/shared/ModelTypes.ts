@@ -22,7 +22,7 @@ export interface AccountPasswordReset {
 
 export interface TESCTeam {
   _id?: string & ObjectID;
-  name: string;
+  event: TESCEvent;
   code: string;
   teammates: TESCUser[];
 }

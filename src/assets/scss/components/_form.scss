@@ -377,6 +377,10 @@
     }
   }
 
+  &__team-code {
+    text-align: center;
+  }
+
   &__error {
     padding: 0.35rem 0.75rem 0 0;
     color: $alert-color;

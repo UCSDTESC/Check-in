@@ -1,12 +1,12 @@
 import React from 'react';
 
-interface HeroProps {
+interface LoadingProps {
   title?: string;
 }
 
-export default class Hero extends React.Component<HeroProps> {
+export default class Loading extends React.Component<LoadingProps> {
   render() {
-    const {title} = this.props;
+    const { title } = this.props;
 
     return (
       <div className="container">

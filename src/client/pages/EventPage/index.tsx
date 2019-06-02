@@ -104,7 +104,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
     teams: [{
       _id: 'abc123' as any,
       code: 'ABCD',
-      name: 'Test Team',
+      event: undefined,
       teammates: [{
         firstName: 'Mitch',
         lastName: 'Jones',
@@ -121,7 +121,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
     {
       _id: 'abc124' as any,
       code: 'ABCE',
-      name: 'Test Team 2',
+      event: undefined,
       teammates: [{
         firstName: 'George',
         lastName: 'Jones',
