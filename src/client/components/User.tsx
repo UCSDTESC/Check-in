@@ -1,11 +1,16 @@
 import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
+import { isAcceptableStatus, isRejectableStatus, isWaitlistableStatus } from '@Shared/UserStatus';
 import UUID from 'node-uuid';
 import React from 'react';
+import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
+import { sendAcceptanceEmail, sendRejectionEmail, sendWaitlistEmail } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
+
+import { AlertType } from '../pages/AlertPage';
 
 import CheckboxButton from './CheckboxButton';
 
@@ -18,6 +23,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: UserProps) => ({
 interface UserProps {
   user: TESCUser;
   event: TESCEvent;
+  createAlert: (message: string, type: AlertType, title: string) => void;
 }
 
 // TODO: Create unified User form data that allows for easy extensibility of
@@ -135,11 +141,105 @@ class User extends React.Component<Props> {
     );
   }
 
+  onSendAcceptance(user: TESCUser) {
+    return (
+      sendAcceptanceEmail(user)
+        .then((success) => {
+          this.props.createAlert(
+            `Successfully sent acceptance email to '${user.account.email}'`,
+            AlertType.Success,
+            'UsersPage'
+          );
+        })
+        .catch(() => {
+          this.props.createAlert(
+            `Something went wrong when sending acceptance email to '${user.account.email}'`,
+            AlertType.Danger,
+            'UsersPage'
+          );
+        })
+    );
+  }
+
+  onSendRejection(user: TESCUser) {
+    return (
+      sendRejectionEmail(user)
+        .then((success) => {
+          this.props.createAlert(
+            `Successfully sent rejection email to '${user.account.email}'`,
+            AlertType.Success,
+            'UsersPage'
+          );
+        })
+        .catch(() => {
+          this.props.createAlert(
+            `Something went wrong when sending rejection email to '${user.account.email}'`,
+            AlertType.Danger,
+            'UsersPage'
+          );
+        })
+    );
+  }
+
+  onSendWaitlist(user: TESCUser) {
+    sendWaitlistEmail(user)
+      .then((success) => {
+        this.props.createAlert(
+          `Successfully sent waitlist email to '${user.account.email}'`,
+          AlertType.Success,
+          'UsersPage'
+        );
+      })
+      .catch(() => {
+        this.props.createAlert(
+          `Something went wrong when sending waitlist email to '${user.account.email}'`,
+          AlertType.Danger,
+          'UsersPage'
+        );
+      });
+  }
+
   render() {
     const {handleSubmit, pristine, reset, submitting, event, user} = this.props;
     return (
       <div>
-        <h3>User <small>{this.props.user._id}</small></h3>
+        <div className="row">
+          <div className="col-md-6">
+            <h3>User <small>{user._id}</small></h3>
+          </div>
+          <div className="col-md-6 d-flex flex-row-reverse">
+            {isAcceptableStatus(user.status) &&
+              <button
+                className={`btn px-2 w-auto
+                  rounded-button rounded-button--small`}
+                onClick={() => this.onSendAcceptance(user)}
+              >
+              <FA name="envelope" className="mr-2" />
+                Send Acceptance
+              </button>
+            }
+            {isRejectableStatus(user.status) &&
+              <button
+                className={`btn px-2 w-auto
+                  rounded-button rounded-button--small`}
+                onClick={() => this.onSendRejection(user)}
+              >
+              <FA name="envelope" className="mr-2" />
+                Send Rejection
+              </button>
+            }
+            {isWaitlistableStatus(user.status) &&
+              <button
+                className={`btn px-2 w-auto
+                  rounded-button rounded-button--small`}
+                onClick={() => this.onSendWaitlist(user)}
+              >
+              <FA name="envelope" className="mr-2" />
+                Send Waitlist Email
+              </button>
+            }
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-6">

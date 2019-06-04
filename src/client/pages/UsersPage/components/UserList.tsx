@@ -4,6 +4,8 @@ import ReactTable from 'react-table';
 import User from '~/components/User';
 import { Column } from '~/static/Types';
 
+import AlertPage, { AlertPageState, PageAlert, AlertType } from '../../AlertPage';
+
 // tslint:disable-next-line
 const styles = require('react-table/react-table.css');
 
@@ -11,6 +13,7 @@ interface UserListProps {
   users: TESCUser[];
   columns: Column[];
   event: TESCEvent;
+  createAlert: (message: string, type: AlertType, title: string) => void;
   onUserUpdate: (newUser: TESCUser) => void;
 }
 
@@ -22,6 +25,7 @@ class UserList extends React.Component<UserListProps> {
         event={this.props.event}
         initialValues={row}
         onSubmit={this.props.onUserUpdate}
+        createAlert={this.props.createAlert}
       />
     </div>
   );

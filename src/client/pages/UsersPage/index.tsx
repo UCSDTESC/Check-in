@@ -10,6 +10,8 @@ import { loadAllUsers, loadColumns } from '~/data/Api';
 import { ApplicationState } from '~/reducers';
 import { Column } from '~/static/Types';
 
+import AlertPage, { AlertPageState, PageAlert, AlertType } from '../AlertPage';
+
 import { addColumn, updateUser, removeColumn, addAvailableColumns } from './actions';
 import ColumnEditor from './components/ColumnEditor';
 import UserList from './components/UserList';
@@ -40,13 +42,14 @@ type RouteProps = RouteComponentProps<{
 
 type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & UsersPageProps;
 
-interface UsersPageState {
+interface UsersPageState extends AlertPageState {
   users: TESCUser[];
 }
 
-class UsersPage extends React.Component<Props, UsersPageState> {
+class UsersPage extends AlertPage<Props, UsersPageState> {
   state: Readonly<UsersPageState> = {
     users: [],
+    alerts: [],
   };
 
   componentDidMount() {
@@ -110,12 +113,21 @@ class UsersPage extends React.Component<Props, UsersPageState> {
       .then(() => {
         const {users} = this.state;
 
+        this.createAlert(
+          `Successfully updated ${user.account.email}'s ${this.props.event.name} Application`,
+          AlertType.Success,
+          'UsersPage'
+        );
+
         this.setState({
           users: [
             ...users.filter((curr) => curr._id !== user._id),
             user,
           ],
         });
+      })
+      .catch(() => {
+        this.createAlert(`Something went wrong with user update`, AlertType.Danger, 'UsersPage');
       });
   }
 
@@ -137,6 +149,11 @@ class UsersPage extends React.Component<Props, UsersPageState> {
 
     return (
       <div className="d-flex flex-column h-100 p-3">
+        <div className="align-self-top">
+          <div className="container">
+            {this.renderAlerts(true)}
+          </div>
+        </div>
         <div className="row">
           <div className="col-12">
             <h1>
@@ -166,6 +183,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
           users={users}
           columns={activeColumns}
           onUserUpdate={this.onUserUpdate}
+          createAlert={this.createAlert}
           event={event}
         />
       </div>

@@ -1,15 +1,7 @@
+import { UserStatus } from '@Shared/UserStatus';
 import { ObjectID } from 'bson';
 
 import { Role } from './Roles';
-
-export enum UserStatus {
-  Rejected = 'Rejected',
-  Unconfirmed = 'Unconfirmed',
-  Confirmed = 'Confirmed',
-  Declined = 'Declined',
-  Late = 'Late',
-  Waitlisted = 'Waitlisted',
-}
 
 export interface AccountPasswordReset {
   _id?: string & ObjectID;
