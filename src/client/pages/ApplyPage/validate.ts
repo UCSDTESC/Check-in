@@ -29,7 +29,7 @@ const createValidator = (options: TESCEventOptions, customQuestions: CustomQuest
     const required: Array<keyof ApplyPageFormData> = [
       'firstName', 'lastName', 'email', 'birthdateDay',
       'birthdateMonth', 'birthdateYear', 'gender', 'phone', 'institution',
-      'major', 'year', 'shirtSize', 'teamCode',
+      'major', 'year', 'shirtSize',
     ];
 
     if (options.allowOutOfState) {
@@ -66,6 +66,10 @@ const createValidator = (options: TESCEventOptions, customQuestions: CustomQuest
 
     if (options.requireMajorGPA) {
       required.push('majorGPA');
+    }
+
+    if (options.allowTeammates) {
+      required.push('teamCode');
     }
 
     if (values.institution === 'ucsd') {
@@ -134,7 +138,8 @@ const createValidator = (options: TESCEventOptions, customQuestions: CustomQuest
       errors.confirmPassword = 'Your passwords do not match';
     }
 
-    if (values.teamCode && values.teamCode.trim().length !== TEAM_CODE_LENGTH) {
+    if (options.allowTeammates &&
+      values.teamCode && values.teamCode.trim().length !== TEAM_CODE_LENGTH) {
       errors.teamCode = 'Invalid Team Code';
     }
 

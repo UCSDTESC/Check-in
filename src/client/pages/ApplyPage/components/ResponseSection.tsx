@@ -233,7 +233,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           this.renderCustomQuestions(customQuestions,
             QuestionType.QUESTION_CHECKBOX))}
 
-        {this.renderTeamOptions(this.state.teamState)}
+        {options.allowTeammates && this.renderTeamOptions(this.state.teamState)}
 
         {FormFields.createRow(
           FormFields.createColumn('col-sm-12 col-md-4 text-center',
