@@ -32,6 +32,19 @@ export default class TeamService {
   }
 
   /**
+   * Gets a team by the registered code.
+   * @param code The code associated with the team.
+   */
+  async getTeamByCode(code: string) {
+    return this.TeamModel
+      .findOne({
+        code: code,
+      })
+      .populate('members')
+      .exec();
+  }
+
+  /**
    *
    * @param event The event to associate with the new team.
    * @param code Optional. Provide a 4-digit team code to associate with the team.

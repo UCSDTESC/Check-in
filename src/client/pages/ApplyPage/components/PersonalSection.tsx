@@ -30,14 +30,14 @@ export interface PersonalSectionFormData extends RegisterUserPersonalSectionRequ
 class PersonalSection extends ApplyPageSection<PersonalSectionFormData, PersonalSectionProps> {
   createEmailField() {
     return (
-    <Field
-      className={'sd-form__input-email'}
-      name={'email'}
-      component={FormFields.errorTextInput}
-      placeholder={'email@university.edu'}
-      type={'email'}
-      onBlur={(e: React.FormEvent<HTMLInputElement>) => this.props.onEmailChange(e.currentTarget.value)}
-    />
+      <Field
+        className={'sd-form__input-email'}
+        name={'email'}
+        component={FormFields.errorTextInput}
+        placeholder={'email@university.edu'}
+        type={'email'}
+        onBlur={(e: React.FormEvent<HTMLInputElement>) => this.props.onEmailChange(e.currentTarget.value)}
+      />
     );
   }
 
@@ -47,12 +47,12 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    */
   createResumeUpload() {
     return (
-    <Field
-      component={FileField}
-      name="resume"
-      placeholder="Resume"
-      text="Drop Your Resume"
-    />
+      <Field
+        component={FileField}
+        name="resume"
+        placeholder="Resume"
+        text="Drop Your Resume"
+      />
     );
   }
 
@@ -61,7 +61,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    * @returns {Component}
    */
   createShareCheckbox() {
-    const {event} = this.props;
+    const { event } = this.props;
 
     return (
       <label>
@@ -107,9 +107,9 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    */
   showInstitutionError(info: any) {
     // TODO: Fix fields info type
-    const {touched, error} = info.institution.meta;
+    const { touched, error } = info.institution.meta;
     if (!touched || !error) {
-      return  <div/>;
+      return <div />;
     }
 
     return (
@@ -152,7 +152,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       );
     }
 
-    return  <span/>;
+    return <span />;
   }
 
   /**
@@ -165,7 +165,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     const institution: InstitutionType = info.institution.input.value;
     // Only show for UCSD institution
     if (institution !== InstitutionType.UCSD) {
-      return <span/>;
+      return <span />;
     }
     return (FormFields.createRow(
       FormFields.createColumn('col',
@@ -225,34 +225,34 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
    */
   renderInstitutionOptions(allowHighSchool: boolean) {
     return (
-    <span>
-      {FormFields.createRow(
-        FormFields.createColumn('col-sm-12 no-margin-bottom',
-          FormFields.createLabel('Institution')
-        ),
-        FormFields.createColumn('col-md',
-          this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
-            'UCSD')
-        ),
-        FormFields.createColumn('col-md',
-          this.createInstitutionCard(InstitutionType.University, 'institution-uni',
-            'Other University')
-        ),
-        allowHighSchool ? FormFields.createColumn('col-md',
-          this.createInstitutionCard(InstitutionType.HighSchool,
-            'institution-hs', 'High School')
-        ) : '',
-        FormFields.createColumn('col-sm-12',
-          <Fields
-            names={['institution']}
-            component={this.showInstitutionError}
-          />
-        )
-      )}
+      <span>
+        {FormFields.createRow(
+          FormFields.createColumn('col-sm-12 no-margin-bottom',
+            FormFields.createLabel('Institution')
+          ),
+          FormFields.createColumn('col-md',
+            this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
+              'UCSD')
+          ),
+          FormFields.createColumn('col-md',
+            this.createInstitutionCard(InstitutionType.University, 'institution-uni',
+              'Other University')
+          ),
+          allowHighSchool ? FormFields.createColumn('col-md',
+            this.createInstitutionCard(InstitutionType.HighSchool,
+              'institution-hs', 'High School')
+          ) : '',
+          FormFields.createColumn('col-sm-12',
+            <Fields
+              names={['institution']}
+              component={this.showInstitutionError}
+            />
+          )
+        )}
 
-      <Fields names={['institution']} component={this.showInstitutionBox} />
-      <Fields names={['institution']} component={this.showPIDBox} />
-    </span>
+        <Fields names={['institution']} component={this.showInstitutionBox} />
+        <Fields names={['institution']} component={this.showPIDBox} />
+      </span>
     );
   }
 
@@ -265,102 +265,102 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   }
 
   render() {
-    const {handleSubmit, pristine, submitting} = this.props;
+    const { handleSubmit, pristine, submitting } = this.props;
     const options = this.props.event.options;
 
     return (
-    <form onSubmit={handleSubmit}>
-      {FormFields.createRow(
-        FormFields.createColumn('col-md-6',
-          FormFields.createLabel('First Name'),
-          FormFields.createInput('firstName', 'First Name')
-        ),
-        FormFields.createColumn('col-md-6',
-          FormFields.createLabel('Last Name'),
-          FormFields.createInput('lastName', 'Last Name')
-        )
-      )}
-      {FormFields.createRow(
-        FormFields.createColumn('col-sm-12',
-          FormFields.createLabel('Email'),
-          this.createEmailField()
-        )
-      )}
+      <form onSubmit={handleSubmit}>
+        {FormFields.createRow(
+          FormFields.createColumn('col-md-6',
+            FormFields.createLabel('First Name'),
+            FormFields.createInput('firstName', 'First Name')
+          ),
+          FormFields.createColumn('col-md-6',
+            FormFields.createLabel('Last Name'),
+            FormFields.createInput('lastName', 'Last Name')
+          )
+        )}
+        {FormFields.createRow(
+          FormFields.createColumn('col-sm-12',
+            FormFields.createLabel('Email'),
+            this.createEmailField()
+          )
+        )}
 
-      {FormFields.createRow(
-        FormFields.createColumn('col-sm-12',
-          FormFields.createLabel('Birthdate'),
-          <div className="row">
-            {FormFields.createColumn('col-sm-4',
-              FormFields.createMonthPicker()
-            )}
-            {FormFields.createColumn('col-sm-4',
-              FormFields.createInput('birthdateDay', 'Day', 'number',
-                'sd-form__input-text mb-1 mb-md-0')
-            )}
-            {FormFields.createColumn('col-sm-4',
-              FormFields.createInput('birthdateYear', 'Year', 'number',
-                'sd-form__input-text')
-            )}
-          </div>
-        )
-      )}
+        {FormFields.createRow(
+          FormFields.createColumn('col-sm-12',
+            FormFields.createLabel('Birthdate'),
+            <div className="row">
+              {FormFields.createColumn('col-sm-4',
+                FormFields.createMonthPicker()
+              )}
+              {FormFields.createColumn('col-sm-4',
+                FormFields.createInput('birthdateDay', 'Day', 'number',
+                  'sd-form__input-text mb-1 mb-md-0')
+              )}
+              {FormFields.createColumn('col-sm-4',
+                FormFields.createInput('birthdateYear', 'Year', 'number',
+                  'sd-form__input-text')
+              )}
+            </div>
+          )
+        )}
 
-      {FormFields.createRow(
-        FormFields.createColumn('col-md-6',
-          FormFields.createLabel('Gender'),
-          FormFields.createGenderPicker()
-        ),
-        FormFields.createColumn('col-md-6',
-          FormFields.createLabel('Phone Number'),
-          FormFields.createInput('phone', '555-555-5555', 'text',
-            'sd-form__input-text', this.normalizePhone)
-        )
-      )}
+        {FormFields.createRow(
+          FormFields.createColumn('col-md-6',
+            FormFields.createLabel('Gender'),
+            FormFields.createGenderPicker()
+          ),
+          FormFields.createColumn('col-md-6',
+            FormFields.createLabel('Phone Number'),
+            FormFields.createInput('phone', '555-555-5555', 'text',
+              'sd-form__input-text', this.normalizePhone)
+          )
+        )}
 
-      {this.renderInstitutionOptions(options.allowHighSchool)}
+        {this.renderInstitutionOptions(options.allowHighSchool)}
 
-      <Fields names={['institution']} component={this.showMajorYearBoxes} />
+        <Fields names={['institution']} component={this.showMajorYearBoxes} />
 
-      {FormFields.createRow(
-        FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Github Username', false),
-          FormFields.createInput('github', 'Github')
-        ),
-        FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Personal Website', false),
-          FormFields.createInput('website', 'http://example.com/')
-        )
-      )}
+        {FormFields.createRow(
+          FormFields.createColumn('col-lg-6',
+            FormFields.createLabel('Github Username', false),
+            FormFields.createInput('github', 'Github')
+          ),
+          FormFields.createColumn('col-lg-6',
+            FormFields.createLabel('Personal Website', false),
+            FormFields.createInput('website', 'http://example.com/')
+          )
+        )}
 
-      {this.createGPAFields(options.requireGPA, options.requireMajorGPA)}
-      {options.requireDiversityOption && this.createDiversityOptions()}
+        {this.createGPAFields(options.requireGPA, options.requireMajorGPA)}
+        {options.requireDiversityOption && this.createDiversityOptions()}
 
-      {FormFields.createRow(
-        FormFields.createColumn('col-md-4 col-md-offset-4',
-          FormFields.createLabel('Resume (5MB Max)'),
-          this.createResumeUpload()
-        )
-      )}
+        {FormFields.createRow(
+          FormFields.createColumn('col-md-4 col-md-offset-4',
+            FormFields.createLabel('Resume (5MB Max)', options.requireResume),
+            this.createResumeUpload()
+          )
+        )}
 
-      {FormFields.createRow(
-        FormFields.createColumn('col-sm-12',
-          this.createShareCheckbox()
-        )
-      )}
+        {FormFields.createRow(
+          FormFields.createColumn('col-sm-12',
+            this.createShareCheckbox()
+          )
+        )}
 
-      {FormFields.createRow(
-        FormFields.createColumn('col-sm-12 text-right',
-          <button
-            className="btn rounded-button"
-            type="submit"
-            disabled={pristine || submitting}
-          >
-            Next
+        {FormFields.createRow(
+          FormFields.createColumn('col-sm-12 text-right',
+            <button
+              className="btn rounded-button"
+              type="submit"
+              disabled={pristine || submitting}
+            >
+              Next
           </button>
-        )
-      )}
-    </form>
+          )
+        )}
+      </form>
     );
   }
 

@@ -114,6 +114,7 @@ export interface TESCUser {
   _id?: string & ObjectID;
   event?: TESCEvent;
   account?: TESCAccount;
+  team?: TESCTeam;
   firstName: string;
   lastName: string;
   birthdate: string;

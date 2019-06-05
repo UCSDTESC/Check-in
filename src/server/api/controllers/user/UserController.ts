@@ -4,6 +4,7 @@ import { EventDocument } from '@Models/Event';
 import { UserDocument } from '@Models/User';
 import EmailService from '@Services/EmailService';
 import EventService from '@Services/EventService';
+import TeamService from '@Services/TeamService';
 import UserService from '@Services/UserService';
 import { TESCAccount, TESCUser } from '@Shared/ModelTypes';
 import { RegisterUserRequest, UpdateUserRequest, RSVPUserRequest } from '@Shared/api/Requests';
@@ -28,6 +29,7 @@ export class UserController {
   constructor(
     private EventService: EventService,
     private EmailService: EmailService,
+    private TeamService: TeamService,
     private UserService: UserService,
   ) { }
 
@@ -78,6 +80,19 @@ export class UserController {
     const newUser = await this.UserService.createNewUser(existingAccount, event, user);
     if (newUser && resume) {
       await this.UserService.updateUserResume(newUser, resume);
+    }
+
+    if (event.options.allowTeammates) {
+      let existingTeam = await this.TeamService.getTeamByCode(user.teamCode);
+      if (!existingTeam) {
+        existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
+      }
+
+      existingTeam.members.push(newUser);
+      newUser.team = existingTeam;
+
+      existingTeam.save();
+      newUser.save();
     }
 
     if (!hasExistingAccount) {

@@ -48,7 +48,6 @@ export default class TeamRegister extends React.Component<Props, TeamRegisterSta
 
       if (newState === JoinCreateTeamState.JOIN) {
         for (let i = 0; i < TEAM_CODE_LENGTH; i++) {
-          console.log('Setting');
           this.teamCodeInputs[i].value = this.state.joinTeamCode[i].trim();
         }
       }
@@ -111,7 +110,7 @@ export default class TeamRegister extends React.Component<Props, TeamRegisterSta
             Your team code is
           </h4>
           <h3 className="mx-2">
-            {this.state.createTeamCode}
+            <u>{this.state.createTeamCode}</u>
           </h3>
           <h4>
             .
