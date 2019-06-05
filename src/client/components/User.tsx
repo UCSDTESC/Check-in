@@ -1,11 +1,16 @@
 import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
+import { isAcceptableStatus, isRejectableStatus, isWaitlistableStatus } from '@Shared/UserStatus';
 import UUID from 'node-uuid';
 import React from 'react';
+import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
+import { sendAcceptanceEmail, sendRejectionEmail, sendWaitlistEmail } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
+
+import { AlertType } from '../pages/AlertPage';
 
 import CheckboxButton from './CheckboxButton';
 
@@ -18,6 +23,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: UserProps) => ({
 interface UserProps {
   user: TESCUser;
   event: TESCEvent;
+  createAlert: (message: string, type: AlertType, title: string) => void;
 }
 
 // TODO: Create unified User form data that allows for easy extensibility of
@@ -63,7 +69,7 @@ class User extends React.Component<Props> {
    * @returns {Component[]} The components to render.
    */
   renderFormCheckbox(label: string, value: string, fieldSize: string = 'col-sm-10',
-                     labelSize: string = 'col-sm-2') {
+    labelSize: string = 'col-sm-2') {
     return [
       <label key="0" className={labelSize + ' col-form-label'}>{label}</label>,
       (
@@ -82,7 +88,7 @@ class User extends React.Component<Props> {
    * @param {String} [labelSize=col-sm-4] The class name of the label.
    */
   renderFormField(label: string, value: string, fieldSize: string = 'col-sm-4',
-                  fieldType: string = 'text', labelSize: string = 'col-sm-2') {
+    fieldType: string = 'text', labelSize: string = 'col-sm-2') {
     return [
       <label key="0" className={labelSize + ' col-form-label'}>{label}</label>,
       (
@@ -103,7 +109,7 @@ class User extends React.Component<Props> {
     } else if (user.highSchool) {
       return this.renderFormField('High School', 'highSchool', 'col-sm-4');
     }
-    return  <span/>;
+    return <span />;
   }
 
   renderGPAFields(event: TESCEvent) {
@@ -135,11 +141,105 @@ class User extends React.Component<Props> {
     );
   }
 
+  onSendAcceptance(user: TESCUser) {
+    return (
+      sendAcceptanceEmail(user)
+        .then((success) => {
+          this.props.createAlert(
+            `Successfully sent acceptance email to '${user.account.email}'`,
+            AlertType.Success,
+            'UsersPage'
+          );
+        })
+        .catch(() => {
+          this.props.createAlert(
+            `Something went wrong when sending acceptance email to '${user.account.email}'`,
+            AlertType.Danger,
+            'UsersPage'
+          );
+        })
+    );
+  }
+
+  onSendRejection(user: TESCUser) {
+    return (
+      sendRejectionEmail(user)
+        .then((success) => {
+          this.props.createAlert(
+            `Successfully sent rejection email to '${user.account.email}'`,
+            AlertType.Success,
+            'UsersPage'
+          );
+        })
+        .catch(() => {
+          this.props.createAlert(
+            `Something went wrong when sending rejection email to '${user.account.email}'`,
+            AlertType.Danger,
+            'UsersPage'
+          );
+        })
+    );
+  }
+
+  onSendWaitlist(user: TESCUser) {
+    sendWaitlistEmail(user)
+      .then((success) => {
+        this.props.createAlert(
+          `Successfully sent waitlist email to '${user.account.email}'`,
+          AlertType.Success,
+          'UsersPage'
+        );
+      })
+      .catch(() => {
+        this.props.createAlert(
+          `Something went wrong when sending waitlist email to '${user.account.email}'`,
+          AlertType.Danger,
+          'UsersPage'
+        );
+      });
+  }
+
   render() {
-    const {handleSubmit, pristine, reset, submitting, event, user} = this.props;
+    const { handleSubmit, pristine, reset, submitting, event, user } = this.props;
     return (
       <div>
-        <h3>User <small>{this.props.user._id}</small></h3>
+        <div className="row">
+          <div className="col-md-6">
+            <h3>User <small>{user._id}</small></h3>
+          </div>
+          <div className="col-md-6 d-flex flex-row-reverse">
+            {isAcceptableStatus(user.status) &&
+              <button
+                className={`btn px-2 w-auto
+                  rounded-button rounded-button--small`}
+                onClick={() => this.onSendAcceptance(user)}
+              >
+                <FA name="envelope" className="mr-2" />
+                Send Acceptance
+              </button>
+            }
+            {isRejectableStatus(user.status) &&
+              <button
+                className={`btn px-2 w-auto
+                  rounded-button rounded-button--small`}
+                onClick={() => this.onSendRejection(user)}
+              >
+                <FA name="envelope" className="mr-2" />
+                Send Rejection
+              </button>
+            }
+            {isWaitlistableStatus(user.status) &&
+              <button
+                className={`btn px-2 w-auto
+                  rounded-button rounded-button--small`}
+                onClick={() => this.onSendWaitlist(user)}
+              >
+                <FA name="envelope" className="mr-2" />
+                Send Waitlist Email
+              </button>
+            }
+          </div>
+        </div>
         <form onSubmit={handleSubmit}>
           <div className="row">
             <div className="col-6">
@@ -158,14 +258,14 @@ class User extends React.Component<Props> {
                 {this.renderFormField('Website', 'website')}
               </div>
               {user.resume &&
-              <span>
-                <h5>Resume</h5>
-                <div className="form-group row mb-2">
-                  {this.renderResume()}
-                  {this.renderFormCheckbox('Share Resume', 'shareResume',
-                    'col-sm-4')}
-                </div>
-              </span>}
+                <span>
+                  <h5>Resume</h5>
+                  <div className="form-group row mb-2">
+                    {this.renderResume()}
+                    {this.renderFormCheckbox('Share Resume', 'shareResume',
+                      'col-sm-4')}
+                  </div>
+                </span>}
               <h5>Travel</h5>
               <div className="form-group row mb-2">
                 {this.renderFormCheckbox('Out Of State', 'travel.outOfState',
@@ -208,7 +308,7 @@ class User extends React.Component<Props> {
 
               {event.options.requireClassRequirement ||
                 event.options.requireExtraCurriculars ?
-                  <h5 className="mt-3">Miscellaneous Questions</h5> : ''}
+                <h5 className="mt-3">Miscellaneous Questions</h5> : ''}
               <div className="row my-2 pt-2">
                 {event.options.requireClassRequirement &&
                   <>

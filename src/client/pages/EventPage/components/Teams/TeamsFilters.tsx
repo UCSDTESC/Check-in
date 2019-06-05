@@ -1,4 +1,5 @@
-import { TESCTeam, UserStatus } from '@Shared/ModelTypes';
+import { TESCTeam } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
 import classNames from 'classnames';
 import React from 'react';
 import FA from 'react-fontawesome';

@@ -1,4 +1,4 @@
-import { TESCTeam, UserStatus } from '@Shared/ModelTypes';
+import { TESCTeam } from '@Shared/ModelTypes';
 import classNames from 'classnames';
 import React from 'react';
 import Loading from '~/components/Loading';

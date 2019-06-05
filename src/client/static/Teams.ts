@@ -1,4 +1,5 @@
-import { TESCUser, UserStatus } from '@Shared/ModelTypes';
+import { TESCUser } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
 
 enum TeamStatusEnum {
   Unmatched = 'Unmatched',

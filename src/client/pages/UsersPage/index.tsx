@@ -10,6 +10,8 @@ import { loadAllUsers, loadColumns } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 import { ColumnDefinitions } from '~/static/Types';
 
+import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
+
 import { addColumn, updateUser, removeColumn } from './actions';
 import ColumnEditor from './components/ColumnEditor';
 import UserList from './components/UserList';
@@ -44,12 +46,12 @@ type RouteProps = RouteComponentProps<{
 
 type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & UsersPageProps;
 
-interface UsersPageState {
+interface UsersPageState extends AlertPageState {
   users: TESCUser[];
   autofillColumns: AutofillColumn[];
 }
 
-class UsersPage extends React.Component<Props, UsersPageState> {
+class UsersPage extends AlertPage<Props, UsersPageState> {
   state: Readonly<UsersPageState> = {
     users: [],
     autofillColumns: [
@@ -58,6 +60,7 @@ class UsersPage extends React.Component<Props, UsersPageState> {
         accessor: 'account.email',
       },
     ],
+    alerts: [],
   };
 
   componentDidMount() {
@@ -134,12 +137,21 @@ class UsersPage extends React.Component<Props, UsersPageState> {
       .then(() => {
         const { users } = this.state;
 
+        this.createAlert(
+          `Successfully updated ${user.account.email}'s ${this.props.event.name} Application`,
+          AlertType.Success,
+          'UsersPage'
+        );
+
         this.setState({
           users: [
             ...users.filter((curr) => curr._id !== user._id),
             user,
           ],
         });
+      })
+      .catch(() => {
+        this.createAlert(`Something went wrong with user update`, AlertType.Danger, 'UsersPage');
       });
   }
 
@@ -160,40 +172,44 @@ class UsersPage extends React.Component<Props, UsersPageState> {
     }
 
     return (
-      <div className="page page--admin users-page d-flex flex-column h-100">
-        <div className="container-fluid">
-          <div className="row">
-            <div className="col-12">
-              <h1>
-                <Link to={`/admin/events/${event.alias}`}>
-                  {event.name}
-                </Link> Users</h1>
-            </div>
-            <div className="col-md-6">
-              <ColumnEditor
-                available={autofillColumns}
-                columns={activeColumns}
-                onAddColumn={this.onAddColumn}
-                onDeleteColumn={this.onRemoveColumn}
-              />
-            </div>
-            <div className="col-md-6">
-              <h4>Tools</h4>
-              <button
-                className="btn rounded-button rounded-button--small"
-                onClick={this.loadUsers}
-              >
-                <i className="fa fa-refresh" />&nbsp;Refresh
-              </button>
-            </div>
+      <div className="d-flex flex-column h-100 p-3">
+        <div className="align-self-top">
+          <div className="container">
+            {this.renderAlerts(true)}
           </div>
-          <UserList
-            users={users}
-            columns={activeColumns}
-            onUserUpdate={this.onUserUpdate}
-            event={event}
-          />
         </div>
+        <div className="row">
+          <div className="col-12">
+            <h1>
+              <Link to={`/admin/events/${event.alias}`}>
+                {event.name}
+              </Link> Users</h1>
+          </div>
+          <div className="col-md-6">
+            <ColumnEditor
+              available={autofillColumns}
+              columns={activeColumns}
+              onAddColumn={this.onAddColumn}
+              onDeleteColumn={this.onRemoveColumn}
+            />
+          </div>
+          <div className="col-md-6">
+            <h4>Tools</h4>
+            <button
+              className="btn rounded-button rounded-button--small"
+              onClick={this.loadUsers}
+            >
+              <i className="fa fa-refresh" />&nbsp;Refresh
+            </button>
+          </div>
+        </div>
+        <UserList
+          users={users}
+          columns={activeColumns}
+          onUserUpdate={this.onUserUpdate}
+          createAlert={this.createAlert}
+          event={event}
+        />
       </div>
     );
   }

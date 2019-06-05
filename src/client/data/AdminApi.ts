@@ -11,7 +11,8 @@ import {
   DownloadResumesRequest,
   RegisterAdminRequest,
   CheckinUserRequest,
-  RegisterEventRequest
+  RegisterEventRequest,
+  StatusEmailRequest
 } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse, JWTAdminAuth } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
@@ -353,7 +354,7 @@ export const updateCustomQuestion = (eventAlias: string, question: Question) =>
   );
 
 /**
- * Delet a custom question from a given event.
+ * Delete a custom question from a given event.
  * @param {String} eventAlias The alias for the event.
  * @param {Object} question The existing question to delete.
  * @param {QuestionType} type The question type.
@@ -364,6 +365,48 @@ export const deleteCustomQuestion = (eventAlias: string, question: Question, typ
       .delete(`/customQuestion`)
       .send({ alias: eventAlias, question, type } as DeleteCustomQuestionRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .use(adminApiPrefix)
+      .use(nocache)
+  );
+
+/**
+ * Send an acceptance email to a user
+ * @param {TESCUser} user The user to send the email to
+ */
+export const sendAcceptanceEmail = (user: TESCUser) =>
+  promisify<SuccessResponse>(
+    request
+      .post(`/emails/acceptance`)
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .send({ user } as StatusEmailRequest)
+      .use(adminApiPrefix)
+      .use(nocache)
+  );
+
+/**
+ * Send a rejection email to a user
+ * @param {TESCUser} user The user to send the email to
+ */
+export const sendRejectionEmail = (user: TESCUser) =>
+  promisify<SuccessResponse>(
+    request
+      .post(`/emails/rejection`)
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .send({ user } as StatusEmailRequest)
+      .use(adminApiPrefix)
+      .use(nocache)
+  );
+
+/**
+ * Send an waitlist email to a user
+ * @param {TESCUser} user The user to send the email to
+ */
+export const sendWaitlistEmail = (user: TESCUser) =>
+  promisify<SuccessResponse>(
+    request
+      .post(`/emails/waitlist/`)
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .send({ user } as StatusEmailRequest)
       .use(adminApiPrefix)
       .use(nocache)
   );
