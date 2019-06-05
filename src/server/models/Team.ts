@@ -17,7 +17,7 @@ const TeamSchema = new Schema({
     unique: true,
     required: [true, 'You must define a team code'],
   },
-  teammates: [{
+  members: [{
     type: Schema.Types.ObjectId,
     ref: 'User',
   }],

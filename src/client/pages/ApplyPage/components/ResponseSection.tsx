@@ -23,7 +23,6 @@ interface ResponseSectionState {
 export interface ResponseSectionFormData extends RegisterUserResponseSectionRequest {
   outOfState?: boolean;
   city?: string;
-  teamCode: string;
 }
 
 class ResponseSection extends ApplyPageSection<ResponseSectionFormData, ResponseSectionProps, ResponseSectionState> {

@@ -15,7 +15,7 @@ export interface TESCTeam {
   _id?: string & ObjectID;
   event: TESCEvent;
   code: string;
-  teammates: TESCUser[];
+  members: TESCUser[];
 }
 
 export interface UploadedFile {
@@ -134,7 +134,6 @@ export interface TESCUser {
   };
   availableBus?: string;
   bussing?: boolean;
-  teammates?: string[];
   status?: UserStatus;
   checkedIn?: boolean;
   sanitized?: boolean;

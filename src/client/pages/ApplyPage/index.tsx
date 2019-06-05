@@ -104,18 +104,6 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
       values.university = values.highSchool;
     }
 
-    values.teammates = [];
-
-    if (values.team1) {
-      values.teammates.push(values.team1);
-    }
-    if (values.team2) {
-      values.teammates.push(values.team2);
-    }
-    if (values.team3) {
-      values.teammates.push(values.team3);
-    }
-
     if (values.outOfState) {
       values.travel = {
         outOfState: values.outOfState,

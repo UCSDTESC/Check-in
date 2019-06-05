@@ -112,7 +112,7 @@ export interface RegisterUserResponseSectionRequest {
   extraCurriculars?: string;
   shirtSize?: string;
   classRequirement?: boolean;
-  teammates: string[];
+  teamCode: string;
 }
 
 export interface RegisterUserUserSectionRequest {

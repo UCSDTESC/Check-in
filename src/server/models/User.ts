@@ -25,6 +25,11 @@ export const UserSchema = new Schema({
     ref: 'Account',
     public: true,
   },
+  team: {
+    type: Schema.Types.ObjectId,
+    ref: 'Team',
+    public: true,
+  },
   // Declares the user's first name
   firstName: {
     type: String,
@@ -176,15 +181,6 @@ export const UserSchema = new Schema({
     displayName: 'Bussing',
     public: true,
   },
-  // Declares the array of teammates that the user has defined
-  teammates: [{
-    type: String,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'You must use a valid email'],
-    displayName: 'Teammates',
-    public: true,
-    editable: true,
-  }],
   // Declares the user's current application status
   // Rejected, Unconfirmed, Confirmed, Declined, Late, and Waitlisted
   status: {
@@ -302,14 +298,12 @@ UserSchema.plugin(mongooseDelete);
 export const PUBLIC_USER_FIELDS: string[] = Object.entries((UserSchema as any).paths)
   .filter(([fieldName, field]: any) => 'public' in field.options)
   .map(([fieldName, field]: any) => fieldName);
-PUBLIC_USER_FIELDS.push('teammates');
 PUBLIC_USER_FIELDS.push('resume');
 
 // Defines the fields which are editable by the account user
 export const EDITABLE_USER_FIELDS: string[] = Object.entries((UserSchema as any).paths)
   .filter(([fieldName, field]: any) => 'editable' in field.options)
   .map(([fieldName, field]: any) => fieldName);
-EDITABLE_USER_FIELDS.push('teammates');
 EDITABLE_USER_FIELDS.push('resume');
 
 export const RegisterModel = () =>
