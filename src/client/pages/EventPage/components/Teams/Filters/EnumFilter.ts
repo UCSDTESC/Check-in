@@ -14,10 +14,10 @@ export default class EnumFilter<E> implements BaseFilter {
   EnumFilterOperations: Map<EnumOperation,
     (team: TESCTeam, property: keyof TESCUser, inputs: E[]) => boolean> = new Map([
       [EnumOperation.INCLUDES, (team: TESCTeam, prop: keyof TESCUser, inputs: E[]) => {
-        return team.teammates.every(member => inputs.includes(member[prop] as E));
+        return team.members.every(member => inputs.includes(member[prop] as E));
       }],
       [EnumOperation.EXCLUDES, (team: TESCTeam, prop: keyof TESCUser, inputs: E[]) => {
-        return team.teammates.every(member => !inputs.includes(member[prop] as E));
+        return team.members.every(member => !inputs.includes(member[prop] as E));
       }],
     ]);
 

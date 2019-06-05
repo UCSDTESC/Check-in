@@ -29,8 +29,8 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
   render() {
     const { team, isSelected, onSelect } = this.props;
 
-    const teamLeader = team.teammates[0];
-    const teamStatus = getTeamStatus(team.teammates);
+    const teamLeader = team.members[0];
+    const teamStatus = getTeamStatus(team.members);
 
     return (
       <div className={`team team--${teamStatus.toLowerCase()} card`} onClick={() => onSelect(team)}>
@@ -58,7 +58,7 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
           </h6>
           <div className="team__members">
             {
-              team.teammates.map(user => (
+              team.members.map(user => (
                 <div
                   className={`team__member team__member--${user.status.toLowerCase()}`}
                   data-toggle="tooltip"

@@ -106,7 +106,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
       _id: 'abc123' as any,
       code: 'ABCD',
       event: undefined,
-      teammates: [{
+      members: [{
         firstName: 'Mitch',
         lastName: 'Jones',
         status: UserStatus.Confirmed,
@@ -123,7 +123,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
       _id: 'abc124' as any,
       code: 'ABCE',
       event: undefined,
-      teammates: [{
+      members: [{
         firstName: 'George',
         lastName: 'Jones',
         status: UserStatus.NoStatus,

@@ -18,22 +18,22 @@ type NumberFilterOperationFn = (team: TESCTeam, property: keyof TESCUser, input1
  */
 const NumberFilterOperations: Map<NumberOperation, NumberFilterOperationFn> = new Map([
   [NumberOperation.BETWEEN, (team: TESCTeam, prop: keyof TESCUser, input1: number, input2?: number) => {
-    return !team.teammates.some(member => member[prop] < input1 || member[prop] > input2);
+    return !team.members.some(member => member[prop] < input1 || member[prop] > input2);
   }],
   [NumberOperation.LT, (team: TESCTeam, prop: keyof TESCUser, input1: number) => {
-    return !team.teammates.some(member => member[prop] >= input1);
+    return !team.members.some(member => member[prop] >= input1);
   }],
   [NumberOperation.LTE, (team: TESCTeam, prop: keyof TESCUser, input1: number) => {
-    return !team.teammates.some(member => member[prop] > input1);
+    return !team.members.some(member => member[prop] > input1);
   }],
   [NumberOperation.GT, (team: TESCTeam, prop: keyof TESCUser, input1: number) => {
-    return !team.teammates.some(member => member[prop] <= input1);
+    return !team.members.some(member => member[prop] <= input1);
   }],
   [NumberOperation.GTE, (team: TESCTeam, prop: keyof TESCUser, input1: number) => {
-    return !team.teammates.some(member => member[prop] < input1);
+    return !team.members.some(member => member[prop] < input1);
   }],
   [NumberOperation.EQUAL, (team: TESCTeam, prop: keyof TESCUser, input1: number) => {
-    return !team.teammates.some(member => member[prop] !== input1);
+    return !team.members.some(member => member[prop] !== input1);
   }],
 ]);
 

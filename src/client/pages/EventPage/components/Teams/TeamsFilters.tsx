@@ -75,7 +75,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
 
     this.admittedTeams = new Set(
       this.props.teams
-        .filter(team => admittedStatuses.has(getTeamStatus(team.teammates)))
+        .filter(team => admittedStatuses.has(getTeamStatus(team.members)))
         .map(team => team._id)
     );
   };
@@ -88,7 +88,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
 
     this.notAdmittedTeams = new Set(
       this.props.teams
-        .filter(team => notAdmittedStatuses.has(getTeamStatus(team.teammates)))
+        .filter(team => notAdmittedStatuses.has(getTeamStatus(team.members)))
         .map(team => team._id)
     );
   };

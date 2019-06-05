@@ -16,16 +16,16 @@ type StringFilterOperationFn = (team: TESCTeam, property: keyof TESCUser, input:
  */
 const StringFilterOperations: Map<StringOperation, StringFilterOperationFn> = new Map([
   [StringOperation.STARTS_WITH, (team: TESCTeam, prop: keyof TESCUser, input: string) => {
-    return team.teammates.every(member => member[prop].toString().toLowerCase().startsWith(input));
+    return team.members.every(member => member[prop].toString().toLowerCase().startsWith(input));
   }],
   [StringOperation.ENDS_WITH, (team: TESCTeam, prop: keyof TESCUser, input: string) => {
-    return team.teammates.every(member => member[prop].toString().toLowerCase().endsWith(input));
+    return team.members.every(member => member[prop].toString().toLowerCase().endsWith(input));
   }],
   [StringOperation.EQUALS, (team: TESCTeam, prop: keyof TESCUser, input: string) => {
-    return team.teammates.every(member => member[prop].toString().toLowerCase() === input);
+    return team.members.every(member => member[prop].toString().toLowerCase() === input);
   }],
   [StringOperation.CONTAINS, (team: TESCTeam, prop: keyof TESCUser, input: string) => {
-    return team.teammates.every(member => member[prop].toString().toLowerCase().includes(input));
+    return team.members.every(member => member[prop].toString().toLowerCase().includes(input));
   }],
 ]);
 
