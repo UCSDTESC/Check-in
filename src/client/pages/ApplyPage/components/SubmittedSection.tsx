@@ -48,7 +48,7 @@ class SubmittedSection extends ApplyPageSection<{}, SubmittedSectionProps> {
   }
 }
 
-export default reduxForm<{}, {}>({
+export default reduxForm<{}, SubmittedSectionProps>({
   form: 'apply',
   destroyOnUnmount: false,
 })(SubmittedSection);
