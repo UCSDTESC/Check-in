@@ -6,6 +6,8 @@ import { Container } from 'typedi';
 export type TeamDocument = TESCTeam & Document;
 export type TeamModel = Model<TeamDocument>;
 
+export const TEAM_CODE_LENGTH = 4;
+
 const TeamSchema = new Schema({
   event: {
     type: Schema.Types.ObjectId,
@@ -15,6 +17,8 @@ const TeamSchema = new Schema({
     type: String,
     trim: true,
     unique: true,
+    minlength: TEAM_CODE_LENGTH,
+    maxlength: TEAM_CODE_LENGTH,
     required: [true, 'You must define a team code'],
   },
   members: [{

@@ -1,12 +1,10 @@
 import { EventDocument } from '@Models/Event';
 import EventService from '@Services/EventService';
-import { TESCEvent } from '@Shared/ModelTypes';
+import TeamService from '@Services/TeamService';
 import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore, Param, QueryParam } from 'routing-controllers';
+import { Get, JsonController, Post } from 'routing-controllers';
 
-import { ErrorMessage } from '../../../utils/Errors';
 import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
-import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 
 /**
  * Handles all of the logic for fetching public event information.
@@ -14,7 +12,8 @@ import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 @JsonController('/events')
 export class EventsController {
   constructor(
-    private EventService: EventService
+    private EventService: EventService,
+    private TeamService: TeamService,
   ) { }
 
   @Get('/')
@@ -41,5 +40,10 @@ export class EventsController {
       events: publicEvents,
       userCounts: returnedUserCounts,
     };
+  }
+
+  @Post('/:eventId/teams')
+  async getTeamCode() {
+    return this.TeamService.generateTeamCode();
   }
 }
