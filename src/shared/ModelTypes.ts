@@ -3,6 +3,8 @@ import { ObjectID } from 'bson';
 
 import { Role } from './Roles';
 
+export const TEAM_CODE_LENGTH = 4;
+
 export interface AccountPasswordReset {
   _id?: string & ObjectID;
   account: TESCAccount;

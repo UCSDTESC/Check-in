@@ -1,8 +1,8 @@
 import { Logger } from '@Config/Logging';
 import { EventDocument } from '@Models/Event';
-import { TeamModel, TEAM_CODE_LENGTH } from '@Models/Team';
+import { TeamModel } from '@Models/Team';
 import { UserModel } from '@Models/User';
-import { TESCTeam } from '@Shared/ModelTypes';
+import { TESCTeam, TEAM_CODE_LENGTH } from '@Shared/ModelTypes';
 import { Service, Inject } from 'typedi';
 
 @Service()

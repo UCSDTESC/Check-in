@@ -1,12 +1,10 @@
-import { TESCTeam } from '@Shared/ModelTypes';
+import { TESCTeam, TEAM_CODE_LENGTH } from '@Shared/ModelTypes';
 import { Model, Schema, Document, model } from 'mongoose';
 import * as mongooseDelete from 'mongoose-delete';
 import { Container } from 'typedi';
 
 export type TeamDocument = TESCTeam & Document;
 export type TeamModel = Model<TeamDocument>;
-
-export const TEAM_CODE_LENGTH = 4;
 
 const TeamSchema = new Schema({
   event: {

@@ -189,7 +189,7 @@ export const UserSchema = new Schema({
     trim: true,
     displayName: 'Status',
     public: true,
-    enum: Object.keys(UserStatus),
+    enum: Object.values(UserStatus),
     default: UserStatus.NoStatus,
   },
   // Declares that the user has checked into the event on the day

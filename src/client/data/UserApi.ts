@@ -222,3 +222,15 @@ export const registerUser = (eventAlias: string, user: ApplyPageFormData) => {
   }
   return promisify<RegisterUserResponse>(baseReq);
 };
+
+/**
+ * Creates a new team code based off the event.
+ * @param eventId The event associated with the new team.
+ */
+export const createTeamCode = (eventId: string) =>
+  promisify<string>(
+    request
+      .post(`/events/${eventId}/teams`)
+      .use(userApiPrefix)
+      .use(nocache)
+  );

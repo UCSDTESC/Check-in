@@ -1,34 +1,72 @@
+import { TEAM_CODE_LENGTH, TESCEvent } from '@Shared/ModelTypes';
 import React from 'react';
+import { WrappedFieldProps } from 'redux-form';
 
-const TEAM_CODE_LENGTH = 4;
+export enum JoinCreateTeamState {
+  JOIN,
+  CREATE,
+}
 
-interface TeamRegisterProps {
-  createNew: boolean;
+export interface TeamRegisterProps {
+  state?: JoinCreateTeamState;
+  generateTeamCode: () => Promise<string>;
 }
 
 interface TeamRegisterState {
-  newTeam: boolean;
-  teamCode?: string[];
+  joinTeamCode?: string[];
+  createTeamCode: string;
 }
 
-export default class TeamRegister extends React.Component<TeamRegisterProps, TeamRegisterState> {
+type Props = WrappedFieldProps & TeamRegisterProps;
+
+export default class TeamRegister extends React.Component<Props, TeamRegisterState> {
   state: Readonly<TeamRegisterState> = {
-    newTeam: false,
-    teamCode: new Array(TEAM_CODE_LENGTH).fill(' '),
+    joinTeamCode: new Array(TEAM_CODE_LENGTH).fill(' '),
+    createTeamCode: '',
   };
 
   teamCodeInputs: HTMLInputElement[] = new Array(TEAM_CODE_LENGTH);
+
+  componentDidMount() {
+    this.props.generateTeamCode()
+      .then(newCode => {
+        this.setState({
+          createTeamCode: newCode,
+        });
+      });
+  }
+
+  componentDidUpdate(prevProps: TeamRegisterProps) {
+    const newState = this.props.state;
+    // Someone updated state, change to the other team code
+    if (newState !== prevProps.state) {
+      const updatedCode = newState === JoinCreateTeamState.CREATE
+        ? this.state.createTeamCode
+        : this.state.joinTeamCode.join('');
+
+      this.props.input.onChange(updatedCode);
+
+      if (newState === JoinCreateTeamState.JOIN) {
+        for (let i = 0; i < TEAM_CODE_LENGTH; i++) {
+          console.log('Setting');
+          this.teamCodeInputs[i].value = this.state.joinTeamCode[i].trim();
+        }
+      }
+    }
+  }
 
   /**
    * Update a part of the team code.
    */
   updateTeamCode = (value: string, index: number) => {
-    const newTeamCode = [...this.state.teamCode];
-    newTeamCode[index] = value;
+    const newTeamCode = [...this.state.joinTeamCode];
+    newTeamCode[index] = value.length === 0 ? ' ' : value;
 
     this.setState({
-      teamCode: newTeamCode,
+      joinTeamCode: newTeamCode,
     });
+
+    this.props.input.onChange(newTeamCode.join(''));
   };
 
   /**
@@ -50,6 +88,9 @@ export default class TeamRegister extends React.Component<TeamRegisterProps, Tea
    * Creates an input text field for an index within the team code.
    */
   createCodeInput = (index: number) => {
+    // Placeholder of ABCD
+    const placeholder = (index + 10).toString(36).toUpperCase();
+
     return (
       <input
         type="text"
@@ -57,27 +98,58 @@ export default class TeamRegister extends React.Component<TeamRegisterProps, Tea
         onChange={e => this.handleCodeInputChange(e, index)}
         ref={ref => this.teamCodeInputs[index] = ref}
         maxLength={1}
+        placeholder={placeholder}
       />
+    );
+  }
+
+  renderCreateTeam() {
+    return (
+      <>
+        <div className="row justify-content-center">
+          <h4>
+            Your team code is
+          </h4>
+          <h3 className="mx-2">
+            {this.state.createTeamCode}
+          </h3>
+          <h4>
+            .
+          </h4>
+        </div>
+        <div className="row justify-content-center">
+          <h5>
+            Make sure your teammates join with this code.
+          </h5>
+        </div>
+      </>
     );
   }
 
   renderJoinTeam() {
     return (
-      <div className="row">
-        {[...Array(TEAM_CODE_LENGTH)].map((_, i) =>
-          <div key={i} className="col">
-            {this.createCodeInput(i)}
-          </div>
-        )}
-      </div>
+      <>
+        <div className="row">
+          <h4>Your 4-digit Team Code:</h4>
+        </div>
+        <div className="row">
+          {[...Array(TEAM_CODE_LENGTH)].map((_, i) =>
+            <div key={i} className="col">
+              {this.createCodeInput(i)}
+            </div>
+          )}
+        </div>
+      </>
     );
   }
 
   render() {
-    const { createNew } = this.props;
+    const { state } = this.props;
+
     return (
       <div className="container">
-        {!createNew && this.renderJoinTeam()}
+        {state === JoinCreateTeamState.JOIN && this.renderJoinTeam()}
+        {state === JoinCreateTeamState.CREATE && this.renderCreateTeam()}
       </div>
     );
   }

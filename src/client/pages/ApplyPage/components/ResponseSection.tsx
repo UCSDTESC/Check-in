@@ -2,16 +2,12 @@ import { CustomQuestions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
-import { Fields, reduxForm, Field } from 'redux-form';
+import { Fields, reduxForm, Field, WrappedFieldProps } from 'redux-form';
 import * as FormFields from '~/components/Fields';
+import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
-import TeamRegister from './TeamRegister';
-
-enum JoinCreateTeamState {
-  JOIN,
-  CREATE,
-}
+import TeamRegister, { JoinCreateTeamState, TeamRegisterProps } from './TeamRegister';
 
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }
@@ -110,9 +106,9 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
   /**
    * Create the error for the join/create team field.
    */
-  showTeamError(info: any) {
+  showTeamError(info: WrappedFieldProps) {
     // TODO: Fix fields info type
-    const { touched, error } = info.team.meta;
+    const { touched, error } = info.meta;
     if (!touched || !error) {
       return <div />;
     }
@@ -126,8 +122,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
    * Renders the components necessary for creating or joining a team.
    */
   renderTeamOptions = (teamState?: JoinCreateTeamState) => {
-    const teamRegister = <TeamRegister createNew={teamState === JoinCreateTeamState.CREATE} />;
-    const conditionalRegister = teamState !== undefined ? teamRegister : <></>;
+    const { event } = this.props;
 
     return (
       <span>
@@ -144,12 +139,19 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
               'Join')
           ),
           FormFields.createColumn('col-sm-12',
-            <Fields
-              names={['team']}
+            <Field
+              name="teamCode"
               component={this.showTeamError}
             />
           ),
-          conditionalRegister
+          <Field
+            name="teamCode"
+            component={TeamRegister}
+            props={{
+              state: teamState,
+              generateTeamCode: () => createTeamCode(event._id),
+            } as TeamRegisterProps}
+          />
         )}
       </span>
     );
