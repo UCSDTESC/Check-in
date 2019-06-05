@@ -3,7 +3,7 @@ import React from 'react';
 const TEAM_CODE_LENGTH = 4;
 
 interface TeamRegisterProps {
-
+  createNew: boolean;
 }
 
 interface TeamRegisterState {
@@ -61,16 +61,23 @@ export default class TeamRegister extends React.Component<TeamRegisterProps, Tea
     );
   }
 
+  renderJoinTeam() {
+    return (
+      <div className="row">
+        {[...Array(TEAM_CODE_LENGTH)].map((_, i) =>
+          <div key={i} className="col">
+            {this.createCodeInput(i)}
+          </div>
+        )}
+      </div>
+    );
+  }
+
   render() {
+    const { createNew } = this.props;
     return (
       <div className="container">
-        <div className="row">
-          {[...Array(TEAM_CODE_LENGTH)].map((_, i) =>
-            <div key={i} className="col">
-              {this.createCodeInput(i)}
-            </div>
-          )}
-        </div>
+        {!createNew && this.renderJoinTeam()}
       </div>
     );
   }

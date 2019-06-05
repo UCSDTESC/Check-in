@@ -2,24 +2,35 @@ import { CustomQuestions } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
-import { Fields, reduxForm } from 'redux-form';
+import { Fields, reduxForm, Field } from 'redux-form';
 import * as FormFields from '~/components/Fields';
-import TeamRegister from '~/components/TeamRegister';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
+import TeamRegister from './TeamRegister';
+
+enum JoinCreateTeamState {
+  JOIN,
+  CREATE,
+}
 
 interface ResponseSectionProps extends ApplyPageSectionProps {
+}
+
+interface ResponseSectionState {
+  teamState?: JoinCreateTeamState;
 }
 
 export interface ResponseSectionFormData extends RegisterUserResponseSectionRequest {
   outOfState?: boolean;
   city?: string;
-  team1?: string;
-  team2?: string;
-  team3?: string;
+  teamCode: string;
 }
 
-class ResponseSection extends ApplyPageSection<ResponseSectionFormData, ResponseSectionProps> {
+class ResponseSection extends ApplyPageSection<ResponseSectionFormData, ResponseSectionProps, ResponseSectionState> {
+  state: Readonly<ResponseSectionState> = {
+    teamState: undefined,
+  };
+
   /**
    * Create a new input field when user claims to be out of state.
    * @param {Object} values Information returned by the {@link Fields}
@@ -66,6 +77,83 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           'Your Response...')
       )
     ));
+  }
+
+  /**
+   * Handles the new values of the change/join team radio buttons.
+   */
+  onChangeTeamState = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newState: JoinCreateTeamState = Number(e.currentTarget.value);
+    this.setState({
+      teamState: newState,
+    });
+  };
+
+  /**
+   * Create a join or create team card.
+   */
+  createTeamStateCard(state: JoinCreateTeamState, id: string, label: string) {
+    return (
+      <div className="sd-form__institution">
+        <input
+          type="radio"
+          value={state}
+          name="institution"
+          id={id}
+          className="sd-form__institution-input"
+          onChange={this.onChangeTeamState}
+        />
+        {FormFields.createLabel(label, false, 'sd-form__institution-label', id)}
+      </div>
+    );
+  }
+
+  /**
+   * Create the error for the join/create team field.
+   */
+  showTeamError(info: any) {
+    // TODO: Fix fields info type
+    const { touched, error } = info.team.meta;
+    if (!touched || !error) {
+      return <div />;
+    }
+
+    return (
+      FormFields.createError(error)
+    );
+  }
+
+  /**
+   * Renders the components necessary for creating or joining a team.
+   */
+  renderTeamOptions = (teamState?: JoinCreateTeamState) => {
+    const teamRegister = <TeamRegister createNew={teamState === JoinCreateTeamState.CREATE} />;
+    const conditionalRegister = teamState !== undefined ? teamRegister : <></>;
+
+    return (
+      <span>
+        {FormFields.createRow(
+          FormFields.createColumn('col-sm-12 no-margin-bottom',
+            FormFields.createLabel('Create or Join a Team')
+          ),
+          FormFields.createColumn('col-md',
+            this.createTeamStateCard(JoinCreateTeamState.CREATE, 'institution-ucsd',
+              'Create')
+          ),
+          FormFields.createColumn('col-md',
+            this.createTeamStateCard(JoinCreateTeamState.JOIN, 'institution-uni',
+              'Join')
+          ),
+          FormFields.createColumn('col-sm-12',
+            <Fields
+              names={['team']}
+              component={this.showTeamError}
+            />
+          ),
+          conditionalRegister
+        )}
+      </span>
+    );
   }
 
   render() {
@@ -144,14 +232,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           this.renderCustomQuestions(customQuestions,
             QuestionType.QUESTION_CHECKBOX))}
 
-        {options.allowTeammates && FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('Join or Create a Team')
-          ),
-          FormFields.createColumn('col-sm-12',
-            <TeamRegister />
-          ),
-        )}
+        {this.renderTeamOptions(this.state.teamState)}
 
         {FormFields.createRow(
           FormFields.createColumn('col-sm-12 col-md-4 text-center',
