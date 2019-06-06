@@ -1,8 +1,6 @@
 import { TESCTeam } from '@Shared/ModelTypes';
-import classNames from 'classnames';
 import React from 'react';
 import Loading from '~/components/Loading';
-import { getTeamStatus, TeamStatus } from '~/static/Teams';
 
 import { CheckboxState } from '../components/Teams/SelectAllCheckbox';
 import TeamCard from '../components/Teams/TeamCard';
@@ -134,8 +132,8 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
     const { teams, columns } = this.props;
     const { filteredTeams, selectedTeams } = this.state;
 
-    if (!filteredTeams && !this.props.teams) {
-      return <Loading />;
+    if (filteredTeams.size === 0 && teams.length === 0) {
+      return <Loading title="Teams" />;
     }
 
     return (

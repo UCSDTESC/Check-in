@@ -14,6 +14,9 @@ export interface TabPage {
   name: string;
   anchor: string;
   render: () => JSX.Element;
+
+  onTabOpen?: () => any;
+  onTabClose?: () => any;
 }
 
 export interface TabularPageState extends AlertPageState {
@@ -46,7 +49,16 @@ export default class TabularPage<P extends Props, S extends TabularPageState> ex
       if (matchingTab === undefined) {
         return;
       }
+
+      if (activeTab && activeTab.onTabClose) {
+        activeTab.onTabClose();
+      }
+
       this.setState({ activeTab: matchingTab });
+
+      if (matchingTab.onTabOpen) {
+        matchingTab.onTabOpen();
+      }
     }
   };
 

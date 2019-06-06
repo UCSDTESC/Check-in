@@ -66,4 +66,17 @@ export default class TeamService {
 
     return newTeam.save();
   }
+
+  /**
+   * Gets all teams that are registered to a given event.
+   * @param event The event associated with all the teams.
+   */
+  async getTeamsByEvent(event: EventDocument) {
+    return this.TeamModel
+      .find({
+        event: event,
+      })
+      .populate('members')
+      .exec();
+  }
 }

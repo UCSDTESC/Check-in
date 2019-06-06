@@ -1,6 +1,7 @@
 import {
   TESCUser, Admin, TESCEventOptions, Question, Download,
-  TESCEvent
+  TESCEvent,
+  TESCTeam
 } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { ADMIN_API_PREFIX } from '@Shared/api/Paths';
@@ -118,6 +119,19 @@ export const loadAllSponsorUsers = (eventId: string) =>
   promisify<TESCUser[]>(
     request
       .get(`/events/${eventId}/sponsor-users`)
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .use(adminApiPrefix)
+      .use(nocache)
+  );
+
+/**
+ * Request a list of all teams.
+ * @returns {Promise} A promise of the request.
+ */
+export const loadAllTeams = (eventId: string) =>
+  promisify<TESCTeam[]>(
+    request
+      .get(`/events/${eventId}/teams`)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
       .use(nocache)

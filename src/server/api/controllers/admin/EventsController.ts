@@ -4,8 +4,9 @@ import { EventDocument } from '@Models/Event';
 import AdminService from '@Services/AdminService';
 import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
+import TeamService from '@Services/TeamService';
 import UserService from '@Services/UserService';
-import { TESCEvent, Admin, TESCUser } from '@Shared/ModelTypes';
+import { TESCEvent, Admin, TESCUser, TESCTeam } from '@Shared/ModelTypes';
 import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
 import {
   RegisterEventRequest, UpdateEventOptionsRequest, AddSponsorRequest, AddOrganiserRequest,
@@ -35,6 +36,7 @@ export class EventsController {
     private AdminService: AdminService,
     private EventService: EventService,
     private SponsorService: SponsorService,
+    private TeamService: TeamService,
     private UserService: UserService,
   ) { }
 
@@ -109,7 +111,7 @@ export class EventsController {
   @Get('/:eventId/users')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   @UseBefore(ValidateEventID)
-  async get(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument): Promise<TESCUser[]> {
+  async getUsers(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument): Promise<TESCUser[]> {
     let users: TESCUser[];
     const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
     const isSponsor = await this.EventService.isAdminSponsor(event.alias, admin);
@@ -122,6 +124,18 @@ export class EventsController {
     }
 
     return users;
+  }
+
+  @Get('/:eventId/teams')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventID)
+  async getTeams(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument): Promise<TESCTeam[]> {
+    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
+    if (!isOrganiser) {
+      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+    }
+
+    return this.TeamService.getTeamsByEvent(event);
   }
 
   @Get('/:eventId/sponsor-users')

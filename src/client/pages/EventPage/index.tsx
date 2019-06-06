@@ -1,4 +1,4 @@
-import { TESCTeam } from '@Shared/ModelTypes';
+import { TESCTeam, TESCEvent } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 import { ObjectID } from 'bson';
 import React from 'react';
@@ -10,7 +10,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch, loadAvailableColumns } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadEventStatistics } from '~/data/AdminApi';
+import { loadEventStatistics, loadAllTeams } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
@@ -84,6 +84,8 @@ class EventPage extends TabularPage<Props, EventPageState> {
       name: 'Teams',
       anchor: 'teams',
       render: this.renderTeams.bind(this),
+      onTabOpen: this.loadTeams.bind(this),
+      onTabClose: () => this.setState({ teams: [] }),
     },
     {
       icon: 'star',
@@ -102,40 +104,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
   state: Readonly<EventPageState> = {
     activeTab: this.tabPages[0],
     alerts: [],
-    teams: [{
-      _id: 'abc123' as any,
-      code: 'ABCD',
-      event: undefined,
-      members: [{
-        firstName: 'Mitch',
-        lastName: 'Jones',
-        status: UserStatus.Confirmed,
-        university: 'The University of California, San Diego',
-      } as any,
-      {
-        firstName: 'Davie',
-        lastName: 'Jones',
-        status: UserStatus.Unconfirmed,
-        university: 'The University of California, San Diego',
-      } as any],
-    },
-    {
-      _id: 'abc124' as any,
-      code: 'ABCE',
-      event: undefined,
-      members: [{
-        firstName: 'George',
-        lastName: 'Jones',
-        status: UserStatus.NoStatus,
-        university: 'The University of California, San Diego',
-      } as any,
-      {
-        firstName: 'Buff',
-        lastName: 'Jones',
-        status: UserStatus.NoStatus,
-        university: 'San Diego State University',
-      } as any],
-    }],
+    teams: [],
   };
 
   /**
@@ -172,6 +141,21 @@ class EventPage extends TabularPage<Props, EventPageState> {
   }
 
   /**
+   * Loads all the teams for the current event into the state.
+   */
+  loadTeams() {
+    const { event } = this.props;
+    if (!event) {
+      return;
+    }
+
+    return loadAllTeams(event._id)
+      .then(teams => {
+        this.setState({ teams: teams });
+      });
+  }
+
+  /**
    * Renders the event tab for actions.
    * @returns {Component} The action tab.
    */
@@ -193,6 +177,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
    */
   renderTeams() {
     const { teams } = this.state;
+
     return (<TeamsTab teams={teams} {...this.props} />);
   }
 
@@ -217,7 +202,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
     const { activeTab } = this.state;
     if (!event || !statistics) {
       return (
-        <Loading />
+        <Loading title="Event" />
       );
     }
 
