@@ -129,6 +129,7 @@ export default class UserService {
     return query
       .populate('event')
       .populate('account')
+      .populate('team')
       .exec();
   }
 

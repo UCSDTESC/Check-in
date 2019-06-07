@@ -1,6 +1,6 @@
 import { Logger } from '@Config/Logging';
 import { EventDocument } from '@Models/Event';
-import { TeamModel } from '@Models/Team';
+import { TeamModel, TeamDocument } from '@Models/Team';
 import { UserModel } from '@Models/User';
 import { TESCTeam, TEAM_CODE_LENGTH } from '@Shared/ModelTypes';
 import { Service, Inject } from 'typedi';
@@ -78,5 +78,31 @@ export default class TeamService {
       })
       .populate('members')
       .exec();
+  }
+
+  /**
+   * Gets the team associated with a given ID.
+   * @param teamId The ID associated with the team.
+   */
+  async getTeamById(teamId: string) {
+    return this.TeamModel
+      .findById(teamId);
+  }
+
+  /**
+   * Populates the fields that are public only to the teammates.
+   * @param team The team to populate.
+   */
+  async populateTeammatesPublicFields(team: TeamDocument) {
+    return team
+      .populate({
+        path: 'members',
+        select: 'firstName lastName',
+        populate: {
+          path: 'account',
+          select: 'email',
+        },
+      })
+      .execPopulate();
   }
 }

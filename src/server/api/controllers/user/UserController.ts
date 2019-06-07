@@ -6,7 +6,7 @@ import EmailService from '@Services/EmailService';
 import EventService from '@Services/EventService';
 import TeamService from '@Services/TeamService';
 import UserService from '@Services/UserService';
-import { TESCAccount, TESCUser } from '@Shared/ModelTypes';
+import { TESCAccount, TESCUser, TESCTeam } from '@Shared/ModelTypes';
 import { RegisterUserRequest, UpdateUserRequest, RSVPUserRequest } from '@Shared/api/Requests';
 import { RegisterUserResponse } from '@Shared/api/Responses';
 import { Request } from 'express-serve-static-core';
@@ -132,5 +132,17 @@ export class UserController {
     await this.UserService.RSVPUser(user, body.status, body.bussing);
     const newUsers = await this.UserService.getUserApplication(account, user.event, true);
     return newUsers[0];
+  }
+
+  @Get('/:userId/team')
+  @UseBefore(UserAuthorisation)
+  async getTeam(@SelectedUserID() user: UserDocument, @AuthorisedUser() account: TESCAccount): Promise<TESCTeam> {
+    if (user.account._id.toString() !== account._id.toString()) {
+      throw new BadRequestError(ErrorMessage.NO_USER_EXISTS());
+    }
+
+    const teamDoc = await this.TeamService.getTeamById(user.team._id);
+
+    return this.TeamService.populateTeammatesPublicFields(teamDoc);
   }
 }

@@ -1,4 +1,4 @@
-import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
+import { TESCUser, TESCEvent, TESCTeam } from '@Shared/ModelTypes';
 import { USER_API_PREFIX } from '@Shared/api/Paths';
 import {
   ResetPasswordRequest, ForgotPasswordRequest, UpdateUserRequest, RSVPUserRequest,
@@ -17,6 +17,7 @@ import pref from 'superagent-prefix';
 import Cookies from 'universal-cookie';
 import { ApplyPageFormData } from '~/pages/ApplyPage';
 import { UserProfileFormData } from '~/pages/UserPage/components/UserProfile';
+import user from '~/reducers/user';
 import CookieTypes from '~/static/Cookies';
 
 import { promisify } from './helpers';
@@ -231,6 +232,19 @@ export const createTeamCode = (eventId: string) =>
   promisify<string>(
     request
       .post(`/events/${eventId}/teams`)
+      .use(userApiPrefix)
+      .use(nocache)
+  );
+
+/**
+ * Gets the team for a given user.
+ * @param userId The user associated with the team.
+ */
+export const getTeam = (userId: string) =>
+  promisify<TESCTeam>(
+    request
+      .get(`/user/${userId}/team`)
+      .set('Authorization', cookies.get(CookieTypes.user.token))
       .use(userApiPrefix)
       .use(nocache)
   );

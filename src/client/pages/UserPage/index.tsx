@@ -14,7 +14,7 @@ import { ApplicationState } from '~/reducers';
 
 import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
 
-import { getCurrentUser, updateCurrentUser } from './actions';
+import { getCurrentUser, getCurrentTeam, updateCurrentUser } from './actions';
 import RSVPConfirm from './components/RSVPConfirm';
 import UserProfile, { UserProfileFormData } from './components/UserProfile';
 
@@ -26,6 +26,7 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
   showLoading,
   hideLoading,
   getCurrentUser,
+  getCurrentTeam,
   updateCurrentUser,
 }, dispatch);
 
@@ -49,16 +50,15 @@ class UserPage extends AlertPage<Props, UserPageState> {
   componentDidMount() {
     document.body.classList.add('user-page__body');
 
-    const { showLoading, hideLoading, getCurrentUser } = this.props;
+    const { showLoading, hideLoading, getCurrentUser, getCurrentTeam } = this.props;
     const { eventAlias } = this.props.match.params;
 
     showLoading();
 
     getCurrentUser(eventAlias)
       .catch(console.error)
-      .finally(() => {
-        hideLoading();
-      });
+      .then(user => user && getCurrentTeam(user._id))
+      .finally(hideLoading);
   }
 
   componentWillUnmount() {
