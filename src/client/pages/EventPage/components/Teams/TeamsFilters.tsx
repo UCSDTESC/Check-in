@@ -220,7 +220,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
   }
 
   render() {
-    const { teams, onSelectAll, selectAllState } = this.props;
+    const { teams, children, onSelectAll, selectAllState } = this.props;
     const { activeFilters } = this.state;
 
     const newFilterButtonClass = classNames(
@@ -232,8 +232,13 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
 
     return (
       <>
-        <div className="row teams-filters teams-filters--border">
-          {this.renderAdmittedButtons(teams)}
+        <div className="row teams-filters teams-filters--border justify-content-between">
+          <div>
+            {this.renderAdmittedButtons(teams)}
+          </div>
+          <div>
+            {children}
+          </div>
         </div>
 
         <div className="row teams-filters teams-filters--secondary teams-filters--border">

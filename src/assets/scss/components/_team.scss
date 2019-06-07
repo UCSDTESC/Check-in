@@ -55,6 +55,19 @@
   }
   
   @mixin modifier-elements($status, $color, $light-color, $text) {
+    &__action-btn--#{$status} {
+      $hover-color: darken($color, 10%);
+
+      background-color: $color;
+      border-color: $hover-color;
+
+      &:hover {
+        background-color: $hover-color;
+        border: 1px solid $hover-color;
+      }
+    }
+
+    // Create card modifiers
     &--#{$status} {
       border-color: $color;
       
@@ -160,6 +173,17 @@
     
     @each $status, $color in $status-colors {
       @include status-background-color($status, $color);
+    }
+  }
+
+  &__action-btn {
+    opacity: 1;
+    transition: opacity cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+    visibility: visible;
+
+    &--hidden {
+      opacity: 0;
+      visibility: hidden;
     }
   }
 }

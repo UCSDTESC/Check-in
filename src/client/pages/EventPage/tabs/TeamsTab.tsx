@@ -1,4 +1,5 @@
 import { TESCTeam } from '@Shared/ModelTypes';
+import classnames from 'classnames';
 import React from 'react';
 import Loading from '~/components/Loading';
 
@@ -128,6 +129,28 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
     }
   }
 
+  renderModifyButtons() {
+    const { selectedTeams } = this.state;
+    const num = selectedTeams.size;
+
+    const buttonClasses = ['btn', 'btn-primary', 'team__action-btn'];
+    const hidden = { 'team__action-btn--hidden': num === 0 };
+
+    return (
+      <div className="btn-group" role="group">
+        <button className={classnames(buttonClasses, hidden, 'team__action-btn--confirmed')}>
+          Admit <span className="badge badge-light">{num}</span>
+        </button>
+        <button className={classnames(buttonClasses, hidden, 'team__action-btn--waitlisted')}>
+          Waitlist <span className="badge badge-light">{num}</span>
+        </button>
+        <button className={classnames(buttonClasses, hidden, 'team__action-btn--rejected')}>
+          Reject <span className="badge badge-light">{num}</span>
+        </button>
+      </div>
+    );
+  }
+
   render() {
     const { teams, columns } = this.props;
     const { filteredTeams, selectedTeams } = this.state;
@@ -144,7 +167,9 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
           columns={columns}
           selectAllState={this.getSelectAllState(filteredTeams, selectedTeams)}
           onSelectAll={this.onSelectAll}
-        />
+        >
+          {this.renderModifyButtons()}
+        </TeamsFilters>
 
         <div className="team__container">
           {teams

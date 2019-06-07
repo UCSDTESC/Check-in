@@ -4,7 +4,7 @@ import { TESCUser, Admin } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
 import { BulkChangeRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore, Post, Body, Patch } from 'routing-controllers';
+import { JsonController, UseBefore, Post, Body, Patch } from 'routing-controllers';
 
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
