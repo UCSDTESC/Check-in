@@ -1,12 +1,42 @@
 .event-card {
+  text-align: center;
+  display: flex;
+  border: 2px solid $tesc-blue;
+  border-radius: $global-radius;
+  justify-content: space-between;
+
+  &--mini {
+    padding: 0.5rem 15px; 
+  }
+
   &__header {
     background: $tesc-blue;
-
+    
+    text-align: left;
     font-weight: bold;
     color: white;
+    // Calc fix from bootstrap
+    border-radius: calc(#{$global-radius} - 4px) calc(#{$global-radius} - 4px) 0 0 !important;
 
     &--highlighted {
       background: $secondary-color;
     }
+  }
+
+  &__img {
+    max-height: 50%;
+    object-fit: contain;
+
+    padding: 2rem;
+  }
+
+  &__body {
+    flex-grow: 0;
+    flex-shrink: 1;
+    height: 35%;
+  }
+
+  &__subtitle {
+    color: $dark-gray;
   }
 }

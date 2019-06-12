@@ -46,14 +46,14 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
     (
       <Section name="Your Events">
         {Object.keys(events)
-        .sort()
-        .map((eventAlias) => (
-          <Link
-            key={eventAlias}
-            dest={resumeLink ? `/resumes/${eventAlias}` : `/events/${eventAlias}`}
-          >
-            {events[eventAlias].name}
-          </Link>))}
+          .sort()
+          .map((eventAlias) => (
+            <Link
+              key={eventAlias}
+              dest={resumeLink ? `/resumes/${eventAlias}` : `/events/${eventAlias}`}
+            >
+              {events[eventAlias].name}
+            </Link>))}
       </Section>
     );
 
@@ -61,7 +61,7 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
    * Creates the menu based off user role and authentication
    */
   renderMenu() {
-    const {events} = this.props;
+    const { events } = this.props;
     const auth = this.props.isAuthenticated;
 
     const role = this.props.user ?
@@ -75,16 +75,16 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
         <div>
           {auth && <Section name="Check In">
             {Object.keys(this.props.events)
-            .sort()
-            .map(alias => {
-              const event = this.props.events[alias];
-              return (<Link
-                key={alias}
-                dest={`/checkin/${alias}`}
-              >
-                {event.name}
-              </Link>);
-            })}
+              .sort()
+              .map(alias => {
+                const event = this.props.events[alias];
+                return (<Link
+                  key={alias}
+                  dest={`/checkin/${alias}`}
+                >
+                  {event.name}
+                </Link>);
+              })}
 
             {auth && <Section name="General">
               <Link dest="/logout">Logout</Link>
@@ -113,7 +113,7 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
    * Creates the user menu for the authenticated user
    */
   renderUser() {
-    const {user} = this.props;
+    const { user } = this.props;
     const auth = this.props.isAuthenticated;
     const role = this.props.user ?
       getRoleRank(this.props.user.role) :
@@ -140,11 +140,8 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
         <div className="admin-sidebar__header navbar-expand-md navbar-inverse">
           <img
             className="admin-sidebar__logo"
-            src="/img/vectors/tesc-logo.svg"
+            src="/img/vectors/tesc-white.svg"
           />
-          <span className="admin-sidebar__header-text">
-            Admin Dashboard
-          </span>
           <NavbarToggler
             right="true"
             className="admin-sidebar__toggler navbar-dark"
@@ -159,9 +156,9 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
         </div>
 
         {this.props.children &&
-        <div className="admin-sidebar__children">
-          {this.props.children}
-        </div>}
+          <div className="admin-sidebar__children">
+            {this.props.children}
+          </div>}
       </div>
     );
   }
