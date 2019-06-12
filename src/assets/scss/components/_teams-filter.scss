@@ -12,20 +12,7 @@
     border-bottom: 1px solid $medium-gray;
   }
   
-  &__button {
-    border: 1px solid $primary-color;
-    background: $white;
-    
-    &:hover {
-      color: $white;
-      background: $primary-color;
-    }
-    
-    &--active {
-      color: $white;
-      background: $primary-color;
-    }
-    
+  &__button {      
     &--new-closed {
       color: $white;
       background: $primary-color;

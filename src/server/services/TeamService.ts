@@ -38,7 +38,9 @@ export default class TeamService {
   async getTeamByCode(code: string) {
     return this.TeamModel
       .findOne({
-        code: code,
+        code: {
+          $regex: new RegExp(code, 'i'),
+        },
       })
       .populate('members')
       .exec();

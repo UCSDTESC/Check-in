@@ -181,19 +181,19 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
   renderAdmittedButtons = (teams: TESCTeam[]) => {
     const { admittedSelection } = this.state;
 
-    const baseClasses = ['btn', 'teams-filters__button'];
+    const baseClasses = ['btn', 'button-group__button', 'teams-filters__button'];
     const allTeamsClasses = classNames(baseClasses, {
-      'teams-filters__button--active': admittedSelection === AdmittedSelectOption.ALL,
+      'button-group__button--active': admittedSelection === AdmittedSelectOption.ALL,
     });
     const admittedTeamsClasses = classNames(baseClasses, {
-      'teams-filters__button--active': admittedSelection === AdmittedSelectOption.ADMITTED,
+      'button-group__button--active': admittedSelection === AdmittedSelectOption.ADMITTED,
     });
     const notAdmittedTeamsClasses = classNames(baseClasses, {
-      'teams-filters__button--active': admittedSelection === AdmittedSelectOption.NOT_ADMITTED,
+      'button-group__button--active': admittedSelection === AdmittedSelectOption.NOT_ADMITTED,
     });
 
     return (
-      <div className="btn-group" role="group">
+      <div className="btn-group button-group" role="group">
         <button
           type="button"
           className={allTeamsClasses}

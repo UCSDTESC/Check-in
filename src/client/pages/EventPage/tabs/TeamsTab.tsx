@@ -137,17 +137,20 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
     const hidden = { 'team__action-btn--hidden': num === 0 };
 
     return (
-      <div className="btn-group" role="group">
-        <button className={classnames(buttonClasses, hidden, 'team__action-btn--confirmed')}>
-          Admit <span className="badge badge-light">{num}</span>
-        </button>
-        <button className={classnames(buttonClasses, hidden, 'team__action-btn--waitlisted')}>
-          Waitlist <span className="badge badge-light">{num}</span>
-        </button>
-        <button className={classnames(buttonClasses, hidden, 'team__action-btn--rejected')}>
-          Reject <span className="badge badge-light">{num}</span>
-        </button>
-      </div>
+      <>
+        Selected {num} Team{num !== 1 ? 's' : ''}
+        {num > 0 && <div className="btn-group ml-1" role="group">
+          <button className={classnames(buttonClasses, hidden, 'team__action-btn--confirmed')}>
+            Admit <span className="badge badge-light">{num}</span>
+          </button>
+          <button className={classnames(buttonClasses, hidden, 'team__action-btn--waitlisted')}>
+            Waitlist <span className="badge badge-light">{num}</span>
+          </button>
+          <button className={classnames(buttonClasses, hidden, 'team__action-btn--rejected')}>
+            Reject <span className="badge badge-light">{num}</span>
+          </button>
+        </div>}
+      </>
     );
   }
 

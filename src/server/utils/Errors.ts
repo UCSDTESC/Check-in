@@ -32,4 +32,5 @@ export const ErrorMessage = {
   NO_EVENT_ALIAS: () => 'Tried to fetch event without providing event alias',
   NO_REQUEST_USER: () => 'No user in the request headers',
   NO_QUESTION_EXISTS: () => 'No question exists by that identifier',
+  NO_TEAM_EXISTS: (code) => `No team exists with the code '${code}' for this event`,
 };

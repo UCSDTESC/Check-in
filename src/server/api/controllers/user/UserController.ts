@@ -73,7 +73,7 @@ export class UserController {
       hasExistingAccount = true;
       const alreadyApplied = await this.EventService.accountHasApplied(existingAccount, event);
       if (alreadyApplied) {
-        throw new Error(ErrorMessage.USER_ALREADY_REGISTERED());
+        throw new BadRequestError(ErrorMessage.USER_ALREADY_REGISTERED());
       }
     }
 
@@ -84,6 +84,10 @@ export class UserController {
 
     if (event.options.allowTeammates) {
       let existingTeam = await this.TeamService.getTeamByCode(user.teamCode);
+      if (existingTeam && existingTeam.event !== event) {
+        throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
+      }
+
       if (!existingTeam) {
         existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
       }
