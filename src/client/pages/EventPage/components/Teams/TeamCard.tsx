@@ -1,6 +1,6 @@
 import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
 import React from 'react';
-import { getTeamStatus, getStatusIndicatorText } from '~/static/Teams';
+import { getTeamStatus, getStatusIndicatorText, TeamStatusDisplayText } from '~/static/Teams';
 
 interface TeamCardProps {
   team: TESCTeam;
@@ -49,7 +49,9 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
               data-placement="right"
               title={getStatusIndicatorText(teamStatus)}
               data-offset="0, 8"
-            />
+            >
+              {TeamStatusDisplayText.get(teamStatus)}
+            </div>
           </h2>
         </div>
         <div className="card-body team__card">

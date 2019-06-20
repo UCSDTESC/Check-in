@@ -6,16 +6,17 @@ import FA from 'react-fontawesome';
 import { TeamStatus, getTeamStatus } from '~/static/Teams';
 import { ColumnDefinitions } from '~/static/Types';
 
+import { getSuggestions as MajorSuggestions } from '~/static/Majors';
+import { getSuggestions as UniversitySuggestions } from '~/static/Universities';
 import BaseFilter from './Filters/BaseFilter';
 import EnumFilter, { EnumOperation } from './Filters/EnumFilter';
+import EnumFilterComponent from './Filters/EnumFilterComponent';
 import NumberFilter, { NumberOperation } from './Filters/NumberFilter';
 import NumberFilterComponent from './Filters/NumberFilterComponent';
 import StringFilter, { StringOperation } from './Filters/StringFilter';
 import YearFilterComponent from './Filters/YearFilterComponent';
 import SelectAllCheckbox, { CheckboxState } from './SelectAllCheckbox';
-import EnumFilterComponent from './Filters/EnumFilterComponent';
-import { getSuggestions as UniversitySuggestions } from '~/static/Universities';
-import { getSuggestions as MajorSuggestions } from '~/static/Majors';
+import StatusFilterComponent from './Filters/StatusFilterComponent';
 
 enum AdmittedSelectOption {
   ALL,
@@ -182,13 +183,14 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
   }
 
   renderNewFilterMenu = () => {
-    const menuClassNames = classNames('row teams-filters teams-filters--border', {
-      'd-none': !this.state.showNewFilterMenu,
-    });
+    const menuClassNames = classNames('row sd-form sd-form--full',
+      'teams-filters teams-filters--top teams-filters--border', {
+        'd-none': !this.state.showNewFilterMenu,
+      });
 
     return (
       <div className={menuClassNames}>
-        <div className="col-3">
+        <div className="col-sm-6 col-md-3">
           <NumberFilterComponent
             label="GPA"
             min={0}
@@ -198,7 +200,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
             onChange={console.log}
           />
         </div>
-        <div className="col-3">
+        <div className="col-sm-6 col-md-3">
           <NumberFilterComponent
             label="Major GPA"
             min={0}
@@ -208,19 +210,14 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
             onChange={console.log}
           />
         </div>
-        <div className="col-3">
+        <div className="col-sm-6 col-md-3">
           <YearFilterComponent
             onChange={console.log}
             label="Year"
           />
         </div>
-        <div className="col-3">
-          <EnumFilterComponent
-            label="Status"
-            getSuggestions={this.getStatusSuggestions}
-            minChars={1}
-            onChange={console.log}
-          />
+        <div className="col-sm-6 col-md-3">
+          <StatusFilterComponent label="Status" onChange={console.log} />
         </div>
 
         <div className="col-6">

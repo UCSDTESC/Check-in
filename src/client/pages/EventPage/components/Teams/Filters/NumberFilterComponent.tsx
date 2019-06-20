@@ -40,7 +40,9 @@ export default class NumberFilterComponent
 
     return (
       <>
-        {label}
+        <div>
+          {label}
+        </div>
         <TooltipRange
           min={min}
           max={max}
@@ -48,6 +50,7 @@ export default class NumberFilterComponent
           onAfterChange={value => onChange(value[0], value[1])}
           handle={handle}
           tipFormatter={format}
+          className="teams-filters__slider"
         />
       </>
     );

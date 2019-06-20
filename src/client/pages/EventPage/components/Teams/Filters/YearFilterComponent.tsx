@@ -1,3 +1,4 @@
+import { UserYearOptions } from '@Shared/UserEnums';
 import { Range, Handle, createSliderWithTooltip } from 'rc-slider';
 import Tooltip from 'rc-tooltip';
 import React from 'react';
@@ -13,10 +14,6 @@ interface YearFilterComponentProps {
 interface YearFilterComponentState {
   value: number[];
 }
-
-const yearMap = [
-  '1', '2', '3', '4', '5+',
-];
 
 const handle = (props: any) => {
   const { value, dragging, index, ...restProps } = props;
@@ -35,7 +32,7 @@ const handle = (props: any) => {
 export default class YearFilterComponent
   extends React.Component<YearFilterComponentProps, YearFilterComponentState> {
   onValueChange = (newValues: number[]) => {
-    this.props.onChange(yearMap.slice(newValues[0], newValues[1] + 1));
+    this.props.onChange(UserYearOptions.slice(newValues[0], newValues[1] + 1));
   }
 
   render() {
@@ -47,12 +44,13 @@ export default class YearFilterComponent
         {label}
         <TooltipRange
           min={0}
-          max={4}
+          max={UserYearOptions.length - 1}
           dots={true}
           step={1}
           onAfterChange={this.onValueChange}
           handle={handle}
-          tipFormatter={(value: number) => yearMap[value]}
+          tipFormatter={(value: number) => UserYearOptions[value]}
+          className="teams-filters__slider"
         />
       </>
     );

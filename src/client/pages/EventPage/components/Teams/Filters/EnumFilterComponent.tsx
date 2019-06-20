@@ -13,7 +13,7 @@ interface EnumFilterComponentState {
 
 export default class EnumFilterComponent
   extends React.Component<EnumFilterComponentProps, EnumFilterComponentState> {
-  onUniversitySelected = (suggestion: string) => {
+  onEnumSelected = (suggestion: string) => {
     this.props.onChange(suggestion);
   }
 
@@ -22,14 +22,16 @@ export default class EnumFilterComponent
 
     return (
       <>
-        {label}
+        <div>
+          {label}
+        </div>
         <AutoSuggest
           getSuggestions={getSuggestions}
           inputProps={{
             className: 'sd-form__input-text w-100',
           }}
-          onSuggestionSelected={this.onUniversitySelected}
-          minChars={minChars ? minChars : 3}
+          onSuggestionSelected={this.onEnumSelected}
+          minChars={!!minChars ? minChars : 3}
         />
       </>
     );

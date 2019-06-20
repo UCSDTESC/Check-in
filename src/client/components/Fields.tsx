@@ -1,3 +1,4 @@
+import { UserDiversityOptions, UserYearOptions, UserGenderOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
 import React from 'react';
 import { Field, WrappedFieldProps } from 'redux-form';
 import majors from '~/static/Majors.json';
@@ -124,12 +125,8 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ i
 export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
   meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
-  const sizes = [
-    'X-Small', 'Small', 'Medium', 'Large', 'X-Large', 'XX-Large',
-  ];
-  const values = [
-    'XS', 'S', 'M', 'L', 'XL', 'XXL',
-  ];
+  const sizes = Object.values(UserShirtSizeOptions);
+  const values = Object.keys(UserShirtSizeOptions);
 
   return (
     <div>
@@ -149,10 +146,6 @@ export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> =
 export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
   meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
-  const genders = [
-    'Female', 'Male', 'Non-Binary', 'Transgender',
-    'I prefer not to say', 'Other',
-  ];
 
   return (
     <div>
@@ -161,7 +154,7 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ 
         className={errorClassName}
       >
         <option key={-1} />
-        {genders.map((gender, i) =>
+        {UserGenderOptions.map((gender, i) =>
           <option key={i} value={gender}>{gender}</option>)}
       </select>
       {touched && error && createError(error)}
@@ -172,9 +165,6 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ 
 export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
   meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
-  const opts = ['American Indian or Alaskan Native', 'Asian / Pacific Islander',
-    'Black or African American', 'Hispanic', 'White / Caucasian',
-    'Multiple ethnicity / Other', 'Prefer Not To Answer'];
 
   return (
     <div>
@@ -183,7 +173,7 @@ export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> =
         className={errorClassName}
       >
         <option key={-1} />
-        {opts.map((opt, i) =>
+        {UserDiversityOptions.map((opt, i) =>
           <option key={i} value={opt}>{opt}</option>)}
       </select>
       {touched && error && createError(error)}
@@ -194,9 +184,6 @@ export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> =
 export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
   meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
-  const years = [
-    '1', '2', '3', '4', '5+', 'Graduate',
-  ];
 
   return (
     <div>
@@ -205,7 +192,7 @@ export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({ in
         className={errorClassName}
       >
         <option key={-1} />
-        {years.map((year, i) =>
+        {UserYearOptions.map((year, i) =>
           <option key={i} value={year}>{year}</option>)}
       </select>
       {touched && error && createError(error)}

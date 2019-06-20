@@ -11,6 +11,10 @@
   &--border {
     border-bottom: 1px solid $medium-gray;
   }
+
+  &--top {
+    align-items: flex-start;
+  }
   
   &__button {      
     &--new-closed {
@@ -67,6 +71,33 @@
 
     &:checked {
       background-color: $tesc-blue;
+    }
+  }
+
+  &__slider {
+    .rc-slider-track {
+      background-color: $primary-color;
+    }
+
+    .rc-slider-dot-active {
+      border-color: $primary-color;
+    }
+    
+    .rc-slider-handle {
+      border-color: $primary-color;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 5px $primary-color;
+      }
+
+      &:hover {
+        border-color: $primary-color;
+      }
+    }
+
+    .rc-slider-rail, .rc-slider-dot {
+      background-color: $light-gray;
     }
   }
 }

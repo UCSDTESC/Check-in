@@ -1,12 +1,23 @@
 import { TESCUser } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 
-enum TeamStatusEnum {
+export enum TeamStatusEnum {
   Unmatched = 'Unmatched',
-  NoStatus = 'NoStatus',
 }
 
 export type TeamStatus = UserStatus | TeamStatusEnum;
+
+export const TeamStatusDisplayText: Map<TeamStatus, string> =
+  new Map<TeamStatus, string>([
+    [UserStatus.Confirmed, 'Confirmed'],
+    [UserStatus.Rejected, 'Rejected'],
+    [UserStatus.Declined, 'Declined'],
+    [UserStatus.Late, 'Late'],
+    [UserStatus.Waitlisted, 'Waitlisted'],
+    [UserStatus.Unconfirmed, 'Admitted'],
+    [TeamStatusEnum.Unmatched, 'Mixed'],
+    [UserStatus.NoStatus, 'No Status'],
+  ]);
 
 /**
  * Get the text that should be in the team status indicator.
@@ -31,7 +42,7 @@ export function getTeamStatus(teammates: TESCUser[]): TeamStatus {
   }
 
   if (!initialStatus) {
-    return TeamStatusEnum.NoStatus;
+    return UserStatus.NoStatus;
   }
 
   return initialStatus;

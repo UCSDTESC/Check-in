@@ -2,6 +2,7 @@
   $confirmed-color: $default-green;
   $rejected-color: $default-red;
   $late-color: $default-red;
+  $declined-color: $default-red;
   $waitlisted-color: $default-blue;
   $unconfirmed-color: $default-purple;
   $unmatching-color: darken($default-yellow, 10%);
@@ -11,6 +12,7 @@
     "confirmed": $confirmed-color,
     "rejected": $rejected-color,
     "late": $late-color,
+    "declined": $declined-color,
     "waitlisted": $waitlisted-color,
     "unconfirmed": $unconfirmed-color,
     "unmatched": $unmatching-color,
@@ -21,20 +23,11 @@
     "confirmed": lighten($confirmed-color, 40%),
     "rejected": lighten($rejected-color, 25%),
     "late": lighten($late-color, 25%),
+    "declined": lighten($declined-color, 25%),
     "waitlisted": lighten($waitlisted-color, 25%),
     "unconfirmed": lighten($unconfirmed-color, 25%),
     "unmatched": lighten($unmatching-color, 28%),
-    "none": lighten($none-color, 10%),
-  );
-  
-  $status-text: (
-    "confirmed": 'Confirmed',
-    "rejected": 'Rejected',
-    "late": 'Late',
-    "waitlisted": 'Waitlisted',
-    "unconfirmed": 'Admitted',
-    "unmatched": 'Mixed',
-    "none": 'No Status',
+    "none": lighten($none-color, 20%),
   );
   
   @mixin status-highlight-border($status, $color) {
@@ -54,7 +47,7 @@
     cursor: auto;
   }
   
-  @mixin modifier-elements($status, $color, $light-color, $text) {
+  @mixin modifier-elements($status, $color, $light-color) {
     &__action-btn--#{$status} {
       $hover-color: darken($color, 10%);
 
@@ -77,12 +70,6 @@
       
       .team__indicator {
         @include status-highlight-border($status, $color); 
-        
-        &::before {
-          text-align: center;
-          width: 100%;
-          content: $text;
-        }
       }
       
       .team__member {
@@ -101,8 +88,7 @@
 
   @each $status, $color in $status-colors {
     @include modifier-elements($status, $color,
-      map-get($status-light-colors, $status),
-      map-get($status-text, $status)
+      map-get($status-light-colors, $status)
     );
   }
 

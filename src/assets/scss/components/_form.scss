@@ -5,6 +5,11 @@
   font-family: $header-font-family;
   letter-spacing: 0.05rem;
 
+  &--full {
+    max-width: none;
+    margin: 0 -15px;
+  }
+
   @mixin extended-radio {
     @include input-style;
     position: relative;
