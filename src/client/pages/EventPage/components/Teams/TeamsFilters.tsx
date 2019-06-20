@@ -9,8 +9,13 @@ import { ColumnDefinitions } from '~/static/Types';
 import BaseFilter from './Filters/BaseFilter';
 import EnumFilter, { EnumOperation } from './Filters/EnumFilter';
 import NumberFilter, { NumberOperation } from './Filters/NumberFilter';
+import NumberFilterComponent from './Filters/NumberFilterComponent';
 import StringFilter, { StringOperation } from './Filters/StringFilter';
+import YearFilterComponent from './Filters/YearFilterComponent';
 import SelectAllCheckbox, { CheckboxState } from './SelectAllCheckbox';
+import EnumFilterComponent from './Filters/EnumFilterComponent';
+import { getSuggestions as UniversitySuggestions } from '~/static/Universities';
+import { getSuggestions as MajorSuggestions } from '~/static/Majors';
 
 enum AdmittedSelectOption {
   ALL,
@@ -168,13 +173,71 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
     }, () => this.onFilterChanged());
   }
 
+  /**
+   * Get suggestions for team status for the auto suggest box.
+   */
+  getStatusSuggestions = (value: string) => {
+    const caseRegexp = new RegExp(value.trim(), 'i');
+    return Object.values(UserStatus).filter((value: string) => value.search(caseRegexp) > -1);
+  }
+
   renderNewFilterMenu = () => {
-    if (!this.state.showNewFilterMenu) {
-      return <></>;
-    }
+    const menuClassNames = classNames('row teams-filters teams-filters--border', {
+      'd-none': !this.state.showNewFilterMenu,
+    });
 
     return (
-      <div className="row teams-filters teams-filters--border" />
+      <div className={menuClassNames}>
+        <div className="col-3">
+          <NumberFilterComponent
+            label="GPA"
+            min={0}
+            max={4.00}
+            step={0.1}
+            format={value => Number(value).toFixed(2)}
+            onChange={console.log}
+          />
+        </div>
+        <div className="col-3">
+          <NumberFilterComponent
+            label="Major GPA"
+            min={0}
+            max={4.00}
+            step={0.1}
+            format={value => Number(value).toFixed(2)}
+            onChange={console.log}
+          />
+        </div>
+        <div className="col-3">
+          <YearFilterComponent
+            onChange={console.log}
+            label="Year"
+          />
+        </div>
+        <div className="col-3">
+          <EnumFilterComponent
+            label="Status"
+            getSuggestions={this.getStatusSuggestions}
+            minChars={1}
+            onChange={console.log}
+          />
+        </div>
+
+        <div className="col-6">
+          <EnumFilterComponent
+            label="Major"
+            getSuggestions={MajorSuggestions}
+            onChange={console.log}
+          />
+        </div>
+        <div className="col-6">
+          <EnumFilterComponent
+            label="University"
+            getSuggestions={UniversitySuggestions}
+            onChange={console.log}
+          />
+        </div>
+      </div>
     );
   };
 
@@ -249,7 +312,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
           />
 
           <button className={newFilterButtonClass} type="button" onClick={this.toggleNewFilterMenu}>
-            New Filter
+            Filter
           </button>
 
           {

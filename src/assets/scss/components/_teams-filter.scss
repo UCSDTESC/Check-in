@@ -20,7 +20,12 @@
       &::before {
         content: "\F0D7";
         font-family: 'FontAwesome';
-        margin-right: 0.1rem;
+        margin-right: 0.5rem;
+      }
+
+      &:hover {
+        color: $white;
+        background-color: darken($primary-color, 3%);
       }
     }
 
@@ -31,7 +36,7 @@
       &::before {
         content: "\F0D8";
         font-family: 'FontAwesome';
-        margin-right: 0.1rem;
+        margin-right: 0.5rem;
       }
     }
   }
