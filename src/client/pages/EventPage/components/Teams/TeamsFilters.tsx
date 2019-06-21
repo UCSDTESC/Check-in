@@ -285,9 +285,10 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
               <button
                 key={option.propertyName}
                 type="button"
-                className={classNames('btn btn-secondary', {
+                className={classNames('btn teams-filters__new-option', {
                   // Make the button active if selected
-                  active: selectedNewFilterOption && selectedNewFilterOption.propertyName === option.propertyName,
+                  'teams-filters__new-option--active':
+                    selectedNewFilterOption && selectedNewFilterOption.propertyName === option.propertyName,
                 })}
                 onClick={() => this.selectNewFilterOption(option)}
               >
@@ -302,9 +303,10 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
               <button
                 key={option.propertyName}
                 type="button"
-                className={classNames('btn btn-secondary', {
+                className={classNames('btn teams-filters__new-option', {
                   // Make the button active if selected
-                  active: selectedNewFilterOption && selectedNewFilterOption.propertyName === option.propertyName,
+                  'teams-filters__new-option--active':
+                    selectedNewFilterOption && selectedNewFilterOption.propertyName === option.propertyName,
                 })}
                 onClick={() => this.selectNewFilterOption(option)}
               >

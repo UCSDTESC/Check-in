@@ -80,6 +80,22 @@
     }
   }
 
+  &__new-option {
+    border: 1px solid $primary-color;
+    color: $primary-color;
+    background: $white;
+
+    &:hover, &:focus {
+      color: $white;
+      background: $primary-color;
+    }
+
+    &--active {
+      color: $white;
+      background: $primary-color;
+    }
+  }
+
   &__slider {
     .rc-slider-track {
       background-color: $primary-color;
