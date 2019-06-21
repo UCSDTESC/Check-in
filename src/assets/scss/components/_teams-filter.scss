@@ -74,6 +74,12 @@
     }
   }
 
+  &__new-component {
+    @include media-breakpoint-up(md) {
+      max-width: 25rem;
+    }
+  }
+
   &__slider {
     .rc-slider-track {
       background-color: $primary-color;

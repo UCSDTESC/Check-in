@@ -28,7 +28,7 @@ export default class EnumFilterComponent
         <AutoSuggest
           getSuggestions={getSuggestions}
           inputProps={{
-            className: 'sd-form__input-text w-100',
+            className: 'sd-form__input-text',
           }}
           onSuggestionSelected={this.onEnumSelected}
           minChars={!!minChars ? minChars : 3}

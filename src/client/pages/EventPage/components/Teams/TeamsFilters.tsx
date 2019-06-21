@@ -1,27 +1,33 @@
-import { TESCTeam } from '@Shared/ModelTypes';
+import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 import classNames from 'classnames';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import FA from 'react-fontawesome';
+import { getSuggestions as MajorSuggestions } from '~/static/Majors';
 import { TeamStatus, getTeamStatus } from '~/static/Teams';
 import { ColumnDefinitions } from '~/static/Types';
-
-import { getSuggestions as MajorSuggestions } from '~/static/Majors';
 import { getSuggestions as UniversitySuggestions } from '~/static/Universities';
+
 import BaseFilter from './Filters/BaseFilter';
 import EnumFilter, { EnumOperation } from './Filters/EnumFilter';
 import EnumFilterComponent from './Filters/EnumFilterComponent';
-import NumberFilter, { NumberOperation } from './Filters/NumberFilter';
 import NumberFilterComponent from './Filters/NumberFilterComponent';
+import StatusFilterComponent from './Filters/StatusFilterComponent';
 import StringFilter, { StringOperation } from './Filters/StringFilter';
 import YearFilterComponent from './Filters/YearFilterComponent';
 import SelectAllCheckbox, { CheckboxState } from './SelectAllCheckbox';
-import StatusFilterComponent from './Filters/StatusFilterComponent';
 
 enum AdmittedSelectOption {
   ALL,
   ADMITTED,
   NOT_ADMITTED,
+}
+
+interface NewFilterOption {
+  propertyName: keyof TESCUser;
+  propertyDisplayName: string;
+  newFilterComponent: ReactNode;
+  deletePrevious?: boolean; // Determines whether to delete any previous filters with the given property name.
 }
 
 interface TeamsFiltersProps {
@@ -37,11 +43,13 @@ interface TeamsFiltersState {
   activeFilters: BaseFilter[];
   admittedSelection: AdmittedSelectOption;
   showNewFilterMenu: boolean;
+  selectedNewFilterOption?: NewFilterOption;
 }
 
 export default class TeamsFilters extends React.Component<TeamsFiltersProps, TeamsFiltersState> {
   admittedTeams: Set<string> = new Set();
   notAdmittedTeams: Set<string> = new Set();
+  newFilterOptions: NewFilterOption[];
 
   constructor(props: TeamsFiltersProps) {
     super(props);
@@ -54,6 +62,8 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
       admittedSelection: AdmittedSelectOption.ALL,
       showNewFilterMenu: false,
     };
+
+    this.constructNewFilterComponents();
 
     this.constructAdmitted(props.teams);
     this.constructNotAdmitted(props.teams);
@@ -97,6 +107,74 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
         .filter(team => notAdmittedStatuses.has(getTeamStatus(team.members)))
         .map(team => team._id)
     );
+  };
+
+  /**
+   * Constructs the components to generate new filters and their callbacks.
+   */
+  constructNewFilterComponents = () => {
+    this.newFilterOptions = [{
+      propertyName: 'university',
+      propertyDisplayName: 'University',
+      newFilterComponent: (
+        <EnumFilterComponent
+          label="University"
+          getSuggestions={UniversitySuggestions}
+          onChange={console.log}
+        />
+      ),
+    }, {
+      propertyName: 'gpa',
+      propertyDisplayName: 'GPA',
+      newFilterComponent: (
+        <NumberFilterComponent
+          label="GPA"
+          min={0}
+          max={4.00}
+          step={0.1}
+          format={value => Number(value).toFixed(2)}
+          onChange={console.log}
+        />
+      ),
+    }, {
+      propertyName: 'majorGPA',
+      propertyDisplayName: 'Major GPA',
+      newFilterComponent: (
+        <NumberFilterComponent
+          label="Major GPA"
+          min={0}
+          max={4.00}
+          step={0.1}
+          format={value => Number(value).toFixed(2)}
+          onChange={console.log}
+        />
+      ),
+    }, {
+      propertyName: 'status',
+      propertyDisplayName: 'Status',
+      newFilterComponent: (
+        <StatusFilterComponent label="Status" onChange={console.log} />
+      ),
+    }, {
+      propertyName: 'year',
+      propertyDisplayName: 'Year',
+      newFilterComponent: (
+        <YearFilterComponent
+          onChange={console.log}
+          label="Year"
+        />
+      ),
+    }, {
+      propertyName: 'major',
+      propertyDisplayName: 'Major',
+      newFilterComponent: (
+        <EnumFilterComponent
+          label="Major"
+          getSuggestions={MajorSuggestions}
+          onChange={console.log}
+        />
+      ),
+    }];
   };
 
   /**
@@ -182,7 +260,18 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
     return Object.values(UserStatus).filter((value: string) => value.search(caseRegexp) > -1);
   }
 
+  /**
+   * Selects a new filter option from the menu.
+   */
+  selectNewFilterOption = (option: NewFilterOption) => {
+    this.setState({
+      selectedNewFilterOption: option,
+    });
+  }
+
   renderNewFilterMenu = () => {
+    const { selectedNewFilterOption } = this.state;
+
     const menuClassNames = classNames('row sd-form sd-form--full',
       'teams-filters teams-filters--top teams-filters--border', {
         'd-none': !this.state.showNewFilterMenu,
@@ -190,50 +279,57 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
 
     return (
       <div className={menuClassNames}>
-        <div className="col-sm-6 col-md-3">
-          <NumberFilterComponent
-            label="GPA"
-            min={0}
-            max={4.00}
-            step={0.1}
-            format={value => Number(value).toFixed(2)}
-            onChange={console.log}
-          />
+        <div className="d-none d-md-block col-md-auto">
+          <div className="btn-group-vertical">
+            {this.newFilterOptions.map(option => (
+              <button
+                key={option.propertyName}
+                type="button"
+                className={classNames('btn btn-secondary', {
+                  // Make the button active if selected
+                  active: selectedNewFilterOption && selectedNewFilterOption.propertyName === option.propertyName,
+                })}
+                onClick={() => this.selectNewFilterOption(option)}
+              >
+                {option.propertyDisplayName}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="col-sm-6 col-md-3">
-          <NumberFilterComponent
-            label="Major GPA"
-            min={0}
-            max={4.00}
-            step={0.1}
-            format={value => Number(value).toFixed(2)}
-            onChange={console.log}
-          />
+        <div className="d-block d-md-none col-12 mb-2">
+          <div className="btn-group">
+            {this.newFilterOptions.map(option => (
+              <button
+                key={option.propertyName}
+                type="button"
+                className={classNames('btn btn-secondary', {
+                  // Make the button active if selected
+                  active: selectedNewFilterOption && selectedNewFilterOption.propertyName === option.propertyName,
+                })}
+                onClick={() => this.selectNewFilterOption(option)}
+              >
+                {option.propertyDisplayName}
+              </button>
+            ))}
+          </div>
         </div>
-        <div className="col-sm-6 col-md-3">
-          <YearFilterComponent
-            onChange={console.log}
-            label="Year"
-          />
-        </div>
-        <div className="col-sm-6 col-md-3">
-          <StatusFilterComponent label="Status" onChange={console.log} />
-        </div>
-
-        <div className="col-6">
-          <EnumFilterComponent
-            label="Major"
-            getSuggestions={MajorSuggestions}
-            onChange={console.log}
-          />
-        </div>
-        <div className="col-6">
-          <EnumFilterComponent
-            label="University"
-            getSuggestions={UniversitySuggestions}
-            onChange={console.log}
-          />
-        </div>
+        {!!selectedNewFilterOption &&
+          <div className="col-12 col-md-auto flex-grow-1">
+            <div className="row">
+              <div className="col-12 teams-filters__new-component">
+                {selectedNewFilterOption.newFilterComponent}
+              </div>
+              <div className="col-12 mt-2">
+                <button
+                  type="button"
+                  className="btn rounded-button rounded-button--short rounded-button--small"
+                >
+                  Add
+                </button>
+              </div>
+            </div>
+          </div>
+        }
       </div>
     );
   };
