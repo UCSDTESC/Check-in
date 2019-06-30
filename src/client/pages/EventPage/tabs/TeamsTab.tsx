@@ -1,6 +1,7 @@
-import { TESCTeam } from '@Shared/ModelTypes';
+import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
 import classnames from 'classnames';
 import React from 'react';
+import FA from 'react-fontawesome';
 import Loading from '~/components/Loading';
 
 import { CheckboxState } from '../components/Teams/SelectAllCheckbox';
@@ -15,6 +16,7 @@ interface TeamsTabProps {
 
 interface TeamsTabState {
   selectedTeams: Set<string>;
+  selectedUsers: Set<TESCUser>;
   filteredTeams: Set<string>;
 }
 
@@ -24,9 +26,15 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
     this.state = {
       selectedTeams: new Set<string>(),
+      selectedUsers: new Set<TESCUser>(),
       filteredTeams: new Set<string>(props.teams.map((team: TESCTeam) => team._id)),
     };
   }
+
+  getUsersFromTeamSet = (teamSet: Set<string>) =>
+    this.props.teams
+      .filter(team => teamSet.has(team._id))
+      .reduce((current, team) => [...current, ...team.members], [] as TESCUser[])
 
   /**
    * Callback for when the filters have changed.
@@ -40,6 +48,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
     this.setState({
       selectedTeams: newSelected,
+      selectedUsers: new Set(this.getUsersFromTeamSet(newSelected)),
       filteredTeams: newFiltered,
     });
   }
@@ -50,6 +59,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   selectSet = (newSet: Set<string>) => {
     this.setState({
       selectedTeams: newSet,
+      selectedUsers: new Set(this.getUsersFromTeamSet(newSet)),
     });
   }
 
@@ -63,6 +73,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
     this.setState({
       selectedTeams: newSelect,
+      selectedUsers: new Set(this.getUsersFromTeamSet(newSelect)),
     });
   };
 
@@ -72,6 +83,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   deselectAll = () => {
     this.setState({
       selectedTeams: new Set(),
+      selectedUsers: new Set(),
     });
   };
 
@@ -86,18 +98,23 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
    */
   onTeamSelect = (team: TESCTeam) => {
     if (!this.isTeamSelected(team)) {
+      const newSelectedTeams = new Set([
+        ...this.state.selectedTeams,
+        team._id,
+      ]);
+
       this.setState({
-        selectedTeams: new Set([
-          ...this.state.selectedTeams,
-          team._id,
-        ]),
+        selectedTeams: newSelectedTeams,
+        selectedUsers: new Set(this.getUsersFromTeamSet(newSelectedTeams)),
       });
     } else {
       // Copy to keep state immutable
       const teamsLess = new Set(this.state.selectedTeams);
       teamsLess.delete(team._id);
+
       this.setState({
         selectedTeams: teamsLess,
+        selectedUsers: new Set(this.getUsersFromTeamSet(teamsLess)),
       });
     }
   }
@@ -130,24 +147,26 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   }
 
   renderModifyButtons() {
-    const { selectedTeams } = this.state;
-    const num = selectedTeams.size;
+    const { selectedTeams, selectedUsers } = this.state;
+    const numTeams = selectedTeams.size;
+    const numUsers = selectedUsers.size;
 
     const buttonClasses = ['btn', 'btn-primary', 'team__action-btn'];
-    const hidden = { 'team__action-btn--hidden': num === 0 };
+    const hidden = { 'team__action-btn--hidden': numTeams === 0 };
 
     return (
       <>
-        Selected {num} Team{num !== 1 ? 's' : ''}
-        {num > 0 && <div className="btn-group ml-1" role="group">
+        Selected <span className="ml-2">{numTeams}</span> <FA name="users" />{' '}
+        <span className="ml-2">{numUsers}</span> <FA name="user" />
+        {numUsers > 0 && <div className="btn-group ml-2" role="group">
           <button className={classnames(buttonClasses, hidden, 'team__action-btn--confirmed')}>
-            Admit <span className="badge badge-light">{num}</span>
+            Admit <span className="badge badge-light">{numUsers}</span>
           </button>
           <button className={classnames(buttonClasses, hidden, 'team__action-btn--waitlisted')}>
-            Waitlist <span className="badge badge-light">{num}</span>
+            Waitlist <span className="badge badge-light">{numUsers}</span>
           </button>
           <button className={classnames(buttonClasses, hidden, 'team__action-btn--rejected')}>
-            Reject <span className="badge badge-light">{num}</span>
+            Reject <span className="badge badge-light">{numUsers}</span>
           </button>
         </div>}
       </>

@@ -145,6 +145,10 @@ export class UserController {
       throw new BadRequestError(ErrorMessage.NO_USER_EXISTS());
     }
 
+    if (!user.team) {
+      throw new Error(ErrorMessage.USER_HAS_NO_TEAM());
+    }
+
     const teamDoc = await this.TeamService.getTeamById(user.team._id);
 
     return this.TeamService.populateTeammatesPublicFields(teamDoc);

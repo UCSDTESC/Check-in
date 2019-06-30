@@ -28,6 +28,7 @@ export const ErrorMessage = {
   RESUME_ZIPPING_ERROR: () => 'There was an error zipping the resumes',
   EXPECTED_QUERY_PARAM: param => `Expected query parameter not provided '${param}'`,
   INVALID_RESET: () => 'This reset request is invalid or has expired',
+  USER_HAS_NO_TEAM: () => 'This user is not part of a team',
 
   NO_EVENT_ALIAS: () => 'Tried to fetch event without providing event alias',
   NO_REQUEST_USER: () => 'No user in the request headers',

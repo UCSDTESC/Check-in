@@ -189,6 +189,10 @@ class UserProfile extends React.Component<Props> {
   }
 
   renderTeamSection = (user: TESCUser) => {
+    if (!user.team) {
+      return <></>;
+    }
+
     return (
       <div className="user-profile__section sd-form">
         <h4>Team <small>{user.team.code}</small></h4>

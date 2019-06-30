@@ -58,6 +58,10 @@
         background-color: $hover-color;
         border: 1px solid $hover-color;
       }
+
+      &:active {
+        background-color: darken($color, 10%) !important;
+      }
     }
 
     // Create card modifiers
