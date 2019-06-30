@@ -178,7 +178,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
   renderTeams() {
     const { teams } = this.state;
 
-    return (<TeamsTab teams={teams} {...this.props} />);
+    return (<TeamsTab onTeamsUpdate={() => this.loadTeams()} teams={teams} {...this.props} />);
   }
 
   /**

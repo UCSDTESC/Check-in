@@ -1,23 +1,41 @@
 import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
 import classnames from 'classnames';
 import React from 'react';
 import FA from 'react-fontawesome';
 import Loading from '~/components/Loading';
+import { bulkChange } from '~/data/AdminApi';
 
+import { addEventSuccessAlert, addEventDangerAlert } from '../actions';
+import ConfirmActionModal from '../components/Teams/ConfirmActionModal';
 import { CheckboxState } from '../components/Teams/SelectAllCheckbox';
 import TeamCard from '../components/Teams/TeamCard';
 import TeamsFilters from '../components/Teams/TeamsFilters';
 
 import EventPageTab from './EventPageTab';
 
+enum UserAction {
+  Admit = 'Admit',
+  Waitlist = 'Waitlist',
+  Reject = 'Reject',
+}
+
+interface ConfirmModalState {
+  isOpen: boolean;
+  actionType: UserAction;
+}
+
 interface TeamsTabProps {
   teams: TESCTeam[];
+  onTeamsUpdate: () => void;
 }
 
 interface TeamsTabState {
   selectedTeams: Set<string>;
   selectedUsers: Set<TESCUser>;
   filteredTeams: Set<string>;
+
+  confirmModalState: ConfirmModalState;
 }
 
 export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState> {
@@ -28,9 +46,16 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       selectedTeams: new Set<string>(),
       selectedUsers: new Set<TESCUser>(),
       filteredTeams: new Set<string>(props.teams.map((team: TESCTeam) => team._id)),
+      confirmModalState: {
+        isOpen: false,
+        actionType: UserAction.Admit,
+      },
     };
   }
 
+  /**
+   * Gets the list of users in a given set of team IDs.
+   */
   getUsersFromTeamSet = (teamSet: Set<string>) =>
     this.props.teams
       .filter(team => teamSet.has(team._id))
@@ -146,6 +171,68 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
     }
   }
 
+  /**
+   * Handles when the admin clicks on a user action button.
+   */
+  onUserAction = (actionType: UserAction) => {
+    // Open the modal and set action type
+    this.setState({
+      confirmModalState: {
+        isOpen: true,
+        actionType: actionType,
+      },
+    });
+  };
+
+  /**
+   * Handles when the user chooses an option within the confirm modal.
+   */
+  onConfirmModalClosed = (shouldAct: boolean) => {
+    // Close the modal
+    this.setState({
+      confirmModalState: {
+        isOpen: false,
+        actionType: UserAction.Admit,
+      },
+    });
+
+    // Exit out if the admin decides to cancel their action.
+    if (!shouldAct) {
+      return;
+    }
+
+    // Perform the action
+    const { event } = this.props;
+    const userAction = this.state.confirmModalState.actionType;
+    let newStatus: UserStatus;
+    switch (userAction) {
+      case (UserAction.Admit):
+        newStatus = UserStatus.Unconfirmed;
+        break;
+      case (UserAction.Reject):
+        newStatus = UserStatus.Rejected;
+        break;
+      case (UserAction.Waitlist):
+        newStatus = UserStatus.Waitlisted;
+        break;
+      default:
+        return;
+    }
+    const userIDs = Array.from(this.state.selectedUsers, user => user._id);
+
+    bulkChange(userIDs, newStatus)
+      .then(() => {
+        // Reload tab
+        this.props.onTeamsUpdate();
+        addEventSuccessAlert(event.alias, `Successfully updated ${userIDs.length} user(s)!`,
+          'Update Teams');
+      })
+      .catch((err) => {
+        addEventDangerAlert(event.alias, err.message, 'Update Teams');
+        console.error(err);
+      });
+  }
+
   renderModifyButtons() {
     const { selectedTeams, selectedUsers } = this.state;
     const numTeams = selectedTeams.size;
@@ -159,13 +246,22 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
         Selected <span className="ml-2">{numTeams}</span> <FA name="users" />{' '}
         <span className="ml-2">{numUsers}</span> <FA name="user" />
         {numUsers > 0 && <div className="btn-group ml-2" role="group">
-          <button className={classnames(buttonClasses, hidden, 'team__action-btn--confirmed')}>
+          <button
+            className={classnames(buttonClasses, hidden, 'team__action-btn--confirmed')}
+            onClick={() => this.onUserAction(UserAction.Admit)}
+          >
             Admit <span className="badge badge-light">{numUsers}</span>
           </button>
-          <button className={classnames(buttonClasses, hidden, 'team__action-btn--waitlisted')}>
+          <button
+            className={classnames(buttonClasses, hidden, 'team__action-btn--waitlisted')}
+            onClick={() => this.onUserAction(UserAction.Waitlist)}
+          >
             Waitlist <span className="badge badge-light">{numUsers}</span>
           </button>
-          <button className={classnames(buttonClasses, hidden, 'team__action-btn--rejected')}>
+          <button
+            className={classnames(buttonClasses, hidden, 'team__action-btn--rejected')}
+            onClick={() => this.onUserAction(UserAction.Reject)}
+          >
             Reject <span className="badge badge-light">{numUsers}</span>
           </button>
         </div>}
@@ -175,7 +271,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
   render() {
     const { teams, columns } = this.props;
-    const { filteredTeams, selectedTeams } = this.state;
+    const { filteredTeams, selectedTeams, selectedUsers, confirmModalState } = this.state;
 
     if (filteredTeams.size === 0 && teams.length === 0) {
       return <Loading title="Teams" />;
@@ -183,6 +279,12 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
     return (
       <>
+        <ConfirmActionModal
+          isOpen={confirmModalState.isOpen}
+          selectedUsers={selectedUsers.size}
+          actionType={confirmModalState.actionType}
+          onConfirmChoice={this.onConfirmModalClosed}
+        />
         <TeamsFilters
           teams={teams}
           onFilteredChanged={this.onFilteredChange}
