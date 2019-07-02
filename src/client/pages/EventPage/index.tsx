@@ -84,7 +84,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
       name: 'Teams',
       anchor: 'teams',
       render: this.renderTeams.bind(this),
-      onTabOpen: this.loadTeams.bind(this),
+      onTabOpen: () => this.loadTeams(),
       onTabClose: () => this.setState({ teams: [] }),
     },
     {
@@ -143,9 +143,12 @@ class EventPage extends TabularPage<Props, EventPageState> {
   /**
    * Loads all the teams for the current event into the state.
    */
-  loadTeams() {
+  loadTeams = () => {
     const { event } = this.props;
     if (!event) {
+      // Force load event again
+      this.props.loadAllAdminEvents()
+        .then(this.loadTeams);
       return;
     }
 
