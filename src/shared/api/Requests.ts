@@ -113,6 +113,7 @@ export interface RegisterUserResponseSectionRequest {
   shirtSize?: string;
   classRequirement?: boolean;
   teamCode: string;
+  createTeam: boolean;
 }
 
 export interface RegisterUserUserSectionRequest {

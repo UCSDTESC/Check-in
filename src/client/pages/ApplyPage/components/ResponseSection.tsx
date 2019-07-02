@@ -82,6 +82,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     this.setState({
       teamState: newState,
     });
+    this.props.change('createTeam', newState === JoinCreateTeamState.CREATE);
   };
 
   /**

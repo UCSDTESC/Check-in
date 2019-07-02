@@ -89,7 +89,11 @@ export class UserController {
       }
 
       if (!existingTeam) {
-        existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
+        if (user.createTeam) {
+          existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
+        } else {
+          throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
+        }
       }
 
       existingTeam.members.push(newUser);
