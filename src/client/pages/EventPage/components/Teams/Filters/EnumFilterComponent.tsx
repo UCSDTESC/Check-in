@@ -1,20 +1,23 @@
 import React from 'react';
 import AutoSuggest from '~/components/AutoSuggest';
 
+import FilterComponent from './FilterComponent';
+import StringFilter, { StringOperation } from './StringFilter';
+
 interface EnumFilterComponentProps {
-  label: string;
   getSuggestions: any;
   minChars?: number;
-  onChange: (newValue: string) => void;
 }
 
 interface EnumFilterComponentState {
 }
 
 export default class EnumFilterComponent
-  extends React.Component<EnumFilterComponentProps, EnumFilterComponentState> {
+  extends FilterComponent<EnumFilterComponentProps, EnumFilterComponentState> {
   onEnumSelected = (suggestion: string) => {
-    this.props.onChange(suggestion);
+    const { label, propertyName } = this.props;
+    const newFilter: StringFilter = new StringFilter(propertyName, label, StringOperation.EQUALS, suggestion);
+    this.props.onFiltersChanged(newFilter);
   }
 
   render() {

@@ -5,10 +5,10 @@ import React from 'react';
 
 // tslint:disable-next-line
 import 'rc-slider/assets/index.css';
+import FilterComponent from './FilterComponent';
+import StringFilter, { StringOperation } from './StringFilter';
 
 interface YearFilterComponentProps {
-  label: string;
-  onChange: (years: string[]) => void;
 }
 
 interface YearFilterComponentState {
@@ -30,13 +30,20 @@ const handle = (props: any) => {
 };
 
 export default class YearFilterComponent
-  extends React.Component<YearFilterComponentProps, YearFilterComponentState> {
+  extends FilterComponent<YearFilterComponentProps, YearFilterComponentState> {
   onValueChange = (newValues: number[]) => {
-    this.props.onChange(UserYearOptions.slice(newValues[0], newValues[1] + 1));
+    const { label, propertyName } = this.props;
+    const newOptions = UserYearOptions.slice(newValues[0], newValues[1] + 1);
+    const newFilters: StringFilter[] = [];
+    for (const option in newOptions) {
+      const newFilter: StringFilter = new StringFilter(propertyName, label, StringOperation.EQUALS, option);
+      newFilters.push(newFilter);
+    }
+    this.props.onFiltersChanged(...newFilters);
   }
 
   render() {
-    const { label, onChange } = this.props;
+    const { label } = this.props;
     const TooltipRange = createSliderWithTooltip(Range);
 
     return (

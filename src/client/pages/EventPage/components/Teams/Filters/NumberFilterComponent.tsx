@@ -4,14 +4,14 @@ import React from 'react';
 
 // tslint:disable-next-line
 import 'rc-slider/assets/index.css';
+import FilterComponent from './FilterComponent';
+import NumberFilter, { NumberOperation } from './NumberFilter';
 
 interface NumberFilterComponentProps {
-  label: string;
   min: number;
   max: number;
   step?: number;
   format?: (value: number) => string;
-  onChange: (min: number, max: number) => void;
 }
 
 interface NumberFilterComponentState {
@@ -33,9 +33,25 @@ const handle = (props: any) => {
 };
 
 export default class NumberFilterComponent
-  extends React.Component<NumberFilterComponentProps, NumberFilterComponentState> {
+  extends FilterComponent<NumberFilterComponentProps, NumberFilterComponentState> {
+  onChange = (value1: number, value2: number) => {
+    const { label, propertyName } = this.props;
+    let newFilter: NumberFilter;
+    if (!!value1 && !!value2) {
+      // Between two
+      newFilter = new NumberFilter(propertyName, label, NumberOperation.BETWEEN, value1, value2);
+    } else if (!!value1 && !value2) {
+      // Above value 1
+      newFilter = new NumberFilter(propertyName, label, NumberOperation.GTE, value1);
+    } else if (!value1 && !!value2) {
+      // Below value 2
+      newFilter = new NumberFilter(propertyName, label, NumberOperation.LTE, value2);
+    }
+    this.props.onFiltersChanged(newFilter);
+  }
+
   render() {
-    const { min, max, label, step, format, onChange } = this.props;
+    const { min, max, label, step, format } = this.props;
     const TooltipRange = createSliderWithTooltip(Range);
 
     return (
@@ -47,7 +63,7 @@ export default class NumberFilterComponent
           min={min}
           max={max}
           step={step ? step : 1}
-          onAfterChange={value => onChange(value[0], value[1])}
+          onAfterChange={value => this.onChange(value[0], value[1])}
           handle={handle}
           tipFormatter={format}
           className="teams-filters__slider"

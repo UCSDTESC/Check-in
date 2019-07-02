@@ -9,11 +9,9 @@ import { ColumnDefinitions } from '~/static/Types';
 import { getSuggestions as UniversitySuggestions } from '~/static/Universities';
 
 import BaseFilter from './Filters/BaseFilter';
-import EnumFilter, { EnumOperation } from './Filters/EnumFilter';
 import EnumFilterComponent from './Filters/EnumFilterComponent';
 import NumberFilterComponent from './Filters/NumberFilterComponent';
 import StatusFilterComponent from './Filters/StatusFilterComponent';
-import StringFilter, { StringOperation } from './Filters/StringFilter';
 import YearFilterComponent from './Filters/YearFilterComponent';
 import SelectAllCheckbox, { CheckboxState } from './SelectAllCheckbox';
 
@@ -27,7 +25,8 @@ interface NewFilterOption {
   propertyName: keyof TESCUser;
   propertyDisplayName: string;
   newFilterComponent: ReactNode;
-  deletePrevious?: boolean; // Determines whether to delete any previous filters with the given property name.
+  // Determines whether to delete any previous filters with the given property name.
+  deletePrevious?: boolean;
 }
 
 interface TeamsFiltersProps {
@@ -44,6 +43,7 @@ interface TeamsFiltersState {
   admittedSelection: AdmittedSelectOption;
   showNewFilterMenu: boolean;
   selectedNewFilterOption?: NewFilterOption;
+  newFilters: BaseFilter[];
 }
 
 export default class TeamsFilters extends React.Component<TeamsFiltersProps, TeamsFiltersState> {
@@ -55,12 +55,10 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
     super(props);
 
     this.state = {
-      activeFilters: [
-        new StringFilter('university', 'University', StringOperation.CONTAINS, 'San Diego'),
-        new EnumFilter<UserStatus>('status', 'Status', EnumOperation.INCLUDES, UserStatus.Late, UserStatus.NoStatus),
-      ],
+      activeFilters: [],
       admittedSelection: AdmittedSelectOption.ALL,
       showNewFilterMenu: false,
+      newFilters: [],
     };
 
     this.constructNewFilterComponents();
@@ -119,49 +117,56 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
       newFilterComponent: (
         <EnumFilterComponent
           label="University"
+          propertyName="university"
           getSuggestions={UniversitySuggestions}
-          onChange={console.log}
+          onFiltersChanged={this.onNewFilterChange}
         />
       ),
     }, {
       propertyName: 'gpa',
       propertyDisplayName: 'GPA',
+      deletePrevious: true,
       newFilterComponent: (
         <NumberFilterComponent
           label="GPA"
+          propertyName="gpa"
           min={0}
           max={4.00}
           step={0.1}
           format={value => Number(value).toFixed(2)}
-          onChange={console.log}
+          onFiltersChanged={this.onNewFilterChange}
         />
       ),
     }, {
       propertyName: 'majorGPA',
       propertyDisplayName: 'Major GPA',
+      deletePrevious: true,
       newFilterComponent: (
         <NumberFilterComponent
           label="Major GPA"
+          propertyName="majorGPA"
           min={0}
           max={4.00}
           step={0.1}
           format={value => Number(value).toFixed(2)}
-          onChange={console.log}
+          onFiltersChanged={this.onNewFilterChange}
         />
       ),
     }, {
       propertyName: 'status',
       propertyDisplayName: 'Status',
       newFilterComponent: (
-        <StatusFilterComponent label="Status" onChange={console.log} />
+        <StatusFilterComponent label="Status" propertyName="status" onFiltersChanged={this.onNewFilterChange} />
       ),
     }, {
       propertyName: 'year',
       propertyDisplayName: 'Year',
+      deletePrevious: true,
       newFilterComponent: (
         <YearFilterComponent
-          onChange={console.log}
           label="Year"
+          propertyName="year"
+          onFiltersChanged={this.onNewFilterChange}
         />
       ),
     }, {
@@ -170,12 +175,46 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
       newFilterComponent: (
         <EnumFilterComponent
           label="Major"
+          propertyName="major"
           getSuggestions={MajorSuggestions}
-          onChange={console.log}
+          onFiltersChanged={this.onNewFilterChange}
         />
       ),
     }];
   };
+
+  /**
+   * Handles the new value when the user changes the value of the new filter component.
+   */
+  onNewFilterChange = (...newFilters: BaseFilter[]) => {
+    this.setState({
+      newFilters,
+    });
+  }
+
+  /**
+   * Adds the new filters to the current list and removes any with the same property name that already exist.
+   */
+  addNewFilter = () => {
+    const { newFilters, selectedNewFilterOption } = this.state;
+    let updatedFilterList = this.state.activeFilters;
+    if (selectedNewFilterOption.deletePrevious) {
+      // Filter out previous ones with the same property name
+      // Assumse all new filters have the same property name
+      updatedFilterList = updatedFilterList
+        .filter(filter => filter.memberProperty !== newFilters[0].memberProperty);
+    }
+
+    // Add the new filters to the list
+    this.setState({
+      activeFilters: [
+        ...newFilters,
+        ...updatedFilterList,
+      ],
+      newFilters: [],
+      showNewFilterMenu: false,
+    }, this.onFilterChanged);
+  }
 
   /**
    * Triggers a full filter and calls the prop to update.
@@ -325,6 +364,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
                 <button
                   type="button"
                   className="btn rounded-button rounded-button--short rounded-button--small"
+                  onClick={() => this.addNewFilter()}
                 >
                   Add
                 </button>
