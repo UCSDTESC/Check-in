@@ -9,9 +9,9 @@ import { ColumnDefinitions } from '~/static/Types';
 import { getSuggestions as UniversitySuggestions } from '~/static/Universities';
 
 import BaseFilter from './Filters/BaseFilter';
-import EnumFilterComponent from './Filters/EnumFilterComponent';
 import NumberFilterComponent from './Filters/NumberFilterComponent';
 import StatusFilterComponent from './Filters/StatusFilterComponent';
+import StringFilterComponent from './Filters/StringFilterComponent';
 import YearFilterComponent from './Filters/YearFilterComponent';
 import SelectAllCheckbox, { CheckboxState } from './SelectAllCheckbox';
 
@@ -114,8 +114,9 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
     this.newFilterOptions = [{
       propertyName: 'university',
       propertyDisplayName: 'University',
+      deletePrevious: true,
       newFilterComponent: (
-        <EnumFilterComponent
+        <StringFilterComponent
           label="University"
           propertyName="university"
           getSuggestions={UniversitySuggestions}
@@ -172,8 +173,9 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
     }, {
       propertyName: 'major',
       propertyDisplayName: 'Major',
+      deletePrevious: true,
       newFilterComponent: (
-        <EnumFilterComponent
+        <StringFilterComponent
           label="Major"
           propertyName="major"
           getSuggestions={MajorSuggestions}
@@ -213,6 +215,7 @@ export default class TeamsFilters extends React.Component<TeamsFiltersProps, Tea
       ],
       newFilters: [],
       showNewFilterMenu: false,
+      selectedNewFilterOption: undefined,
     }, this.onFilterChanged);
   }
 
