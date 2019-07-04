@@ -9,20 +9,40 @@ interface StatusFilterComponentProps {
 }
 
 interface StatusFilterComponentState {
+  values: TeamStatus[];
 }
 
 export default class StatusFilterComponent
   extends FilterComponent<StatusFilterComponentProps, StatusFilterComponentState> {
-  onChange = (newValueEvent: ChangeEvent<HTMLSelectElement>) => {
+  state: Readonly<StatusFilterComponentState> = {
+    values: [],
+  };
+
+  componentDidMount() {
+    this.sendCurrentValues();
+  }
+
+  /**
+   * Sends the currently selected values' filter to the parent.
+   */
+  sendCurrentValues = () => {
     const { label, propertyName } = this.props;
-    const newStatus: TeamStatus = newValueEvent.currentTarget.value as TeamStatus;
     const newFilter: EnumFilter<TeamStatus> =
-      new EnumFilter<TeamStatus>(propertyName, label, EnumOperation.INCLUDES, newStatus);
+      new EnumFilter<TeamStatus>(propertyName, label, EnumOperation.INCLUDES, ...this.state.values);
     this.props.onFiltersChanged(newFilter);
+  }
+
+  onChange = (newValueEvent: ChangeEvent<HTMLSelectElement>) => {
+    const newStatus: TeamStatus = newValueEvent.currentTarget.value as TeamStatus;
+    const newValues = [newStatus, ...this.state.values];
+    this.setState({
+      values: newValues,
+    }, this.sendCurrentValues);
   }
 
   render() {
     const { label } = this.props;
+    const { values } = this.state;
     const userStatuses = Object.values(UserStatus);
     const teamStatuses = Object.values(TeamStatusEnum);
 
@@ -31,6 +51,11 @@ export default class StatusFilterComponent
         <div>
           {label}
         </div>
+        <ul>
+          {values.map(value =>
+            <li key={value}>{value}</li>
+          )}
+        </ul>
         <select className="sd-form__input-select d-block w-100" onChange={this.onChange}>
           {[...userStatuses, ...teamStatuses].map(status =>
             <option key={status} value={status}>{TeamStatusDisplayText.get(status)}</option>

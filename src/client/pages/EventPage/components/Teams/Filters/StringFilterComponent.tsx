@@ -21,10 +21,12 @@ export default class StringFilterComponent
 
   componentDidMount() {
     // Resend the values when remounting.
-    console.log('mounted');
     this.sendCurrentValues();
   }
 
+  /**
+   * Sends the currently selected values' filter to the parent.
+   */
   sendCurrentValues = () => {
     const { label, propertyName } = this.props;
 
