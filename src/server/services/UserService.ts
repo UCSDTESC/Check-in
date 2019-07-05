@@ -54,6 +54,7 @@ export default class UserService {
           path: 'customQuestions.checkBox',
         }],
       })
+      .populate('team')
       .exec();
   }
 

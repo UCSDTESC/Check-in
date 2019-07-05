@@ -141,6 +141,39 @@ class User extends React.Component<Props> {
     );
   }
 
+  renderTeamFields(event: TESCEvent) {
+    const { team } = this.props.user;
+    if (!team) {
+      return <></>;
+    }
+
+    return (
+      <div className="row">
+        <div className="col-12 col-lg">
+          <h5>Team Fields</h5>
+          <div className="form-group row mb-2">
+            <label className="col-sm-2 col-form-label">
+              Team Code
+            </label>
+            <div className="col-sm-4 col-form-label">
+              {team.code}
+            </div>
+            <label className="col-sm-2 col-form-label">
+              Team Members
+            </label>
+            <div className="col-sm-4 col-form-label">
+              <ul>
+                {team.members.map(member =>
+                  <li key={String(member)}>{member}</li>
+                )}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   onSendAcceptance(user: TESCUser) {
     return (
       sendAcceptanceEmail(user)
@@ -360,6 +393,7 @@ class User extends React.Component<Props> {
               </div>
             }
           </div>
+          {event.options.allowTeammates && this.renderTeamFields(event)}
           <div className="row">
             <div className="col-12">
               <button

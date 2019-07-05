@@ -28,6 +28,10 @@ const initialState: UserPageColumnsState = {
       Header: 'Major',
       accessor: 'major',
     },
+    {
+      Header: 'Team Code',
+      accessor: 'team.code',
+    },
   ],
 };
 

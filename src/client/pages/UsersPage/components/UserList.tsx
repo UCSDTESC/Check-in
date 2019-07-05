@@ -4,8 +4,7 @@ import ReactTable from 'react-table';
 import User from '~/components/User';
 
 import { AutofillColumn } from '..';
-
-import AlertPage, { AlertPageState, PageAlert, AlertType } from '../../AlertPage';
+import { AlertType } from '../../AlertPage';
 
 // tslint:disable-next-line
 const styles = require('react-table/react-table.css');
