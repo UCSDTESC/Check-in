@@ -6,7 +6,7 @@ import EmailService from '@Services/EmailService';
 import EventService from '@Services/EventService';
 import TeamService from '@Services/TeamService';
 import UserService from '@Services/UserService';
-import { TESCAccount, TESCUser, TESCTeam } from '@Shared/ModelTypes';
+import { TESCAccount, TESCUser, TESCTeam, MAX_TEAM_SIZE } from '@Shared/ModelTypes';
 import { RegisterUserRequest, UpdateUserRequest, RSVPUserRequest } from '@Shared/api/Requests';
 import { RegisterUserResponse } from '@Shared/api/Responses';
 import { Request } from 'express-serve-static-core';
@@ -94,6 +94,10 @@ export class UserController {
         } else {
           throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
         }
+      }
+
+      if (existingTeam.members.length >= MAX_TEAM_SIZE) {
+        throw new BadRequestError(ErrorMessage.TEAM_FULL(user.teamCode, MAX_TEAM_SIZE));
       }
 
       existingTeam.members.push(newUser);

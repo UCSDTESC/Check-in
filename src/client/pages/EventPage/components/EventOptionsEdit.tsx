@@ -1,4 +1,4 @@
-import { TESCEvent, TESCEventOptions } from '@Shared/ModelTypes';
+import { TESCEvent, TESCEventOptions, MAX_TEAM_SIZE } from '@Shared/ModelTypes';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { UncontrolledTooltip } from 'reactstrap';
@@ -27,7 +27,7 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
     this.setState({
       // TODO: Fix dynamically property
       // @ts-ignore
-      options: {...this.state.options, [optionName]: !this.state.options[optionName]},
+      options: { ...this.state.options, [optionName]: !this.state.options[optionName] },
     });
   };
 
@@ -41,16 +41,16 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
   );
 
   render() {
-    const {onOptionsUpdate, event} = this.props;
-    const {options} = this.state;
+    const { onOptionsUpdate, event } = this.props;
+    const { options } = this.state;
 
     const optionNames = {
       allowHighSchool: 'Allow High School Students',
       mlhProvisions: 'Add MLH Provisions',
       allowOutOfState: 'Allow Out-of-State Students',
-      foodOption : 'Add Food Preference Section',
+      foodOption: 'Add Food Preference Section',
       requireResume: 'Require Resume Uploads',
-      allowTeammates : 'Allow Team Members',
+      allowTeammates: 'Allow Teams',
       requireDiversityOption: 'Require Race In Application',
       requireClassRequirement: 'Require Applicant To Have Completed CSE 100',
       requireExtraCurriculars: 'Require Extra Curriculars',
@@ -63,8 +63,7 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
       mlhProvisions: 'Add the MLH provisions section as a requirement to apply',
       foodOption: 'Give the applicant the option to let you know their ' +
         'preference for catering',
-      allowTeammates: 'Allow the applicant the option to specify their ' +
-        'teammates',
+      allowTeammates: `Allow applicants to create and join teams of up to ${MAX_TEAM_SIZE}`,
       requireExtraCurriculars: 'Create a text field on the application for' +
         ' the applicant to put their extra curriculars / student orgs',
     };

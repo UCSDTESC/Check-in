@@ -17,8 +17,8 @@ import {
   Get, JsonController, UseBefore, Param, QueryParam, Post, UploadedFile,
   BodyParam, Put, Body, BadRequestError
 } from 'routing-controllers';
-import { ErrorMessage } from 'utils/Errors';
 
+import { ErrorMessage } from '../../../utils/Errors';
 import { SelectedEventID } from '../..//decorators/SelectedEventID';
 import { ValidateEventID } from '../..//middleware/ValidateEventID';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
