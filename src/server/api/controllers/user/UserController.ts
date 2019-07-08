@@ -74,8 +74,7 @@ export class UserController {
       existingTeam = await this.TeamService.getTeamByCode(user.teamCode);
       // Check error conditions for the existing team
       if (existingTeam) {
-        // TODO: Type check event variables
-        if (existingTeam.event !== event) {
+        if (existingTeam.event._id.toHexString() !== event._id.toHexString()) {
           throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
         }
 

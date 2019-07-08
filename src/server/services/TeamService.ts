@@ -43,6 +43,7 @@ export default class TeamService {
         },
       })
       .populate('members')
+      .populate('event')
       .exec();
   }
 
