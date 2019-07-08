@@ -35,7 +35,7 @@ export default class TeamService {
    * Gets a team by the registered code.
    * @param code The code associated with the team.
    */
-  async getTeamByCode(code: string) {
+  async getTeamByCode(code: string): Promise<TeamDocument> {
     return this.TeamModel
       .findOne({
         code: {

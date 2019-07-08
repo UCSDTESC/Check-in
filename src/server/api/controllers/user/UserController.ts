@@ -1,6 +1,7 @@
 import { Logger } from '@Config/Logging';
 import Uploads from '@Config/Uploads';
 import { EventDocument } from '@Models/Event';
+import { TeamDocument } from '@Models/Team';
 import { UserDocument } from '@Models/User';
 import EmailService from '@Services/EmailService';
 import EventService from '@Services/EventService';
@@ -67,6 +68,23 @@ export class UserController {
     let hasExistingAccount = false;
     let existingAccount = await this.UserService.getAccountByEmail(user.email);
 
+    // Check the team code works before registering account
+    let existingTeam: TeamDocument;
+    if (event.options.allowTeammates) {
+      existingTeam = await this.TeamService.getTeamByCode(user.teamCode);
+      // Check error conditions for the existing team
+      if (existingTeam) {
+        // TODO: Type check event variables
+        if (existingTeam.event !== event) {
+          throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
+        }
+
+        if (existingTeam.members.length >= MAX_TEAM_SIZE) {
+          throw new BadRequestError(ErrorMessage.TEAM_FULL(user.teamCode, MAX_TEAM_SIZE));
+        }
+      }
+    }
+
     if (!existingAccount) {
       existingAccount = await this.UserService.createNewAccount(user.email, user.password);
     } else {
@@ -82,24 +100,15 @@ export class UserController {
       await this.UserService.updateUserResume(newUser, resume);
     }
 
-    if (event.options.allowTeammates) {
-      let existingTeam = await this.TeamService.getTeamByCode(user.teamCode);
-      if (existingTeam && existingTeam.event !== event) {
+    if (!existingTeam) {
+      if (event.options.allowTeammates && user.createTeam) {
+        existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
+      } else {
         throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
       }
+    }
 
-      if (!existingTeam) {
-        if (user.createTeam) {
-          existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
-        } else {
-          throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
-        }
-      }
-
-      if (existingTeam.members.length >= MAX_TEAM_SIZE) {
-        throw new BadRequestError(ErrorMessage.TEAM_FULL(user.teamCode, MAX_TEAM_SIZE));
-      }
-
+    if (existingTeam) {
       existingTeam.members.push(newUser);
       newUser.team = existingTeam;
 
