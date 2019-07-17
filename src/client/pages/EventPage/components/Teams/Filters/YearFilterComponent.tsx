@@ -34,12 +34,8 @@ export default class YearFilterComponent
   onValueChange = (newValues: number[]) => {
     const { label, propertyName } = this.props;
     const newOptions = UserYearOptions.slice(newValues[0], newValues[1] + 1);
-    const newFilters: StringFilter[] = [];
-    for (const option in newOptions) {
-      const newFilter: StringFilter = new StringFilter(propertyName, label, StringOperation.EQUALS, option);
-      newFilters.push(newFilter);
-    }
-    this.props.onFiltersChanged(...newFilters);
+    const newFilter: StringFilter = new StringFilter(propertyName, label, StringOperation.EQUALS, ...newOptions);
+    this.props.onFiltersChanged(newFilter);
   }
 
   render() {

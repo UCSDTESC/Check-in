@@ -62,6 +62,19 @@ export default class StringFilter implements BaseFilter {
       return displaySingle.get(this.operation);
     }
 
+    // Display all options if it's short
+    const inputsJoined = inputs.join('", "');
+    if (inputsJoined.length <= 25) {
+      const displayMultipleAll: Map<StringOperation, string> = new Map([
+        [StringOperation.ENDS_WITH, `${dn} ends with any of "${inputsJoined}"`],
+        [StringOperation.EQUALS, `${dn} is any of "${inputsJoined}"`],
+        [StringOperation.STARTS_WITH, `${dn} starts with any of "${inputsJoined}"`],
+        [StringOperation.CONTAINS, `${dn} contains any of "${inputsJoined}"`],
+      ]);
+
+      return displayMultipleAll.get(this.operation);
+    }
+
     const displayMultiple: Map<StringOperation, string> = new Map([
       [StringOperation.ENDS_WITH, `${dn} ends with any of ${inputs.length} values`],
       [StringOperation.EQUALS, `${dn} is any of ${inputs.length} values`],
