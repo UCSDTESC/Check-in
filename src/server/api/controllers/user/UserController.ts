@@ -81,6 +81,8 @@ export class UserController {
         if (existingTeam.members.length >= MAX_TEAM_SIZE) {
           throw new BadRequestError(ErrorMessage.TEAM_FULL(user.teamCode, MAX_TEAM_SIZE));
         }
+      } else if (!user.createTeam) { // If team doesn't exist, but trying to join one
+        throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
       }
     }
 
