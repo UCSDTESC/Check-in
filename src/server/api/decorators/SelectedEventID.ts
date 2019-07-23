@@ -2,13 +2,13 @@ import EventService from '@Services/EventService';
 import { createParamDecorator } from 'routing-controllers';
 import { Container } from 'typedi';
 
-export function SelectedEvent(options?: {}) {
+export function SelectedEventID(options?: {}) {
   return createParamDecorator({
     required: true,
     value: async action => {
       const eventService = Container.get(EventService);
-      const alias = action.request.params.eventAlias;
-      return await eventService.getEventByAlias(alias);
+      const eventId = action.request.params.eventId;
+      return await eventService.getEventById(eventId);
     },
   });
 }

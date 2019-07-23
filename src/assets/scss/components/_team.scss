@@ -1,0 +1,179 @@
+.team {
+  $confirmed-color: $default-green;
+  $rejected-color: $default-red;
+  $late-color: $default-red;
+  $declined-color: $default-red;
+  $waitlisted-color: $default-blue;
+  $unconfirmed-color: $default-purple;
+  $unmatching-color: darken($default-yellow, 10%);
+  $none-color: $medium-gray;
+  
+  $status-colors: (
+    "confirmed": $confirmed-color,
+    "rejected": $rejected-color,
+    "late": $late-color,
+    "declined": $declined-color,
+    "waitlisted": $waitlisted-color,
+    "unconfirmed": $unconfirmed-color,
+    "unmatched": $unmatching-color,
+    "none": $none-color,
+  );
+  
+  $status-light-colors: (
+    "confirmed": lighten($confirmed-color, 40%),
+    "rejected": lighten($rejected-color, 25%),
+    "late": lighten($late-color, 25%),
+    "declined": lighten($declined-color, 25%),
+    "waitlisted": lighten($waitlisted-color, 25%),
+    "unconfirmed": lighten($unconfirmed-color, 25%),
+    "unmatched": lighten($unmatching-color, 28%),
+    "none": lighten($none-color, 20%),
+  );
+  
+  @mixin status-highlight-border($status, $color) {
+    color: $color;
+    border-color: $color;
+    background-color: map-get($status-light-colors, $status);
+  }
+  
+  flex: 1 0 auto;
+  max-width: 18rem;
+  border-color: $admin-blue;
+  border-width: 2px;
+  margin: 0.5rem;
+  cursor: pointer;
+
+  &--disabled {
+    cursor: auto;
+  }
+  
+  @mixin modifier-elements($status, $color, $light-color) {
+    &__action-btn--#{$status} {
+      $hover-color: darken($color, 10%);
+
+      background-color: $color;
+      border-color: $hover-color;
+
+      &:hover {
+        background-color: $hover-color;
+        border: 1px solid $hover-color;
+      }
+
+      &:active {
+        background-color: darken($color, 10%) !important;
+      }
+    }
+
+    // Create card modifiers
+    &--#{$status} {
+      border-color: $color;
+      
+      .team__title {
+        color: $color;
+      }
+      
+      .team__indicator {
+        @include status-highlight-border($status, $color); 
+      }
+      
+      .team__member {
+        background-color: $color;
+      }
+
+      .team__select {
+        border-color: $color;
+
+        &:checked {
+          background-color: $color;
+        }
+      }
+    }
+  }
+
+  @each $status, $color in $status-colors {
+    @include modifier-elements($status, $color,
+      map-get($status-light-colors, $status)
+    );
+  }
+
+  &__container {
+    background: $white;
+    display: flex;
+    flex-basis: 15rem;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+  }
+  
+  &__card {
+    padding: 1rem;
+  }
+  
+  &__title {
+    color: $admin-blue;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+  }
+
+  &__select {
+    top: 0;
+    margin-right: 1rem !important;
+    border-radius: $global-radius;
+  }
+  
+  &__name {
+    flex-grow: 1;
+  }
+  
+  &__indicator {
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 0.2rem;
+    border: 2px solid;  
+    padding: 0.25rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  &__member {
+    border: 2px solid $white;
+    border-radius: 100%;
+    height: 3rem;
+    width: 3rem;
+    font-size: 0.9rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: $white;
+    
+    &:hover {
+      cursor: pointer;
+    }
+    
+    &:not(:first-child) {
+      margin-left: -0.8rem;
+    }
+    
+    @mixin status-background-color($status, $color) {
+      &--#{$status} {
+        background-color: $color !important;
+      }
+    }
+    
+    @each $status, $color in $status-colors {
+      @include status-background-color($status, $color);
+    }
+  }
+
+  &__action-btn {
+    opacity: 1;
+    transition: opacity cubic-bezier(0.075, 0.82, 0.165, 1) 0.5s;
+    visibility: visible;
+
+    &--hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+}

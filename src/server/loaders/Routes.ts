@@ -1,10 +1,11 @@
 import { Config } from '@Config/index';
+import { ADMIN_API_PREFIX, USER_API_PREFIX } from '@Shared/api/Paths';
 import * as express from 'express';
 import { useExpressServer, useContainer } from 'routing-controllers';
 import Container from 'typedi';
 
 import { CustomErrorHandler } from '../api/ErrorHandler';
-import Controllers from '../api/controllers';
+import { AdminControllers, UserControllers } from '../api/controllers';
 
 import Loader from './Loader';
 
@@ -12,7 +13,7 @@ export default class RoutesLoader extends Loader {
   public static async initialiseLoader(app: express.Application) {
 
     // Development Hot-Middleware
-    if (Config.NodeEnv === 'development') {
+    if (Config.IsDev) {
       const webpack = require('webpack');
       const webpackConfig = require('../../../webpack.config.js');
 
@@ -29,7 +30,6 @@ export default class RoutesLoader extends Loader {
           modules: false,
         },
         watchOptions: {
-          poll: true,
         },
       }));
 
@@ -41,8 +41,23 @@ export default class RoutesLoader extends Loader {
     useContainer(Container);
 
     app = useExpressServer(app, {
-      routePrefix: '/api',
-      controllers: Controllers,
+      routePrefix: ADMIN_API_PREFIX,
+      controllers: AdminControllers,
+      middlewares: [
+        CustomErrorHandler,
+      ],
+      defaultErrorHandler: false,
+      classTransformer: false,
+      defaults: {
+        paramOptions: {
+          required: true,
+        },
+      },
+    });
+
+    app = useExpressServer(app, {
+      routePrefix: USER_API_PREFIX,
+      controllers: UserControllers,
       middlewares: [
         CustomErrorHandler,
       ],

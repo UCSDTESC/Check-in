@@ -3,12 +3,22 @@ import { ObjectID } from 'bson';
 
 import { Role } from './Roles';
 
+export const TEAM_CODE_LENGTH = 4;
+export const MAX_TEAM_SIZE = 4;
+
 export interface AccountPasswordReset {
   _id?: string & ObjectID;
   account: TESCAccount;
   resetString: string;
   expires: Date;
   valid: boolean;
+}
+
+export interface TESCTeam {
+  _id?: string & ObjectID;
+  event: TESCEvent;
+  code: string;
+  members: TESCUser[];
 }
 
 export interface UploadedFile {
@@ -105,6 +115,7 @@ export interface TESCUser {
   _id?: string & ObjectID;
   event?: TESCEvent;
   account?: TESCAccount;
+  team?: TESCTeam;
   firstName: string;
   lastName: string;
   birthdate: string;
@@ -127,7 +138,6 @@ export interface TESCUser {
   };
   availableBus?: string;
   bussing?: boolean;
-  teammates?: string[];
   status?: UserStatus;
   checkedIn?: boolean;
   sanitized?: boolean;

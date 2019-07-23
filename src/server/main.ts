@@ -11,7 +11,7 @@ import ApplicationLoader from './loaders';
 
 // Create workers on all the threads
 if (Config.NodeEnv === 'development') {
-// Don't multithread for debugging ease
+  // Don't multithread for debugging ease
   startInstance();
 } else {
   throng({
@@ -30,5 +30,8 @@ async function startInstance() {
   app.listen(port, () => {
     Logger.info('Server started. Listening on port %d with %d worker(s)',
       port, Config.WebConcurrency);
+    if (Config.IsDev) {
+      Logger.warn('Server started in DEBUG mode.');
+    }
   });
 }

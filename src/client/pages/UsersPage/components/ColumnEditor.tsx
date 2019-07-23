@@ -1,18 +1,19 @@
 import React from 'react';
-import { Column } from '~/static/Types';
+
+import { AutofillColumn } from '..';
 
 interface UserListProps {
-  available: Column[];
-  columns: Column[];
-  onAddColumn: (newColumn: Column) => void;
-  onDeleteColumn: (toDelete: Column) => void;
+  available: AutofillColumn[];
+  columns: AutofillColumn[];
+  onAddColumn: (newColumn: AutofillColumn) => void;
+  onDeleteColumn: (toDelete: AutofillColumn) => void;
 }
 
 interface UserListState {
   newFilter: string;
 }
 
-interface IndexedColumn extends Column {
+interface IndexedColumn extends AutofillColumn {
   index: number;
 }
 
@@ -21,7 +22,7 @@ export default class UserList extends React.Component<UserListProps, UserListSta
     newFilter: '',
   };
 
-  changeFilter = (e: React.FormEvent<HTMLInputElement>) => this.setState({newFilter: e.currentTarget.value});
+  changeFilter = (e: React.FormEvent<HTMLInputElement>) => this.setState({ newFilter: e.currentTarget.value });
 
   /**
    * Add a new column to the list.
@@ -32,7 +33,7 @@ export default class UserList extends React.Component<UserListProps, UserListSta
   };
 
   render() {
-    const {available, columns, onDeleteColumn} = this.props;
+    const { available, columns, onDeleteColumn } = this.props;
     const activeColumnAccessors = Object.values(columns)
       .reduce((agg, col) => {
         agg.push(col.accessor);
@@ -58,9 +59,9 @@ export default class UserList extends React.Component<UserListProps, UserListSta
                 .filter((available) =>
                   !(activeColumnAccessors.includes(available.accessor)))
                 .map((available) =>
-                (<option key={available.index} value={available.index}>
-                  {available.Header}
-                </option>))}
+                  (<option key={available.index} value={available.index}>
+                    {available.Header}
+                  </option>))}
             </select>
           </div>
           <div className="col-12">
@@ -73,7 +74,7 @@ export default class UserList extends React.Component<UserListProps, UserListSta
                 onClick={() => onDeleteColumn(column)}
                 className="badge badge-dark column-editor__badge"
               >
-                <i className="fa fa-close"/>
+                <i className="fa fa-close" />
               </a>
               <span className="sr-only">delete column</span>
             </div>))}

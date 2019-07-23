@@ -6,14 +6,17 @@ import { Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { Get, JsonController, UseBefore, Res, Req, Post } from 'routing-controllers';
 
-import { AdminAuthorisation } from '../middleware/AdminAuthorisation';
-import { AdminLogin } from '../middleware/AdminLogin';
+import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
+import { AdminLogin } from '../../middleware/AdminLogin';
 
-@JsonController('/auth')
-export class AdminAuthController {
+/**
+ * Handles all of the logic for admin authentication.
+ */
+@JsonController()
+export class AuthController {
   constructor(
     private AdminService: AdminService
-  ) {}
+  ) { }
 
   /**
    * Signs a user with the JWT secret.

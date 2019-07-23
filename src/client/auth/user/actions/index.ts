@@ -2,7 +2,7 @@ import { JWTUserAuthToken } from '@Shared/api/Responses';
 import { createStandardAction } from 'typesafe-actions';
 import Cookies from 'universal-cookie';
 import { deleteUserEvents, ApplicationDispatch, ApplicationAction } from '~/actions';
-import * as Auth from '~/data/User';
+import * as Auth from '~/data/UserApi';
 import CookieTypes from '~/static/Cookies';
 
 import { LoginFormData } from '../Login';
@@ -58,8 +58,8 @@ export const logoutUser = (): ApplicationAction => (
   (dispatch: ApplicationDispatch) => {
     dispatch(unauthoriseUser());
     dispatch(deleteUserEvents());
-    cookies.remove(CookieTypes.user.token, {path: '/'});
-    cookies.remove(CookieTypes.user.user, {path: '/'});
+    cookies.remove(CookieTypes.user.token, { path: '/' });
+    cookies.remove(CookieTypes.user.user, { path: '/' });
   });
 
 // Return authorisation events

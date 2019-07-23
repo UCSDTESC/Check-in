@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadAllUsers } from '~/data/Api';
+import { loadAllUsers } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
 import { AlertType } from '../AlertPage';
@@ -93,17 +93,17 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
 
   componentDidMount() {
     super.componentDidMount();
-    const {users, event} = this.props;
+    const { users, event } = this.props;
 
-    if (!users.length) {
-      this.loadUsers();
-    }
+    showLoading();
 
     if (!event) {
-      showLoading();
-
       this.props.loadAllAdminEvents()
         .catch(console.error)
+        .then(this.loadUsers)
+        .finally(hideLoading);
+    } else {
+      this.loadUsers()
         .finally(hideLoading);
     }
   }
@@ -114,7 +114,7 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
   };
 
   onCheckinSuccessful = () => {
-    const {lastUser} = this.state;
+    const { lastUser } = this.state;
 
     this.clearAlerts();
     this.createAlert(`Checked in ${lastUser.firstName}`, AlertType.Success);
@@ -124,15 +124,11 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    const {showLoading, hideLoading, addUsers} = this.props;
+    const { addUsers } = this.props;
+    const { event } = this.props;
 
-    showLoading();
-
-    loadAllUsers(this.props.match.params.eventAlias)
-    .then(res => {
-      hideLoading();
-      return addUsers(res);
-    });
+    return loadAllUsers(event._id)
+      .then(addUsers);
   }
 
   validateUser = (user: TESCUser) =>
@@ -156,22 +152,22 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
       }
 
       return resolve(user);
-  })
+    })
 
   checkinUser = (user: TESCUser): Promise<TESCUser> =>
-  new Promise((resolve, reject) => {
-    const {event} = this.props;
+    new Promise((resolve, reject) => {
+      const { event } = this.props;
 
-    this.validateUser(user)
-    .then(() =>
-    this.props.userCheckin(user, event.alias)
-    )
-    .then(() => resolve(user))
-    .catch(reject);
-  });
+      this.validateUser(user)
+        .then(() =>
+          this.props.userCheckin(user, event._id)
+        )
+        .then(() => resolve(user))
+        .catch(reject);
+    });
 
   onScan = (userId: string) => {
-    const {lastUser} = this.state;
+    const { lastUser } = this.state;
 
     if (lastUser && userId === lastUser._id) {
       this.onCheckinError('User has already checked in');
@@ -211,7 +207,7 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     });
 
     this.checkinUser(this.state.lastUser)
-    .then((user) => {
+      .then((user) => {
         this.onCheckinSuccessful();
       })
       .catch((err: string) => {
@@ -250,8 +246,8 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
   }
 
   render() {
-    const {users, event} = this.props;
-    const {isLiabilityShowing, activeTab} = this.state;
+    const { users, event } = this.props;
+    const { isLiabilityShowing, activeTab } = this.state;
 
     if (!users.length) {
       return (

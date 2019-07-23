@@ -2,7 +2,7 @@ import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import { createStandardAction } from 'typesafe-actions';
 import Cookies from 'universal-cookie';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
-import * as Auth from '~/data/AdminAuth';
+import * as AdminApi from '~/data/AdminApi';
 import CookieTypes from '~/static/Cookies';
 
 import { LoginFormData } from '../Login';
@@ -51,7 +51,7 @@ export function errorHandler(dispatch: ApplicationDispatch, error: any) {
 export const loginAdmin = (loginFormData: LoginFormData): ApplicationAction<Promise<{}>> => (
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
-      Auth.login(loginFormData.username, loginFormData.password)
+      AdminApi.login(loginFormData.username, loginFormData.password)
         .then((res) => {
           storeLogin(res.token, res.user);
           dispatch(authoriseAdmin(res.user));
@@ -62,7 +62,7 @@ export const loginAdmin = (loginFormData: LoginFormData): ApplicationAction<Prom
           return errorHandler(dispatch, err);
         });
     })
-  );
+);
 
 /**
  * Logout the current authenticated user.
@@ -71,8 +71,8 @@ export const loginAdmin = (loginFormData: LoginFormData): ApplicationAction<Prom
 export const logoutAdmin = (): ApplicationAction => (
   (dispatch: ApplicationDispatch) => {
     dispatch(unauthoriseAdmin());
-    cookies.remove(CookieTypes.admin.token, {path: '/'});
-    cookies.remove(CookieTypes.admin.user, {path: '/'});
+    cookies.remove(CookieTypes.admin.token, { path: '/' });
+    cookies.remove(CookieTypes.admin.user, { path: '/' });
   });
 
 // Return authorisation events

@@ -4,22 +4,26 @@ import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { Link, RouteComponentProps } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
-import { loadAllAdminEvents, ApplicationDispatch } from '~/actions';
+import { loadAllAdminEvents, ApplicationDispatch, loadAvailableColumns } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadAllUsers, loadColumns } from '~/data/Api';
+import { loadAllUsers, loadColumns } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { Column } from '~/static/Types';
+import { ColumnDefinitions } from '~/static/Types';
 
-import AlertPage, { AlertPageState, PageAlert, AlertType } from '../AlertPage';
+import AlertPage, { AlertPageState, AlertType } from '../AlertPage';
 
-import { addColumn, updateUser, removeColumn, addAvailableColumns } from './actions';
+import { addColumn, updateUser, removeColumn } from './actions';
 import ColumnEditor from './components/ColumnEditor';
 import UserList from './components/UserList';
 
+export interface AutofillColumn {
+  Header: string;
+  accessor: string;
+}
+
 const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => ({
-  availableColumns: state.admin.userColumns.available,
-  activeColumns: state.admin.userColumns.active,
-  loadedAvailableColumns: state.admin.userColumns.loadedAvailable,
+  availableColumns: state.admin.availableColumns,
+  activeColumns: state.admin.userPageColumns.active,
   event: state.admin.events[ownProps.match.params.eventAlias],
 });
 
@@ -27,7 +31,7 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
   updateUser,
   addColumn,
   removeColumn,
-  addAvailableColumns,
+  loadAvailableColumns,
   showLoading,
   hideLoading,
   loadAllAdminEvents,
@@ -44,64 +48,84 @@ type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof
 
 interface UsersPageState extends AlertPageState {
   users: TESCUser[];
+  autofillColumns: AutofillColumn[];
 }
 
 class UsersPage extends AlertPage<Props, UsersPageState> {
   state: Readonly<UsersPageState> = {
     users: [],
+    autofillColumns: [
+      {
+        Header: 'Email',
+        accessor: 'account.email',
+      },
+    ],
     alerts: [],
   };
 
   componentDidMount() {
-    const {event, loadedAvailableColumns} = this.props;
+    const { event } = this.props;
+
+    showLoading();
 
     if (!event) {
-      showLoading();
-
       this.props.loadAllAdminEvents()
         .catch(console.error)
+        .then(this.loadUsers)
+        .finally(hideLoading);
+    } else if (!this.state.users.length) {
+      this.loadUsers()
         .finally(hideLoading);
     }
 
-    if (!this.state.users.length) {
-      this.loadUsers();
-    }
-
-    if (!loadedAvailableColumns) {
-      this.loadAvailableColumns();
-    }
+    this.ensureAvailableColumns()
+      .then(this.loadAutofillColumns.bind(this));
   }
 
   /**
-   * Loads the column definitions from the server.
+   * Loads any available columns, if needed.
    */
-  loadAvailableColumns() {
-    loadColumns()
-      .then(columns => {
-        const newColumns: Column[] = Object.entries(columns)
-          .reduce((acc, [key, value]) => {
-            acc.push({
-              Header: value,
-              accessor: key,
-            } as Column);
-            return acc;
-          }, []);
-        this.props.addAvailableColumns(newColumns);
-      });
+  ensureAvailableColumns() {
+    if (Object.keys(this.props.availableColumns).length > 0) {
+      return Promise.resolve(this.props.availableColumns);
+    }
+
+    return this.props.loadAvailableColumns();
+  }
+
+  /**
+   * Loads the available column definitions into the autofill state.
+   */
+  loadAutofillColumns(availableColumns: ColumnDefinitions) {
+    // Create the new columns based off the current set.
+    const newColumns: AutofillColumn[] = Object.entries(availableColumns)
+      .reduce((acc, [key, value]) => {
+        // Ensure we're not doubling up.
+        if (acc.some(col => col.accessor === key)) {
+          return acc;
+        }
+
+        acc.push({
+          Header: value,
+          accessor: key,
+        } as AutofillColumn);
+        return acc;
+      }, this.state.autofillColumns);
+
+    this.setState({
+      autofillColumns: newColumns,
+    });
   }
 
   /**
    * Loads all the users into the redux state.
    */
   loadUsers = () => {
-    const {showLoading, hideLoading} = this.props;
-    const eventAlias = this.props.match.params.eventAlias;
+    const { event } = this.props;
 
-    showLoading();
-    loadAllUsers(eventAlias)
+    return loadAllUsers(event._id)
       .then((res: TESCUser[]) => {
-        hideLoading();
-        return this.setState({users: res});
+        return this.setState({ users: res });
       });
   }
 
@@ -111,7 +135,7 @@ class UsersPage extends AlertPage<Props, UsersPageState> {
   onUserUpdate = (user: TESCUser) => {
     this.props.updateUser(user)
       .then(() => {
-        const {users} = this.state;
+        const { users } = this.state;
 
         this.createAlert(
           `Successfully updated ${user.account.email}'s ${this.props.event.name} Application`,
@@ -131,15 +155,15 @@ class UsersPage extends AlertPage<Props, UsersPageState> {
       });
   }
 
-  onAddColumn = (column: Column) =>
+  onAddColumn = (column: AutofillColumn) =>
     this.props.addColumn(column)
 
-  onRemoveColumn = (column: Column) =>
+  onRemoveColumn = (column: AutofillColumn) =>
     this.props.removeColumn(column)
 
   render() {
-    const {event, activeColumns, availableColumns} = this.props;
-    const {users} = this.state;
+    const { event, activeColumns } = this.props;
+    const { users, autofillColumns } = this.state;
 
     if (!event) {
       return (
@@ -163,7 +187,7 @@ class UsersPage extends AlertPage<Props, UsersPageState> {
           </div>
           <div className="col-md-6">
             <ColumnEditor
-              available={availableColumns}
+              available={autofillColumns}
               columns={activeColumns}
               onAddColumn={this.onAddColumn}
               onDeleteColumn={this.onRemoveColumn}

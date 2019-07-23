@@ -2,16 +2,16 @@ import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import React from 'react';
 import ReactTable from 'react-table';
 import User from '~/components/User';
-import { Column } from '~/static/Types';
 
-import AlertPage, { AlertPageState, PageAlert, AlertType } from '../../AlertPage';
+import { AutofillColumn } from '..';
+import { AlertType } from '../../AlertPage';
 
 // tslint:disable-next-line
 const styles = require('react-table/react-table.css');
 
 interface UserListProps {
   users: TESCUser[];
-  columns: Column[];
+  columns: AutofillColumn[];
   event: TESCEvent;
   createAlert: (message: string, type: AlertType, title: string) => void;
   onUserUpdate: (newUser: TESCUser) => void;
@@ -37,7 +37,7 @@ class UserList extends React.Component<UserListProps> {
         columns={this.props.columns}
         defaultPageSize={10}
         className="-striped -highlight user-list"
-        SubComponent={({original}) => this.expandComponent(original)}
+        SubComponent={({ original }) => this.expandComponent(original)}
         filterable={true}
         defaultFilterMethod={(filter, row) =>
           String(row[filter.id]).indexOf(filter.value) !== -1}

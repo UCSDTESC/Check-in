@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 module.exports = {
+  cache: true,
   devtool: 'eval-source-map',
   context: path.join(__dirname),
   entry: {

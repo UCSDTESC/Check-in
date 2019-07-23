@@ -1,8 +1,9 @@
 import { TESCUser } from '@Shared/ModelTypes';
 import { createStandardAction } from 'typesafe-actions';
 import { ApplicationAction, ApplicationDispatch } from '~/actions';
-import * as Api from '~/data/Api';
-import { Column } from '~/static/Types';
+import * as Api from '~/data/AdminApi';
+
+import { AutofillColumn } from '..';
 
 import * as Types from './types';
 
@@ -12,14 +13,13 @@ export const _updateUser = createStandardAction(Types.UPDATE_USER)<TESCUser>();
 
 // Update the user in the database, and then on the client
 export const updateUser = (user: TESCUser): ApplicationAction<Promise<void>> =>
-(dispatch: ApplicationDispatch) =>
-    Api.updateUser(user.event.alias, user)
+  (dispatch: ApplicationDispatch) =>
+    Api.updateUser(user)
       .then(() => {
         dispatch(_updateUser(user));
       })
       .catch(console.error);
 
 // Columns
-export const addColumn = createStandardAction(Types.ADD_COLUMN)<Column>();
-export const removeColumn = createStandardAction(Types.REMOVE_COLUMN)<Column>();
-export const addAvailableColumns = createStandardAction(Types.ADD_AVAILABLE_COLUMNS)<Column[]>();
+export const addColumn = createStandardAction(Types.ADD_COLUMN)<AutofillColumn>();
+export const removeColumn = createStandardAction(Types.REMOVE_COLUMN)<AutofillColumn>();

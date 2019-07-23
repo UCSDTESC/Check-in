@@ -7,10 +7,13 @@ import { EventDocument } from '@Models/Event';
  * @param event The event to create conditions for.
  */
 export const getResumeConditions = (event: EventDocument) => ({
-  'deleted': {$ne: true},
+  'deleted': { $ne: true },
   'shareResume': true,
-  'resume': {$exists: true},
-  'resume.size': {$gt: 0},
+  'resume': { $exists: true },
+  'resume.size': { $gt: 0 },
   'sanitized': true,
   'event': event,
 });
+
+export const RESUME_FIELDS = 'firstName lastName university year gender major' +
+  ' resume.url status account';

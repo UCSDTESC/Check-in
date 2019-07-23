@@ -1,19 +1,12 @@
 import { handleActions, ReducerMap } from 'redux-actions';
 import { ActionType } from 'typesafe-actions';
 
-import { addAvailableColumns, addColumn, removeColumn } from '../actions';
+import { addColumn, removeColumn } from '../actions';
 import * as Types from '../actions/types';
 
-import { ColumnsState } from './types';
+import { ColumnsState as UserPageColumnsState } from './types';
 
-const initialState: ColumnsState = {
-  loadedAvailable: false,
-  available: [
-    {
-      Header: 'Email',
-      accessor: 'account.email',
-    },
-  ],
+const initialState: UserPageColumnsState = {
   active: [
     {
       Header: 'First Name',
@@ -35,14 +28,14 @@ const initialState: ColumnsState = {
       Header: 'Major',
       accessor: 'major',
     },
-  ]};
+    {
+      Header: 'Team Code',
+      accessor: 'team.code',
+    },
+  ],
+};
 
 export default handleActions({
-  [Types.ADD_AVAILABLE_COLUMNS]: (state, action: ActionType<typeof addAvailableColumns>) => ({
-    ...state,
-    available: [...state.available, ...action.payload],
-    loadedAvailable: true,
-  }),
   [Types.ADD_COLUMN]: (state, action: ActionType<typeof addColumn>) => ({
     ...state,
     active: [
@@ -55,4 +48,4 @@ export default handleActions({
     active: Object.values(state.active)
       .filter(key => key.accessor !== action.payload.accessor),
   }),
-} as ReducerMap<ColumnsState, any>, initialState);
+} as ReducerMap<UserPageColumnsState, any>, initialState);

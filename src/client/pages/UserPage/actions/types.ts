@@ -1,2 +1,3 @@
 // CurrentUser
 export const UPDATE_CURRENT_USER = 'UPDATE_CURRENT_USER';
+export const UPDATE_CURRENT_TEAM = 'UPDATE_CURRENT_TEAM';

@@ -5,6 +5,11 @@
   font-family: $header-font-family;
   letter-spacing: 0.05rem;
 
+  &--full {
+    max-width: none;
+    margin: 0 -15px;
+  }
+
   @mixin extended-radio {
     @include input-style;
     position: relative;
@@ -15,6 +20,7 @@
     }
 
     &-input {
+      appearance: none;
       display: block;
       width: 100%;
       height: 100%;
@@ -156,15 +162,6 @@
     border-bottom: none;
   }
 
-  // Resets
-  select,
-  input[type="radio"],
-  input[type="checkbox"] {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-  }
-
   input:-webkit-autofill,
   input:-webkit-autofill:hover,
   input:-webkit-autofill:focus,
@@ -206,21 +203,23 @@
       border: 0.2rem solid $tesc-blue;
       transition: background-color 0.2s ease;
 
-      // Account for line-height difference
+      appearance: none;
       position: relative;
       top: 0.25rem;
-      display: inline-block;
       margin-right: 0.25rem;
 
       &:focus {
-        margin: 0;
-        margin-right: 0.25rem;
+        margin: 0 0.25rem 0 0;
         background-color: $white;
         border: 0.2rem solid $tesc-blue;
       }
 
       &:checked {
         background-color: $accent-green;
+      }
+
+      &:indeterminate {
+        background-color: $medium-gray;
       }
     }
 
@@ -256,8 +255,6 @@
     }
 
     @include media-breakpoint-down(md) {
-      height: 4rem;
-
       #institution-ucsd {
         background: url('../img/site/featurette-ucsd.png') no-repeat 1rem center;
         background-size: 15%;
@@ -271,6 +268,24 @@
       #institution-hs {
         background: url('../img/site/featurette-high-school.png') no-repeat 1rem center;
         background-size: 15%;
+      }
+    }
+  }
+
+  &__team {
+    @include extended-radio;
+    height: 5rem;
+
+    &-label {
+      top: 2rem;
+    }
+
+    @include media-breakpoint-down(md) {
+      height: 3rem;
+      margin-bottom: -0.6rem;
+
+      &-label {
+        top: 1rem;
       }
     }
   }
@@ -381,6 +396,10 @@
     label {
       margin-left: 2px;
     }
+  }
+
+  &__team-code {
+    text-align: center;
   }
 
   &__error {

@@ -4,12 +4,14 @@ import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
 import { bindActionCreators } from 'redux';
 import Loading from '~/components/Loading';
-import { downloadResumes, pollDownload } from '~/data/Api';
+import { downloadResumes, pollDownload } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { applyResumeFilter } from '~/static/ResumeFilter';
+import { applyResumeFilter } from '~/static/Resumes';
 
-import { toggleFilter, filterOptionActions, selectAllOptions,
-  selectNoneOptions, ApplicationDispatch } from '../actions';
+import {
+  toggleFilter, filterOptionActions, selectAllOptions,
+  selectNoneOptions, ApplicationDispatch
+} from '../actions';
 
 import Sidebar from './components/SponsorSidebar';
 
@@ -73,7 +75,7 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
    * Gives the request to download the resumes that are currently selected.
    */
   downloadResumes = () => {
-    const {showLoading, filters, resumes} = this.props;
+    const { showLoading, filters, resumes } = this.props;
     showLoading();
 
     const filtered = applyResumeFilter(filters, resumes.applicants)
@@ -95,7 +97,7 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
    */
   startPolling = (downloadId: string) => {
     const pollingInterval = 1000;
-    const {hideLoading} = this.props;
+    const { hideLoading } = this.props;
 
     pollDownload(downloadId)
       .then((res) => {
@@ -116,7 +118,7 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
   }
 
   render() {
-    const {user, filters, resumes, filtered} = this.props;
+    const { user, filters, resumes, filtered } = this.props;
     const filterOptions = this.createFilterOptions(resumes.applicants);
 
     if (!user) {

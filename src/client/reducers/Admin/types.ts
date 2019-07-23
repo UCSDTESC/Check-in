@@ -1,5 +1,7 @@
 import { TESCEvent } from '@Shared/ModelTypes';
-import { Filter } from '~/static/Types';
+import { Filter, ColumnDefinitions } from '~/static/Types';
+
+export type AvailableColumnsState = ColumnDefinitions;
 
 export interface EventsState {
   [EventAlias: string]: TESCEvent;

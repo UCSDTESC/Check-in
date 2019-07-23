@@ -1,16 +1,16 @@
-import { AuthorisedAdmin } from '../decorators/AuthorisedAdmin';
-import {AdminAuthorisation} from '../middleware/AdminAuthorisation';
-import { RoleAuth } from '../middleware/RoleAuth';
 import { Logger } from '@Config/Logging';
 import EmailService from '@Services/EmailService';
-import { Role } from '@Shared/Roles';
-
-import { Post, JsonController, UseBefore, Req, Body, BodyParam, InternalServerError } from 'routing-controllers';
-import { Request } from 'express';
-import { Admin, TESCUser } from '@Shared/ModelTypes';
-import { SuccessResponse } from '@Shared/api/Responses';
 import EventService from '@Services/EventService';
+import { Admin, TESCUser } from '@Shared/ModelTypes';
+import { Role } from '@Shared/Roles';
+import { SuccessResponse } from '@Shared/api/Responses';
+import { Request } from 'express';
+import { Post, JsonController, UseBefore, Req, BodyParam } from 'routing-controllers';
 import { ErrorMessage } from 'utils/Errors';
+
+import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
+import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
+import { RoleAuth } from '../../middleware/RoleAuth';
 
 @JsonController('/emails')
 @UseBefore(AdminAuthorisation)
@@ -18,7 +18,7 @@ export class EmailController {
   constructor(
     private EmailService: EmailService,
     private EventService: EventService
-  ) {}
+  ) { }
 
   @Post('/acceptance/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
@@ -29,19 +29,20 @@ export class EmailController {
   ): Promise<SuccessResponse> {
     const isOrganiser = await this.EventService.isAdminOrganiser(forUser.event.alias, admin);
 
-    if(!isOrganiser) {
-      Logger.error(ErrorMessage.NOT_ORGANISER())
-      return SuccessResponse.Negative
-    }
-      
-    const sendGridResponse = await this.EmailService.sendEventAcceptanceEmail(request, admin, forUser.event, forUser);
-    const {statusCode, statusMessage} = sendGridResponse[0];
-
-    if (statusCode >= 400) {
-      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${statusCode}' and statusMessage '${statusMessage}'`);
+    if (!isOrganiser) {
+      Logger.error(ErrorMessage.NOT_ORGANISER());
       return SuccessResponse.Negative;
     }
-    return SuccessResponse.Positive
+
+    const sendGridResponse = await this.EmailService.sendEventAcceptanceEmail(request, admin, forUser.event, forUser);
+    const { statusCode, statusMessage } = sendGridResponse[0];
+
+    if (statusCode >= 400) {
+      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${
+        statusCode}' and statusMessage '${statusMessage}'`);
+      return SuccessResponse.Negative;
+    }
+    return SuccessResponse.Positive;
   }
 
   @Post('/rejection/')
@@ -52,20 +53,21 @@ export class EmailController {
     @BodyParam('user') forUser: TESCUser
   ): Promise<SuccessResponse> {
     const isOrganiser = await this.EventService.isAdminOrganiser(forUser.event.alias, admin);
-   
-    if(!isOrganiser) {
-      Logger.error(ErrorMessage.NOT_ORGANISER())
-      return SuccessResponse.Negative
+
+    if (!isOrganiser) {
+      Logger.error(ErrorMessage.NOT_ORGANISER());
+      return SuccessResponse.Negative;
     }
 
     const sendGridResponse = await this.EmailService.sendEventRejectionEmail(request, admin, forUser.event, forUser);
-    const {statusCode, statusMessage} = sendGridResponse[0];
+    const { statusCode, statusMessage } = sendGridResponse[0];
 
     if (statusCode >= 400) {
-      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${statusCode}' and statusMessage '${statusMessage}'`);
+      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${
+        statusCode}' and statusMessage '${statusMessage}'`);
       return SuccessResponse.Negative;
     }
-    return SuccessResponse.Positive
+    return SuccessResponse.Positive;
   }
 
   @Post('/waitlist/')
@@ -77,18 +79,19 @@ export class EmailController {
   ): Promise<SuccessResponse> {
     const isOrganiser = await this.EventService.isAdminOrganiser(forUser.event.alias, admin);
 
-    if(!isOrganiser) {
-      Logger.error(ErrorMessage.NOT_ORGANISER())
-      return SuccessResponse.Negative
+    if (!isOrganiser) {
+      Logger.error(ErrorMessage.NOT_ORGANISER());
+      return SuccessResponse.Negative;
     }
 
     const sendGridResponse = await this.EmailService.sendEventWaitlistEmail(request, admin, forUser.event, forUser);
-    const {statusCode, statusMessage} = sendGridResponse[0];
+    const { statusCode, statusMessage } = sendGridResponse[0];
 
     if (statusCode >= 400) {
-      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${statusCode}' and statusMessage '${statusMessage}'`);
+      Logger.error(`Sendgrid Send API Call Failed - returned statusCode '${
+        statusCode}' and statusMessage '${statusMessage}'`);
       return SuccessResponse.Negative;
     }
-    return SuccessResponse.Positive
+    return SuccessResponse.Positive;
   }
 }

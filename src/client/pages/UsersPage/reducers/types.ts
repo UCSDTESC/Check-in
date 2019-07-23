@@ -1,7 +1,5 @@
-import { Column } from '~/static/Types';
+import { AutofillColumn } from '..';
 
 export interface ColumnsState {
-  readonly loadedAvailable: boolean;
-  readonly available: Column[];
-  readonly active: Column[];
+  readonly active: AutofillColumn[];
 }

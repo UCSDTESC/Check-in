@@ -7,13 +7,13 @@ interface EventCardProps {
   header?: string;
   image?: string;
   title?: string;
-  subtext?: string;
+  subtext?: JSX.Element;
   className?: string;
 }
 
 export default class EventCard extends React.Component<EventCardProps> {
   render() {
-    const {highlighted, to, header, title, subtext, image, className}
+    const { highlighted, to, header, title, subtext, image, className }
       = this.props;
 
     const eventHeaderClass = highlighted
@@ -22,7 +22,7 @@ export default class EventCard extends React.Component<EventCardProps> {
 
     return (
       <Link to={to}>
-        <div className={`card mb-4 box-shadow event-card ${className}`}>
+        <div className={`card mb-4 box-shadow event-card ${className ? className : ''}`}>
           {!!header &&
             <div className={`card-header ${eventHeaderClass}`}>
               {header}
@@ -35,16 +35,16 @@ export default class EventCard extends React.Component<EventCardProps> {
               alt={title}
             />
           }
-          <div className="card-body">
-            <h5 className="card-title">
+          <div className="card-body event-card__body">
+            <h5 className="card-title event-card__title">
               {title}
             </h5>
-            <p className="card-text">
+            <p className="card-text event-card__subtitle">
               {subtext}
             </p>
           </div>
         </div>
       </Link>
-      );
+    );
   }
 }

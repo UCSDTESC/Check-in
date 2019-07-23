@@ -1,12 +1,13 @@
 import { TESCEvent } from '@Shared/ModelTypes';
-import { EventsWithStatisticsResponse } from '@Shared/api/Responses';
+import { EventsWithStatisticsResponse, ColumnResponse } from '@Shared/api/Responses';
 import { Action, AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { createStandardAction, ActionType } from 'typesafe-actions';
-import * as Api from '~/data/Api';
-import * as UserApi from '~/data/User';
+import User from '~/components/User';
+import * as AdminApi from '~/data/AdminApi';
+import * as UserApi from '~/data/UserApi';
 import { ApplicationState } from '~/reducers';
-import { FilterOption } from '~/static/Types';
+import { FilterOption, ColumnDefinitions } from '~/static/Types';
 
 import * as Types from './types';
 
@@ -50,6 +51,9 @@ export const addAdminEvent = createStandardAction(Types.ADD_ADMIN_EVENT)<TESCEve
 export const addAdminEvents = createStandardAction(Types.ADD_ADMIN_EVENTS)<TESCEvent[]>();
 export const replaceAdminEvents = createStandardAction(Types.REPLACE_ADMIN_EVENTS)<TESCEvent[]>();
 
+// Available Columns
+export const replaceAvailableColumns = createStandardAction(Types.REPLACE_AVAILABLE_COLUMNS)<ColumnDefinitions>();
+
 export type ApplicationDispatch = ThunkDispatch<ApplicationState, void, Action>;
 export type ApplicationAction<ReturnType = void> = ThunkAction<ReturnType, ApplicationState, void, AnyAction>;
 
@@ -65,7 +69,7 @@ const mapUserCountIntoEvents = (response: EventsWithStatisticsResponse): TESCEve
 export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
-      Api.loadAllEvents()
+      AdminApi.loadAllEvents()
         .then(res => {
           const mapped = mapUserCountIntoEvents(res);
           dispatch(replaceAdminEvents(mapped));
@@ -77,7 +81,7 @@ export const loadAllAdminEvents = (): ApplicationAction<Promise<{}>> =>
 export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
-      Api.loadAllPublicEvents()
+      UserApi.loadAllPublicEvents()
         .then(res => {
           const mapped = mapUserCountIntoEvents(res);
           dispatch(replaceEvents(mapped));
@@ -86,13 +90,24 @@ export const loadAllPublicEvents = (): ApplicationAction<Promise<{}>> =>
         .catch(reject);
     });
 
-export const loadUserEvents = (): ApplicationAction<Promise<{}>> =>
+export const loadAccountEvents = (accountId: string): ApplicationAction<Promise<{}>> =>
   (dispatch: ApplicationDispatch) =>
     new Promise((resolve, reject) => {
-      UserApi.getUserEvents()
+      UserApi.getAccountEvents(accountId)
         .then(res => {
           dispatch(replaceUserEvents(res));
           return resolve();
+        })
+        .catch(reject);
+    });
+
+export const loadAvailableColumns = (): ApplicationAction<Promise<ColumnDefinitions>> =>
+  (dispatch: ApplicationDispatch) =>
+    new Promise((resolve, reject) => {
+      AdminApi.loadColumns()
+        .then(res => {
+          dispatch(replaceAvailableColumns(res));
+          return resolve(res);
         })
         .catch(reject);
     });

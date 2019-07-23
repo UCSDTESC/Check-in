@@ -1,5 +1,6 @@
 import ResumeService from '@Services/ResumeService';
 import { TESCUser } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
 import { Model, Schema, Document, model } from 'mongoose';
 import * as crate from 'mongoose-crate';
 import * as S3 from 'mongoose-crate-s3';
@@ -22,6 +23,11 @@ export const UserSchema = new Schema({
   account: {
     type: Schema.Types.ObjectId,
     ref: 'Account',
+    public: true,
+  },
+  team: {
+    type: Schema.Types.ObjectId,
+    ref: 'Team',
     public: true,
   },
   // Declares the user's first name
@@ -175,22 +181,16 @@ export const UserSchema = new Schema({
     displayName: 'Bussing',
     public: true,
   },
-  // Declares the array of teammates that the user has defined
-  teammates: [{
-    type: String,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'You must use a valid email'],
-    displayName: 'Teammates',
-    public: true,
-    editable: true,
-  }],
   // Declares the user's current application status
   // Rejected, Unconfirmed, Confirmed, Declined, Late, and Waitlisted
   status: {
     type: String,
+    required: true,
     trim: true,
     displayName: 'Status',
     public: true,
+    enum: Object.values(UserStatus),
+    default: UserStatus.NoStatus,
   },
   // Declares that the user has checked into the event on the day
   checkedIn: {
@@ -252,7 +252,7 @@ export const UserSchema = new Schema({
     displayName: 'Why This Event?',
     public: true,
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
 UserSchema.plugin(mongooseSanitizer);
 UserSchema.plugin(crate, {
@@ -271,7 +271,7 @@ UserSchema.plugin(crate, {
   },
 });
 
-UserSchema.method('csvFlatten', function() {
+UserSchema.method('csvFlatten', function () {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
   const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
@@ -280,7 +280,7 @@ UserSchema.method('csvFlatten', function() {
     'bussing', 'teammates', 'status', 'checkedIn'];
 
   const autoFilled: any = autoFill.reduce((acc, val) => {
-    return Object.assign(acc, {[val]: user[val]});
+    return Object.assign(acc, { [val]: user[val] });
   }, {});
 
   autoFilled.outOfState = user.travel.outOfState;
@@ -298,14 +298,12 @@ UserSchema.plugin(mongooseDelete);
 export const PUBLIC_USER_FIELDS: string[] = Object.entries((UserSchema as any).paths)
   .filter(([fieldName, field]: any) => 'public' in field.options)
   .map(([fieldName, field]: any) => fieldName);
-PUBLIC_USER_FIELDS.push('teammates');
 PUBLIC_USER_FIELDS.push('resume');
 
 // Defines the fields which are editable by the account user
 export const EDITABLE_USER_FIELDS: string[] = Object.entries((UserSchema as any).paths)
   .filter(([fieldName, field]: any) => 'editable' in field.options)
   .map(([fieldName, field]: any) => fieldName);
-EDITABLE_USER_FIELDS.push('teammates');
 EDITABLE_USER_FIELDS.push('resume');
 
 export const RegisterModel = () =>

@@ -23,30 +23,30 @@ export default class AutoSuggest extends React.Component<AutoSuggestProps, AutoS
    * As defined by the react-autosuggest documentation
    */
   defaultTheme =
-  {
-    container: 'react-autosuggest__container',
-    containerOpen: 'react-autosuggest__container--open',
-    input: 'react-autosuggest__input',
-    inputOpen: 'react-autosuggest__input--open',
-    inputFocused: 'react-autosuggest__input--focused',
-    suggestionsContainer: 'react-autosuggest__suggestions-container',
-    suggestionsContainerOpen: 'react-autosuggest__suggestions-container--open',
-    suggestionsList: 'react-autosuggest__suggestions-list',
-    suggestion: 'react-autosuggest__suggestion',
-    suggestionFirst: 'react-autosuggest__suggestion--first',
-    suggestionHighlighted: 'react-autosuggest__suggestion--highlighted',
-    sectionContainer: 'react-autosuggest__section-container',
-    sectionContainerFirst: 'react-autosuggest__section-container--first',
-    sectionTitle: 'react-autosuggest__section-title',
-  };
+    {
+      container: 'react-autosuggest__container',
+      containerOpen: 'react-autosuggest__container--open',
+      input: 'react-autosuggest__input',
+      inputOpen: 'react-autosuggest__input--open',
+      inputFocused: 'react-autosuggest__input--focused',
+      suggestionsContainer: 'react-autosuggest__suggestions-container',
+      suggestionsContainerOpen: 'react-autosuggest__suggestions-container--open',
+      suggestionsList: 'react-autosuggest__suggestions-list',
+      suggestion: 'react-autosuggest__suggestion',
+      suggestionFirst: 'react-autosuggest__suggestion--first',
+      suggestionHighlighted: 'react-autosuggest__suggestion--highlighted',
+      sectionContainer: 'react-autosuggest__section-container',
+      sectionContainerFirst: 'react-autosuggest__section-container--first',
+      sectionTitle: 'react-autosuggest__section-title',
+    };
 
-  onChange = (event: FormEvent, {newValue}: {newValue: string}) => {
+  onChange = (event: FormEvent, { newValue }: { newValue: string }) => {
     this.setState({
       value: newValue,
     });
   }
 
-  onFetchRequested = ({value}: {value: string}) => {
+  onFetchRequested = ({ value }: { value: string }) => {
     const suggestions = this.props.getSuggestions(value);
     this.setState({
       suggestions,
@@ -61,23 +61,23 @@ export default class AutoSuggest extends React.Component<AutoSuggestProps, AutoS
 
   renderSuggestion = (suggestion: string) => {
     return (
-    <a
-      tabIndex={-1}
-      onClick={() => this.props.onSuggestionSelected(suggestion)}
-      className="sd-form__suggestions-link"
-    >
-      {suggestion}
-    </a>
+      <a
+        tabIndex={-1}
+        onClick={() => this.props.onSuggestionSelected(suggestion)}
+        className="sd-form__suggestions-link"
+      >
+        {suggestion}
+      </a>
     );
   }
 
   getSuggestionValue = (suggestion: string) => suggestion;
 
-  shouldRenderSuggestions = (value: string) => value.trim().length >
+  shouldRenderSuggestions = (value: string) => value.trim().length >=
     (this.props.minChars ? this.props.minChars : 0)
 
   render() {
-    const {suggestions, value} = this.state;
+    const { suggestions, value } = this.state;
 
     const defaultTheme = this.defaultTheme;
 

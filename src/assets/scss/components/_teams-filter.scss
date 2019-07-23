@@ -1,0 +1,125 @@
+.teams-filters {
+  background: $white;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  
+  &--secondary {
+    background: $admin-background-blue;
+  }
+  
+  &--border {
+    border-bottom: 1px solid $medium-gray;
+  }
+
+  &--top {
+    align-items: flex-start;
+  }
+  
+  &__button {      
+    &--new-closed {
+      color: $white;
+      background: $primary-color;
+
+      &::before {
+        content: "\F0D7";
+        font-family: 'FontAwesome';
+        margin-right: 0.5rem;
+      }
+
+      &:hover {
+        color: $white;
+        background-color: darken($primary-color, 3%);
+      }
+    }
+
+    &--new-open {
+      color: $primary-color;
+      background: $white;
+
+      &::before {
+        content: "\F0D8";
+        font-family: 'FontAwesome';
+        margin-right: 0.5rem;
+      }
+    }
+  }
+  
+  &__filter {
+    border: 1px solid $primary-color;
+    background: $white;
+  }
+
+  &__filter-delete {
+    margin-right: 0.2rem;
+    border-radius: $global-radius;
+    padding: 3px 6px;
+
+    &::before {
+      vertical-align: middle;
+    }
+
+    &:hover {
+      background: $primary-color;
+      color: $white;
+    }
+  }
+
+  &__checkbox {
+    border-radius: $global-radius;
+    margin-bottom: 0.5rem !important;
+
+    &:checked {
+      background-color: $tesc-blue;
+    }
+  }
+
+  &__new-component {
+    @include media-breakpoint-up(md) {
+      max-width: 25rem;
+    }
+  }
+
+  &__new-option {
+    border: 1px solid $primary-color;
+    color: $primary-color;
+    background: $white;
+
+    &:hover, &:focus {
+      color: $white;
+      background: $primary-color;
+    }
+
+    &--active {
+      color: $white;
+      background: $primary-color;
+    }
+  }
+
+  &__slider {
+    .rc-slider-track {
+      background-color: $primary-color;
+    }
+
+    .rc-slider-dot-active {
+      border-color: $primary-color;
+    }
+    
+    .rc-slider-handle {
+      border-color: $primary-color;
+
+      &:focus {
+        border-color: $primary-color;
+        box-shadow: 0 0 0 5px $primary-color;
+      }
+
+      &:hover {
+        border-color: $primary-color;
+      }
+    }
+
+    .rc-slider-rail, .rc-slider-dot {
+      background-color: $light-gray;
+    }
+  }
+}

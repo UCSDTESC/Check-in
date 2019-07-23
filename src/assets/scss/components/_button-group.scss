@@ -1,0 +1,38 @@
+@mixin button-underline($underline-color, $height: 3px, $width: 85%) {
+  content: "";
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: calc(50% - #{$width/2});
+  width: $width;
+  height: $height;
+  background-color: $underline-color;
+}
+
+.button-group {
+  &__button {
+    background: transparent;
+    border-radius: 0;
+    box-sizing: border-box;
+    position: relative;
+
+    &:hover {
+      &:after {
+        @include button-underline($medium-gray);
+      }
+    }
+
+    &--active {
+      &:after {
+        @include button-underline($admin-blue);
+      }
+
+      &:hover {
+        &:after {
+          // Overwrite background on hover with --active
+          background-color: $admin-blue;
+        }
+      }
+    }
+  }
+}

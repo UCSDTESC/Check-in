@@ -1,5 +1,4 @@
 import { TESCEvent } from '@Shared/ModelTypes';
-import { EventUserCounts } from '@Shared/api/Responses';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { Link } from 'react-router-dom';
@@ -13,7 +12,7 @@ interface EventListProps {
 
 export default class EventList extends React.Component<EventListProps> {
   render() {
-    const {events, resumeLink, canCreate} = this.props;
+    const { events, resumeLink, canCreate } = this.props;
     const highlightEvent = (o: string) => (o !== 'TESC');
 
     return (
@@ -21,20 +20,22 @@ export default class EventList extends React.Component<EventListProps> {
         <h2>Your Events</h2>
         <div className="row">
           {events
-          .sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1)
-          .map((event) => (
-            <div className="col-xl-3 col-lg-4 col-md-6 mb-3" key={event._id}>
-              <EventCard
-                to={`/admin/${resumeLink ? 'resumes' : 'events'}/${event.alias}`}
-                highlighted={highlightEvent(event.organisedBy)}
-                header={`Organized By ${event.organisedBy}`}
-                image={event.logo.url}
-                title={event.name}
-                subtext={`${event.users} Registered ${event.users === 1 ? 'User' : 'Users'}`}
-                className="h-100"
-              />
-            </div>)
-          )}
+            .sort((a, b) => a.name.toUpperCase() < b.name.toUpperCase() ? -1 : 1)
+            .map((event) => (
+              <div className="col-xl-3 col-lg-4 col-md-6 mb-3" key={event._id}>
+                <EventCard
+                  to={`/admin/${resumeLink ? 'resumes' : 'events'}/${event.alias}`}
+                  highlighted={highlightEvent(event.organisedBy)}
+                  header={`Organized By ${event.organisedBy}`}
+                  image={event.logo.url}
+                  title={event.name}
+                  subtext={<>
+                    {event.users} Registered User{event.users === 1 ? '' : 's'}
+                  </>}
+                  className="h-100"
+                />
+              </div>)
+            )}
           {canCreate && <div className="col-xl-3 col-lg-4 col-md-6 mb-3">
             <Link
               to="/admin/new"
@@ -42,7 +43,7 @@ export default class EventList extends React.Component<EventListProps> {
             >
               <div><FA name="plus" /></div>
               <div className="dashboard-page__plus-sm">
-                  Create Event
+                Create Event
               </div>
             </Link>
           </div>}

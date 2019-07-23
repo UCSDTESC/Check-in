@@ -6,7 +6,7 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Loading from '~/components/Loading';
 import NavHeader from '~/components/NavHeader';
-import { registerUser, loadEventByAlias, checkUserExists } from '~/data/Api';
+import { registerUser, loadEventByAlias, checkUserExists } from '~/data/UserApi';
 
 import Header from './components/Header';
 import PersonalSection, { PersonalSectionFormData, InstitutionType } from './components/PersonalSection';
@@ -48,8 +48,10 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     const {eventAlias} = this.props.match.params;
     loadEventByAlias(eventAlias)
       .then((res) => {
+        // Take the first (and only event) from the response
+        const thisEvent = res.events[0];
         this.setState({
-          event: (res as TESCEvent),
+          event: thisEvent,
         });
       })
       .catch((err) => {
@@ -100,18 +102,6 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     }
     if (values.institution === InstitutionType.HighSchool) {
       values.university = values.highSchool;
-    }
-
-    values.teammates = [];
-
-    if (values.team1) {
-      values.teammates.push(values.team1);
-    }
-    if (values.team2) {
-      values.teammates.push(values.team2);
-    }
-    if (values.team3) {
-      values.teammates.push(values.team3);
     }
 
     if (values.outOfState) {

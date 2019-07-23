@@ -5,7 +5,7 @@ import { Button } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { ApplicationDispatch } from '~/actions';
 import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal';
-import { loadAllAdmins, registerAdmin, deleteAdmin } from '~/data/Api';
+import { loadAllAdmins, registerAdmin, deleteAdmin } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
 import { replaceAdmins } from './actions';
@@ -64,7 +64,7 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
       .catch(console.error);
 
   render() {
-    const {admins} = this.props;
+    const { admins } = this.props;
 
     return (
       <div>

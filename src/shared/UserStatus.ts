@@ -5,11 +5,12 @@ export enum UserStatus {
   Declined = 'Declined',
   Late = 'Late',
   Waitlisted = 'Waitlisted',
+  NoStatus = 'None',
 }
 
 export function isAcceptableStatus(status: UserStatus): boolean {
   return new Set<UserStatus>([UserStatus.Unconfirmed,
-    UserStatus.Confirmed, UserStatus.Waitlisted]).has(status);
+  UserStatus.Confirmed, UserStatus.Waitlisted]).has(status);
 }
 
 export function isRejectableStatus(status: UserStatus): boolean {

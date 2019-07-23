@@ -1,7 +1,7 @@
 import React from 'react';
 import { InjectedFormProps, FormErrors } from 'redux-form';
 import Forgot, { ForgotFormData } from '~/auth/user/Forgot';
-import { forgotPassword } from '~/data/User';
+import { forgotPassword } from '~/data/UserApi';
 
 interface ForgotPageState {
   error: string;
@@ -23,8 +23,8 @@ class ForgotPage extends React.Component<InjectedFormProps, ForgotPageState> {
 
     return forgotPassword(values.email)
       .then(() => this.setState(
-        {success: 'Your password reset has been sent to your email'}))
-      .catch((e) => this.setState({error: e.message}));
+        { success: 'Your password reset has been sent to your email' }))
+      .catch((e) => this.setState({ error: e.message }));
   }
 
   render() {

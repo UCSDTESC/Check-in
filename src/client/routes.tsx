@@ -9,8 +9,8 @@ import { RouteComponentProps } from 'react-router';
 import { withRouter } from 'react-router-dom';
 import { Switch, Route } from 'react-router-dom';
 import { bindActionCreators, compose } from 'redux';
-import { authorised as AdminAuthorised } from '~/data/Api';
-import { authorised as UserAuthorised } from '~/data/User';
+import { authorised as AdminAuthorised } from '~/data/AdminApi';
+import { authorised as UserAuthorised } from '~/data/UserApi';
 import CookieTypes from '~/static/Cookies';
 
 import PrivateRoute from './PrivateRoute';
@@ -56,11 +56,11 @@ type Props = RouteComponentProps & ReturnType<typeof mapDispatchToProps> & Route
 
 class Routes extends React.Component<Props> {
   componentDidMount() {
-    const {authoriseAdmin, authoriseUser, finishAuthorisation, finishUserAuth,
-           logoutAdmin, logoutUser} = this.props;
+    const { authoriseAdmin, authoriseUser, finishAuthorisation, finishUserAuth,
+            logoutAdmin, logoutUser } = this.props;
 
     // Check initial authentication
-    const {cookies} = this.props;
+    const { cookies } = this.props;
 
     if (cookies.get(CookieTypes.admin.token)) {
       // Verify the JWT Token is still valid
@@ -103,8 +103,8 @@ class Routes extends React.Component<Props> {
    * Update the Google analytics to set the current page.
    */
   onRouteChanged() {
-    const {location} = this.props;
-    ReactGA.set({page: location.pathname + location.search});
+    const { location } = this.props;
+    ReactGA.set({ page: location.pathname + location.search });
     ReactGA.pageview(location.pathname + location.search);
   }
 
