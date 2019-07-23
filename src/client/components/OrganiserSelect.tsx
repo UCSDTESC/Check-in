@@ -32,7 +32,7 @@ export default class OrganiserSelect extends AdminSelect {
       <StyledSelect
         isSearchable={true}
         isClearable={true}
-        options={admins.filter(option => excludeIds.includes(option.value))}
+        options={admins.filter(option => !excludeIds.includes(option.value))}
         isLoading={admins.length === 0}
         onChange={onChange}
         value={value}
