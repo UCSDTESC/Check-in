@@ -255,8 +255,6 @@
     }
 
     @include media-breakpoint-down(md) {
-      height: 4rem;
-
       #institution-ucsd {
         background: url('../img/site/featurette-ucsd.png') no-repeat 1rem center;
         background-size: 15%;
@@ -270,6 +268,24 @@
       #institution-hs {
         background: url('../img/site/featurette-high-school.png') no-repeat 1rem center;
         background-size: 15%;
+      }
+    }
+  }
+
+  &__team {
+    @include extended-radio;
+    height: 5rem;
+
+    &-label {
+      top: 2rem;
+    }
+
+    @include media-breakpoint-down(md) {
+      height: 3rem;
+      margin-bottom: -0.6rem;
+
+      &-label {
+        top: 1rem;
       }
     }
   }

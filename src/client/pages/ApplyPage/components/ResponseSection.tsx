@@ -90,16 +90,16 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
    */
   createTeamStateCard(state: JoinCreateTeamState, id: string, label: string) {
     return (
-      <div className="sd-form__institution">
+      <div className="sd-form__team">
         <input
           type="radio"
           value={state}
-          name="institution"
+          name="team-state"
           id={id}
-          className="sd-form__institution-input"
+          className="sd-form__team-input"
           onChange={this.onChangeTeamState}
         />
-        {FormFields.createLabel(label, false, 'sd-form__institution-label', id)}
+        {FormFields.createLabel(label, false, 'sd-form__team-label', id)}
       </div>
     );
   }
@@ -132,11 +132,11 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
             FormFields.createLabel('Create or Join a Team')
           ),
           FormFields.createColumn('col-md',
-            this.createTeamStateCard(JoinCreateTeamState.CREATE, 'institution-ucsd',
+            this.createTeamStateCard(JoinCreateTeamState.CREATE, 'team-create',
               'Create')
           ),
           FormFields.createColumn('col-md',
-            this.createTeamStateCard(JoinCreateTeamState.JOIN, 'institution-uni',
+            this.createTeamStateCard(JoinCreateTeamState.JOIN, 'team-join',
               'Join')
           ),
           FormFields.createColumn('col-sm-12',
