@@ -274,18 +274,40 @@
 
   &__team {
     @include extended-radio;
-    height: 5rem;
+    height: 15rem;
 
-    &-label {
+    /*&-label {
       top: 2rem;
+    }*/
+
+    @include media-breakpoint-down(md) {
+      height: 4rem;
+      margin-bottom: -0.6rem;
+
+      /*&-label {
+        top: 1rem;
+      }*/
+    }
+
+    #create-team {
+      background: url('../img/site/create-team.svg') no-repeat center center;
+      background-size: 70%;
+    }
+
+    #join-team {
+      background: url('../img/site/join-team.svg') no-repeat center center;
+      background-size: 70%;
     }
 
     @include media-breakpoint-down(md) {
-      height: 3rem;
-      margin-bottom: -0.6rem;
-
-      &-label {
-        top: 1rem;
+      #create-team {
+        background: url('../img/site/create-team.svg') no-repeat 1rem center;
+        background-size: 10%;
+      }
+  
+      #join-team {
+        background: url('../img/site/join-team.svg') no-repeat 1rem center;
+        background-size: 10%;
       }
     }
   }

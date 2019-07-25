@@ -132,11 +132,11 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
             FormFields.createLabel('Create or Join a Team')
           ),
           FormFields.createColumn('col-md',
-            this.createTeamStateCard(JoinCreateTeamState.CREATE, 'team-create',
+            this.createTeamStateCard(JoinCreateTeamState.CREATE, 'create-team',
               'Create')
           ),
           FormFields.createColumn('col-md',
-            this.createTeamStateCard(JoinCreateTeamState.JOIN, 'team-join',
+            this.createTeamStateCard(JoinCreateTeamState.JOIN, 'join-team',
               'Join')
           ),
           FormFields.createColumn('col-sm-12',
