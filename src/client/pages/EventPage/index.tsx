@@ -200,6 +200,14 @@ class EventPage extends TabularPage<Props, EventPageState> {
     return (<SettingsTab {...this.props} />);
   }
 
+  static getDerivedStateFromProps(props: Props, state: EventPageState) {
+    if (props.alerts != state.alerts) {
+      return {
+        alerts: props.alerts
+      }
+    }
+  }
+
   render() {
     const { event, statistics, alerts } = this.props;
     const { activeTab } = this.state;
