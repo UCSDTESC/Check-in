@@ -55,6 +55,7 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
       requireClassRequirement: 'Require Applicant To Have Completed CSE 100',
       requireExtraCurriculars: 'Require Extra Curriculars',
       requireGPA: 'Require GPA In Application',
+      enableGPA: 'Enable GPA In Application (not Required)',
       requireMajorGPA: 'Require Major GPA In Application',
       requireWhyThisEvent: `Require 'Why ${event.name}?' In Application`,
     };
