@@ -107,6 +107,14 @@ class EventPage extends TabularPage<Props, EventPageState> {
     teams: [],
   };
 
+  static getDerivedStateFromProps(props: Props, state: EventPageState) {
+    if (props.alerts !== state.alerts) {
+      return {
+        alerts: props.alerts,
+      };
+    }
+  }
+
   /**
    * Dismisses a visible alert and removes from redux store.
    * @param {Date} timestamp The timestamp key associated with the alert.
@@ -198,14 +206,6 @@ class EventPage extends TabularPage<Props, EventPageState> {
    */
   renderSettings() {
     return (<SettingsTab {...this.props} />);
-  }
-
-  static getDerivedStateFromProps(props: Props, state: EventPageState) {
-    if (props.alerts != state.alerts) {
-      return {
-        alerts: props.alerts
-      }
-    }
   }
 
   render() {

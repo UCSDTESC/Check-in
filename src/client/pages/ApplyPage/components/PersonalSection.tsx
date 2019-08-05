@@ -357,7 +357,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
               disabled={pristine || submitting}
             >
               Next
-          </button>
+            </button>
           )
         )}
       </form>

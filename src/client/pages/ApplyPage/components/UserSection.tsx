@@ -71,27 +71,27 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
             this.createProvisionBox(),
             <span>
               I agree to the&nbsp;
-            <a
+              <a
                 className="sd-link__underline sd-link__hover-purple"
                 href="https://git.io/v7bCA"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 MLH Data Sharing Policy
-            </a>.
-          </span>
+              </a>.
+            </span>
           ),
           FormFields.createColumn('col-sm-12',
             this.createAcceptBox(),
             <span>I have read and agree to the&nbsp;
-            <a
+              <a
                 className="sd-link__underline sd-link__hover-purple"
                 href="https://static.mlh.io/docs/mlh-code-of-conduct.pdf"
                 rel="noopener noreferrer"
                 target="_blank"
               >
                 MLH Code of Conduct
-            </a>
+              </a>
             </span>
           )
         )}
