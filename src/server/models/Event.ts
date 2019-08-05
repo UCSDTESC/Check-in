@@ -114,6 +114,10 @@ export const EventSchema = new Schema({
       type: Boolean,
       default: false,
     },
+    enableGPA: {
+      type: Boolean,
+      default: false,
+    },
     requireMajorGPA: {
       type: Boolean,
       default: false,
@@ -137,7 +141,7 @@ export const EventSchema = new Schema({
       ref: 'Question',
     }],
   },
-}, {timestamps: true});
+}, { timestamps: true });
 
 EventSchema.plugin(crate, {
   storage: new S3({
