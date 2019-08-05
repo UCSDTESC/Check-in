@@ -196,12 +196,12 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     );
   }
 
-  createGPAFields(requireGPA: boolean, requireMajorGPA: boolean) {
+  createGPAFields(enableGPA: boolean, requireGPA: boolean, requireMajorGPA: boolean) {
     const gpaFields = [];
 
-    if (requireGPA) {
+    if (enableGPA || requireGPA) {
       gpaFields.push(FormFields.createColumn('col-lg-6',
-        FormFields.createLabel('Grade Point Average (GPA)', true),
+        FormFields.createLabel('Grade Point Average (GPA)', requireGPA),
         FormFields.createInput('gpa', '4.00')
       ));
     }
@@ -333,7 +333,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
           )
         )}
 
-        {this.createGPAFields(options.requireGPA, options.requireMajorGPA)}
+        {this.createGPAFields(options.enableGPA, options.requireGPA, options.requireMajorGPA)}
         {options.requireDiversityOption && this.createDiversityOptions()}
 
         {FormFields.createRow(
