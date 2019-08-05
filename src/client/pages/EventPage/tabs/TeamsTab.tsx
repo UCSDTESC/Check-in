@@ -234,6 +234,9 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       });
   }
 
+  /**
+   * Renders the buttons which modifies the selected users
+   */
   renderModifyButtons() {
     const { selectedTeams, selectedUsers } = this.state;
     const numTeams = selectedTeams.size;
@@ -243,10 +246,8 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
     const hidden = { 'team__action-btn--hidden': numTeams === 0 };
 
     return (
-      <>
-        Selected <span className="ml-2">{numTeams}</span> <FA name="users" />{' '}
-        <span className="ml-2">{numUsers}</span> <FA name="user" />
-        {numUsers > 0 && <div className="btn-group ml-2" role="group">
+      <div>
+        {numUsers > 0 && <div className="btn-group" role="group">
           <button
             className={classnames(buttonClasses, hidden, 'team__action-btn--confirmed')}
             onClick={() => this.onUserAction(UserAction.Admit)}
@@ -266,7 +267,40 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
             Reject <span className="badge badge-light">{numUsers}</span>
           </button>
         </div>}
-      </>
+      </div>
+    );
+  }
+
+  /**
+   * Renders the field that displays the number of filtered teams and users.
+   */
+  renderFilteredCount() {
+    const { filteredTeams } = this.state;
+    const numTeams = filteredTeams.size;
+
+    const numUsers = this.getUsersFromTeamSet(filteredTeams).length;
+
+    return (
+      <div>
+        Filtered <span className="ml-2">{numTeams}</span> <FA name="users" />{' '}
+        <span className="ml-2">{numUsers}</span> <FA name="user" />
+      </div>
+    );
+  }
+
+  /**
+   * Renders the field that displays the number of selected teams and users.
+   */
+  renderSelectedCount() {
+    const { selectedTeams, selectedUsers } = this.state;
+    const numTeams = selectedTeams.size;
+    const numUsers = selectedUsers.size;
+
+    return (
+      <div>
+        Selected <span className="ml-2">{numTeams}</span> <FA name="users" />{' '}
+        <span className="ml-2">{numUsers}</span> <FA name="user" />
+      </div>
     );
   }
 
@@ -293,7 +327,15 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
           selectAllState={this.getSelectAllState(filteredTeams, selectedTeams)}
           onSelectAll={this.onSelectAll}
         >
-          {this.renderModifyButtons()}
+          <div className="d-flex flex-row">
+            <div>
+              {this.renderModifyButtons()}
+            </div>
+            <div className="d-flex flex-column align-items-end ml-2">
+              {this.renderFilteredCount()}
+              {this.renderSelectedCount()}
+            </div>
+          </div>
         </TeamsFilters>
 
         <div className="team__container">
