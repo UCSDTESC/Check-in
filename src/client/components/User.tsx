@@ -115,7 +115,7 @@ class User extends React.Component<Props> {
   renderGPAFields(event: TESCEvent) {
     return (
       <>
-        {event.options.requireGPA &&
+        {(event.options.requireGPA || event.options.enableGPA) &&
           this.renderFormField('GPA', 'gpa', 'col-sm-4')}
         {event.options.requireMajorGPA &&
           this.renderFormField('Major GPA', 'majorGPA', 'col-sm-4')}
