@@ -79,6 +79,7 @@ export interface TESCEventOptions {
   requireClassRequirement: boolean;
   requireExtraCurriculars: boolean;
   requireGPA: boolean;
+  enableGPA: boolean;
   requireMajorGPA: boolean;
   requireWhyThisEvent: boolean;
 }
