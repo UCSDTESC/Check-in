@@ -133,6 +133,11 @@ export class UserController {
     @UploadedFile('resume', { options: Uploads, required: false }) resume: Express.Multer.File,
     @BodyParam('user') body: UpdateUserRequest): Promise<TESCUser> {
     const event = body.event;
+
+    if (!event) {
+      throw new BadRequestError(ErrorMessage.NO_REQUEST_EVENT());
+    }
+
     const user = (await this.UserService.getUserApplication(account, event))[0];
     if (!user) {
       throw new BadRequestError(ErrorMessage.NO_USER_EXISTS());

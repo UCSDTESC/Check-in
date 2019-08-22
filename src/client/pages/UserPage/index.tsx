@@ -70,12 +70,12 @@ class UserPage extends AlertPage<Props, UserPageState> {
    * @param {UserProfileFormData} newUser The new user object to update to.
    */
   updateUser = (newUser: UserProfileFormData) => {
-    const { updateCurrentUser } = this.props;
+    const { user, updateCurrentUser } = this.props;
     const oldUser = this.props.user;
     // Delta is all the changed fields in the form
     const delta = diff(oldUser, newUser);
 
-    updateUserField(delta)
+    updateUserField({...delta, event: user.event})
       .then((newUser) => {
         updateCurrentUser(newUser);
         this.createAlert('You have successfully updated your profile',

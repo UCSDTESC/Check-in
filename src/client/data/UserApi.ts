@@ -122,7 +122,7 @@ export const updateUserField = (user: UserProfileFormData) => {
   return promisify<TESCUser>(request
     .put(`/user`)
     .field('user', JSON.stringify({
-      ...postObject,
+      ...postObject
     } as UpdateUserRequest))
     .attach('resume', user.newResume ? user.newResume[0] : null)
     .set('Authorization', cookies.get(CookieTypes.user.token))
