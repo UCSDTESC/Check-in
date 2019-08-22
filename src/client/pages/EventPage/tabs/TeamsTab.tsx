@@ -187,7 +187,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   /**
    * Handles when the user chooses an option within the confirm modal.
    */
-  onConfirmModalClosed = (shouldAct: boolean) => {
+  onConfirmModalClosed = (shouldAct: boolean, toSendEmail: boolean) => {
     // Close the modal
     this.setState({
       confirmModalState: {
@@ -224,6 +224,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       .then(() => {
         // Reload tab
         this.props.onTeamsUpdate();
+
         addEventSuccessAlert(event.alias, `Successfully updated ${userIDs.length} user(s)!`,
           'Update Teams');
       })

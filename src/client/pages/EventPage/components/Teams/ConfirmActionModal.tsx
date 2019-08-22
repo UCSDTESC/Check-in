@@ -1,17 +1,30 @@
 import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import ToggleSwitch from '~/components/ToggleSwitch';
 
 interface ConfirmActionModalProps {
   isOpen: boolean;
   actionType: string;
   selectedUsers: number;
-  onConfirmChoice: (confirm: boolean) => void;
+  onConfirmChoice: (confirm: boolean, toSendEmail: boolean) => void;
 }
 
-export default class ConfirmActionModal extends React.Component<ConfirmActionModalProps> {
+interface ConfirmActionModalState {
+  toSendEmail: boolean;
+}
+
+export default class ConfirmActionModal extends React.Component<ConfirmActionModalProps, ConfirmActionModalState> {
+
+  constructor(props: ConfirmActionModalProps) {
+    super(props);
+    this.state = {
+      toSendEmail: false
+    }
+  }
+
   render() {
     const { isOpen, onConfirmChoice, actionType, selectedUsers } = this.props;
-
+    const {toSendEmail} = this.state;
     const confirmText = `${actionType} ${selectedUsers} User${selectedUsers === 1 ? '' : 's'}`;
 
     return (
@@ -23,9 +36,19 @@ export default class ConfirmActionModal extends React.Component<ConfirmActionMod
         <ModalFooter>
           <div className="row no-gutters w-100">
             <div className="col-12 text-center mb-2">
+              <div className="d-flex w-75 my-3 mx-auto">
+                <ToggleSwitch 
+                  className="d-inline-block" 
+                  checked={toSendEmail}
+                  onChange={() => this.setState({toSendEmail: !toSendEmail})}/>
+                <span className="align-self-center ml-auto">
+                  Send {actionType} Email To {selectedUsers} Applicant
+                  {selectedUsers != 1 ? 's' : ''}?
+                </span>
+              </div>
               <Button
                 className="rounded-button rounded-button--full"
-                onClick={() => onConfirmChoice(true)}
+                onClick={() => onConfirmChoice(true, toSendEmail)}
               >
                 {actionType}
               </Button>
@@ -33,7 +56,7 @@ export default class ConfirmActionModal extends React.Component<ConfirmActionMod
             <div className="col-12">
               <Button
                 className="rounded-button rounded-button--secondary rounded-button--full"
-                onClick={() => onConfirmChoice(false)}
+                onClick={() => onConfirmChoice(false, false)}
               >
                 Cancel
               </Button>
