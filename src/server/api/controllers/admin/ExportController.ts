@@ -3,6 +3,7 @@ import EventService from '@Services/EventService';
 import UserService from '@Services/UserService';
 import { Role } from '@Shared/Roles';
 import { ExportUsersRequest } from '@Shared/api/Requests';
+import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { Response } from 'express-serve-static-core';
 import moment = require('moment');
 import { Get, JsonController, UseBefore, Body, Post, Res, BadRequestError } from 'routing-controllers';
@@ -14,6 +15,7 @@ import { RoleAuth } from '../../middleware/RoleAuth';
  * Handles all of the logic for exporting user information.
  */
 @JsonController('/export')
+@UseBefore(AdminAuthorisation)
 export class ExportController {
   constructor(
     private UserService: UserService,

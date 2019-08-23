@@ -4,6 +4,7 @@ import { ColumnsController } from './admin/ColumnsController';
 import { CustomQuestionController } from './admin/CustomQuestionController';
 import { EmailController } from './admin/EmailController';
 import { EventsController as AdminEventsController } from './admin/EventsController';
+import { ExportController } from './admin/ExportController';
 import { ResumesController } from './admin/ResumesController';
 import { SponsorsController } from './admin/SponsorsController';
 import { StatisticsController } from './admin/StatisticsController';
@@ -20,6 +21,7 @@ export const AdminControllers = [
   ColumnsController,
   CustomQuestionController,
   EmailController,
+  ExportController,
   ResumesController,
   SponsorsController,
   StatisticsController,
