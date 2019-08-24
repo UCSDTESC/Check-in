@@ -13,7 +13,8 @@ import {
   RegisterAdminRequest,
   CheckinUserRequest,
   RegisterEventRequest,
-  StatusEmailRequest
+  StatusEmailRequest,
+  ExportUsersRequest
 } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse, JWTAdminAuth } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
@@ -248,7 +249,8 @@ export const pollDownload = (downloadId: string) =>
  */
 export const exportUsers = (eventAlias: string): SuperAgentRequest =>
   request
-    .get(`/export/${eventAlias}`)
+    .post(`/export/`)
+    .send({alias: eventAlias} as ExportUsersRequest)
     .set('Authorization', cookies.get(CookieTypes.admin.token))
     .use(adminApiPrefix);
 
