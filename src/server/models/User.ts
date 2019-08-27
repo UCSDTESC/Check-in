@@ -277,7 +277,7 @@ UserSchema.method('csvFlatten', function () {
   const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
     'gender', 'phone', 'university', 'pid', 'major', 'year', 'github',
     'website', 'shareResume', 'food', 'diet', 'shirtSize', 'availableBus',
-    'bussing', 'teammates', 'status', 'checkedIn'];
+    'bussing', 'teammates', 'status', 'checkedIn', 'createdAt', 'updatedAt'];
 
   const autoFilled: any = autoFill.reduce((acc, val) => {
     return Object.assign(acc, { [val]: user[val] });
@@ -288,6 +288,9 @@ UserSchema.method('csvFlatten', function () {
   autoFilled.resume = user.resume ? user.resume.url : '';
 
   autoFilled.email = user.account ? user.account.email : '';
+
+  autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
+  autoFilled.customQuestion = user.customQuestionResponses ? user.customQuestionResponses : '';
 
   return autoFilled;
 });
