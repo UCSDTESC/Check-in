@@ -7,6 +7,7 @@ import * as S3 from 'mongoose-crate-s3';
 import * as mongooseDelete from 'mongoose-delete';
 import * as mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
+import { print } from 'util';
 
 export type UserDocument = TESCUser & Document & {
   csvFlatten: () => any;
@@ -279,7 +280,7 @@ UserSchema.method('csvFlatten', function () {
     'website', 'shareResume', 'food', 'diet', 'shirtSize', 'availableBus',
     'bussing', 'teammates', 'status', 'checkedIn', 'createdAt', 'updatedAt'];
 
-  const autoFilled: any = autoFill.reduce((acc, val) => {
+  let autoFilled: any = autoFill.reduce((acc, val) => {
     return Object.assign(acc, { [val]: user[val] });
   }, {});
 
@@ -290,8 +291,9 @@ UserSchema.method('csvFlatten', function () {
   autoFilled.email = user.account ? user.account.email : '';
 
   autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
-  autoFilled.customQuestion = user.customQuestionResponses ? user.customQuestionResponses : '';
-
+  if (user.customQuestionResponses) {
+    autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
+  }
   return autoFilled;
 });
 
