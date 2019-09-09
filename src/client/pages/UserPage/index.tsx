@@ -75,6 +75,10 @@ class UserPage extends AlertPage<Props, UserPageState> {
     // Delta is all the changed fields in the form
     const delta = diff(oldUser, newUser);
 
+    if (!delta.event) {
+      delta.event = oldUser.event;
+    }
+
     updateUserField(delta)
       .then((newUser) => {
         updateCurrentUser(newUser);
