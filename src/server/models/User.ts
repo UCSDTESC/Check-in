@@ -294,6 +294,9 @@ UserSchema.method('csvFlatten', function () {
   if (user.customQuestionResponses) {
     autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
   }
+
+  autoFilled.team = user.team ? user.team.code : '';
+
   return autoFilled;
 });
 
