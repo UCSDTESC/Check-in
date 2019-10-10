@@ -1,4 +1,5 @@
 import { Admin } from '@Shared/ModelTypes';
+import moment from 'moment';
 import React from 'react';
 import { Button } from 'reactstrap';
 
@@ -9,7 +10,9 @@ interface AdminListProps {
 }
 
 interface DisplayColumnMap {
-  [AdminPropertyName: string]: string;
+  username: string;
+  role: string;
+  lastAccessed: string;
 }
 
 interface AdminListState {
@@ -21,6 +24,7 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
     columns: {
       username: 'Username',
       role: 'Role',
+      lastAccessed: 'Last Accessed'
     },
   };
 
@@ -34,6 +38,26 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
       {name}
     </th>
   );
+
+  /**
+   * Creates the rows for the admin entry
+   * @returns {Component} The row to be rendered
+   */
+  renderAdmin = (admin: Admin) => {
+    const {columns} = this.state;
+
+    const adminToBeRendered = {...admin, 
+      lastAccessed: moment(admin.lastAccessed).fromNow()
+    }
+    return Object.keys(columns).map(column => (
+      <td key={column} className="admin-list__value">
+        {/*
+        // TODO: Fix accessing dynamic properties
+        // @ts-ignore */}
+        {adminToBeRendered[column]}
+      </td>)
+    )
+  }
 
   render() {
     const {columns} = this.state;
@@ -61,14 +85,7 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
                   <i className="fa fa-ban"/>
                 </Button>}
               </td>
-              {Object.keys(columns).map(column => (
-                <td key={column} className="admin-list__value">
-                  {/*
-                  // TODO: Fix accessing dynamic properties
-                  // @ts-ignore */}
-                  {admin[column]}
-                </td>)
-              )}
+              {this.renderAdmin(admin)}
             </tr>)
           )}
         </tbody>
