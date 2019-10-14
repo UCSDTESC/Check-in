@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { sendAcceptanceEmail, sendRejectionEmail, sendWaitlistEmail } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
+import { generateQRCodeURL } from '~/utils/QRCodes'
 
 import { AlertType } from '../pages/AlertPage';
 
@@ -236,14 +237,14 @@ class User extends React.Component<Props> {
     const { handleSubmit, pristine, reset, submitting, event, user } = this.props;
     return (
       <div>
-        <div className="row">
+        <div className="row mb-3">
           <div className="col-md-6">
             <h3>User <small>{user._id}</small></h3>
           </div>
           <div className="col-md-6 d-flex flex-row-reverse">
             {isAcceptableStatus(user.status) &&
               <button
-                className={`btn px-2 w-auto
+                className={`btn px-2 ml-1 w-auto
                   rounded-button rounded-button--small`}
                 onClick={() => this.onSendAcceptance(user)}
               >
@@ -253,7 +254,7 @@ class User extends React.Component<Props> {
             }
             {isRejectableStatus(user.status) &&
               <button
-                className={`btn px-2 w-auto
+                className={`btn px-2 mx-1 w-auto
                   rounded-button rounded-button--small`}
                 onClick={() => this.onSendRejection(user)}
               >
@@ -263,7 +264,7 @@ class User extends React.Component<Props> {
             }
             {isWaitlistableStatus(user.status) &&
               <button
-                className={`btn px-2 w-auto
+                className={`btn px-2 mx-1 w-auto
                   rounded-button rounded-button--small`}
                 onClick={() => this.onSendWaitlist(user)}
               >
@@ -271,6 +272,15 @@ class User extends React.Component<Props> {
                 Send Waitlist Email
               </button>
             }
+            <a
+              className={`btn px-2 mx-1 w-auto
+                rounded-button rounded-button--small`}
+                href={generateQRCodeURL(user)}
+                target="_blank"
+            >
+              <FA name="qrcode" className="mr-2" />
+              QR Code
+            </a>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
