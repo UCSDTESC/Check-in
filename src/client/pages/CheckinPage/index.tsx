@@ -237,10 +237,10 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     );
   }
 
-  renderManualTab(props: Props) {
+  renderManualTab() {
     return (
       <CheckinTab>
-        <ManualScanner onUserScanned={this.onScan} users={props.users} />
+        <ManualScanner onUserScanned={this.onScan} users={this.props.users} />
       </CheckinTab>
     );
   }
