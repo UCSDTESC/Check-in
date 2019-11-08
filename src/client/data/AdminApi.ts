@@ -219,14 +219,12 @@ export const deleteAdmin = (adminId: string) =>
  * @param {String[]} applicants An array of User IDs to download
  * @returns {Promise} A promise of the request.
  */
-export const downloadResumes = (applicants: string[]) =>
-  promisify<Download>(
+export const downloadResumes = (applicants: string[]): SuperAgentRequest =>
     request
       .post('/resumes')
       .send({ applicants } as DownloadResumesRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
       .use(adminApiPrefix)
-  );
 
 /**
  * Requests the status of an ongoing download.
