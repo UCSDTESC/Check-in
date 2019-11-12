@@ -34,7 +34,7 @@ export class ResumesController {
       throw new Error(ErrorMessage.NO_USERS_SELECTED());
     }
 
-    const flattenedUsers = users.map(user => user.csvFlatten());
+    const flattenedUsers = users.map(user => user.csvFlatten(true));
     const fileName = `${admin.username}-${moment().format()}.csv`;
     const csv = this.CSVService.parseJSONToCSV(flattenedUsers);
     response = this.CSVService.setJSONReturnHeaders(response, fileName);

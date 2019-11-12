@@ -10,7 +10,7 @@ import { Container } from 'typedi';
 import { print } from 'util';
 
 export type UserDocument = TESCUser & Document & {
-  csvFlatten: () => any;
+  csvFlatten: (isSponsor? : boolean) => any;
   attach: (name: string, options: any) => Promise<UserDocument>;
 };
 export type UserModel = Model<UserDocument>;
@@ -272,13 +272,18 @@ UserSchema.plugin(crate, {
   },
 });
 
-UserSchema.method('csvFlatten', function () {
+UserSchema.method('csvFlatten', function (isSponsor = false) {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
-  const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
+  let autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
     'gender', 'phone', 'university', 'pid', 'major', 'year', 'github',
     'website', 'shareResume', 'food', 'diet', 'shirtSize', 'availableBus',
     'bussing', 'teammates', 'status', 'checkedIn', 'createdAt', 'updatedAt'];
+
+  if (isSponsor) {
+    autoFill =  ['firstName', 'lastName', 'email', 'phone', 
+      'university', 'major', 'year', 'github', 'website', 'gpa', 'majorGPA'];
+  }
 
   let autoFilled: any = autoFill.reduce((acc, val) => {
     return Object.assign(acc, { [val]: user[val] });
@@ -290,12 +295,15 @@ UserSchema.method('csvFlatten', function () {
 
   autoFilled.email = user.account ? user.account.email : '';
 
-  autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
-  if (user.customQuestionResponses) {
-    autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
-  }
+  if (!isSponsor) {
+    autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
+    
+    if (user.customQuestionResponses) {
+      autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
+    }
 
-  autoFilled.team = user.team ? user.team.code : '';
+    autoFilled.team = user.team ? user.team.code : '';
+  }
 
   return autoFilled;
 });
