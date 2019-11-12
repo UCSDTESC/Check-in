@@ -19,6 +19,5 @@ module.exports = {
     "^@Services/(.*)": "<rootDir>/src/server/services/$1"
   },
   setupFilesAfterEnv: ["<rootDir>/src/server/setupTests.ts"],
-  testMatch: ['<rootDir>/src/**/tests/*.ts',],
-
+  testMatch: ['<rootDir>/src/**/tests/api/*.ts'],
 }
