@@ -1,11 +1,11 @@
-import { Logger } from '@Config/Logging';
-import AdminService from '@Services/AdminService';
+import CSVService from '@Services/CSVService';
 import SponsorService from '@Services/SponsorService';
 import { Admin, Download } from '@Shared/ModelTypes';
 import { Role } from '@Shared/Roles';
 import { DownloadResumesRequest } from '@Shared/api/Requests';
-import { GetSponsorsResponse, SuccessResponse } from '@Shared/api/Responses';
-import { Get, JsonController, UseBefore, Post, Body, Param } from 'routing-controllers';
+import { Response } from 'express-serve-static-core';
+import moment = require('moment');
+import { Get, Res, JsonController, UseBefore, Post, Body, Param } from 'routing-controllers';
 import { ErrorMessage } from 'utils/Errors';
 
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
@@ -19,12 +19,14 @@ import { RoleAuth } from '../../middleware/RoleAuth';
 @UseBefore(AdminAuthorisation)
 export class ResumesController {
   constructor(
+    private CSVService: CSVService,
     private SponsorService: SponsorService
   ) { }
 
   @Post('/')
   @UseBefore(RoleAuth(Role.ROLE_SPONSOR))
-  async downloadResumes(@AuthorisedAdmin() admin: Admin, @Body() body: DownloadResumesRequest): Promise<Download> {
+  async downloadResumes(@AuthorisedAdmin() admin: Admin, 
+    @Body() body: DownloadResumesRequest, @Res() response: Response) {
     const userIDs = body.applicants;
     const users = await this.SponsorService.getSelectedUsers(userIDs);
 
@@ -32,12 +34,11 @@ export class ResumesController {
       throw new Error(ErrorMessage.NO_USERS_SELECTED());
     }
 
-    const download = await this.SponsorService.createResumeDownload(users, admin);
-    return new Promise(async (resolve, reject) => {
-      resolve(download);
-
-      await this.SponsorService.startResumeDownlod(download, users, admin);
-    });
+    const flattenedUsers = users.map(user => user.csvFlatten());
+    const fileName = `${admin.username}-${moment().format()}.csv`;
+    const csv = this.CSVService.parseJSONToCSV(flattenedUsers);
+    response = this.CSVService.setJSONReturnHeaders(response, fileName);
+    return response.send(csv);
   }
 
   @Get('/:downloadId')

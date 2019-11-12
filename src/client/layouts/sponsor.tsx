@@ -75,18 +75,31 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
    * Gives the request to download the resumes that are currently selected.
    */
   downloadResumes = () => {
-    const { showLoading, filters, resumes } = this.props;
-    showLoading();
-
+    const { showLoading, hideLoading, filters, resumes } = this.props;
     const filtered = applyResumeFilter(filters, resumes.applicants)
       .map(user => user._id);
 
+    this.setState({
+      isDownloading: true,
+    });
+
     downloadResumes(filtered)
       .then((res) => {
+        showLoading();
+
+        const blob = new Blob([res.text], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        
+        link.href = url;
+        link.setAttribute('download', `${this.props.user.username}-${Date.now()}.csv`);
+        document.body.appendChild(link);
+        link.click();
+
+        hideLoading();
         this.setState({
-          isDownloading: true,
+          isDownloading: false
         });
-        this.startPolling(res._id);
       })
       .catch(console.error);
   }
