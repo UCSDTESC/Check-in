@@ -67,6 +67,11 @@ const baseTESCUser = (): TESCUser => ({
 })
 
 export const generateFake = <T extends FakeableData>(p? : Partial<T>): T => {
+  console.log(typeof p)
+  return {
+    ...baseTESCUser(),
+    ...p
+  } as T
 }
 
 export const populatedAccount = new Account(baseTESCAccount());

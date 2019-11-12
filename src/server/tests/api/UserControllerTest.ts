@@ -8,8 +8,9 @@ import { Container } from 'typedi';
 import { AccountDocument } from '@Models/Account';
 import { RegisterUserRequest } from '@Shared/api/Requests';
 import { ErrorMessage } from '../../utils/Errors';
-import { populatedEvent, populatedUser, populatedAccount } from '../fake';
+import { populatedEvent, populatedUser, populatedAccount, generateFake } from '../fake';
 import { Request } from 'express-serve-static-core';
+import { TESCUser } from '@Shared/ModelTypes';
 
 describe('UserController', () => {
   const userService = Container.get(UserService);
@@ -99,6 +100,7 @@ describe('UserController', () => {
     }); 
 
     describe('for user with existing tesc.events account', () => {
+      const xd = generateFake<TESCUser>();
       beforeAll(() => {
         accountModel.toReturn(populatedAccount, 'find');
       });
