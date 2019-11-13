@@ -21,7 +21,7 @@
     "rollback": "./node_modules/.bin/mm down",
     "heroku-postbuild": "npm run migrate && ./node_modules/.bin/gulp prod --production",
     "test-server": "tsc -P ./src/server/tsconfig.json --outDir /tmp",
-    "test-server-unit": "./node_modules/.bin/jest"
+    "test-server:unit": "./node_modules/.bin/jest"
   },
   "homepage": "https://github.com/UCSDTESC/Check-in#readme",
   "dependencies": {

@@ -1,5 +1,5 @@
 import { Inject, Container } from 'typedi';
-import { EventModel } from '@Models/Event';
+import { EventModel, EventDocument } from '@Models/Event';
 import { UserModel } from '@Models/User';
 import { AccountModel } from '@Models/Account';
 import { TESCEvent, TESCAccount, TESCUser } from '@Shared/ModelTypes';
@@ -8,11 +8,6 @@ import { RegisterUserRequest } from '@Shared/api/Requests';
 const Event = Container.get<EventModel>('EventModel');
 const User = Container.get<UserModel>('UserModel');
 const Account = Container.get<AccountModel>('AccountModel');
-
-type FakeableData = 
-  | TESCUser
-  | TESCEvent
-  | TESCAccount
 
 const baseTESCEvent = (): TESCEvent => ({
   name: 'TESC Event',
@@ -66,16 +61,53 @@ const baseTESCUser = (): TESCUser => ({
   account: baseTESCAccount(),
 })
 
-export const generateFake = <T extends FakeableData>(p? : Partial<T>): T => {
-  console.log(typeof p)
+const baseApplication = (): RegisterUserRequest => ({
+  alias: 'some-event-alias',
+  user: {
+    email: 'fake@tesc.ucsd.edu',
+    ...baseTESCUser(),
+    teamCode: 'ABCD',
+    createTeam: false,
+    customQuestionResponses: new Map<string, string>(),
+    provision: false,
+    accept: false
+  }
+})
+
+export const generateFakeApplication = (p?: Partial<RegisterUserRequest>): RegisterUserRequest => {
+  return {
+    ...baseApplication(),
+    ...p
+  }
+}
+
+export const generateFakeUser = (p?: Partial<TESCUser>): TESCUser => {
   return {
     ...baseTESCUser(),
     ...p
-  } as T
+  }
 }
 
-export const populatedAccount = new Account(baseTESCAccount());
+export const generateFakeEvent = (p?: Partial<TESCEvent>): TESCEvent => {
+  return {
+    ...baseTESCEvent(),
+    ...p
+  }
+}
 
-export const populatedEvent = new Event(baseTESCEvent());
+export const generateFakeAccount = (p?: Partial<TESCAccount>): TESCAccount => {
+  return {
+    ...baseTESCAccount(),
+    ...p
+  }
+}
 
-export const populatedUser = new User(baseTESCUser());
+export const generateFakeEventDocument = (p?: Partial<TESCEvent>) => new Event(generateFakeEvent(p))
+
+export const generateFakeUserDocument = (p?: Partial<TESCUser>) => new User(generateFakeUser(p))
+
+export const fakeAccount = new Account(baseTESCAccount());
+
+export const fakeEvent = generateFakeEventDocument();
+
+export const fakeUser = generateFakeUserDocument();
