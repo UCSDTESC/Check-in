@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { sendAcceptanceEmail, sendRejectionEmail, sendWaitlistEmail } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { generateQRCodeURL } from '~/utils/QRCodes'
+import { generateQRCodeURL } from '@Shared/QRCodes'
 
 import { AlertType } from '../pages/AlertPage';
 
