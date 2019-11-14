@@ -65,7 +65,7 @@ export default class EmailService {
    */
   async sendEventAcceptanceEmail(request: Request, admin: Admin, event: TESCEvent, user: TESCUser) {
     Logger.info(`Sending acceptance email to '${user.account.email}' for event '${event.alias}' by '${admin.username}'`);
-    return sendAcceptanceEmail(user.account.email, event);
+    return sendAcceptanceEmail(user, event);
   }
 
   /**
@@ -76,7 +76,7 @@ export default class EmailService {
    */
   async sendEventRejectionEmail(request: Request, admin: Admin, event: TESCEvent, user: TESCUser) {
     Logger.info(`Sending rejection email to '${user.account.email}' for event '${event.alias}' by '${admin.username}'`);
-    return sendRejectionEmail(user.account.email, event)
+    return sendRejectionEmail(user, event)
   }
 
   /**
@@ -87,6 +87,6 @@ export default class EmailService {
    */
   async sendEventWaitlistEmail(request: Request, admin: Admin, event: TESCEvent, user: TESCUser) {
     Logger.info(`Sending waitlist email to '${user.account.email}' for event '${event.alias}' by '${admin.username}'`);
-    return sendWaitlistEmail(user.account.email, event)
+    return sendWaitlistEmail(user, event)
   }
 }
