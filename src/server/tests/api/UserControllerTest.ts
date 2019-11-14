@@ -7,11 +7,13 @@ import { UserController } from '../../api/controllers/user/UserController';
 import { BadRequestError } from 'routing-controllers';
 import mockingoose from 'mockingoose';
 import { Container } from 'typedi';
+import * as path from 'path';
 import { ErrorMessage } from '../../utils/Errors';
-import { fakeEvent, fakeUser, fakeAccount, generateFakeApplication, generateFakeEventDocument } from '../fake';
+import { fakeEvent, fakeUser, fakeAccount, generateFakeApplication, generateFakeEventDocument, generateFakeEvent } from '../fake';
 import { Request } from 'express-serve-static-core';
 
 describe('UserController', () => {
+
   const userService = Container.get(UserService);
   const eventService = Container.get(EventService);
   const emailService = Container.get(EmailService);
@@ -98,17 +100,18 @@ describe('UserController', () => {
           expect(error).toEqual(new BadRequestError(ErrorMessage.CANNOT_REGISTER()));
         }
       });
-    }); 
+    });
 
     describe('for user with existing tesc.events account', () => {
       beforeAll(() => {
-        accountModel.toReturn(fakeAccount, 'find');
+        accountModel.toReturn(fakeAccount, 'findOne');
+        eventModel.toReturn(fakeEvent, 'findOne');
+        userModel.toReturn(fakeUser, 'save');
       });
 
       describe('for user that has already applied to event', () => {
         beforeAll(() => {
           userModel.toReturn(fakeUser, 'findOne');
-          eventModel.toReturn(fakeEvent, 'findOne');
         })
 
         afterAll(() => {
@@ -122,7 +125,54 @@ describe('UserController', () => {
             expect(error).toEqual(new BadRequestError(ErrorMessage.CANNOT_REGISTER()));
           }         
         });
-      })
+      });
+    });
+
+    describe('teams', () => {
+      describe('for event without team option set', () => {
+        beforeEach(() => {
+          userModel.toReturn(fakeUser, 'save');
+          eventModel.toReturn(generateFakeEventDocument({
+            closeTime: new Date(2200, 12, 30).toString(), 
+            options: {
+              ...generateFakeEvent().options,
+              allowTeammates: false
+            }
+          }), 'findOne');
+        });
+  
+        test('no team service methods are called', async () => {
+          const getTeamByCodeSpy = jest.spyOn(teamService, 'getTeamByCode');
+          const createNewTeamSpy = jest.spyOn(teamService, 'createNewTeam');
+  
+          await userController.registerNewUser({
+            path: path.join(__dirname, '../test-resume.pdf')
+          } as Express.Multer.File, fakeApplication, {} as Request);
+  
+          expect(getTeamByCodeSpy).toHaveBeenCalledTimes(0);
+          expect(createNewTeamSpy).toHaveBeenCalledTimes(0);
+  
+          getTeamByCodeSpy.mockRestore();
+          createNewTeamSpy.mockRestore();
+        });
+      });
+
+      describe('for event with team option set', () => {
+        beforeEach(() => {
+          userModel.toReturn(fakeUser, 'save');
+          eventModel.toReturn(generateFakeEventDocument({
+            closeTime: new Date(2200, 12, 30).toString(), 
+            options: {
+              ...generateFakeEvent().options,
+              allowTeammates: true
+            }
+          }), 'findOne');
+        });
+
+        test('for user creating a new team', () => {
+           
+        });
+      });
     });
   });
 });

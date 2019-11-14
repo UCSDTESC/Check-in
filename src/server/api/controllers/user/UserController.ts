@@ -67,7 +67,6 @@ export class UserController {
 
     let hasExistingAccount = false;
     let existingAccount = await this.UserService.getAccountByEmail(user.email);
-
     // Check the team code works before registering account
     let existingTeam: TeamDocument;
     if (event.options.allowTeammates) {
@@ -85,7 +84,7 @@ export class UserController {
         throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
       }
     }
-
+    
     if (!existingAccount) {
       existingAccount = await this.UserService.createNewAccount(user.email, user.password);
     } else {
