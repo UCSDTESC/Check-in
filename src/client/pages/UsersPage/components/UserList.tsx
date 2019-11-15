@@ -1,6 +1,6 @@
 import { TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import React from 'react';
-import ReactTable from 'react-table';
+import ReactTable, { ReactTableDefaults } from 'react-table';
 import User from '~/components/User';
 
 import { AutofillColumn } from '..';
@@ -34,13 +34,17 @@ class UserList extends React.Component<UserListProps> {
     return (
       <ReactTable
         data={this.props.users}
+        column={{
+          ...ReactTableDefaults.column,
+          Cell: ({value}) => value ? String(value): value
+        }}
         columns={this.props.columns}
         defaultPageSize={10}
         className="-striped -highlight user-list"
         SubComponent={({ original }) => this.expandComponent(original)}
         filterable={true}
         defaultFilterMethod={(filter, row) =>
-          String(row[filter.id]).indexOf(filter.value) !== -1}
+          String(row[filter.id]).toLowerCase().indexOf(filter.value.toLowerCase()) !== -1}
       />
     );
   }
