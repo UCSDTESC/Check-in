@@ -53,7 +53,6 @@ export class UserController {
     @Req() request: Request
   ): Promise<RegisterUserResponse> {
     Logger.info(`Registration attempted by '${body.user.email}' for '${body.alias}'`);
-
     const event = await this.EventService.getEventByAlias(body.alias);
     const user = body.user;
     if (!event) {
@@ -67,6 +66,7 @@ export class UserController {
 
     let hasExistingAccount = false;
     let existingAccount = await this.UserService.getAccountByEmail(user.email);
+
     // Check the team code works before registering account
     let existingTeam: TeamDocument;
     if (event.options.allowTeammates) {
@@ -84,7 +84,7 @@ export class UserController {
         throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
       }
     }
-    
+
     if (!existingAccount) {
       existingAccount = await this.UserService.createNewAccount(user.email, user.password);
     } else {
@@ -100,8 +100,8 @@ export class UserController {
       await this.UserService.updateUserResume(newUser, resume);
     }
 
-    if (!existingTeam) {
-      if (event.options.allowTeammates && user.createTeam) {
+    if (event.options.allowTeammates && !existingTeam) {
+      if (user.createTeam) {
         existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
       } else {
         throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));

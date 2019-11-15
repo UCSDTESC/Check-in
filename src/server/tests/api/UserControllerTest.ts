@@ -22,6 +22,7 @@ describe('UserController', () => {
   const userModel = mockingoose(Container.get('UserModel'));
   const eventModel = mockingoose(Container.get('EventModel'));
   const accountModel = mockingoose(Container.get('AccountModel'));
+  const teamModel = mockingoose(Container.get('TeamModel'));
 
   const userController = new UserController(
     eventService, 
@@ -109,6 +110,10 @@ describe('UserController', () => {
         userModel.toReturn(fakeUser, 'save');
       });
 
+      afterAll(() => {
+        mockingoose.resetAll();
+      })
+
       describe('for user that has already applied to event', () => {
         beforeAll(() => {
           userModel.toReturn(fakeUser, 'findOne');
@@ -140,7 +145,9 @@ describe('UserController', () => {
             }
           }), 'findOne');
         });
-  
+
+        afterAll(() => mockingoose.resetAll());
+
         test('no team service methods are called', async () => {
           const getTeamByCodeSpy = jest.spyOn(teamService, 'getTeamByCode');
           const createNewTeamSpy = jest.spyOn(teamService, 'createNewTeam');
@@ -160,6 +167,8 @@ describe('UserController', () => {
       describe('for event with team option set', () => {
         beforeEach(() => {
           userModel.toReturn(fakeUser, 'save');
+          teamModel.toReturn(null, 'findOne');
+          accountModel.toReturn(fakeAccount, 'findOne');
           eventModel.toReturn(generateFakeEventDocument({
             closeTime: new Date(2200, 12, 30).toString(), 
             options: {
@@ -169,8 +178,18 @@ describe('UserController', () => {
           }), 'findOne');
         });
 
-        test('for user creating a new team', () => {
-           
+        test('for user creating a new team', async () => {
+          await userController.registerNewUser({
+            path: path.join(__dirname, '../test-resume.pdf')
+          } as Express.Multer.File, generateFakeApplication({
+            user: {
+              ...fakeApplication.user,
+              createTeam: true,
+              teamCode: ''
+            }
+          }), {} as Request);
+
+          expect(true).toBeTruthy()
         });
       });
     });
