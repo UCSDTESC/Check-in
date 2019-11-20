@@ -101,8 +101,8 @@ export class UserController {
       await this.UserService.updateUserResume(newUser, resume);
     }
 
-    if (!existingTeam) {
-      if (event.options.allowTeammates && user.createTeam) {
+    if(event.options.allowTeammates && !existingTeam) {
+      if (user.createTeam) {
         existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
       } else {
         throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
