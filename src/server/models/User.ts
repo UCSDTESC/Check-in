@@ -8,6 +8,7 @@ import * as mongooseDelete from 'mongoose-delete';
 import * as mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
 import { print } from 'util';
+import { generateQRCodeURL } from '@Shared/QRCodes';
 
 export type UserDocument = TESCUser & Document & {
   csvFlatten: (isSponsor? : boolean) => any;
@@ -303,6 +304,8 @@ UserSchema.method('csvFlatten', function (isSponsor = false) {
     }
 
     autoFilled.team = user.team ? user.team.code : '';
+
+    autoFilled.qrCode = generateQRCodeURL(user);
   }
 
   return autoFilled;
