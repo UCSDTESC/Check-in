@@ -5,17 +5,13 @@ import { AccountModel } from '@Models/Account';
 import { TESCEvent, TESCAccount, TESCUser } from '@Shared/ModelTypes';
 import { RegisterUserRequest } from '@Shared/api/Requests';
 
-type DeepPartial<T> = {
-  [P in keyof T]?: DeepPartial<T[P]>;
-};
-
 const Event = Container.get<EventModel>('EventModel');
 const User = Container.get<UserModel>('UserModel');
 const Account = Container.get<AccountModel>('AccountModel');
 
 const baseTESCEvent = (): TESCEvent => ({
   name: 'TESC Event',
-  alias: 'tescEvent',
+  alias: 'tesc-event',
   organisers: [],
   organisedBy: 'TESC',
   closeTime: new Date().toString(),
@@ -111,12 +107,3 @@ export const generateFakeEventDocument = (p?: Partial<TESCEvent>) => new Event(g
 export const generateFakeUserDocument = (p?: Partial<TESCUser>) => new User(generateFakeUser(p))
 
 export const generateFakeAccountDocument = (p?: Partial<TESCUser>) => new Account(generateFakeAccount(p))
-
-export const fakeAccount = generateFakeAccountDocument();
-
-export const fakeEvent = generateFakeEventDocument();
-
-export const fakeUser = generateFakeUserDocument({
-  account: fakeAccount.toObject(),
-  event: fakeEvent.toObject()
-});

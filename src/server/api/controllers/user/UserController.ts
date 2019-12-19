@@ -103,6 +103,7 @@ export class UserController {
     if (event.options.allowTeammates && !existingTeam) {
       if (user.createTeam) {
         existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
+        console.log('made existing team!')
       } else {
         throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
       }
@@ -112,8 +113,8 @@ export class UserController {
       existingTeam.members.push(newUser);
       newUser.team = existingTeam;
 
-      existingTeam.save();
-      newUser.save();
+      await existingTeam.save();
+      await newUser.save();
     }
 
     if (!hasExistingAccount) {
