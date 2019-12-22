@@ -113,8 +113,8 @@ export class UserController {
       existingTeam.members.push(newUser);
       newUser.team = existingTeam;
 
-      existingTeam.save();
-      newUser.save();
+      await existingTeam.save();
+      await newUser.save();
     }
 
     if (!hasExistingAccount) {
