@@ -2,12 +2,14 @@ import { Inject, Container } from 'typedi';
 import { EventModel, EventDocument } from '@Models/Event';
 import { UserModel } from '@Models/User';
 import { AccountModel } from '@Models/Account';
-import { TESCEvent, TESCAccount, TESCUser } from '@Shared/ModelTypes';
+import { TESCEvent, TESCAccount, TESCUser, TESCTeam } from '@Shared/ModelTypes';
 import { RegisterUserRequest } from '@Shared/api/Requests';
+import { TeamModel } from '@Models/Team';
 
 const Event = Container.get<EventModel>('EventModel');
 const User = Container.get<UserModel>('UserModel');
 const Account = Container.get<AccountModel>('AccountModel');
+const Team = Container.get<TeamModel>('TeamModel');
 
 const baseTESCEvent = (): TESCEvent => ({
   name: 'TESC Event',
@@ -61,6 +63,12 @@ const baseTESCUser = (): TESCUser => ({
   account: baseTESCAccount(),
 })
 
+const baseTESCTeam = (): TESCTeam => ({
+  event: baseTESCEvent(),
+  code: 'L33T',
+  members: []
+})
+
 const baseApplication = (): RegisterUserRequest => ({
   alias: 'some-event-alias',
   user: {
@@ -102,8 +110,17 @@ export const generateFakeAccount = (p?: Partial<TESCAccount>): TESCAccount => {
   }
 }
 
+export const generateFakeTeam = (p?: Partial<TESCTeam>): TESCTeam => {
+  return {
+    ...baseTESCTeam(),
+    ...p
+  }
+}
+
 export const generateFakeEventDocument = (p?: Partial<TESCEvent>) => new Event(generateFakeEvent(p))
 
 export const generateFakeUserDocument = (p?: Partial<TESCUser>) => new User(generateFakeUser(p))
 
 export const generateFakeAccountDocument = (p?: Partial<TESCUser>) => new Account(generateFakeAccount(p))
+
+export const generateFakeTeamDocument = (p?: Partial<TESCTeam>) => new Team(generateFakeTeam(p));

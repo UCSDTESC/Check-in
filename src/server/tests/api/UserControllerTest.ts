@@ -6,7 +6,7 @@ import { AccountModel } from '@Models/Account';
 import { UserController } from '../../api/controllers/user/UserController';
 import { Container } from 'typedi';
 import { ErrorMessage } from '../../utils/Errors';
-import { generateFakeApplication, generateFakeEventDocument, generateFakeEvent, generateFakeAccount, generateFakeAccountDocument, generateFakeUserDocument } from '../fake';
+import { generateFakeApplication, generateFakeEventDocument, generateFakeEvent, generateFakeAccount, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../fake';
 import TestDatabaseConnection from '../TestDatabaseConnection';
 import { EventModel } from '@Models/Event';
 import { UserModel, PUBLIC_USER_FIELDS } from '@Models/User';
@@ -102,7 +102,7 @@ describe('UserController', () => {
         try {
           await userController.registerNewUser({} as Express.Multer.File, fakeApplication, {} as Request);
         } catch (error) {
-          expect(error).toEqual(new BadRequestError(ErrorMessage.NO_ALIAS_EXISTS(null)));
+          expect(error).toEqual(new BadRequestError(ErrorMessage.NO_ALIAS_EXISTS(fakeApplication.alias)));
         }
       });  
     });
@@ -183,33 +183,98 @@ describe('UserController', () => {
       });
 
       describe('for event with team option set', () => {
-        const fakeEvent = generateFakeEventDocument({
-          closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
-          options: {
-            ...generateFakeEvent().options,
-            allowTeammates: true
-          }
-        });
-        const fakeAccount = generateFakeAccountDocument();
-
-        beforeEach(async () => {
-          await fakeAccount.save();
-          await fakeEvent.save();
-        });
-
-        test('for user creating a new team', async () => {
-          await userController.registerNewUser({
-            path: path.join(__dirname, '../test-resume.pdf')
-          } as Express.Multer.File, generateFakeApplication({
-            alias: fakeEvent.alias,
-            user: {
-              ...fakeApplication.user,
-              createTeam: true,
-              teamCode: 'TESC'
+        describe('for user creating a new team', () => {
+          const fakeEvent = generateFakeEventDocument({
+            closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
+            options: {
+              ...generateFakeEvent().options,
+              allowTeammates: true
             }
-          }), {} as Request);
+          });
 
-          expect(true).toBeTruthy()
+          const fakeAccount = generateFakeAccountDocument();
+  
+          beforeEach(async () => {
+            await fakeAccount.save();
+            await fakeEvent.save();
+          });
+
+          test('creates team entity', async () => {
+            await userController.registerNewUser({
+              path: path.join(__dirname, '../test-resume.pdf')
+            } as Express.Multer.File, generateFakeApplication({
+              alias: fakeEvent.alias,
+              user: {
+                ...fakeApplication.user,
+                createTeam: true,
+                teamCode: 'TESC'
+              }
+            }), {} as Request);
+  
+            // No Teams in DB before, there should be one now.
+            expect((await teamModel.find({})).length).toBe(1);
+          })
+        });
+
+
+        describe('for user joining team', () => {
+          const fakeEvent = generateFakeEventDocument({
+            closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
+            options: {
+              ...generateFakeEvent().options,
+              allowTeammates: true
+            }
+          });
+          const fakeTeam = generateFakeTeamDocument({
+            event: fakeEvent.toObject()
+          });
+
+          beforeAll(async () => {
+            await fakeAccount.save();
+            await fakeEvent.save();
+            await fakeTeam.save();
+          });
+          describe('for existent team', () => {
+            test('joins team', async () => {
+              await userController.registerNewUser({
+                path: path.join(__dirname, '../test-resume.pdf')
+              } as Express.Multer.File, generateFakeApplication({
+                alias: fakeEvent.alias,
+                user: {
+                  ...fakeApplication.user,
+                  createTeam: false,
+                  teamCode: 'L33T'
+                }
+              }), {} as Request);
+    
+              const teamBeingJoined = await teamModel.findOne({code: fakeTeam.code});
+              expect(teamBeingJoined.members.length).toBe(fakeTeam.members.length + 1);
+            });
+          });
+
+          describe('for non existent team', () => {
+            beforeAll(async () => {
+              await fakeEvent.save();
+              await teamModel.deleteMany({});
+            });
+
+            test('throws error', async () => {
+              try {
+                await userController.registerNewUser({
+                  path: path.join(__dirname, '../test-resume.pdf')
+                } as Express.Multer.File, generateFakeApplication({
+                  alias: fakeEvent.alias,
+                  user: {
+                    ...fakeApplication.user,
+                    createTeam: false,
+                    teamCode: 'L33T'
+                  }
+                }), {} as Request);
+              } catch(e) {
+                expect(e).toEqual(new BadRequestError(ErrorMessage.NO_TEAM_EXISTS('L33T')));
+              }
+            });
+          });
         });
       });
     });

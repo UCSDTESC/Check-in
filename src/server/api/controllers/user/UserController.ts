@@ -38,7 +38,7 @@ export class UserController {
   @UseBefore(UserAuthorisation)
   async get(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount): Promise<TESCUser[]> {
     const application = await this.UserService.getUserApplication(account, event, true);
-
+    console.log(application)
     if (!application) {
       throw new Error(ErrorMessage.USER_NOT_REGISTERED());
     }
@@ -56,7 +56,7 @@ export class UserController {
     const event = await this.EventService.getEventByAlias(body.alias);
     const user = body.user;
     if (!event) {
-      throw new BadRequestError(ErrorMessage.NO_ALIAS_EXISTS(event));
+      throw new BadRequestError(ErrorMessage.NO_ALIAS_EXISTS(body.alias));
     }
 
     const isOpen = await this.EventService.isRegistrationOpen(event);
@@ -103,7 +103,6 @@ export class UserController {
     if (event.options.allowTeammates && !existingTeam) {
       if (user.createTeam) {
         existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
-        console.log('made existing team!')
       } else {
         throw new BadRequestError(ErrorMessage.NO_TEAM_EXISTS(user.teamCode));
       }
