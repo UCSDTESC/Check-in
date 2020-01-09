@@ -96,8 +96,7 @@ export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({ inpu
   );
 };
 
-export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className,
-  meta: { touched, error } }) => {
+export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -107,7 +106,7 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ i
   return (
     <div>
       <select
-        {...input}
+        {...{...input, value: input.value + 1}}
         className={errorClassName}
       >
         <option key={-1}>Month</option>
@@ -278,12 +277,12 @@ export function createTextArea(name: string, placeholder: string,
   );
 }
 
-export function createMonthPicker(name: string = null) {
+export function createMonthPicker(name = 'birthdateMonth') {
   return (
     <Field
       component={errorMonthPicker}
       className="sd-form__input-select mb-1 mb-md-0"
-      name={`${name || 'birthdateMonth'}`}
+      name={name}
     />
   );
 }

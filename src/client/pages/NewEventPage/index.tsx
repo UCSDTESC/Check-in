@@ -10,7 +10,7 @@ import { registerNewEvent } from '~/data/AdminApi';
 
 import { addEventSuccessAlert } from '../EventPage/actions';
 
-import NewEventForm, { NewEventFormData } from './components/NewEventForm';
+import EventForm, { EventFormData } from '~/components/EventForm';
 import createValidator from './validate';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
@@ -33,7 +33,7 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
     err: null,
   };
 
-  createNewEvent = (event: NewEventFormData) => {
+  createNewEvent = (event: EventFormData) => {
     registerNewEvent(event)
       .then((res: TESCEvent) => {
         this.setState({ err: null });
@@ -60,7 +60,7 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
 
         <div className="sd-form__wrapper">
           <div className="sd-form">
-            <NewEventForm
+            <EventForm
               validate={validator}
               onSubmit={this.createNewEvent}
               initialValues={{ organisedBy: 'TESC' }}

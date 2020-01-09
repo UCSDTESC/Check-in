@@ -24,7 +24,7 @@ import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import Cookies from 'universal-cookie';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
-import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
+import { EventFormData } from '~/components/EventForm';
 import CookieTypes from '~/static/Cookies';
 
 import { promisify } from './helpers';
@@ -166,7 +166,7 @@ export const checkinUser = (id: string, eventId: string) =>
       .use(adminApiPrefix)
   );
 
-export const registerNewEvent = (event: NewEventFormData) => {
+export const registerNewEvent = (event: EventFormData) => {
   const { logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields } = event;
   const closeTime: string = moment(new Date(
     closeTimeYear,

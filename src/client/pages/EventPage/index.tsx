@@ -27,6 +27,8 @@ import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
 import TeamsTab from './tabs/TeamsTab';
 import ViewApplication from './components/ViewApplication';
+import EventForm, { EventFormData } from '../../components/EventForm';
+import createValidator from '../NewEventPage/validate';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -99,6 +101,12 @@ class EventPage extends TabularPage<Props, EventPageState> {
       name: 'Settings',
       anchor: 'settings',
       render: this.renderSettings.bind(this),
+    } as TabPage,
+    {
+      icon: 'cog',
+      name: 'Edit',
+      anchor: 'edit',
+      render: this.renderEditForm.bind(this),
     } as TabPage,
   ];
 
@@ -207,6 +215,33 @@ class EventPage extends TabularPage<Props, EventPageState> {
    */
   renderSettings() {
     return (<SettingsTab {...this.props} />);
+  }
+
+  /**
+   * Renders the event tab for editing the ebemt.
+   * @returns {Component} The edit tab
+   */
+  renderEditForm() {
+    const validator = createValidator();
+    const eventDate = new Date(this.props.event.closeTime);
+    const initialValues: Partial<EventFormData> = {
+      ...this.props.event,
+      closeTimeDay: eventDate.getDay(),
+      closeTimeMonth: eventDate.getMonth(),
+      closeTimeYear: eventDate.getFullYear(),
+      logo: undefined, // TODO: Figure out logo
+    }
+
+    return (
+          <div className="sd-form">
+            <EventForm
+              validate={validator}
+              // onSubmit={this.createNewEvent} // TODO
+              initialValues={initialValues}
+            />
+          </div>
+    )
+    
   }
 
   render() {
