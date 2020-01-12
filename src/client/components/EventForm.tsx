@@ -18,7 +18,7 @@ export interface EventFormData {
 }
 
 interface EventFormProps {
-
+  editing?: boolean;
 }
 
 type Props = InjectedFormProps<EventFormData, EventFormProps> & EventFormProps;
@@ -122,7 +122,7 @@ class EventForm extends React.Component<Props> {
             type="submit"
             disabled={pristine || submitting}
           >
-              Create Event!
+              {this.props.editing ? 'Edit Event!' : 'Create Event!'}
           </button>
         )}
       </form>

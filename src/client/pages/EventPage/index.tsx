@@ -97,16 +97,16 @@ class EventPage extends TabularPage<Props, EventPageState> {
       render: this.renderAdministrators.bind(this),
     } as TabPage,
     {
+      icon: 'edit',
+      name: 'Edit',
+      anchor: 'edit',
+      render: this.renderEditForm.bind(this),
+    } as TabPage,
+    {
       icon: 'cog',
       name: 'Settings',
       anchor: 'settings',
       render: this.renderSettings.bind(this),
-    } as TabPage,
-    {
-      icon: 'cog',
-      name: 'Edit',
-      anchor: 'edit',
-      render: this.renderEditForm.bind(this),
     } as TabPage,
   ];
 
@@ -250,6 +250,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
               </UncontrolledAlert>
             )}
             <EventForm
+              editing
               validate={validator}
               onSubmit={editEvent}
               initialValues={initialValues}
