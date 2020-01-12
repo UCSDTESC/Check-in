@@ -1,13 +1,12 @@
-import { Admin } from '@Shared/ModelTypes';
-import { Role, getRoleRank } from '@Shared/Roles';
-import { JWTAdminAuth, JWTAdminAuthToken } from '@Shared/api/Responses';
 import React from 'react';
 import { NavbarToggler } from 'reactstrap';
-import ToggleSwitch from '~/components/ToggleSwitch';
+import { Role, getRoleRank } from '@Shared/Roles';
+import { JWTAdminAuthToken } from '@Shared/api/Responses';
 import { EventsState } from '~/reducers/Admin/types';
 
 import Link from './Link';
 import Section from './Section';
+import { NavLink } from 'react-router-dom';
 
 interface AdminSidebarProps {
   isAuthenticated: boolean;
@@ -114,11 +113,6 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
    */
   renderUser() {
     const { user } = this.props;
-    const auth = this.props.isAuthenticated;
-    const role = this.props.user ?
-      getRoleRank(this.props.user.role) :
-      getRoleRank(Role.ROLE_MEMBER);
-    const checkinAdmin = this.props.user ? this.props.user.checkin : false;
 
     return (
       <div className="admin-sidebar__user-box admin-sidebar__dark">
@@ -137,17 +131,19 @@ export default class AdminSidebar extends React.Component<AdminSidebarProps, Adm
 
     return (
       <div className="admin-sidebar">
-        <div className="admin-sidebar__header navbar-expand-md navbar-inverse">
-          <img
-            className="admin-sidebar__logo"
-            src="/img/vectors/tesc-white.svg"
-          />
-          <NavbarToggler
-            right="true"
-            className="admin-sidebar__toggler navbar-dark"
-            onClick={this.toggleHidden}
-          />
-        </div>
+        <NavLink to="/admin/" exact={true}>
+          <div className="admin-sidebar__header navbar-expand-md navbar-inverse">
+            <img
+              className="admin-sidebar__logo"
+              src="/img/vectors/tesc-white.svg"
+            />
+            <NavbarToggler
+              right="true"
+              className="admin-sidebar__toggler navbar-dark"
+              onClick={this.toggleHidden}
+            />
+          </div>
+        </NavLink>
 
         <div className={this.state.isHidden ? 'd-none d-md-block' : ''}>
           {auth && this.renderUser()}
