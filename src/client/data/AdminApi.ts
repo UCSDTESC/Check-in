@@ -187,6 +187,32 @@ export const registerNewEvent = (event: EventFormData) => {
   );
 };
 
+export const editExistingEvent = (id: string, event: Partial<EventFormData>) => {
+  const { logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields } = event;
+  const closeTime: string = moment(new Date(
+    closeTimeYear,
+    closeTimeMonth - 1,
+    closeTimeDay
+  )).toISOString(true);
+
+  
+  const promiseReq = request
+    .post(`/events/edit/${id}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token))
+    .field('event', JSON.stringify({
+      ...eventWithoutFields,
+      closeTime,
+    } as RegisterEventRequest))
+    .use(adminApiPrefix)
+    .use(nocache)
+
+    if (logo) {
+      promiseReq.attach('logo', logo[0])
+    }
+
+    return promisify<TESCEvent>(promiseReq);
+}
+
 /**
  * Request to register a new admin.
  * @param {Object} admin The admin fields to register.

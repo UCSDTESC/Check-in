@@ -106,7 +106,7 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ i
   return (
     <div>
       <select
-        {...{...input, value: input.value + 1}}
+        {...input}
         className={errorClassName}
       >
         <option key={-1}>Month</option>

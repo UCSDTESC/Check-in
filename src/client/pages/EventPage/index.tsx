@@ -1,6 +1,4 @@
-import { TESCTeam, TESCEvent } from '@Shared/ModelTypes';
-import { UserStatus } from '@Shared/UserStatus';
-import { ObjectID } from 'bson';
+import { TESCTeam } from '@Shared/ModelTypes';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
@@ -10,7 +8,7 @@ import { UncontrolledTooltip } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch, loadAvailableColumns } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadEventStatistics, loadAllTeams } from '~/data/AdminApi';
+import { loadEventStatistics, loadAllTeams, editExistingEvent } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
@@ -29,6 +27,7 @@ import TeamsTab from './tabs/TeamsTab';
 import ViewApplication from './components/ViewApplication';
 import EventForm, { EventFormData } from '../../components/EventForm';
 import createValidator from '../NewEventPage/validate';
+import { UncontrolledAlert } from 'reactstrap/lib/Uncontrolled';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -66,6 +65,7 @@ export type Props = RouteProps & ReturnType<typeof mapStateToProps> &
 
 interface EventPageState extends TabularPageState {
   teams: TESCTeam[];
+  err?: string;
 }
 
 class EventPage extends TabularPage<Props, EventPageState> {
@@ -227,21 +227,35 @@ class EventPage extends TabularPage<Props, EventPageState> {
     const initialValues: Partial<EventFormData> = {
       ...this.props.event,
       closeTimeDay: eventDate.getDay(),
-      closeTimeMonth: eventDate.getMonth(),
+      closeTimeMonth: eventDate.getMonth() + 1,
       closeTimeYear: eventDate.getFullYear(),
       logo: undefined, // TODO: Figure out logo
     }
 
+    const editEvent = async (eventData: EventFormData) => {
+      try {
+        const event = await editExistingEvent(this.props.event._id, eventData);
+        this.setState({ err: null });
+        this.props.addEventSuccessAlert(event.alias, `Successfully edited ${event.name}`, 'Edit Event');
+      } catch (e) {
+        this.setState({ err: e.message });
+      }
+    }
+
     return (
           <div className="sd-form">
+            {this.state.err && (
+              <UncontrolledAlert color="danger">
+                {this.state.err}
+              </UncontrolledAlert>
+            )}
             <EventForm
               validate={validator}
-              // onSubmit={this.createNewEvent} // TODO
+              onSubmit={editEvent}
               initialValues={initialValues}
             />
           </div>
-    )
-    
+    );
   }
 
   render() {

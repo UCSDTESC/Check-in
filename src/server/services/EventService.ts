@@ -320,6 +320,22 @@ export default class EventService {
   }
 
   /**
+   * Edits an existing event with given attributes.
+   * @param request The request with event parameters.
+   * @param logoPath The file path of the logo to associate with the new event.
+   */
+  async editExistingEvent(id: string, request: Partial<RegisterEventRequest>, logoPath?: string) {
+    const event = await this.EventModel.findByIdAndUpdate(id, request);
+    if (logoPath) {
+      try {
+        await event.attach('logo', { path: logoPath });
+      } catch (err) {
+        throw new Error(ErrorMessage.DATABASE_ERROR());
+      }
+    }
+  }
+
+  /**
    * Determines whether an event's registration is still publicly open.
    * @param event The event for which to check.
    */
