@@ -1,17 +1,17 @@
-import { UserModel } from "@Models/User";
-import { EventModel, EventDocument } from "@Models/Event";
-import { EventStatistics } from "@Shared/api/Responses";
-import { Container, Service, Inject } from "typedi";
+import { UserModel } from '@Models/User';
+import { EventModel, EventDocument } from '@Models/Event';
+import { EventStatistics } from '@Shared/api/Responses';
+import { Container, Service, Inject } from 'typedi';
 
-import { DatabaseError, ErrorMessage } from "../utils/Errors";
-import { getResumeConditions } from "../utils/Resumes";
+import { DatabaseError, ErrorMessage } from '../utils/Errors';
+import { getResumeConditions } from '../utils/Resumes';
 
 @Service()
 export default class StatisticsService {
-  @Inject("EventModel")
+  @Inject('EventModel')
   private EventModel: EventModel;
 
-  @Inject("UserModel")
+  @Inject('UserModel')
   private UserModel: UserModel;
 
   /**
@@ -25,14 +25,14 @@ export default class StatisticsService {
       this.UserModel.find({
         event: event._id
       })
-        .distinct("university")
+        .distinct('university')
         .exec(),
       this.UserModel.aggregate([
         {
           $match: { event: event._id }
         },
         {
-          $group: { _id: "$gender", count: { $sum: 1 } }
+          $group: { _id: '$gender', count: { $sum: 1 } }
         }
       ]).exec(),
       this.UserModel.countDocuments({ event: event, checkedIn: true }),
@@ -41,7 +41,7 @@ export default class StatisticsService {
           $match: { event: event._id }
         },
         {
-          $group: { _id: "$status", count: { $sum: 1 } }
+          $group: { _id: '$status', count: { $sum: 1 } }
         }
       ]).exec(),
       this.UserModel.countDocuments(getResumeConditions(event)),
@@ -50,10 +50,10 @@ export default class StatisticsService {
           $match: { event: event._id }
         },
         {
-          $group: { _id: { date: { $dateToString: { format: "%m-%d", date: "$createdAt" } } }, count: { $sum: 1 }}
+          $group: { _id: { date: { $dateToString: { format: '%m-%d', date: '$createdAt' } } }, count: { $sum: 1 }}
         },
         {
-          $sort: { "_id.date": 1 }
+          $sort: { '_id.date': 1 }
         }
       ])
     ])
