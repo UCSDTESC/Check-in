@@ -1,7 +1,7 @@
-import React from "react";
-import { VictoryChart, VictoryAxis, VictoryLine, VictoryTheme } from "victory";
+import React from 'react';
+import { VictoryChart, VictoryAxis, VictoryLine, VictoryTheme } from 'victory';
 
-import EventStatisticsComponent from "./EventStatisticsComponent";
+import EventStatisticsComponent from './EventStatisticsComponent';
 
 export default class AppsOverTimeStatistics extends EventStatisticsComponent {
   render() {
@@ -11,10 +11,10 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
     const appsTimeData: { date: string; appCount: number }[] = [];
 
     Object.keys(statistics.appsOverTime).forEach(key => {
-      if (key != "null") {
+      if (key !== 'null') {
         appsTimeData.push({
           date: key,
-          appCount: statistics.appsOverTime[key]
+          appCount: statistics.appsOverTime[key],
         });
       }
     });
@@ -30,12 +30,12 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
               minDomain={{ y: 0 }}
             >
               <VictoryLine
-                data={ appsTimeData }
+                data={appsTimeData}
                 x="date"
                 y="appCount"
               />
               <VictoryAxis tickCount={6} />
-              <VictoryAxis dependentAxis />
+              <VictoryAxis dependentAxis={true} />
             </VictoryChart>
           </div>
         </div>
