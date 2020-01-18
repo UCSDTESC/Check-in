@@ -4,6 +4,7 @@ import Loading from '~/components/Loading';
 
 import EventStatisticsCharts from '../components/EventStatisticsCharts';
 import GenderStatistics from '../components/GenderStatistics';
+import AppsOverTimeStatistics from '../components/AppsOverTimeStatistics';
 
 import EventPageTab from './EventPageTab';
 
@@ -27,6 +28,9 @@ export default class StatisticsTab extends EventPageTab<StatisticsTabProps> {
           </div>
           <div className="col-lg-4 col-md-6">
             <GenderStatistics event={event} statistics={statistics} />
+          </div>
+          <div className="col-lg-4 col-md-6">
+            <AppsOverTimeStatistics event={event} statistics={statistics} />
           </div>
         </div>
       </div>
