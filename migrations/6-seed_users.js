@@ -26,6 +26,7 @@ module.exports.up = function (done) {
               firstName: 'Fake',
               lastName: 'Person',
               gender: 'Male',
+              pronoun: 'He/Him/His',
               phone: '0000000000',
               university: 'Fake University',
               password: hash

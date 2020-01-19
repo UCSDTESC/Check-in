@@ -307,11 +307,15 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         )}
 
         {FormFields.createRow(
-          FormFields.createColumn('col-md-6',
+          FormFields.createColumn('col-md-4',
             FormFields.createLabel('Gender'),
             FormFields.createGenderPicker()
           ),
-          FormFields.createColumn('col-md-6',
+          FormFields.createColumn('col-md-4',
+            FormFields.createLabel('Pronoun'),
+            FormFields.createPronounPicker()
+          ),
+          FormFields.createColumn('col-md-4',
             FormFields.createLabel('Phone Number'),
             FormFields.createInput('phone', '555-555-5555', 'text',
               'sd-form__input-text', this.normalizePhone)

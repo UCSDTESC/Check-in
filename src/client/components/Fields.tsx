@@ -1,4 +1,4 @@
-import { UserDiversityOptions, UserYearOptions, UserGenderOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
+import { UserDiversityOptions, UserYearOptions, UserGenderOptions, UserPronounOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
 import React from 'react';
 import { Field, WrappedFieldProps } from 'redux-form';
 import majors from '~/static/Majors.json';
@@ -162,6 +162,25 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ 
   );
 };
 
+export const errorPronounPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
+  meta: { touched, error } }) => {
+  const errorClassName = errorClass(className, touched, error);
+
+  return (
+    <div>
+      <select
+        {...input}
+        className={errorClassName}
+      >
+        <option key={-1} />
+        {UserPronounOptions.map((pronoun, i) =>
+          <option key={i} value={pronoun}>{pronoun}</option>)}
+      </select>
+      {touched && error && createError(error)}
+    </div>
+  );
+};
+
 export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
   meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
@@ -275,6 +294,16 @@ export function createGenderPicker() {
       component={errorGenderPicker}
       className="sd-form__input-select"
       name="gender"
+    />
+  );
+}
+
+export function createPronounPicker() {
+  return (
+    <Field
+      component={errorPronounPicker}
+      className="sd-form__input-select"
+      name="pronoun"
     />
   );
 }

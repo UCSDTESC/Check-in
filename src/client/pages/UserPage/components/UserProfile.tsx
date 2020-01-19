@@ -7,6 +7,7 @@ import FileField from '~/components/FileField';
 
 export interface UserProfileFormData {
   gender: string;
+  pronoun: string;
   newResume: File[];
   shareResume: boolean;
   majorGPA: string;
@@ -37,6 +38,20 @@ class UserProfile extends React.Component<Props> {
       <select {...input} className={className}>
         {genders.map((gender, i) =>
           <option key={i} value={gender}>{gender}</option>)}
+      </select>
+    );
+  };
+
+  pronounSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
+    const pronouns = [
+      'He/Him/His', 'She/Her/Hers', 'They/Them/Theirs',
+      'I prefer not to say', 'Other',
+    ];
+
+    return (
+      <select {...input} className={className}>
+        {pronouns.map((pronoun, i) =>
+          <option key={i} value={pronoun}>{pronoun}</option>)}
       </select>
     );
   };
@@ -229,7 +244,7 @@ class UserProfile extends React.Component<Props> {
         placeholder="No Soylent"
       />
       <div className="row mt-3">
-        <div className="col-lg-6 mb-3">
+        <div className="col-lg-4 mb-3">
           <h5>Gender:</h5>
           <Field
             component={this.genderSelect}
@@ -237,7 +252,15 @@ class UserProfile extends React.Component<Props> {
             className="sd-form__input-select user-profile__select"
           />
         </div>
-        <div className="col-lg-6 mb-3">
+        <div className="col-lg-4 mb-3">
+          <h5>Pronoun:</h5>
+          <Field
+            component={this.pronounSelect}
+            name="pronoun"
+            className="sd-form__input-select user-profile__select"
+          />
+        </div>
+        <div className="col-lg-4 mb-3">
           <h5>T-Shirt Size (Unisex):</h5>
           <Field
             component={this.shirtSizeSelect}
