@@ -1,4 +1,5 @@
 import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
+import { generateQRCodeURL } from '@Shared/QRCodes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
 import { isAcceptableStatus, isRejectableStatus, isWaitlistableStatus, UserStatus } from '@Shared/UserStatus';
@@ -9,11 +10,11 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { sendAcceptanceEmail, sendRejectionEmail, sendWaitlistEmail } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { generateQRCodeURL } from '@Shared/QRCodes'
 
 import { AlertType } from '../pages/AlertPage';
 
 import CheckboxButton from './CheckboxButton';
+import TeamEditModal from './TeamEditModal';
 
 const mapStateToProps = (state: ApplicationState, ownProps: UserProps) => ({
   resume: ownProps.user.resume ? ownProps.user.resume : null,
@@ -34,7 +35,15 @@ interface UserFormData {
 
 type Props = InjectedFormProps<UserFormData, UserProps> & ReturnType<typeof mapStateToProps> & UserProps;
 
-class User extends React.Component<Props> {
+interface UserState {
+  isEditTeamModalOpen: boolean;
+}
+
+class User extends React.Component<Props, UserState> {
+  state: Readonly<UserState> = {
+    isEditTeamModalOpen: false,
+  };
+
   /**
    * Create a download resume button with associated label.
    * @returns {Component[]} The components to render.
@@ -106,19 +115,20 @@ class User extends React.Component<Props> {
 
   renderFormDropdown(label: string, value: string, options: string[], fieldSize: string = 'col-sm-4',
     fieldType: string = 'text', labelSize: string = 'col-sm-2') {
-      return [<label key="0" className={labelSize + ' col-form-label'}>{label}</label>,
-      (
-        <div key="1" className={fieldSize}>
-          <Field
-            name={value}
-            className="form-control"
-            component="select"
-            type={fieldType}>
-              <option></option>
-              {options.map((o, i) => <option key={`opt-${i}`}>{o}</option>)}
-          </Field>
-        </div>
-      )];
+    return [<label key="0" className={labelSize + ' col-form-label'}>{label}</label>,
+    (
+      <div key="1" className={fieldSize}>
+        <Field
+          name={value}
+          className="form-control"
+          component="select"
+          type={fieldType}
+        >
+          <option />
+          {options.map((o, i) => <option key={`opt-${i}`}>{o}</option>)}
+        </Field>
+      </div>
+    )];
   }
 
   renderInstitution(user: TESCUser) {
@@ -159,6 +169,10 @@ class User extends React.Component<Props> {
     );
   }
 
+  toggleTeamEditModal = () => this.setState({
+    isEditTeamModalOpen: !this.state.isEditTeamModalOpen,
+  });
+
   renderTeamFields(event: TESCEvent) {
     const { team } = this.props.user;
     if (!team) {
@@ -166,29 +180,21 @@ class User extends React.Component<Props> {
     }
 
     return (
-      <div className="row">
-        <div className="col-12 col-lg">
-          <h5>Team Fields</h5>
-          <div className="form-group row mb-2">
-            <label className="col-sm-2 col-form-label">
-              Team Code
-            </label>
-            <div className="col-sm-4 col-form-label">
-              {team.code}
-            </div>
-            <label className="col-sm-2 col-form-label">
-              Team Members
-            </label>
-            <div className="col-sm-4 col-form-label">
-              <ul>
-                {team.members.map(member =>
-                  <li key={String(member)}>{member}</li>
-                )}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+      <>
+        <h5>
+          Team {team.code}
+          <button
+            type="button"
+            className={`btn px-2 mx-1 w-auto
+                rounded-button rounded-button--small pull-right`}
+            onClick={() => this.toggleTeamEditModal()}
+          >
+            <FA name="users" className="mr-2" />
+            Edit Team
+          </button>
+        </h5>
+        <TeamEditModal toggle={this.toggleTeamEditModal} open={this.state.isEditTeamModalOpen} />
+      </>
     );
   }
 
@@ -256,7 +262,19 @@ class User extends React.Component<Props> {
       <div>
         <div className="row mb-3">
           <div className="col-md-6">
-            <h3>User <small>{user._id}</small></h3>
+            <h3 className="mb-3">
+              User <small>{user._id}</small>
+              <a
+                className={`btn px-2 mx-1 w-auto my-auto
+                  rounded-button rounded-button--small pull-right`}
+                href={generateQRCodeURL(user)}
+                target="_blank"
+              >
+                <FA name="qrcode" className="mr-2" />
+                QR Code
+              </a>
+            </h3>
+            {event.options.allowTeammates && this.renderTeamFields(event)}
           </div>
           <div className="col-md-6 d-flex flex-row-reverse">
             {isAcceptableStatus(user.status) &&
@@ -289,15 +307,6 @@ class User extends React.Component<Props> {
                 Send Waitlist Email
               </button>
             }
-            <a
-              className={`btn px-2 mx-1 w-auto
-                rounded-button rounded-button--small`}
-                href={generateQRCodeURL(user)}
-                target="_blank"
-            >
-              <FA name="qrcode" className="mr-2" />
-              QR Code
-            </a>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
@@ -343,7 +352,7 @@ class User extends React.Component<Props> {
                     {this.renderFormCheckbox('Bussing', 'bussing', 'col-sm-4')}
                     {this.renderFormCheckbox('Sanitized', 'sanitized',
                       'col-sm-4')}
-                    {this.renderFormDropdown('Status', 'status', 
+                    {this.renderFormDropdown('Status', 'status',
                       Object.values(UserStatus), 'col-sm-4')}
                   </div>
                 </span>
@@ -421,7 +430,6 @@ class User extends React.Component<Props> {
               </div>
             }
           </div>
-          {event.options.allowTeammates && this.renderTeamFields(event)}
           <div className="row">
             <div className="col-12">
               <button
