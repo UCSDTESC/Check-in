@@ -12,6 +12,10 @@ export type CustomFieldProps = WrappedFieldProps & {
   maxLength?: number;
 };
 
+type ApplicationColProps = {
+  className?: string
+}
+
 /**
  * Defines all of the custom fields for the application.
  * Anything beginning with "error" contains a label which renders the error, and
@@ -28,6 +32,12 @@ export function createRow(...content: any[]) {
 
 export const ApplicationRow: FunctionComponent = (props) => (
   <div className="row sd-form__row">
+    {props.children}
+  </div>
+)
+
+export const ApplicationCol: FunctionComponent<ApplicationColProps> = (props) => (
+  <div className={props.className}>
     {props.children}
   </div>
 )
