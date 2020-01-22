@@ -7,7 +7,7 @@ import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
-import { ApplicationRow } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol } from '~/components/Fields';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
   onEmailChange: (newEmail: string) => void;
@@ -129,8 +129,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     if (value === InstitutionType.University) {
       return (
         <ApplicationRow>
-          {FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('University'),
+          <ApplicationCol className='col-sm-12'>
+            {[FormFields.createLabel('University'),
             (
               <Field
                 component={UniversityField}
@@ -138,17 +138,18 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
                 className="sd-form__input-text"
                 placeholder="University"
               />
-            )
-          )}
+            )]}
+          </ApplicationCol>
         </ApplicationRow>
       );
     } else if (value === InstitutionType.HighSchool) {
       return (
         <ApplicationRow>
-          {FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('High School'),
-            FormFields.createInput('highSchool', 'High School')
-          )}
+          <ApplicationCol className="col-sm-12">
+            {[FormFields.createLabel('High School'),
+              FormFields.createInput('highSchool', 'High School')
+            ]}
+          </ApplicationCol>
         </ApplicationRow>
       );
     }
@@ -170,10 +171,10 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     }
     return (
       <ApplicationRow>
-        {FormFields.createColumn('col',
-          FormFields.createLabel('Student PID'),
-          FormFields.createInput('pid', 'AXXXXXXXX')
-        )}
+        <ApplicationCol className='col'>
+          {[FormFields.createLabel('Student PID'),
+          FormFields.createInput('pid', 'AXXXXXXXX')]}
+        </ApplicationCol>
       </ApplicationRow>
       );
   }
@@ -187,14 +188,14 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
     return (
       <ApplicationRow>
-        {[FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Major'),
-          FormFields.createMajorPicker()
-        ),
-        FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Year in School'),
-          FormFields.createYearPicker()
-        )]}
+        <ApplicationCol className='col-lg-6'>
+          {[FormFields.createLabel('Major'),
+          FormFields.createMajorPicker()]}
+        </ApplicationCol>
+        <ApplicationCol className='col-lg-6'>
+          {[FormFields.createLabel('Year in School'),
+          FormFields.createYearPicker()]}
+        </ApplicationCol>
       </ApplicationRow>
     );
   }
@@ -203,17 +204,21 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     const gpaFields = [];
 
     if (enableGPA || requireGPA) {
-      gpaFields.push(FormFields.createColumn('col-lg-6',
-        FormFields.createLabel('Grade Point Average (GPA)', requireGPA),
-        FormFields.createInput('gpa', '4.00')
-      ));
+      gpaFields.push(
+        <ApplicationCol className='col-lg-6'>
+          {[FormFields.createLabel('Grade Point Average (GPA)', requireGPA),
+          FormFields.createInput('gpa', '4.00')]}
+        </ApplicationCol>
+      );
     }
 
     if (requireMajorGPA) {
-      gpaFields.push(FormFields.createColumn('col-lg-6',
-        FormFields.createLabel('Major GPA', true),
-        FormFields.createInput('majorGPA', '4.00')
-      ));
+      gpaFields.push(
+        <ApplicationCol className='col-lg-6'>
+        {[FormFields.createLabel('Major GPA', true),
+        FormFields.createInput('majorGPA', '4.00')]}
+        </ApplicationCol>
+      );
     }
 
     return <ApplicationRow>{[...gpaFields]}</ApplicationRow>;
@@ -230,27 +235,33 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     return (
       <span>
         <ApplicationRow>
-          {[FormFields.createColumn('col-sm-12 no-margin-bottom',
-            FormFields.createLabel('Institution')
-          ),
-          FormFields.createColumn('col-md',
-            this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
-              'UCSD')
-          ),
-          FormFields.createColumn('col-md',
-            this.createInstitutionCard(InstitutionType.University, 'institution-uni',
-              'Other University')
-          ),
-          allowHighSchool ? FormFields.createColumn('col-md',
-            this.createInstitutionCard(InstitutionType.HighSchool,
-              'institution-hs', 'High School')
-          ) : '',
-          FormFields.createColumn('col-sm-12',
+          <ApplicationCol className='col-sm-12 no-margin-bottom'>
+            {FormFields.createLabel('Institution')}
+          </ApplicationCol>
+
+          <ApplicationCol className='col-md'>
+            {this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
+              'UCSD')}
+          </ApplicationCol>
+
+          <ApplicationCol className='col-md'>
+            {this.createInstitutionCard(InstitutionType.University, 'institution-uni',
+              'Other University')}
+          </ApplicationCol>
+
+          {allowHighSchool && 
+            <ApplicationCol className='col-md'>
+            {this.createInstitutionCard(InstitutionType.HighSchool,
+              'institution-hs', 'High School')}
+            </ApplicationCol>
+          }
+          
+          <ApplicationCol className='col-sm-12'>
             <Fields
               names={['institution']}
               component={this.showInstitutionError}
             />
-          )]}
+          </ApplicationCol>
         </ApplicationRow>
         <Fields names={['institution']} component={this.showInstitutionBox} />
         <Fields names={['institution']} component={this.showPIDBox} />
@@ -261,10 +272,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   createDiversityOptions() {
     return (
     <ApplicationRow>
-      {FormFields.createColumn('col-md-6',
-        FormFields.createLabel('What is your race / ethnicity?'),
+      <ApplicationCol className='col-md-6'>
+        {[FormFields.createLabel('What is your race / ethnicity?'),
         FormFields.createDiversityOptions()
-      )}
+        ]}
+      </ApplicationCol>
       </ApplicationRow>);
   }
 
@@ -275,50 +287,54 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     return (
       <form onSubmit={handleSubmit}>
          <ApplicationRow>
-          {[FormFields.createColumn('col-md-6',
-            FormFields.createLabel('First Name'),
-            FormFields.createInput('firstName', 'First Name')
-          ),
-          FormFields.createColumn('col-md-6',
-            FormFields.createLabel('Last Name'),
-            FormFields.createInput('lastName', 'Last Name')
-          )]}
+          <ApplicationCol className="col-md-6">
+            {[FormFields.createLabel('First Name'),
+              FormFields.createInput('firstName', 'First Name')]}
+          </ApplicationCol>
+          <ApplicationCol className="col-md-6">
+            {[FormFields.createLabel('Last Name'),
+              FormFields.createInput('lastName', 'Last Name')
+            ]}
+          </ApplicationCol>
         </ApplicationRow>
         <ApplicationRow>
-          {FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('Email'),
-            this.createEmailField()
-          )}
+          <ApplicationCol className='col-sm-12'>
+            {[FormFields.createLabel('Email'),
+              this.createEmailField()
+            ]}
+          </ApplicationCol>
         </ApplicationRow>
         <ApplicationRow>
-          {FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('Birthdate'),
-            <div className="row">
-              {FormFields.createColumn('col-sm-4',
-                FormFields.createMonthPicker()
-              )}
-              {FormFields.createColumn('col-sm-4',
-                FormFields.createInput('birthdateDay', 'Day', 'number',
-                  'sd-form__input-text mb-1 mb-md-0')
-              )}
-              {FormFields.createColumn('col-sm-4',
-                FormFields.createInput('birthdateYear', 'Year', 'number',
-                  'sd-form__input-text')
-              )}
-            </div>
-          )}
+          <ApplicationCol className='col-sm-12'>
+            {[FormFields.createLabel('Birthdate'),
+              <div className="row">
+                <ApplicationCol className="col-sm-4">
+                  {FormFields.createMonthPicker()}
+                </ApplicationCol>
+                <ApplicationCol className='col-sm-4'>
+                  {FormFields.createInput('birthdateDay', 'Day', 'number',
+                    'sd-form__input-text mb-1 mb-md-0')}
+                </ApplicationCol>
+                <ApplicationCol className='col-sm-4'>,
+                  {FormFields.createInput('birthdateYear', 'Year', 'number',
+                    'sd-form__input-text')}
+                </ApplicationCol> 
+              </div>
+          ]}
+          </ApplicationCol>
         </ApplicationRow>
 
         <ApplicationRow>
-          {[FormFields.createColumn('col-md-6',
-            FormFields.createLabel('Gender'),
+          <ApplicationCol className='col-md-6'>
+          {[FormFields.createLabel('Gender'),
             FormFields.createGenderPicker()
-          ),
-          FormFields.createColumn('col-md-6',
-            FormFields.createLabel('Phone Number'),
+          ]}
+          </ApplicationCol>
+          <ApplicationCol className='col-md-6'>
+            {[FormFields.createLabel('Phone Number'),
             FormFields.createInput('phone', '555-555-5555', 'text',
-              'sd-form__input-text', this.normalizePhone)
-          )]} 
+              'sd-form__input-text', this.normalizePhone)]}
+          </ApplicationCol>
         </ApplicationRow>
 
         {this.renderInstitutionOptions(options.allowHighSchool)}
@@ -326,42 +342,43 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <Fields names={['institution']} component={this.showMajorYearBoxes} />
 
         <ApplicationRow>
-          {[FormFields.createColumn('col-lg-6',
-            FormFields.createLabel('Github Username', false),
-            FormFields.createInput('github', 'Github')
-          ),
-          FormFields.createColumn('col-lg-6',
-            FormFields.createLabel('Personal Website', false),
+          <ApplicationCol className='col-lg-6'>
+           {[ FormFields.createLabel('Github Username', false),
+            FormFields.createInput('github', 'Github')]}
+          </ApplicationCol>
+          <ApplicationCol className='col-lg-6'>
+            {[FormFields.createLabel('Personal Website', false),
             FormFields.createInput('website', 'http://example.com/')
-          )]}
+            ]}
+          </ApplicationCol>
         </ApplicationRow>
 
         {this.createGPAFields(options.enableGPA, options.requireGPA, options.requireMajorGPA)}
         {options.requireDiversityOption && this.createDiversityOptions()}
 
         <ApplicationRow>
-          {FormFields.createColumn('col-md-4 col-md-offset-4',
-            FormFields.createLabel('Resume (5MB Max)', options.requireResume),
+          <ApplicationCol className='col-md-4 col-md-offset-4'>
+            {[FormFields.createLabel('Resume (5MB Max)', options.requireResume),
             this.createResumeUpload()
-          )}
+            ]}
+          </ApplicationCol>
         </ApplicationRow>
 
         <ApplicationRow>
-          {FormFields.createColumn('col-sm-12',
-            this.createShareCheckbox()
-          )}
+          <ApplicationCol className='col-sm-12'>
+            {this.createShareCheckbox()}
+          </ApplicationCol>
         </ApplicationRow>
 
         <ApplicationRow>
-          {FormFields.createColumn('col-sm-12 text-right',
+          <ApplicationCol className='col-sm-12 text-right'>
             <button
               className="btn rounded-button"
               type="submit"
-              disabled={pristine || submitting}
-            >
+              disabled={pristine || submitting}>
               Next
             </button>
-          )}
+          </ApplicationCol>
         </ApplicationRow>
       </form>
     );
