@@ -8,6 +8,7 @@ import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import TeamRegister, { JoinCreateTeamState, TeamRegisterProps } from './TeamRegister';
+import { ApplicationRow } from '~/components/Fields';
 
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }
@@ -35,12 +36,12 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
   showCity(values: any) {
     if (values.outOfState && values.outOfState.input.value === 'true') {
       return (
-        FormFields.createRow(
-          FormFields.createColumn('col-lg-6',
+        <ApplicationRow>
+          {FormFields.createColumn('col-lg-6',
             FormFields.createLabel('If yes, from where?', false),
             FormFields.createInput('city', 'Which city?')
-          )
-        )
+          )}
+        </ApplicationRow>
       );
     }
     return <span />;
@@ -127,8 +128,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
     return (
       <span>
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 no-margin-bottom',
+        <ApplicationRow>
+          {[FormFields.createColumn('col-sm-12 no-margin-bottom',
             FormFields.createLabel('Create or Join a Team')
           ),
           FormFields.createColumn('col-md',
@@ -153,7 +154,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
               generateTeamCode: () => createTeamCode(event._id),
             } as TeamRegisterProps}
           />
-        )}
+        ]}
+        </ApplicationRow>
       </span>
     );
   }
@@ -164,20 +166,21 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
     return (
       <form onSubmit={handleSubmit}>
-        {options.foodOption && FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('What kind of food would you like to see ' +
-              'at the hackathon?', false),
-            FormFields.createTextArea('food', 'Healthy Snacks and Drinks')
-          )
-        )}
+        {options.foodOption && 
+          <ApplicationRow>
+            {FormFields.createColumn('col-sm-12',
+              FormFields.createLabel('What kind of food would you like to see ' +
+                'at the hackathon?', false),
+              FormFields.createTextArea('food', 'Healthy Snacks and Drinks')
+            )}
+          </ApplicationRow>}
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
+        <ApplicationRow>
+          {FormFields.createColumn('col-sm-12',
             FormFields.createLabel('Dietary Restrictions', false),
             FormFields.createTextArea('diet', 'Dietary Restrictions')
-          )
-        )}
+          )}
+        </ApplicationRow>
 
         {options.requireWhyThisEvent &&
           FormFields.createColumn('col-sm-12',
@@ -186,58 +189,69 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           )
         }
 
-        {options.allowOutOfState && FormFields.createRow(
-          FormFields.createColumn('col-lg-12',
-            FormFields.createLabel('I will be travelling from outside the ' +
-              'San Diego county'),
-            FormFields.createRadio('outOfState', true, 'Yes'),
-            FormFields.createRadio('outOfState', false, 'No')
-          )
-        )}
+        {options.allowOutOfState && 
+          <ApplicationRow>
+            {FormFields.createColumn('col-lg-12',
+              FormFields.createLabel('I will be travelling from outside the ' +
+                'San Diego county'),
+              FormFields.createRadio('outOfState', true, 'Yes'),
+              FormFields.createRadio('outOfState', false, 'No')
+            )}
+          </ApplicationRow>
+        }
 
         {options.allowOutOfState &&
           <Fields names={['outOfState']} component={this.showCity} />}
 
-        {options.requireExtraCurriculars && FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
+        {options.requireExtraCurriculars && 
+          <ApplicationRow>
+          {FormFields.createColumn('col-sm-12',
             FormFields.createLabel('Please put down any extra curriculars or Student'
               + ' Organizations you are affiliated with', true),
             FormFields.createTextArea('extraCurriculars', 'Extra Curriculars')
-          )
-        )}
+          )}
+          </ApplicationRow>
+        }
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-12',
+        <ApplicationRow>
+          {FormFields.createColumn('col-12',
             FormFields.createLabel('T-Shirt Size (Unisex)'),
             FormFields.createTShirtSizePicker()
-          )
-        )}
+          )}
+        </ApplicationRow>
 
-        {customQuestions && FormFields.createRow(
-          this.renderCustomQuestions(customQuestions,
-            QuestionType.QUESTION_LONG))}
+        {customQuestions && <ApplicationRow>
+          {this.renderCustomQuestions(customQuestions,
+            QuestionType.QUESTION_LONG)}
+          </ApplicationRow>}
 
-        {options.requireClassRequirement && FormFields.createRow(
-          FormFields.createColumn('col-lg-12',
-            FormFields.createLabel('Have you taken an Advanced Data Structures ' +
-              '(CSE 100) or equivalent class?'),
-            FormFields.createRadio('classRequirement', true, 'Yes'),
-            FormFields.createRadio('classRequirement', false, 'No')
-          )
-        )}
+        {options.requireClassRequirement && 
+          <ApplicationRow>
+            {FormFields.createColumn('col-lg-12',
+              FormFields.createLabel('Have you taken an Advanced Data Structures ' +
+                '(CSE 100) or equivalent class?'),
+              FormFields.createRadio('classRequirement', true, 'Yes'),
+              FormFields.createRadio('classRequirement', false, 'No')
+            )}
+          </ApplicationRow>
+        }
 
-        {customQuestions && FormFields.createRow(
-          this.renderCustomQuestions(customQuestions,
-            QuestionType.QUESTION_SHORT))}
+        {customQuestions && 
+          <ApplicationRow>
+            {this.renderCustomQuestions(customQuestions,
+              QuestionType.QUESTION_SHORT)}
+          </ApplicationRow>}
 
-        {customQuestions && FormFields.createRow(
-          this.renderCustomQuestions(customQuestions,
-            QuestionType.QUESTION_CHECKBOX))}
+        {customQuestions && 
+          <ApplicationRow>
+            {this.renderCustomQuestions(customQuestions,
+              QuestionType.QUESTION_CHECKBOX)}
+          </ApplicationRow>}
 
         {options.allowTeammates && this.renderTeamOptions(this.state.teamState)}
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 col-md-4 text-center',
+        <ApplicationRow>
+          {[FormFields.createColumn('col-sm-12 col-md-4 text-center',
             <button
               className="btn rounded-button rounded-button--secondary"
               type="button"
@@ -254,8 +268,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
             >
               Next!
             </button>
-          )
-        )}
+          )]}
+        </ApplicationRow>
       </form>
     );
   }

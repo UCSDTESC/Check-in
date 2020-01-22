@@ -7,6 +7,7 @@ import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
+import { ApplicationRow } from '~/components/Fields';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
   onEmailChange: (newEmail: string) => void;
@@ -127,8 +128,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     const value: InstitutionType = info.institution.input.value;
     if (value === InstitutionType.University) {
       return (
-        FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
+        <ApplicationRow>
+          {FormFields.createColumn('col-sm-12',
             FormFields.createLabel('University'),
             (
               <Field
@@ -138,17 +139,17 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
                 placeholder="University"
               />
             )
-          )
-        )
+          )}
+        </ApplicationRow>
       );
     } else if (value === InstitutionType.HighSchool) {
       return (
-        FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
+        <ApplicationRow>
+          {FormFields.createColumn('col-sm-12',
             FormFields.createLabel('High School'),
             FormFields.createInput('highSchool', 'High School')
-          )
-        )
+          )}
+        </ApplicationRow>
       );
     }
 
@@ -167,12 +168,14 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     if (institution !== InstitutionType.UCSD) {
       return <span />;
     }
-    return (FormFields.createRow(
-      FormFields.createColumn('col',
-        FormFields.createLabel('Student PID'),
-        FormFields.createInput('pid', 'AXXXXXXXX')
-      )
-    ));
+    return (
+      <ApplicationRow>
+        {FormFields.createColumn('col',
+          FormFields.createLabel('Student PID'),
+          FormFields.createInput('pid', 'AXXXXXXXX')
+        )}
+      </ApplicationRow>
+      );
   }
 
   showMajorYearBoxes(info: any) {
@@ -183,16 +186,16 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     }
 
     return (
-      FormFields.createRow(
-        FormFields.createColumn('col-lg-6',
+      <ApplicationRow>
+        {[FormFields.createColumn('col-lg-6',
           FormFields.createLabel('Major'),
           FormFields.createMajorPicker()
         ),
         FormFields.createColumn('col-lg-6',
           FormFields.createLabel('Year in School'),
           FormFields.createYearPicker()
-        )
-      )
+        )]}
+      </ApplicationRow>
     );
   }
 
@@ -213,7 +216,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       ));
     }
 
-    return FormFields.createRow(...gpaFields);
+    return <ApplicationRow>{[...gpaFields]}</ApplicationRow>;
   }
 
   /**
@@ -226,8 +229,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   renderInstitutionOptions(allowHighSchool: boolean) {
     return (
       <span>
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 no-margin-bottom',
+        <ApplicationRow>
+          {[FormFields.createColumn('col-sm-12 no-margin-bottom',
             FormFields.createLabel('Institution')
           ),
           FormFields.createColumn('col-md',
@@ -247,9 +250,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
               names={['institution']}
               component={this.showInstitutionError}
             />
-          )
-        )}
-
+          )]}
+        </ApplicationRow>
         <Fields names={['institution']} component={this.showInstitutionBox} />
         <Fields names={['institution']} component={this.showPIDBox} />
       </span>
@@ -257,11 +259,13 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   }
 
   createDiversityOptions() {
-    return (FormFields.createRow(
-      FormFields.createColumn('col-md-6',
+    return (
+    <ApplicationRow>
+      {FormFields.createColumn('col-md-6',
         FormFields.createLabel('What is your race / ethnicity?'),
         FormFields.createDiversityOptions()
-      )));
+      )}
+      </ApplicationRow>);
   }
 
   render() {
@@ -270,25 +274,24 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
     return (
       <form onSubmit={handleSubmit}>
-        {FormFields.createRow(
-          FormFields.createColumn('col-md-6',
+         <ApplicationRow>
+          {[FormFields.createColumn('col-md-6',
             FormFields.createLabel('First Name'),
             FormFields.createInput('firstName', 'First Name')
           ),
           FormFields.createColumn('col-md-6',
             FormFields.createLabel('Last Name'),
             FormFields.createInput('lastName', 'Last Name')
-          )
-        )}
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
+          )]}
+        </ApplicationRow>
+        <ApplicationRow>
+          {FormFields.createColumn('col-sm-12',
             FormFields.createLabel('Email'),
             this.createEmailField()
-          )
-        )}
-
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
+          )}
+        </ApplicationRow>
+        <ApplicationRow>
+          {FormFields.createColumn('col-sm-12',
             FormFields.createLabel('Birthdate'),
             <div className="row">
               {FormFields.createColumn('col-sm-4',
@@ -303,11 +306,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
                   'sd-form__input-text')
               )}
             </div>
-          )
-        )}
+          )}
+        </ApplicationRow>
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-md-6',
+        <ApplicationRow>
+          {[FormFields.createColumn('col-md-6',
             FormFields.createLabel('Gender'),
             FormFields.createGenderPicker()
           ),
@@ -315,42 +318,42 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
             FormFields.createLabel('Phone Number'),
             FormFields.createInput('phone', '555-555-5555', 'text',
               'sd-form__input-text', this.normalizePhone)
-          )
-        )}
+          )]} 
+        </ApplicationRow>
 
         {this.renderInstitutionOptions(options.allowHighSchool)}
 
         <Fields names={['institution']} component={this.showMajorYearBoxes} />
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-lg-6',
+        <ApplicationRow>
+          {[FormFields.createColumn('col-lg-6',
             FormFields.createLabel('Github Username', false),
             FormFields.createInput('github', 'Github')
           ),
           FormFields.createColumn('col-lg-6',
             FormFields.createLabel('Personal Website', false),
             FormFields.createInput('website', 'http://example.com/')
-          )
-        )}
+          )]}
+        </ApplicationRow>
 
         {this.createGPAFields(options.enableGPA, options.requireGPA, options.requireMajorGPA)}
         {options.requireDiversityOption && this.createDiversityOptions()}
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-md-4 col-md-offset-4',
+        <ApplicationRow>
+          {FormFields.createColumn('col-md-4 col-md-offset-4',
             FormFields.createLabel('Resume (5MB Max)', options.requireResume),
             this.createResumeUpload()
-          )
-        )}
+          )}
+        </ApplicationRow>
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
+        <ApplicationRow>
+          {FormFields.createColumn('col-sm-12',
             this.createShareCheckbox()
-          )
-        )}
+          )}
+        </ApplicationRow>
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 text-right',
+        <ApplicationRow>
+          {FormFields.createColumn('col-sm-12 text-right',
             <button
               className="btn rounded-button"
               type="submit"
@@ -358,8 +361,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
             >
               Next
             </button>
-          )
-        )}
+          )}
+        </ApplicationRow>
       </form>
     );
   }
