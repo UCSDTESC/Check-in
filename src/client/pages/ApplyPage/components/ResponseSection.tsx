@@ -8,7 +8,7 @@ import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import TeamRegister, { JoinCreateTeamState, TeamRegisterProps } from './TeamRegister';
-import { ApplicationRow, ApplicationCol, ApplicationLabel } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }
@@ -39,7 +39,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         <ApplicationRow>
           <ApplicationCol className='col-lg-6'>
             <ApplicationLabel required={false}>If yes, from where?</ApplicationLabel>
-            {FormFields.createInput('city', 'Which city?')}
+            <ApplicationInput name='city' placeholder='Which city?' />
           </ApplicationCol>
         </ApplicationRow>
       );
@@ -56,6 +56,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         inputField = FormFields.createTextArea;
         break;
       case QuestionType.QUESTION_SHORT:
+        // TODO: migrate to <ApplicationInput />
         inputField = FormFields.createInput;
         break;
       case QuestionType.QUESTION_CHECKBOX:

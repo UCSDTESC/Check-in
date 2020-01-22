@@ -20,7 +20,16 @@ type ApplicationLabelProps = {
   required?: boolean;
   className?: string;
   forTag?: string;
+  //hack?
   children?: string | JSX.Element[] | JSX.Element
+}
+
+type ApplicationInputProps = {
+  className?: string;
+  name?: string;
+  placeholder?: string;
+  type?: string;
+  normalize?: (value: any, previousValue: any) => void = null;
 }
 
 /**
@@ -263,6 +272,23 @@ export function createLabel(text: string, required: boolean = true, className: s
     </label>
   );
 }
+
+export const ApplicationInput: React.StatelessComponent<ApplicationInputProps> = ({
+  className,
+  name,
+  type,
+  normalize,
+  placeholder
+}) => (
+  <Field 
+    className={className || 'sd-form__input-text'}
+    name={name}
+    component={errorTextInput}
+    type={type || 'text'}
+    normalize={normalize}
+    placeholder={placeholder}
+  />
+)
 
 export function createInput(name: string, placeholder: string, type: string = 'text',
   className: string = 'sd-form__input-text',
