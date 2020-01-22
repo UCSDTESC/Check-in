@@ -7,7 +7,7 @@ import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
-import { ApplicationRow, ApplicationCol, ApplicationLabel } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
   onEmailChange: (newEmail: string) => void;
@@ -149,7 +149,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <ApplicationRow>
           <ApplicationCol className="col-sm-12">
             <ApplicationLabel>High School</ApplicationLabel>
-            {FormFields.createInput('highSchool', 'High School')}
+            <ApplicationInput name='highSchool' placeholder='High School' />
           </ApplicationCol>
         </ApplicationRow>
       );
@@ -174,7 +174,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       <ApplicationRow>
         <ApplicationCol className='col'>
           <ApplicationLabel>Student PID</ApplicationLabel>
-          {FormFields.createInput('pid', 'AXXXXXXXX')}
+          <ApplicationInput name='pid' placeholder='AXXXXXXXX' />
         </ApplicationCol>
       </ApplicationRow>
       );
@@ -208,7 +208,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       gpaFields.push(
         <ApplicationCol className='col-lg-6'>
           <ApplicationLabel required={requireGPA}>Grade Point Average (GPA)</ApplicationLabel>
-          FormFields.createInput('gpa', '4.00')]}
+          <ApplicationInput name='gpa' placeholder='4.00'/>
         </ApplicationCol>
       );
     }
@@ -217,7 +217,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       gpaFields.push(
         <ApplicationCol className='col-lg-6'>
           <ApplicationLabel required={true}>Major GPA</ApplicationLabel>
-          {FormFields.createInput('majorGPA', '4.00')}
+          <ApplicationInput name='majorGPA' placeholder='4.00' />
         </ApplicationCol>
       );
     }
@@ -291,11 +291,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
          <ApplicationRow>
           <ApplicationCol className="col-md-6">
             <ApplicationLabel>First Name</ApplicationLabel>
-            {FormFields.createInput('firstName', 'First Name')}
+            <ApplicationInput name='firstName' placeholder='First Name' />
           </ApplicationCol>
           <ApplicationCol className="col-md-6">
             <ApplicationLabel>Last Name</ApplicationLabel>
-            {FormFields.createInput('lastName', 'Last Name')}
+            <ApplicationInput name='lastName' placeholder='Last Name' />
           </ApplicationCol>
         </ApplicationRow>
         <ApplicationRow>
@@ -312,12 +312,12 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
                 {FormFields.createMonthPicker()}
               </ApplicationCol>
               <ApplicationCol className='col-sm-4'>
-                {FormFields.createInput('birthdateDay', 'Day', 'number',
-                  'sd-form__input-text mb-1 mb-md-0')}
+                <ApplicationInput name='birthdateDay' placeholder='Day'
+                  type='number' className='sd-form__input-text mb-1 mb-md-0' />
               </ApplicationCol>
               <ApplicationCol className='col-sm-4'>,
-                {FormFields.createInput('birthdateYear', 'Year', 'number',
-                  'sd-form__input-text')}
+                <ApplicationInput name='birthdateYear' placeholder='Year' 
+                  type='number' className='sd-form__input-text' />
               </ApplicationCol> 
             </div>
           </ApplicationCol>
@@ -330,8 +330,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
           </ApplicationCol>
           <ApplicationCol className='col-md-6'>
             <ApplicationLabel>Phone Number</ApplicationLabel>
-            {FormFields.createInput('phone', '555-555-5555', 'text',
-              'sd-form__input-text', this.normalizePhone)}
+            <ApplicationInput name='phone' placeholder='555-555-5555'
+              type='text' className='sd-form__input-text' normalize={this.normalizePhone} />
           </ApplicationCol>
         </ApplicationRow>
 
@@ -342,11 +342,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <ApplicationRow>
           <ApplicationCol className='col-lg-6'>
            <ApplicationLabel required={false}>Github Username'</ApplicationLabel>
-            {FormFields.createInput('github', 'Github')}
+            <ApplicationInput name='github' placeholder='Github' />
           </ApplicationCol>
           <ApplicationCol className='col-lg-6'>
             <ApplicationLabel required={false}>Personal Website'</ApplicationLabel>
-            {FormFields.createInput('website', 'http://example.com/')}
+            <ApplicationInput name='website' placeholder='http://example.com/' />
           </ApplicationCol>
         </ApplicationRow>
 

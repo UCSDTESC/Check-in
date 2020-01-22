@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
-import { ApplicationRow, ApplicationCol, ApplicationLabel } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 
 interface UserSectionProps extends ApplyPageSectionProps {
   emailExists: boolean;
@@ -128,11 +128,11 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
           </ApplicationCol>
           <ApplicationCol className='col-md-6'>
             <ApplicationLabel>Password</ApplicationLabel>
-            {FormFields.createInput('password', 'Password', 'password')}
+            <ApplicationInput name='password' placeholder='Password' type='password'/>
           </ApplicationCol>
           <ApplicationCol className='col-md-6'>
             <ApplicationLabel>Confirm Password</ApplicationLabel>
-            {FormFields.createInput('confirmPassword', 'Confirm Password', 'password')}
+            <ApplicationInput name='confirmPassword' placeholder='Confirm Password' type='password' />
           </ApplicationCol>
         </ApplicationRow>}
 
