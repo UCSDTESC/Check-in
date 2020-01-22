@@ -24,7 +24,7 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
     columns: {
       username: 'Username',
       role: 'Role',
-      lastAccessed: 'Last Accessed'
+      lastAccessed: 'Last Accessed',
     },
   };
 
@@ -46,11 +46,11 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
   renderAdmin = (admin: Admin) => {
     const {columns} = this.state;
 
-    const adminToBeRendered = {...admin, 
-      lastAccessed: admin.lastAccessed 
-        ? moment(admin.lastAccessed).fromNow() 
-        : 'Never Logged In'
-    }
+    const adminToBeRendered = {...admin,
+                               lastAccessed: admin.lastAccessed
+        ? moment(admin.lastAccessed).fromNow()
+        : 'Never Logged In',
+    };
     return Object.keys(columns).map(column => (
       <td key={column} className="admin-list__value">
         {/*
@@ -58,7 +58,7 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
         // @ts-ignore */}
         {adminToBeRendered[column]}
       </td>)
-    )
+    );
   }
 
   render() {

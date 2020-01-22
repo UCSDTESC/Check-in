@@ -4,11 +4,11 @@ import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Fields, reduxForm, Field, WrappedFieldProps } from 'redux-form';
 import * as FormFields from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput, ApplicationTextArea } from '~/components/Fields';
 import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import TeamRegister, { JoinCreateTeamState, TeamRegisterProps } from './TeamRegister';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }
@@ -37,9 +37,9 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     if (values.outOfState && values.outOfState.input.value === 'true') {
       return (
         <ApplicationRow>
-          <ApplicationCol className='col-lg-6'>
+          <ApplicationCol className="col-lg-6">
             <ApplicationLabel required={false}>If yes, from where?</ApplicationLabel>
-            <ApplicationInput name='city' placeholder='Which city?' />
+            <ApplicationInput name="city" placeholder="Which city?" />
           </ApplicationCol>
         </ApplicationRow>
       );
@@ -68,7 +68,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     }
 
     return customQuestions[type].map(x => (
-      <ApplicationCol className='col-sm-12'>
+      <ApplicationCol className="col-sm-12">
         <ApplicationLabel required={x.isRequired}>{x.question}</ApplicationLabel>
         {inputField(`customQuestionResponses.${x._id}`,
           'Your Response...')}
@@ -101,7 +101,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           className="sd-form__team-input"
           onChange={this.onChangeTeamState}
         />
-        <ApplicationLabel required={false} className='sd-form__team-label' forTag={id}>
+        <ApplicationLabel required={false} className="sd-form__team-label" forTag={id}>
           {label}
         </ApplicationLabel>
       </div>
@@ -132,18 +132,18 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     return (
       <span>
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12 no-margin-bottom'>
+          <ApplicationCol className="col-sm-12 no-margin-bottom">
             <ApplicationLabel>Create or Join a Team</ApplicationLabel>
           </ApplicationCol>
-          <ApplicationCol className='col-md'>
+          <ApplicationCol className="col-md">
             {this.createTeamStateCard(JoinCreateTeamState.CREATE, 'create-team',
               'Create')}
           </ApplicationCol>
-          <ApplicationCol className='col-md'>
+          <ApplicationCol className="col-md">
             {this.createTeamStateCard(JoinCreateTeamState.JOIN, 'join-team',
               'Join')}
           </ApplicationCol>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <Field
               name="teamCode"
               component={this.showTeamError}
@@ -169,34 +169,34 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
     return (
       <form onSubmit={handleSubmit}>
-        {options.foodOption && 
+        {options.foodOption &&
           <ApplicationRow>
-            <ApplicationCol className='col-sm-12'>
+            <ApplicationCol className="col-sm-12">
               <ApplicationLabel required={false}>
                 What kind of food would you like to see at the event?
               </ApplicationLabel>
-              {FormFields.createTextArea('food', 'Healthy Snacks and Drinks')}
+              <ApplicationTextArea name="food" placeholder="Healthy Snacks and Drinks" />
             </ApplicationCol>
           </ApplicationRow>}
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <ApplicationLabel required={false}>Dietary Restrictions</ApplicationLabel>
-            {FormFields.createTextArea('diet', 'Dietary Restrictions')}
+            <ApplicationTextArea name="diet" placeholder="Dietary Restrictions" />
           </ApplicationCol>
         </ApplicationRow>
 
         {options.requireWhyThisEvent &&
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <ApplicationLabel required={true}>
               <>Why Do You Want To Attend {event.name}?</>
             </ApplicationLabel>
-            {FormFields.createTextArea('whyEventResponse', 'Your Response...')}
+            <ApplicationTextArea name="whyEventResponse" placeholder="Your Response..." />
           </ApplicationCol>
         }
 
-        {options.allowOutOfState && 
+        {options.allowOutOfState &&
           <ApplicationRow>
-            <ApplicationCol className='col-lg-12'>
+            <ApplicationCol className="col-lg-12">
               <ApplicationLabel>I will be travelling from outside the San Diego county</ApplicationLabel>
               {FormFields.createRadio('outOfState', true, 'Yes')}
               {FormFields.createRadio('outOfState', false, 'No')}}
@@ -207,19 +207,19 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         {options.allowOutOfState &&
           <Fields names={['outOfState']} component={this.showCity} />}
 
-        {options.requireExtraCurriculars && 
+        {options.requireExtraCurriculars &&
           <ApplicationRow>
-            <ApplicationCol className='col-sm-12'>
+            <ApplicationCol className="col-sm-12">
               <ApplicationLabel required={true}>
                 Please put down any extra curriculars or Student Organizations you are affiliated with
               </ApplicationLabel>
-              {FormFields.createTextArea('extraCurriculars', 'Extra Curriculars')}
+              <ApplicationTextArea name="extraCurriculars" placeholder="Extra Curriculars" />
             </ApplicationCol>
           </ApplicationRow>
         }
 
         <ApplicationRow>
-          <ApplicationCol className='col-12'>
+          <ApplicationCol className="col-12">
             <ApplicationLabel>T-Shirt Size (Unisex)</ApplicationLabel>
             {FormFields.createTShirtSizePicker()}
           </ApplicationCol>
@@ -230,9 +230,9 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
             QuestionType.QUESTION_LONG)}
           </ApplicationRow>}
 
-        {options.requireClassRequirement && 
+        {options.requireClassRequirement &&
           <ApplicationRow>
-            <ApplicationCol className='col-lg-12'>
+            <ApplicationCol className="col-lg-12">
               <ApplicationLabel>
                 Have you taken an Advanced Data Structures (CSE 100) or equivalent class?
               </ApplicationLabel>
@@ -242,13 +242,13 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           </ApplicationRow>
         }
 
-        {customQuestions && 
+        {customQuestions &&
           <ApplicationRow>
             {this.renderCustomQuestions(customQuestions,
               QuestionType.QUESTION_SHORT)}
           </ApplicationRow>}
 
-        {customQuestions && 
+        {customQuestions &&
           <ApplicationRow>
             {this.renderCustomQuestions(customQuestions,
               QuestionType.QUESTION_CHECKBOX)}
@@ -257,7 +257,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         {options.allowTeammates && this.renderTeamOptions(this.state.teamState)}
 
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12 col-md-4 text-center'>
+          <ApplicationCol className="col-sm-12 col-md-4 text-center">
             <button
               className="btn rounded-button rounded-button--secondary"
               type="button"
@@ -266,7 +266,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
               Go Back
             </button>
           </ApplicationCol>
-          <ApplicationCol className='col-sm-12 col-md-8 text-right'>
+          <ApplicationCol className="col-sm-12 col-md-8 text-right">
             <button
               className="btn sd-form__nav-button rounded-button success button"
               type="submit"

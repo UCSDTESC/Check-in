@@ -1,9 +1,9 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 
 interface UserSectionProps extends ApplyPageSectionProps {
   emailExists: boolean;
@@ -57,7 +57,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
     return (
       <span>
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <ApplicationLabel>
             I authorize you to share my application/registration information for event administration,
             ranking, MLH administration, pre- and post-event informational
@@ -69,7 +69,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
         </ApplicationRow>
 
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             {[this.createProvisionBox(),
             <span>
               I agree to the&nbsp;
@@ -83,7 +83,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
               </a>.
             </span>]}
           </ApplicationCol>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             {[this.createAcceptBox(),
             <span>I have read and agree to the&nbsp;
               <a
@@ -108,7 +108,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
     return (
       <form onSubmit={handleSubmit}>
         {emailExists && <ApplicationRow>
-          <ApplicationCol className='col-sm-12 mt-4 text-center'>
+          <ApplicationCol className="col-sm-12 mt-4 text-center">
             <h4 key="0">You&#39;re Almost Done!</h4>,
             <h5 key="1" className="mt-3">
               <strong><i className="fa fa-check" /></strong>
@@ -119,26 +119,26 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
         </ApplicationRow>}
 
         {!emailExists && <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <h4 key="0">You&#39;re Almost Done!</h4>,
             <h5 key="1">
               To complete your application, please add a password
             </h5>
           </ApplicationCol>
-          <ApplicationCol className='col-md-6'>
+          <ApplicationCol className="col-md-6">
             <ApplicationLabel>Password</ApplicationLabel>
-            <ApplicationInput name='password' placeholder='Password' type='password'/>
+            <ApplicationInput name="password" placeholder="Password" type="password"/>
           </ApplicationCol>
-          <ApplicationCol className='col-md-6'>
+          <ApplicationCol className="col-md-6">
             <ApplicationLabel>Confirm Password</ApplicationLabel>
-            <ApplicationInput name='confirmPassword' placeholder='Confirm Password' type='password' />
+            <ApplicationInput name="confirmPassword" placeholder="Confirm Password" type="password" />
           </ApplicationCol>
         </ApplicationRow>}
 
         {options.mlhProvisions && this.createMLHProvisions()}
 
         <ApplicationRow>
-            <ApplicationCol className='col-sm-12 col-md-4 text-center'>
+            <ApplicationCol className="col-sm-12 col-md-4 text-center">
               <button
                 className="btn rounded-button rounded-button--secondary"
                 type="button"
@@ -148,7 +148,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
                 Go Back
               </button>
             </ApplicationCol>
-            <ApplicationCol className='col-sm-12 col-md-8 text-right'>
+            <ApplicationCol className="col-sm-12 col-md-8 text-right">
               <button
                 className="btn sd-form__nav-button rounded-button success button"
                 type="submit"
@@ -157,7 +157,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
                 Apply!
               </button>
             </ApplicationCol>
-            <ApplicationCol className='col-sm-12 col-md-4 text-center'>
+            <ApplicationCol className="col-sm-12 col-md-4 text-center">
               <span>
                 {isSubmitting && <img
                   className="sd-form__loading"
@@ -166,9 +166,9 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
               </span>
             </ApplicationCol>
         </ApplicationRow>
-        
+
         {submitError && <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             {FormFields.createError(submitError.message)}
           </ApplicationCol>
         </ApplicationRow>}
