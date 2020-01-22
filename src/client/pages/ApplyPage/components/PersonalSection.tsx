@@ -7,7 +7,7 @@ import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
-import { ApplicationRow, ApplicationCol } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel } from '~/components/Fields';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
   onEmailChange: (newEmail: string) => void;
@@ -96,7 +96,9 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
           id={id}
           className="sd-form__institution-input"
         />
-        {FormFields.createLabel(label, false, 'sd-form__institution-label', id)}
+        <ApplicationLabel required={false} className='sd-form__institution-label' forTag={id}>
+          {label}
+        </ApplicationLabel>
       </div>
     );
   }
@@ -130,7 +132,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       return (
         <ApplicationRow>
           <ApplicationCol className='col-sm-12'>
-            {[FormFields.createLabel('University'),
+            <ApplicationLabel>University</ApplicationLabel>
             (
               <Field
                 component={UniversityField}
@@ -146,9 +148,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       return (
         <ApplicationRow>
           <ApplicationCol className="col-sm-12">
-            {[FormFields.createLabel('High School'),
-              FormFields.createInput('highSchool', 'High School')
-            ]}
+            <ApplicationLabel>High School</ApplicationLabel>
+            {FormFields.createInput('highSchool', 'High School')}
           </ApplicationCol>
         </ApplicationRow>
       );
@@ -172,8 +173,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     return (
       <ApplicationRow>
         <ApplicationCol className='col'>
-          {[FormFields.createLabel('Student PID'),
-          FormFields.createInput('pid', 'AXXXXXXXX')]}
+          <ApplicationLabel>Student PID</ApplicationLabel>
+          {FormFields.createInput('pid', 'AXXXXXXXX')}
         </ApplicationCol>
       </ApplicationRow>
       );
@@ -189,12 +190,12 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     return (
       <ApplicationRow>
         <ApplicationCol className='col-lg-6'>
-          {[FormFields.createLabel('Major'),
-          FormFields.createMajorPicker()]}
+          <ApplicationLabel>Major</ApplicationLabel>
+          {FormFields.createMajorPicker()}
         </ApplicationCol>
         <ApplicationCol className='col-lg-6'>
-          {[FormFields.createLabel('Year in School'),
-          FormFields.createYearPicker()]}
+          <ApplicationLabel>Year in School</ApplicationLabel>
+          {FormFields.createYearPicker()}
         </ApplicationCol>
       </ApplicationRow>
     );
@@ -206,7 +207,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     if (enableGPA || requireGPA) {
       gpaFields.push(
         <ApplicationCol className='col-lg-6'>
-          {[FormFields.createLabel('Grade Point Average (GPA)', requireGPA),
+          <ApplicationLabel required={requireGPA}>Grade Point Average (GPA)</ApplicationLabel>
           FormFields.createInput('gpa', '4.00')]}
         </ApplicationCol>
       );
@@ -215,8 +216,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     if (requireMajorGPA) {
       gpaFields.push(
         <ApplicationCol className='col-lg-6'>
-        {[FormFields.createLabel('Major GPA', true),
-        FormFields.createInput('majorGPA', '4.00')]}
+          <ApplicationLabel required={true}>Major GPA</ApplicationLabel>
+          {FormFields.createInput('majorGPA', '4.00')}
         </ApplicationCol>
       );
     }
@@ -236,7 +237,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       <span>
         <ApplicationRow>
           <ApplicationCol className='col-sm-12 no-margin-bottom'>
-            {FormFields.createLabel('Institution')}
+            <ApplicationLabel>Institution</ApplicationLabel>
           </ApplicationCol>
 
           <ApplicationCol className='col-md'>
@@ -273,11 +274,12 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     return (
     <ApplicationRow>
       <ApplicationCol className='col-md-6'>
-        {[FormFields.createLabel('What is your race / ethnicity?'),
-        FormFields.createDiversityOptions()
-        ]}
+        <ApplicationLabel>
+          What is your race / ethnicity?
+        </ApplicationLabel>
+        {FormFields.createDiversityOptions()}
       </ApplicationCol>
-      </ApplicationRow>);
+    </ApplicationRow>);
   }
 
   render() {
@@ -288,52 +290,48 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       <form onSubmit={handleSubmit}>
          <ApplicationRow>
           <ApplicationCol className="col-md-6">
-            {[FormFields.createLabel('First Name'),
-              FormFields.createInput('firstName', 'First Name')]}
+            <ApplicationLabel>First Name</ApplicationLabel>
+            {FormFields.createInput('firstName', 'First Name')}
           </ApplicationCol>
           <ApplicationCol className="col-md-6">
-            {[FormFields.createLabel('Last Name'),
-              FormFields.createInput('lastName', 'Last Name')
-            ]}
+            <ApplicationLabel>Last Name</ApplicationLabel>
+            {FormFields.createInput('lastName', 'Last Name')}
           </ApplicationCol>
         </ApplicationRow>
         <ApplicationRow>
           <ApplicationCol className='col-sm-12'>
-            {[FormFields.createLabel('Email'),
-              this.createEmailField()
-            ]}
+            <ApplicationLabel>Email</ApplicationLabel>
+            {this.createEmailField()}
           </ApplicationCol>
         </ApplicationRow>
         <ApplicationRow>
           <ApplicationCol className='col-sm-12'>
-            {[FormFields.createLabel('Birthdate'),
-              <div className="row">
-                <ApplicationCol className="col-sm-4">
-                  {FormFields.createMonthPicker()}
-                </ApplicationCol>
-                <ApplicationCol className='col-sm-4'>
-                  {FormFields.createInput('birthdateDay', 'Day', 'number',
-                    'sd-form__input-text mb-1 mb-md-0')}
-                </ApplicationCol>
-                <ApplicationCol className='col-sm-4'>,
-                  {FormFields.createInput('birthdateYear', 'Year', 'number',
-                    'sd-form__input-text')}
-                </ApplicationCol> 
-              </div>
-          ]}
+            <ApplicationLabel>Birthdate</ApplicationLabel>
+            <div className="row">
+              <ApplicationCol className="col-sm-4">
+                {FormFields.createMonthPicker()}
+              </ApplicationCol>
+              <ApplicationCol className='col-sm-4'>
+                {FormFields.createInput('birthdateDay', 'Day', 'number',
+                  'sd-form__input-text mb-1 mb-md-0')}
+              </ApplicationCol>
+              <ApplicationCol className='col-sm-4'>,
+                {FormFields.createInput('birthdateYear', 'Year', 'number',
+                  'sd-form__input-text')}
+              </ApplicationCol> 
+            </div>
           </ApplicationCol>
         </ApplicationRow>
 
         <ApplicationRow>
           <ApplicationCol className='col-md-6'>
-          {[FormFields.createLabel('Gender'),
-            FormFields.createGenderPicker()
-          ]}
+            <ApplicationLabel>Gender</ApplicationLabel>
+            {FormFields.createGenderPicker()}
           </ApplicationCol>
           <ApplicationCol className='col-md-6'>
-            {[FormFields.createLabel('Phone Number'),
-            FormFields.createInput('phone', '555-555-5555', 'text',
-              'sd-form__input-text', this.normalizePhone)]}
+            <ApplicationLabel>Phone Number</ApplicationLabel>
+            {FormFields.createInput('phone', '555-555-5555', 'text',
+              'sd-form__input-text', this.normalizePhone)}
           </ApplicationCol>
         </ApplicationRow>
 
@@ -343,13 +341,12 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
         <ApplicationRow>
           <ApplicationCol className='col-lg-6'>
-           {[ FormFields.createLabel('Github Username', false),
-            FormFields.createInput('github', 'Github')]}
+           <ApplicationLabel required={false}>Github Username'</ApplicationLabel>
+            {FormFields.createInput('github', 'Github')}
           </ApplicationCol>
           <ApplicationCol className='col-lg-6'>
-            {[FormFields.createLabel('Personal Website', false),
-            FormFields.createInput('website', 'http://example.com/')
-            ]}
+            <ApplicationLabel required={false}>Personal Website'</ApplicationLabel>
+            {FormFields.createInput('website', 'http://example.com/')}
           </ApplicationCol>
         </ApplicationRow>
 
@@ -358,9 +355,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
         <ApplicationRow>
           <ApplicationCol className='col-md-4 col-md-offset-4'>
-            {[FormFields.createLabel('Resume (5MB Max)', options.requireResume),
-            this.createResumeUpload()
-            ]}
+            <ApplicationLabel required={options.requireResume}>Resume (5MB Max)</ApplicationLabel>
+            {this.createResumeUpload()}
           </ApplicationCol>
         </ApplicationRow>
 
