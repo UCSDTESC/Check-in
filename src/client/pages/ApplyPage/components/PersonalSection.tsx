@@ -3,11 +3,11 @@ import { RegisterUserPersonalSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Field, Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
   onEmailChange: (newEmail: string) => void;
@@ -96,7 +96,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
           id={id}
           className="sd-form__institution-input"
         />
-        <ApplicationLabel required={false} className='sd-form__institution-label' forTag={id}>
+        <ApplicationLabel required={false} className="sd-form__institution-label" forTag={id}>
           {label}
         </ApplicationLabel>
       </div>
@@ -131,7 +131,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     if (value === InstitutionType.University) {
       return (
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <ApplicationLabel>University</ApplicationLabel>
             (
               <Field
@@ -149,7 +149,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <ApplicationRow>
           <ApplicationCol className="col-sm-12">
             <ApplicationLabel>High School</ApplicationLabel>
-            <ApplicationInput name='highSchool' placeholder='High School' />
+            <ApplicationInput name="highSchool" placeholder="High School" />
           </ApplicationCol>
         </ApplicationRow>
       );
@@ -172,9 +172,9 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     }
     return (
       <ApplicationRow>
-        <ApplicationCol className='col'>
+        <ApplicationCol className="col">
           <ApplicationLabel>Student PID</ApplicationLabel>
-          <ApplicationInput name='pid' placeholder='AXXXXXXXX' />
+          <ApplicationInput name="pid" placeholder="AXXXXXXXX" />
         </ApplicationCol>
       </ApplicationRow>
       );
@@ -189,11 +189,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
     return (
       <ApplicationRow>
-        <ApplicationCol className='col-lg-6'>
+        <ApplicationCol className="col-lg-6">
           <ApplicationLabel>Major</ApplicationLabel>
           {FormFields.createMajorPicker()}
         </ApplicationCol>
-        <ApplicationCol className='col-lg-6'>
+        <ApplicationCol className="col-lg-6">
           <ApplicationLabel>Year in School</ApplicationLabel>
           {FormFields.createYearPicker()}
         </ApplicationCol>
@@ -206,18 +206,18 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
     if (enableGPA || requireGPA) {
       gpaFields.push(
-        <ApplicationCol className='col-lg-6'>
+        <ApplicationCol className="col-lg-6">
           <ApplicationLabel required={requireGPA}>Grade Point Average (GPA)</ApplicationLabel>
-          <ApplicationInput name='gpa' placeholder='4.00'/>
+          <ApplicationInput name="gpa" placeholder="4.00"/>
         </ApplicationCol>
       );
     }
 
     if (requireMajorGPA) {
       gpaFields.push(
-        <ApplicationCol className='col-lg-6'>
+        <ApplicationCol className="col-lg-6">
           <ApplicationLabel required={true}>Major GPA</ApplicationLabel>
-          <ApplicationInput name='majorGPA' placeholder='4.00' />
+          <ApplicationInput name="majorGPA" placeholder="4.00" />
         </ApplicationCol>
       );
     }
@@ -236,28 +236,28 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     return (
       <span>
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12 no-margin-bottom'>
+          <ApplicationCol className="col-sm-12 no-margin-bottom">
             <ApplicationLabel>Institution</ApplicationLabel>
           </ApplicationCol>
 
-          <ApplicationCol className='col-md'>
+          <ApplicationCol className="col-md">
             {this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
               'UCSD')}
           </ApplicationCol>
 
-          <ApplicationCol className='col-md'>
+          <ApplicationCol className="col-md">
             {this.createInstitutionCard(InstitutionType.University, 'institution-uni',
               'Other University')}
           </ApplicationCol>
 
-          {allowHighSchool && 
-            <ApplicationCol className='col-md'>
+          {allowHighSchool &&
+            <ApplicationCol className="col-md">
             {this.createInstitutionCard(InstitutionType.HighSchool,
               'institution-hs', 'High School')}
             </ApplicationCol>
           }
-          
-          <ApplicationCol className='col-sm-12'>
+
+          <ApplicationCol className="col-sm-12">
             <Fields
               names={['institution']}
               component={this.showInstitutionError}
@@ -273,7 +273,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   createDiversityOptions() {
     return (
     <ApplicationRow>
-      <ApplicationCol className='col-md-6'>
+      <ApplicationCol className="col-md-6">
         <ApplicationLabel>
           What is your race / ethnicity?
         </ApplicationLabel>
@@ -291,47 +291,47 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
          <ApplicationRow>
           <ApplicationCol className="col-md-6">
             <ApplicationLabel>First Name</ApplicationLabel>
-            <ApplicationInput name='firstName' placeholder='First Name' />
+            <ApplicationInput name="firstName" placeholder="First Name" />
           </ApplicationCol>
           <ApplicationCol className="col-md-6">
             <ApplicationLabel>Last Name</ApplicationLabel>
-            <ApplicationInput name='lastName' placeholder='Last Name' />
+            <ApplicationInput name="lastName" placeholder="Last Name" />
           </ApplicationCol>
         </ApplicationRow>
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <ApplicationLabel>Email</ApplicationLabel>
             {this.createEmailField()}
           </ApplicationCol>
         </ApplicationRow>
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             <ApplicationLabel>Birthdate</ApplicationLabel>
             <div className="row">
               <ApplicationCol className="col-sm-4">
                 {FormFields.createMonthPicker()}
               </ApplicationCol>
-              <ApplicationCol className='col-sm-4'>
-                <ApplicationInput name='birthdateDay' placeholder='Day'
-                  type='number' className='sd-form__input-text mb-1 mb-md-0' />
+              <ApplicationCol className="col-sm-4">
+                <ApplicationInput name="birthdateDay" placeholder="Day"
+                  type="number" className="sd-form__input-text mb-1 mb-md-0" />
               </ApplicationCol>
-              <ApplicationCol className='col-sm-4'>,
-                <ApplicationInput name='birthdateYear' placeholder='Year' 
-                  type='number' className='sd-form__input-text' />
-              </ApplicationCol> 
+              <ApplicationCol className="col-sm-4">,
+                <ApplicationInput name="birthdateYear" placeholder="Year"
+                  type="number" className="sd-form__input-text" />
+              </ApplicationCol>
             </div>
           </ApplicationCol>
         </ApplicationRow>
 
         <ApplicationRow>
-          <ApplicationCol className='col-md-6'>
+          <ApplicationCol className="col-md-6">
             <ApplicationLabel>Gender</ApplicationLabel>
             {FormFields.createGenderPicker()}
           </ApplicationCol>
-          <ApplicationCol className='col-md-6'>
+          <ApplicationCol className="col-md-6">
             <ApplicationLabel>Phone Number</ApplicationLabel>
-            <ApplicationInput name='phone' placeholder='555-555-5555'
-              type='text' className='sd-form__input-text' normalize={this.normalizePhone} />
+            <ApplicationInput name="phone" placeholder="555-555-5555"
+              type="text" className="sd-form__input-text" normalize={this.normalizePhone} />
           </ApplicationCol>
         </ApplicationRow>
 
@@ -340,13 +340,13 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <Fields names={['institution']} component={this.showMajorYearBoxes} />
 
         <ApplicationRow>
-          <ApplicationCol className='col-lg-6'>
+          <ApplicationCol className="col-lg-6">
            <ApplicationLabel required={false}>Github Username'</ApplicationLabel>
-            <ApplicationInput name='github' placeholder='Github' />
+            <ApplicationInput name="github" placeholder="Github" />
           </ApplicationCol>
-          <ApplicationCol className='col-lg-6'>
+          <ApplicationCol className="col-lg-6">
             <ApplicationLabel required={false}>Personal Website'</ApplicationLabel>
-            <ApplicationInput name='website' placeholder='http://example.com/' />
+            <ApplicationInput name="website" placeholder="http://example.com/" />
           </ApplicationCol>
         </ApplicationRow>
 
@@ -354,20 +354,20 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         {options.requireDiversityOption && this.createDiversityOptions()}
 
         <ApplicationRow>
-          <ApplicationCol className='col-md-4 col-md-offset-4'>
+          <ApplicationCol className="col-md-4 col-md-offset-4">
             <ApplicationLabel required={options.requireResume}>Resume (5MB Max)</ApplicationLabel>
             {this.createResumeUpload()}
           </ApplicationCol>
         </ApplicationRow>
 
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12'>
+          <ApplicationCol className="col-sm-12">
             {this.createShareCheckbox()}
           </ApplicationCol>
         </ApplicationRow>
 
         <ApplicationRow>
-          <ApplicationCol className='col-sm-12 text-right'>
+          <ApplicationCol className="col-sm-12 text-right">
             <button
               className="btn rounded-button"
               type="submit"

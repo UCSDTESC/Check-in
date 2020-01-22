@@ -1,4 +1,5 @@
 import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
+import { generateQRCodeURL } from '@Shared/QRCodes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
 import { isAcceptableStatus, isRejectableStatus, isWaitlistableStatus, UserStatus } from '@Shared/UserStatus';
@@ -9,7 +10,6 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { sendAcceptanceEmail, sendRejectionEmail, sendWaitlistEmail } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { generateQRCodeURL } from '@Shared/QRCodes'
 
 import { AlertType } from '../pages/AlertPage';
 
@@ -114,7 +114,7 @@ class User extends React.Component<Props> {
             className="form-control"
             component="select"
             type={fieldType}>
-              <option></option>
+              <option/>
               {options.map((o, i) => <option key={`opt-${i}`}>{o}</option>)}
           </Field>
         </div>
@@ -343,7 +343,7 @@ class User extends React.Component<Props> {
                     {this.renderFormCheckbox('Bussing', 'bussing', 'col-sm-4')}
                     {this.renderFormCheckbox('Sanitized', 'sanitized',
                       'col-sm-4')}
-                    {this.renderFormDropdown('Status', 'status', 
+                    {this.renderFormDropdown('Status', 'status',
                       Object.values(UserStatus), 'col-sm-4')}
                   </div>
                 </span>
