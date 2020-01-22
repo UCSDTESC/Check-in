@@ -8,7 +8,7 @@ import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import TeamRegister, { JoinCreateTeamState, TeamRegisterProps } from './TeamRegister';
-import { ApplicationRow, ApplicationCol } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel } from '~/components/Fields';
 
 interface ResponseSectionProps extends ApplyPageSectionProps {
 }
@@ -38,8 +38,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
       return (
         <ApplicationRow>
           <ApplicationCol className='col-lg-6'>
-            {[FormFields.createLabel('If yes, from where?', false),
-            FormFields.createInput('city', 'Which city?')]}
+            <ApplicationLabel required={false}>If yes, from where?</ApplicationLabel>
+            {FormFields.createInput('city', 'Which city?')}
           </ApplicationCol>
         </ApplicationRow>
       );
@@ -68,9 +68,9 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
     return customQuestions[type].map(x => (
       <ApplicationCol className='col-sm-12'>
-        {[FormFields.createLabel(x.question, x.isRequired),
-        inputField(`customQuestionResponses.${x._id}`,
-          'Your Response...')]}
+        <ApplicationLabel required={x.isRequired}>{x.question}</ApplicationLabel>
+        {inputField(`customQuestionResponses.${x._id}`,
+          'Your Response...')}
       </ApplicationCol>
     ));
   }
@@ -100,7 +100,9 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           className="sd-form__team-input"
           onChange={this.onChangeTeamState}
         />
-        {FormFields.createLabel(label, false, 'sd-form__team-label', id)}
+        <ApplicationLabel required={false} className='sd-form__team-label' forTag={id}>
+          {label}
+        </ApplicationLabel>
       </div>
     );
   }
@@ -130,7 +132,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
       <span>
         <ApplicationRow>
           <ApplicationCol className='col-sm-12 no-margin-bottom'>
-            {FormFields.createLabel('Create or Join a Team')}
+            <ApplicationLabel>Create or Join a Team</ApplicationLabel>
           </ApplicationCol>
           <ApplicationCol className='col-md'>
             {this.createTeamStateCard(JoinCreateTeamState.CREATE, 'create-team',
@@ -169,32 +171,34 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         {options.foodOption && 
           <ApplicationRow>
             <ApplicationCol className='col-sm-12'>
-              {[FormFields.createLabel('What kind of food would you like to see ' +
-                'at the event?', false),
-              FormFields.createTextArea('food', 'Healthy Snacks and Drinks')]}
+              <ApplicationLabel required={false}>
+                What kind of food would you like to see at the event?
+              </ApplicationLabel>
+              {FormFields.createTextArea('food', 'Healthy Snacks and Drinks')}
             </ApplicationCol>
           </ApplicationRow>}
         <ApplicationRow>
           <ApplicationCol className='col-sm-12'>
-            {[FormFields.createLabel('Dietary Restrictions', false),
-            FormFields.createTextArea('diet', 'Dietary Restrictions')]}
+            <ApplicationLabel required={false}>Dietary Restrictions</ApplicationLabel>
+            {FormFields.createTextArea('diet', 'Dietary Restrictions')}
           </ApplicationCol>
         </ApplicationRow>
 
         {options.requireWhyThisEvent &&
           <ApplicationCol className='col-sm-12'>
-            {[FormFields.createLabel(`Why Do You Want To Attend ${event.name}?`, true),
-            FormFields.createTextArea('whyEventResponse', 'Your Response...')]}
+            <ApplicationLabel required={true}>
+              <>Why Do You Want To Attend {event.name}?</>
+            </ApplicationLabel>
+            {FormFields.createTextArea('whyEventResponse', 'Your Response...')}
           </ApplicationCol>
         }
 
         {options.allowOutOfState && 
           <ApplicationRow>
             <ApplicationCol className='col-lg-12'>
-              {[FormFields.createLabel('I will be travelling from outside the ' +
-                'San Diego county'),
-              FormFields.createRadio('outOfState', true, 'Yes'),
-              FormFields.createRadio('outOfState', false, 'No')]}
+              <ApplicationLabel>I will be travelling from outside the San Diego county</ApplicationLabel>
+              {FormFields.createRadio('outOfState', true, 'Yes')}
+              {FormFields.createRadio('outOfState', false, 'No')}}
             </ApplicationCol>
           </ApplicationRow>
         }
@@ -205,17 +209,18 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         {options.requireExtraCurriculars && 
           <ApplicationRow>
             <ApplicationCol className='col-sm-12'>
-              {[FormFields.createLabel('Please put down any extra curriculars or Student'
-                + ' Organizations you are affiliated with', true),
-              FormFields.createTextArea('extraCurriculars', 'Extra Curriculars')]}
+              <ApplicationLabel required={true}>
+                Please put down any extra curriculars or Student Organizations you are affiliated with
+              </ApplicationLabel>
+              {FormFields.createTextArea('extraCurriculars', 'Extra Curriculars')}
             </ApplicationCol>
           </ApplicationRow>
         }
 
         <ApplicationRow>
           <ApplicationCol className='col-12'>
-            {[FormFields.createLabel('T-Shirt Size (Unisex)'),
-            FormFields.createTShirtSizePicker()]}
+            <ApplicationLabel>T-Shirt Size (Unisex)</ApplicationLabel>
+            {FormFields.createTShirtSizePicker()}
           </ApplicationCol>
         </ApplicationRow>
 
@@ -227,10 +232,11 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         {options.requireClassRequirement && 
           <ApplicationRow>
             <ApplicationCol className='col-lg-12'>
-              {[FormFields.createLabel('Have you taken an Advanced Data Structures ' +
-                '(CSE 100) or equivalent class?'),
-              FormFields.createRadio('classRequirement', true, 'Yes'),
-              FormFields.createRadio('classRequirement', false, 'No')]}
+              <ApplicationLabel>
+                Have you taken an Advanced Data Structures (CSE 100) or equivalent class?
+              </ApplicationLabel>
+              {FormFields.createRadio('classRequirement', true, 'Yes')}
+              {FormFields.createRadio('classRequirement', false, 'No')}
             </ApplicationCol>
           </ApplicationRow>
         }

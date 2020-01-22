@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
-import { ApplicationRow, ApplicationCol } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel } from '~/components/Fields';
 
 interface UserSectionProps extends ApplyPageSectionProps {
   emailExists: boolean;
@@ -58,12 +58,13 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
       <span>
         <ApplicationRow>
           <ApplicationCol className='col-sm-12'>
-            {FormFields.createLabel(`I authorize you to share my
-            application/registration information for event administration,
+            <ApplicationLabel>
+            I authorize you to share my application/registration information for event administration,
             ranking, MLH administration, pre- and post-event informational
             e-mails, and occasional messages about hackathons in-line with the
             MLH Privacy Policy. I further I agree to the terms of both the MLH
-            Contest Terms and Conditions and the MLH Privacy Policy.`)}
+            Contest Terms and Conditions and the MLH Privacy Policy.
+            </ApplicationLabel>
           </ApplicationCol>
         </ApplicationRow>
 
@@ -125,12 +126,12 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
             </h5>
           </ApplicationCol>
           <ApplicationCol className='col-md-6'>
-            {[FormFields.createLabel('Password'),
-            FormFields.createInput('password', 'Password', 'password')]}
+            <ApplicationLabel>Password</ApplicationLabel>
+            {FormFields.createInput('password', 'Password', 'password')}
           </ApplicationCol>
           <ApplicationCol className='col-md-6'>
-            {[FormFields.createLabel('Confirm Password'),
-            FormFields.createInput('confirmPassword', 'Confirm Password', 'password')]}
+            <ApplicationLabel>Confirm Password</ApplicationLabel>
+            {FormFields.createInput('confirmPassword', 'Confirm Password', 'password')}
           </ApplicationCol>
         </ApplicationRow>}
 

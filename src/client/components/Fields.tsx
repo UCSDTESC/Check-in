@@ -16,6 +16,13 @@ type ApplicationColProps = {
   className?: string
 }
 
+type ApplicationLabelProps = {
+  required?: boolean;
+  className?: string;
+  forTag?: string;
+  children?: string | JSX.Element[] | JSX.Element
+}
+
 /**
  * Defines all of the custom fields for the application.
  * Anything beginning with "error" contains a label which renders the error, and
@@ -234,6 +241,16 @@ export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({ i
     </div>
   );
 };
+
+export const ApplicationLabel: FunctionComponent<ApplicationLabelProps> = 
+  ({required, className, forTag, children}) => (
+    <label
+      className={'sd-form__label ' + (required ? 'sd-form__required ' + className : className)}
+      htmlFor={forTag}
+    >
+      <>{children}</>
+    </label>
+) 
 
 export function createLabel(text: string, required: boolean = true, className: string = '',
   forTag: string = '') {
