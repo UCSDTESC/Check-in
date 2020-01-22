@@ -1,5 +1,5 @@
 import { UserDiversityOptions, UserYearOptions, UserGenderOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Field, WrappedFieldProps } from 'redux-form';
 import majors from '~/static/Majors.json';
 
@@ -25,6 +25,12 @@ export function createRow(...content: any[]) {
     </div>
   );
 }
+
+export const ApplicationRow: FunctionComponent = (props) => (
+  <div className="row sd-form__row">
+    {props.children}
+  </div>
+)
 
 export function createColumn(size: string, ...content: any[]) {
   return (
