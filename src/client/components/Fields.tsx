@@ -24,18 +24,25 @@ type ApplicationLabelProps = {
   children?: string | JSX.Element[] | JSX.Element;
 };
 
-type ApplicationInputProps = {
+export type ApplicationInputProps = {
   className?: string;
   name?: string;
   placeholder?: string;
   type?: string;
-  normalize?: (value: any, previousValue: any) => void = null;
+  normalize?: (value: any, previousValue: any) => void;
 };
 
-type ApplicationTextAreaProps = {
+export type ApplicationTextAreaProps = {
   name?: string;
   placeholder?: string;
   maxLength?: number;
+  className?: string;
+};
+
+type ApplicationRadioProps = {
+  name?: string;
+  value?: any;
+  label?: string;
   className?: string;
 };
 
@@ -259,7 +266,7 @@ export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({ i
 };
 
 export const ApplicationLabel: FunctionComponent<ApplicationLabelProps> =
-  ({required, className, forTag, children}) => (
+  ({required = true, className = '', forTag = '', children}) => (
     <label
       className={'sd-form__label ' + (required ? 'sd-form__required ' + className : className)}
       htmlFor={forTag}
@@ -281,17 +288,17 @@ export function createLabel(text: string, required: boolean = true, className: s
 }
 
 export const ApplicationInput: React.StatelessComponent<ApplicationInputProps> = ({
-  className,
+  className = 'sd-form__input-text' ,
   name,
-  type,
+  type = 'text',
   normalize,
   placeholder,
 }) => (
   <Field
-    className={className || 'sd-form__input-text'}
+    className={className}
     name={name}
     component={errorTextInput}
-    type={type || 'text'}
+    type={type}
     normalize={normalize}
     placeholder={placeholder}
   />
@@ -313,7 +320,7 @@ export function createInput(name: string, placeholder: string, type: string = 't
 }
 
 export const ApplicationTextArea: React.FunctionComponent<ApplicationTextAreaProps> =
-  ({className, name, maxLength, placeholder}) => (
+  ({className = 'sd-form__input-textarea', name, maxLength = null, placeholder}) => (
     <Field
       className={className}
       name={name}
@@ -322,19 +329,6 @@ export const ApplicationTextArea: React.FunctionComponent<ApplicationTextAreaPro
       placeholder={placeholder}
     />
 );
-
-export function createTextArea(name: string, placeholder: string,
-  maxLength: number = null, className: string = 'sd-form__input-textarea') {
-  return (
-    <Field
-      className={className}
-      name={name}
-      maxLength={maxLength}
-      component={errorTextArea}
-      placeholder={placeholder}
-    />
-  );
-}
 
 export function createMonthPicker(name: string = null) {
   return (
@@ -396,9 +390,8 @@ export function createMajorPicker() {
   );
 }
 
-export function createRadio(name: string, value: any, label: string,
-  className: string = 'sd-form__input-radio') {
-  return (
+export const ApplicationRadio: FunctionComponent<ApplicationRadioProps> =
+  ({className = 'sd-form__input-radio', name, value, label}) => (
     <Field
       component={errorRadio}
       className={className}
@@ -406,5 +399,4 @@ export function createRadio(name: string, value: any, label: string,
       defaultVal={String(value)}
       label={label}
     />
-  );
-}
+);

@@ -4,7 +4,7 @@ import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Fields, reduxForm, Field, WrappedFieldProps } from 'redux-form';
 import * as FormFields from '~/components/Fields';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput, ApplicationTextArea } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput, ApplicationTextArea, ApplicationRadio, ApplicationTextAreaProps, ApplicationInputProps } from '~/components/Fields';
 import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
@@ -49,29 +49,33 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
   // TODO: Make into a statically-typed method
   renderCustomQuestions(customQuestions: CustomQuestions, type: QuestionType) {
-    let inputField: (fieldName: string, value: any, ...otherArgs: any[]) => JSX.Element | JSX.Element[] = null;
+    let InputField: React.FunctionComponent<
+      { name: string }
+      | ApplicationTextAreaProps
+      | ApplicationInputProps
+    > = null;
 
     switch (type) {
       case QuestionType.QUESTION_LONG:
-        inputField = FormFields.createTextArea;
+        InputField = ApplicationTextArea;
         break;
       case QuestionType.QUESTION_SHORT:
-        // TODO: migrate to <ApplicationInput />
-        inputField = FormFields.createInput;
+        InputField = ApplicationInput;
         break;
       case QuestionType.QUESTION_CHECKBOX:
-        inputField = (name: string) => [
-          FormFields.createRadio(name, true, 'Yes'),
-          FormFields.createRadio(name, false, 'No'),
-        ];
+        InputField = ({name}) => (
+          <>
+            <ApplicationRadio name={name} value={true} label={'Yes'} />
+            <ApplicationRadio name={name} value={false} label={'No'} />
+          </>
+        );
         break;
     }
 
     return customQuestions[type].map(x => (
       <ApplicationCol className="col-sm-12">
         <ApplicationLabel required={x.isRequired}>{x.question}</ApplicationLabel>
-        {inputField(`customQuestionResponses.${x._id}`,
-          'Your Response...')}
+        {<InputField name={`customQuestionResponses.${x._id}`} placeholder={'Your Response...'}/>}
       </ApplicationCol>
     ));
   }
@@ -157,7 +161,6 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
               generateTeamCode: () => createTeamCode(event._id),
             } as TeamRegisterProps}
           />
-        ]}
         </ApplicationRow>
       </span>
     );
@@ -198,8 +201,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           <ApplicationRow>
             <ApplicationCol className="col-lg-12">
               <ApplicationLabel>I will be travelling from outside the San Diego county</ApplicationLabel>
-              {FormFields.createRadio('outOfState', true, 'Yes')}
-              {FormFields.createRadio('outOfState', false, 'No')}}
+              <ApplicationRadio name='outOfState' value={true} label='Yes' />
+              <ApplicationRadio name='outOfState' value={false} label='No' />
             </ApplicationCol>
           </ApplicationRow>
         }
@@ -236,8 +239,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
               <ApplicationLabel>
                 Have you taken an Advanced Data Structures (CSE 100) or equivalent class?
               </ApplicationLabel>
-              {FormFields.createRadio('classRequirement', true, 'Yes')}
-              {FormFields.createRadio('classRequirement', false, 'No')}
+              <ApplicationRadio name='classRequirement' value={true} label='Yes' />
+              <ApplicationRadio name='classRequirement' value={false} label='No' />
             </ApplicationCol>
           </ApplicationRow>
         }
