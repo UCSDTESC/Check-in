@@ -146,11 +146,6 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
 
     const {previewMode} = this.props;
 
-    if (previewMode) {
-      // TODO: show some kind of error to user here?
-      return;
-    }
-
     values = this.sanitiseValues(values);
 
     this.setState({
@@ -285,6 +280,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
               validate={validator}
               event={event}
               emailExists={emailExists}
+              previewMode={previewMode}
             />}
             {page === 4 && <SubmittedSection event={event} />}
           </div>

@@ -8,7 +8,6 @@ type ViewApplicationProps = {
 
 class ViewApplication extends React.Component<ViewApplicationProps, {}> {
 
-
   render() {
     const {event} = this.props;
     const isEventClosed = new Date(event.closeTime) < new Date
