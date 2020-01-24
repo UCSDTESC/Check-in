@@ -26,6 +26,7 @@ import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
 import TeamsTab from './tabs/TeamsTab';
+import ViewApplication from './components/ViewApplication';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -258,13 +259,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
                 className="d-none d-md-block"
               />
 
-              <Link
-                to={`/register/${event.alias}`}
-                className={`btn event-page__btn rounded-button
-                rounded-button--small rounded-button--arrow`}
-              >
-                Go To Form
-              </Link>
+              <ViewApplication event={event} />
             </div>
           </div>
 

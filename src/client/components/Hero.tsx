@@ -23,7 +23,6 @@ export default class Hero extends React.Component<HeroProps> {
 
     return (
       <div className={heroClass} style={heroStyle}>
-        <NavHeader />
       </div>
     );
   }
