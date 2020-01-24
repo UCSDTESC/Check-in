@@ -8,7 +8,7 @@ class PreviewApplication extends React.Component {
     return (
       <>
         <Alert color="danger">
-          You are in preview mode. You will not be able to create an application
+          You are in preview mode.
         </Alert>
         <ApplyPage previewMode={true} />
       </>
