@@ -8,7 +8,7 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
     const { statistics } = this.props;
 
     // Create the data array needed to make the line chart
-    const appsTimeData: { date: string; appCount: number }[] = [];
+    const appsTimeData: Array<{ date: string; appCount: number }> = [];
 
     Object.keys(statistics.appsOverTime).forEach(key => {
       if (key !== 'null') {
