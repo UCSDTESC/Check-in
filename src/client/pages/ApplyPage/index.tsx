@@ -5,7 +5,6 @@ import Progress from 'react-progress';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Loading from '~/components/Loading';
-import NavHeader from '~/components/NavHeader';
 import { registerUser, loadEventByAlias, checkUserExists } from '~/data/UserApi';
 
 import Header from './components/Header';
@@ -16,9 +15,10 @@ import UserSection, { UserSectionFormData } from './components/UserSection';
 import createValidator from './validate';
 
 interface ApplyPageProps {
+  previewMode?: boolean;
 }
 
-type Props = RouteComponentProps<{
+type Props = ApplyPageProps & RouteComponentProps<{
   eventAlias: string;
 }>;
 
@@ -143,6 +143,9 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
    * @param {Object} values The validated form data.
    */
   onFinalSubmit = (values: ApplyPageFormData) => {
+
+    const {previewMode} = this.props;
+
     values = this.sanitiseValues(values);
 
     this.setState({
@@ -203,11 +206,11 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
 
   render() {
     const {page, event, emailExists} = this.state;
+    const {previewMode} = this.props;
 
     if (!event) {
       return (
       <div className="page apply-page apply-page--loading">
-        <NavHeader />
         <Loading title="Registration" />
       </div>
       );
@@ -217,10 +220,9 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     const validator = createValidator(options, event.customQuestions);
 
     // Check for closed
-    if (new Date(event.closeTime) < new Date()) {
+    if (!previewMode && new Date(event.closeTime) < new Date()) {
       return (
       <div className="page apply-page">
-        <NavHeader />
         <div className="container">
           <div className="row">
             <div className="col-md-4 text-md-right text-center">
@@ -250,7 +252,6 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
 
     return (
       <div className="page apply-page">
-        <NavHeader />
         <div className="sd-form__wrapper">
           <Progress percent={(page * 100) / 4} className="sd-form__progress" />
           <div className="sd-form">
@@ -279,6 +280,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
               validate={validator}
               event={event}
               emailExists={emailExists}
+              previewMode={previewMode}
             />}
             {page === 4 && <SubmittedSection event={event} />}
           </div>
