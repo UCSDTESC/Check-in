@@ -9,5 +9,6 @@ declare module 'victory' {
     eventKey?: StringOrNumberOrCallback;
     style?: Pick<VictoryStyleInterface, 'parent'>;
     minDomain?: number | { x?: number, y?: number };
+    maxDomain?: number | { x?: number, y?: number };
   }
 }
