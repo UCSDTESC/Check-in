@@ -23,14 +23,16 @@ export default class StatisticsTab extends EventPageTab<StatisticsTabProps> {
     return (
       <div className="tab-page__contents">
         <div className="row">
+          <div className="col-12">
+            <AppsOverTimeStatistics event={event} statistics={statistics} />
+          </div>
+        </div>
+        <div className="row">
           <div className="col-lg-4 col-md-6">
             <EventStatisticsCharts event={event} statistics={statistics} />
           </div>
           <div className="col-lg-4 col-md-6">
             <GenderStatistics event={event} statistics={statistics} />
-          </div>
-          <div className="col-lg-4 col-md-6">
-            <AppsOverTimeStatistics event={event} statistics={statistics} />
           </div>
         </div>
       </div>
