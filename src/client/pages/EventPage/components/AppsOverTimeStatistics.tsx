@@ -18,6 +18,16 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
       });
     }
 
+    // Lastest applicants vs time data
+    const latest = appsTimeData[appsTimeData.length - 1];
+
+    const axisStyles = {
+      tickLabels: { fontSize: 5, padding: 5 },
+      ticks: { size: 2 },
+      grid: { opacity: 0 },
+      axisLabel: { fontSize: 8, padding: 20 },
+    };
+
     return (
       <div className="event-statistics event-page__card">
         <h2>Applicants Over Time</h2>
@@ -25,8 +35,10 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
           <div className="col-12">
             <VictoryChart
               theme={VictoryTheme.material}
-              width={475}
               minDomain={{ y: 0 }}
+              maxDomain={{ y: latest.appCount + 3, x: appsTimeData.length + 1 }}
+              height={150}
+              padding={{ top: 10, bottom: 45, left: 35, right: 35 }}
               containerComponent={
                 <VictoryVoronoiContainer
                   labels={data => data.appCount}
@@ -45,6 +57,16 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
                 data={appsTimeData}
                 x="date"
                 y="appCount"
+                animate={{
+                  duration: 1000,
+                  easing: "cubic"
+                }}
+                style={{
+                  data: {
+                    strokeWidth: 2,
+                    strokeLinecap: "round"
+                  },
+                }}
               />
               <VictoryAxis tickCount={6} />
               <VictoryAxis dependentAxis={true} />
