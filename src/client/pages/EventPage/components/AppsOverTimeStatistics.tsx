@@ -10,14 +10,13 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
     // Create the data array needed to make the line chart
     const appsTimeData: Array<{ date: string; appCount: number }> = [];
 
-    Object.keys(statistics.appsOverTime).forEach(key => {
-      if (key !== 'null') {
-        appsTimeData.push({
-          date: key,
-          appCount: statistics.appsOverTime[key],
-        });
-      }
-    });
+    // Push stats query data to array of data points
+    for (const [key, value] of Object.entries(statistics.appsOverTime)) {
+      appsTimeData.push({
+        date: key,
+        appCount: value,
+      });
+    }
 
     return (
       <div className="event-statistics event-page__card">
