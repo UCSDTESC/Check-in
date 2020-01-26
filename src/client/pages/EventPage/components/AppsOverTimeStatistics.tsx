@@ -1,5 +1,5 @@
 import React from 'react';
-import { VictoryChart, VictoryAxis, VictoryLine, VictoryTheme } from 'victory';
+import { VictoryChart, VictoryAxis, VictoryLine, VictoryTheme, VictoryVoronoiContainer, VictoryTooltip } from 'victory';
 
 import EventStatisticsComponent from './EventStatisticsComponent';
 
@@ -28,6 +28,19 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
               theme={VictoryTheme.material}
               width={475}
               minDomain={{ y: 0 }}
+              containerComponent={
+                <VictoryVoronoiContainer
+                  labels={data => data.appCount}
+                  labelComponent={
+                    <VictoryTooltip
+                      cornerRadius={2}
+                      pointerLength={2}
+                      style={{ fontSize: 5 }}
+                      flyoutStyle={{ strokeWidth: .5 }}
+                    />
+                  }
+                />
+              }
             >
               <VictoryLine
                 data={appsTimeData}
