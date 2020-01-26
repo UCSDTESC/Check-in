@@ -68,8 +68,8 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
                   },
                 }}
               />
-              <VictoryAxis tickCount={6} />
-              <VictoryAxis dependentAxis={true} />
+              <VictoryAxis tickCount={6} style={axisStyles} label="Date" />
+              <VictoryAxis dependentAxis={true} style={axisStyles} label="Applicant Count" />
             </VictoryChart>
           </div>
         </div>
