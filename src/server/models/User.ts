@@ -12,7 +12,6 @@ import { generateQRCodeURL } from '@Shared/QRCodes';
 
 export type UserDocument = TESCUser & Document & {
   csvFlatten: (isSponsor? : boolean, emailsOnly? : boolean) => any;
-  //csvFlattenForEmails: () => any;
   attach: (name: string, options: any) => Promise<UserDocument>;
 };
 export type UserModel = Model<UserDocument>;

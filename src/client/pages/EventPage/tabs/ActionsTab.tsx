@@ -73,7 +73,7 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
             </a>
 
             <a
-              className="btn event-page__btn rounded-button rounded-button--small"
+              className="btn event-page__btn rounded-button rounded-button--small ml-0 mt-2"
               onClick={this.exportEmails}
               href="#"
             >
