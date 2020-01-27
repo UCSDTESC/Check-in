@@ -243,12 +243,13 @@ export const pollDownload = (downloadId: string) =>
  * Requests the download of all users as a CSV file. Returned as a request since
  * it downloads a CSV blob.
  * @param {String} eventAlias The alias associated with the event.
+ * @param {boolean} emailsOnly True if only want to export emails.
  * @returns {Request} A request object not wrapped in a promise.
  */
-export const exportUsers = (eventAlias: string): SuperAgentRequest =>
+export const exportUsers = (eventAlias: string, emailsOnly: boolean): SuperAgentRequest =>
   request
     .post(`/export/`)
-    .send({alias: eventAlias} as ExportUsersRequest)
+    .send({alias: eventAlias, emailsOnly: emailsOnly} as ExportUsersRequest)
     .set('Authorization', cookies.get(CookieTypes.admin.token))
     .use(adminApiPrefix);
 
