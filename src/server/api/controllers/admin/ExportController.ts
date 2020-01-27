@@ -32,7 +32,8 @@ export class ExportController {
     }
 
     const eventUsers = await this.UserService.getAllUsersByEvent(event);
-    const flattenedUsers = eventUsers.map(user => user.csvFlatten());
+
+    var flattenedUsers = eventUsers.map(user => user.csvFlatten(false, body.emailsOnly));
 
     const fileName = `${event.alias}-${moment().format()}.csv`;
     const csv = this.CSVService.parseJSONToCSV(flattenedUsers);
