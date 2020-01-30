@@ -1,7 +1,7 @@
 import React from 'react';
 import { WrappedFieldProps } from 'redux-form';
 import AutoSuggest from '~/components/AutoSuggest';
-import * as FormFields from '~/components/Fields';
+import {ApplicationError} from '~/components/Fields';
 import { getSuggestions } from '~/static/Universities';
 
 interface UniversityFieldProps {
@@ -35,7 +35,7 @@ export default class UniversityField extends React.Component<Props> {
           onSuggestionSelected={this.onUniversitySelected}
           minChars={3}
         />
-        {touched && error && FormFields.createError(error)}
+        {touched && error && <ApplicationError>{error}</ApplicationError>}
       </div>
     );
   }

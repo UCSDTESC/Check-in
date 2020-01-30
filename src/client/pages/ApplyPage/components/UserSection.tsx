@@ -1,7 +1,6 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form';
-import * as FormFields from '~/components/Fields';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput, ApplicationError } from '~/components/Fields';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 
@@ -71,7 +70,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
 
         <ApplicationRow>
           <ApplicationCol className="col-sm-12">
-            {[this.createProvisionBox(),
+            {this.createProvisionBox()}
             <span>
               I agree to the&nbsp;
               <a
@@ -82,10 +81,10 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
               >
                 MLH Data Sharing Policy
               </a>.
-            </span>]}
+            </span>
           </ApplicationCol>
           <ApplicationCol className="col-sm-12">
-            {[this.createAcceptBox(),
+            {this.createAcceptBox()}
             <span>I have read and agree to the&nbsp;
               <a
                 className="sd-link__underline sd-link__hover-purple"
@@ -95,7 +94,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
               >
                 MLH Code of Conduct
               </a>
-            </span>]}
+            </span>
           </ApplicationCol>
         </ApplicationRow>
       </span>
@@ -170,7 +169,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
 
         {submitError && <ApplicationRow>
           <ApplicationCol className="col-sm-12">
-            {FormFields.createError(submitError.message)}
+            <ApplicationError>{submitError.message}</ApplicationError>
           </ApplicationCol>
         </ApplicationRow>}
       </form>

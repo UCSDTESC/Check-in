@@ -3,7 +3,13 @@ import { RegisterUserPersonalSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Field, Fields, reduxForm } from 'redux-form';
 import * as FormFields from '~/components/Fields';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput } from '~/components/Fields';
+import { 
+  ApplicationRow, 
+  ApplicationCol, 
+  ApplicationLabel, 
+  ApplicationInput, 
+  ApplicationDiversityOptions,
+  ApplicationError } from '~/components/Fields';
 import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
@@ -116,7 +122,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     }
 
     return (
-      FormFields.createError(error)
+      <ApplicationError>{error}</ApplicationError>
     );
   }
 
@@ -277,7 +283,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <ApplicationLabel>
           What is your race / ethnicity?
         </ApplicationLabel>
-        {FormFields.createDiversityOptions()}
+        <ApplicationDiversityOptions />
       </ApplicationCol>
     </ApplicationRow>);
   }

@@ -89,6 +89,15 @@ export function createError(text: string) {
   );
 }
 
+export const ApplicationError: FunctionComponent<{}> = (props) => {
+  return (
+    <div className="sd-form__error">
+      <strong><i className="fa fa-exclamation-triangle" /> </strong>
+      {props.children}
+    </div>
+  );
+}
+
 export function errorClass(className: string, touched: boolean, error: boolean) {
   return className + (touched && error ? ' ' + 'sd-form__input--error' : '');
 }
@@ -350,7 +359,7 @@ export function createGenderPicker() {
   );
 }
 
-export function createDiversityOptions() {
+export function ApplicationDiversityOptions() {
   return (
     <Field
       component={errorDiversityOptions}

@@ -4,7 +4,7 @@ import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Fields, reduxForm, Field, WrappedFieldProps } from 'redux-form';
 import * as FormFields from '~/components/Fields';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput, ApplicationTextArea, ApplicationRadio, ApplicationTextAreaProps, ApplicationInputProps } from '~/components/Fields';
+import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput, ApplicationTextArea, ApplicationRadio, ApplicationTextAreaProps, ApplicationInputProps, ApplicationError } from '~/components/Fields';
 import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
@@ -123,7 +123,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     }
 
     return (
-      FormFields.createError(error)
+      <ApplicationError>{error}</ApplicationError>
     );
   }
 
