@@ -2,7 +2,7 @@ import React from 'react';
 import Dropzone from 'react-dropzone';
 import { WrappedFieldProps } from 'redux-form';
 
-import * as FormFields from './Fields';
+import { ApplicationError } from './Fields';
 
 interface FileFieldProps {
   accept?: string;
@@ -72,7 +72,7 @@ export default class FileField extends React.Component<Props> {
             </div>
           )}
         </Dropzone>
-        {touched && error && FormFields.createError(error)}
+        {touched && error && <ApplicationError>{error}</ApplicationError>}
       </>
     );
   }

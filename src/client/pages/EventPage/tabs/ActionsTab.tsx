@@ -79,7 +79,7 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
             >
               Export User Emails
             </a>
-            
+
           </div>
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />

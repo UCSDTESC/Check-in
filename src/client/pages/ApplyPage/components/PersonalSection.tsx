@@ -2,7 +2,18 @@ import { TESCEvent } from '@Shared/ModelTypes';
 import { RegisterUserPersonalSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Field, Fields, reduxForm } from 'redux-form';
-import * as FormFields from '~/components/Fields';
+import {
+  ApplicationRow,
+  ApplicationCol,
+  ApplicationLabel,
+  ApplicationInput,
+  ApplicationDiversityOptions,
+  ApplicationError,
+  ApplicationMajorPicker,
+  ApplicationYearPicker,
+  ApplicationMonthPicker,
+  ApplicationGenderPicker,
+  errorTextInput } from '~/components/Fields';
 import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
@@ -33,7 +44,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       <Field
         className={'sd-form__input-email'}
         name={'email'}
-        component={FormFields.errorTextInput}
+        component={errorTextInput}
         placeholder={'email@university.edu'}
         type={'email'}
         onBlur={(e: React.FormEvent<HTMLInputElement>) => this.props.onEmailChange(e.currentTarget.value)}
@@ -95,7 +106,9 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
           id={id}
           className="sd-form__institution-input"
         />
-        {FormFields.createLabel(label, false, 'sd-form__institution-label', id)}
+        <ApplicationLabel required={false} className="sd-form__institution-label" forTag={id}>
+          {label}
+        </ApplicationLabel>
       </div>
     );
   }
@@ -113,7 +126,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     }
 
     return (
-      FormFields.createError(error)
+      <ApplicationError>{error}</ApplicationError>
     );
   }
 
@@ -127,9 +140,9 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     const value: InstitutionType = info.institution.input.value;
     if (value === InstitutionType.University) {
       return (
-        FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('University'),
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12">
+            <ApplicationLabel>University</ApplicationLabel>
             (
               <Field
                 component={UniversityField}
@@ -137,18 +150,18 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
                 className="sd-form__input-text"
                 placeholder="University"
               />
-            )
-          )
-        )
+            )]}
+          </ApplicationCol>
+        </ApplicationRow>
       );
     } else if (value === InstitutionType.HighSchool) {
       return (
-        FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('High School'),
-            FormFields.createInput('highSchool', 'High School')
-          )
-        )
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12">
+            <ApplicationLabel>High School</ApplicationLabel>
+            <ApplicationInput name="highSchool" placeholder="High School" />
+          </ApplicationCol>
+        </ApplicationRow>
       );
     }
 
@@ -167,12 +180,14 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     if (institution !== InstitutionType.UCSD) {
       return <span />;
     }
-    return (FormFields.createRow(
-      FormFields.createColumn('col',
-        FormFields.createLabel('Student PID'),
-        FormFields.createInput('pid', 'AXXXXXXXX')
-      )
-    ));
+    return (
+      <ApplicationRow>
+        <ApplicationCol className="col">
+          <ApplicationLabel>Student PID</ApplicationLabel>
+          <ApplicationInput name="pid" placeholder="AXXXXXXXX" />
+        </ApplicationCol>
+      </ApplicationRow>
+      );
   }
 
   showMajorYearBoxes(info: any) {
@@ -183,16 +198,16 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     }
 
     return (
-      FormFields.createRow(
-        FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Major'),
-          FormFields.createMajorPicker()
-        ),
-        FormFields.createColumn('col-lg-6',
-          FormFields.createLabel('Year in School'),
-          FormFields.createYearPicker()
-        )
-      )
+      <ApplicationRow>
+        <ApplicationCol className="col-lg-6">
+          <ApplicationLabel>Major</ApplicationLabel>
+          <ApplicationMajorPicker />
+        </ApplicationCol>
+        <ApplicationCol className="col-lg-6">
+          <ApplicationLabel>Year in School</ApplicationLabel>
+          <ApplicationYearPicker />
+        </ApplicationCol>
+      </ApplicationRow>
     );
   }
 
@@ -200,20 +215,24 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     const gpaFields = [];
 
     if (enableGPA || requireGPA) {
-      gpaFields.push(FormFields.createColumn('col-lg-6',
-        FormFields.createLabel('Grade Point Average (GPA)', requireGPA),
-        FormFields.createInput('gpa', '4.00')
-      ));
+      gpaFields.push(
+        <ApplicationCol className="col-lg-6">
+          <ApplicationLabel required={requireGPA}>Grade Point Average (GPA)</ApplicationLabel>
+          <ApplicationInput name="gpa" placeholder="4.00"/>
+        </ApplicationCol>
+      );
     }
 
     if (requireMajorGPA) {
-      gpaFields.push(FormFields.createColumn('col-lg-6',
-        FormFields.createLabel('Major GPA', true),
-        FormFields.createInput('majorGPA', '4.00')
-      ));
+      gpaFields.push(
+        <ApplicationCol className="col-lg-6">
+          <ApplicationLabel required={true}>Major GPA</ApplicationLabel>
+          <ApplicationInput name="majorGPA" placeholder="4.00" />
+        </ApplicationCol>
+      );
     }
 
-    return FormFields.createRow(...gpaFields);
+    return <ApplicationRow>{[...gpaFields]}</ApplicationRow>;
   }
 
   /**
@@ -226,30 +245,35 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   renderInstitutionOptions(allowHighSchool: boolean) {
     return (
       <span>
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 no-margin-bottom',
-            FormFields.createLabel('Institution')
-          ),
-          FormFields.createColumn('col-md',
-            this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
-              'UCSD')
-          ),
-          FormFields.createColumn('col-md',
-            this.createInstitutionCard(InstitutionType.University, 'institution-uni',
-              'Other University')
-          ),
-          allowHighSchool ? FormFields.createColumn('col-md',
-            this.createInstitutionCard(InstitutionType.HighSchool,
-              'institution-hs', 'High School')
-          ) : '',
-          FormFields.createColumn('col-sm-12',
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12 no-margin-bottom">
+            <ApplicationLabel>Institution</ApplicationLabel>
+          </ApplicationCol>
+
+          <ApplicationCol className="col-md">
+            {this.createInstitutionCard(InstitutionType.UCSD, 'institution-ucsd',
+              'UCSD')}
+          </ApplicationCol>
+
+          <ApplicationCol className="col-md">
+            {this.createInstitutionCard(InstitutionType.University, 'institution-uni',
+              'Other University')}
+          </ApplicationCol>
+
+          {allowHighSchool &&
+            <ApplicationCol className="col-md">
+            {this.createInstitutionCard(InstitutionType.HighSchool,
+              'institution-hs', 'High School')}
+            </ApplicationCol>
+          }
+
+          <ApplicationCol className="col-sm-12">
             <Fields
               names={['institution']}
               component={this.showInstitutionError}
             />
-          )
-        )}
-
+          </ApplicationCol>
+        </ApplicationRow>
         <Fields names={['institution']} component={this.showInstitutionBox} />
         <Fields names={['institution']} component={this.showPIDBox} />
       </span>
@@ -257,11 +281,15 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   }
 
   createDiversityOptions() {
-    return (FormFields.createRow(
-      FormFields.createColumn('col-md-6',
-        FormFields.createLabel('What is your race / ethnicity?'),
-        FormFields.createDiversityOptions()
-      )));
+    return (
+    <ApplicationRow>
+      <ApplicationCol className="col-md-6">
+        <ApplicationLabel>
+          What is your race / ethnicity?
+        </ApplicationLabel>
+        <ApplicationDiversityOptions />
+      </ApplicationCol>
+    </ApplicationRow>);
   }
 
   render() {
@@ -270,96 +298,94 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
 
     return (
       <form onSubmit={handleSubmit}>
-        {FormFields.createRow(
-          FormFields.createColumn('col-md-6',
-            FormFields.createLabel('First Name'),
-            FormFields.createInput('firstName', 'First Name')
-          ),
-          FormFields.createColumn('col-md-6',
-            FormFields.createLabel('Last Name'),
-            FormFields.createInput('lastName', 'Last Name')
-          )
-        )}
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('Email'),
-            this.createEmailField()
-          )
-        )}
-
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('Birthdate'),
+         <ApplicationRow>
+          <ApplicationCol className="col-md-6">
+            <ApplicationLabel>First Name</ApplicationLabel>
+            <ApplicationInput name="firstName" placeholder="First Name" />
+          </ApplicationCol>
+          <ApplicationCol className="col-md-6">
+            <ApplicationLabel>Last Name</ApplicationLabel>
+            <ApplicationInput name="lastName" placeholder="Last Name" />
+          </ApplicationCol>
+        </ApplicationRow>
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12">
+            <ApplicationLabel>Email</ApplicationLabel>
+            {this.createEmailField()}
+          </ApplicationCol>
+        </ApplicationRow>
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12">
+            <ApplicationLabel>Birthdate</ApplicationLabel>
             <div className="row">
-              {FormFields.createColumn('col-sm-4',
-                FormFields.createMonthPicker()
-              )}
-              {FormFields.createColumn('col-sm-4',
-                FormFields.createInput('birthdateDay', 'Day', 'number',
-                  'sd-form__input-text mb-1 mb-md-0')
-              )}
-              {FormFields.createColumn('col-sm-4',
-                FormFields.createInput('birthdateYear', 'Year', 'number',
-                  'sd-form__input-text')
-              )}
+              <ApplicationCol className="col-sm-4">
+                <ApplicationMonthPicker />
+              </ApplicationCol>
+              <ApplicationCol className="col-sm-4">
+                <ApplicationInput name="birthdateDay" placeholder="Day"
+                  type="number" className="sd-form__input-text mb-1 mb-md-0" />
+              </ApplicationCol>
+              <ApplicationCol className="col-sm-4">,
+                <ApplicationInput name="birthdateYear" placeholder="Year"
+                  type="number" className="sd-form__input-text" />
+              </ApplicationCol>
             </div>
-          )
-        )}
+          </ApplicationCol>
+        </ApplicationRow>
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-md-6',
-            FormFields.createLabel('Gender'),
-            FormFields.createGenderPicker()
-          ),
-          FormFields.createColumn('col-md-6',
-            FormFields.createLabel('Phone Number'),
-            FormFields.createInput('phone', '555-555-5555', 'text',
-              'sd-form__input-text', this.normalizePhone)
-          )
-        )}
+        <ApplicationRow>
+          <ApplicationCol className="col-md-6">
+            <ApplicationLabel>Gender</ApplicationLabel>
+            <ApplicationGenderPicker />
+          </ApplicationCol>
+          <ApplicationCol className="col-md-6">
+            <ApplicationLabel>Phone Number</ApplicationLabel>
+            <ApplicationInput name="phone" placeholder="555-555-5555"
+              type="text" className="sd-form__input-text" normalize={this.normalizePhone} />
+          </ApplicationCol>
+        </ApplicationRow>
 
         {this.renderInstitutionOptions(options.allowHighSchool)}
 
         <Fields names={['institution']} component={this.showMajorYearBoxes} />
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-lg-6',
-            FormFields.createLabel('Github Username', false),
-            FormFields.createInput('github', 'Github')
-          ),
-          FormFields.createColumn('col-lg-6',
-            FormFields.createLabel('Personal Website', false),
-            FormFields.createInput('website', 'http://example.com/')
-          )
-        )}
+        <ApplicationRow>
+          <ApplicationCol className="col-lg-6">
+           <ApplicationLabel required={false}>Github Username'</ApplicationLabel>
+            <ApplicationInput name="github" placeholder="Github" />
+          </ApplicationCol>
+          <ApplicationCol className="col-lg-6">
+            <ApplicationLabel required={false}>Personal Website'</ApplicationLabel>
+            <ApplicationInput name="website" placeholder="http://example.com/" />
+          </ApplicationCol>
+        </ApplicationRow>
 
         {this.createGPAFields(options.enableGPA, options.requireGPA, options.requireMajorGPA)}
         {options.requireDiversityOption && this.createDiversityOptions()}
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-md-4 col-md-offset-4',
-            FormFields.createLabel('Resume (5MB Max)', options.requireResume),
-            this.createResumeUpload()
-          )
-        )}
+        <ApplicationRow>
+          <ApplicationCol className="col-md-4 col-md-offset-4">
+            <ApplicationLabel required={options.requireResume}>Resume (5MB Max)</ApplicationLabel>
+            {this.createResumeUpload()}
+          </ApplicationCol>
+        </ApplicationRow>
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            this.createShareCheckbox()
-          )
-        )}
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12">
+            {this.createShareCheckbox()}
+          </ApplicationCol>
+        </ApplicationRow>
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 text-right',
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12 text-right">
             <button
               className="btn rounded-button"
               type="submit"
-              disabled={pristine || submitting}
-            >
+              disabled={pristine || submitting}>
               Next
             </button>
-          )
-        )}
+          </ApplicationCol>
+        </ApplicationRow>
       </form>
     );
   }

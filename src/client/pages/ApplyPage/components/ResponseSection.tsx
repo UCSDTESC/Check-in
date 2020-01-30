@@ -3,7 +3,17 @@ import { QuestionType } from '@Shared/Questions';
 import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Fields, reduxForm, Field, WrappedFieldProps } from 'redux-form';
-import * as FormFields from '~/components/Fields';
+import {
+  ApplicationRow,
+  ApplicationCol,
+  ApplicationLabel,
+  ApplicationInput,
+  ApplicationTextArea,
+  ApplicationRadio,
+  ApplicationTextAreaProps,
+  ApplicationInputProps,
+  ApplicationError,
+  ApplicationTShirtPicker } from '~/components/Fields';
 import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
@@ -35,12 +45,12 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
   showCity(values: any) {
     if (values.outOfState && values.outOfState.input.value === 'true') {
       return (
-        FormFields.createRow(
-          FormFields.createColumn('col-lg-6',
-            FormFields.createLabel('If yes, from where?', false),
-            FormFields.createInput('city', 'Which city?')
-          )
-        )
+        <ApplicationRow>
+          <ApplicationCol className="col-lg-6">
+            <ApplicationLabel required={false}>If yes, from where?</ApplicationLabel>
+            <ApplicationInput name="city" placeholder="Which city?" />
+          </ApplicationCol>
+        </ApplicationRow>
       );
     }
     return <span />;
@@ -48,29 +58,34 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
   // TODO: Make into a statically-typed method
   renderCustomQuestions(customQuestions: CustomQuestions, type: QuestionType) {
-    let inputField: (fieldName: string, value: any, ...otherArgs: any[]) => JSX.Element | JSX.Element[] = null;
+    let InputField: React.FunctionComponent<
+      { name: string }
+      | ApplicationTextAreaProps
+      | ApplicationInputProps
+    > = null;
 
     switch (type) {
       case QuestionType.QUESTION_LONG:
-        inputField = FormFields.createTextArea;
+        InputField = ApplicationTextArea;
         break;
       case QuestionType.QUESTION_SHORT:
-        inputField = FormFields.createInput;
+        InputField = ApplicationInput;
         break;
       case QuestionType.QUESTION_CHECKBOX:
-        inputField = (name: string) => [
-          FormFields.createRadio(name, true, 'Yes'),
-          FormFields.createRadio(name, false, 'No'),
-        ];
+        InputField = ({name}) => (
+          <>
+            <ApplicationRadio name={name} value={true} label={'Yes'} />
+            <ApplicationRadio name={name} value={false} label={'No'} />
+          </>
+        );
         break;
     }
 
     return customQuestions[type].map(x => (
-      FormFields.createColumn('col-sm-12',
-        FormFields.createLabel(x.question, x.isRequired),
-        inputField(`customQuestionResponses.${x._id}`,
-          'Your Response...')
-      )
+      <ApplicationCol className="col-sm-12">
+        <ApplicationLabel required={x.isRequired}>{x.question}</ApplicationLabel>
+        {<InputField name={`customQuestionResponses.${x._id}`} placeholder={'Your Response...'}/>}
+      </ApplicationCol>
     ));
   }
 
@@ -99,7 +114,9 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           className="sd-form__team-input"
           onChange={this.onChangeTeamState}
         />
-        {FormFields.createLabel(label, false, 'sd-form__team-label', id)}
+        <ApplicationLabel required={false} className="sd-form__team-label" forTag={id}>
+          {label}
+        </ApplicationLabel>
       </div>
     );
   }
@@ -115,7 +132,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
     }
 
     return (
-      FormFields.createError(error)
+      <ApplicationError>{error}</ApplicationError>
     );
   }
 
@@ -127,24 +144,24 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
     return (
       <span>
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 no-margin-bottom',
-            FormFields.createLabel('Create or Join a Team')
-          ),
-          FormFields.createColumn('col-md',
-            this.createTeamStateCard(JoinCreateTeamState.CREATE, 'create-team',
-              'Create')
-          ),
-          FormFields.createColumn('col-md',
-            this.createTeamStateCard(JoinCreateTeamState.JOIN, 'join-team',
-              'Join')
-          ),
-          FormFields.createColumn('col-sm-12',
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12 no-margin-bottom">
+            <ApplicationLabel>Create or Join a Team</ApplicationLabel>
+          </ApplicationCol>
+          <ApplicationCol className="col-md">
+            {this.createTeamStateCard(JoinCreateTeamState.CREATE, 'create-team',
+              'Create')}
+          </ApplicationCol>
+          <ApplicationCol className="col-md">
+            {this.createTeamStateCard(JoinCreateTeamState.JOIN, 'join-team',
+              'Join')}
+          </ApplicationCol>
+          <ApplicationCol className="col-sm-12">
             <Field
               name="teamCode"
               component={this.showTeamError}
             />
-          ),
+          </ApplicationCol>
           <Field
             name="teamCode"
             component={TeamRegister}
@@ -153,7 +170,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
               generateTeamCode: () => createTeamCode(event._id),
             } as TeamRegisterProps}
           />
-        )}
+        </ApplicationRow>
       </span>
     );
   }
@@ -164,80 +181,95 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
 
     return (
       <form onSubmit={handleSubmit}>
-        {options.foodOption && FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('What kind of food would you like to see ' +
-              'at the hackathon?', false),
-            FormFields.createTextArea('food', 'Healthy Snacks and Drinks')
-          )
-        )}
-
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('Dietary Restrictions', false),
-            FormFields.createTextArea('diet', 'Dietary Restrictions')
-          )
-        )}
+        {options.foodOption &&
+          <ApplicationRow>
+            <ApplicationCol className="col-sm-12">
+              <ApplicationLabel required={false}>
+                What kind of food would you like to see at the event?
+              </ApplicationLabel>
+              <ApplicationTextArea name="food" placeholder="Healthy Snacks and Drinks" />
+            </ApplicationCol>
+          </ApplicationRow>}
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12">
+            <ApplicationLabel required={false}>Dietary Restrictions</ApplicationLabel>
+            <ApplicationTextArea name="diet" placeholder="Dietary Restrictions" />
+          </ApplicationCol>
+        </ApplicationRow>
 
         {options.requireWhyThisEvent &&
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel(`Why Do You Want To Attend ${event.name}?`, true),
-            FormFields.createTextArea('whyEventResponse', 'Your Response...')
-          )
+          <ApplicationCol className="col-sm-12">
+            <ApplicationLabel required={true}>
+              <>Why Do You Want To Attend {event.name}?</>
+            </ApplicationLabel>
+            <ApplicationTextArea name="whyEventResponse" placeholder="Your Response..." />
+          </ApplicationCol>
         }
 
-        {options.allowOutOfState && FormFields.createRow(
-          FormFields.createColumn('col-lg-12',
-            FormFields.createLabel('I will be travelling from outside the ' +
-              'San Diego county'),
-            FormFields.createRadio('outOfState', true, 'Yes'),
-            FormFields.createRadio('outOfState', false, 'No')
-          )
-        )}
+        {options.allowOutOfState &&
+          <ApplicationRow>
+            <ApplicationCol className="col-lg-12">
+              <ApplicationLabel>I will be travelling from outside the San Diego county</ApplicationLabel>
+              <ApplicationRadio name="outOfState" value={true} label="Yes" />
+              <ApplicationRadio name="outOfState" value={false} label="No" />
+            </ApplicationCol>
+          </ApplicationRow>
+        }
 
         {options.allowOutOfState &&
           <Fields names={['outOfState']} component={this.showCity} />}
 
-        {options.requireExtraCurriculars && FormFields.createRow(
-          FormFields.createColumn('col-sm-12',
-            FormFields.createLabel('Please put down any extra curriculars or Student'
-              + ' Organizations you are affiliated with', true),
-            FormFields.createTextArea('extraCurriculars', 'Extra Curriculars')
-          )
-        )}
+        {options.requireExtraCurriculars &&
+          <ApplicationRow>
+            <ApplicationCol className="col-sm-12">
+              <ApplicationLabel required={true}>
+                Please put down any extra curriculars or Student Organizations you are affiliated with
+              </ApplicationLabel>
+              <ApplicationTextArea name="extraCurriculars" placeholder="Extra Curriculars" />
+            </ApplicationCol>
+          </ApplicationRow>
+        }
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-12',
-            FormFields.createLabel('T-Shirt Size (Unisex)'),
-            FormFields.createTShirtSizePicker()
-          )
-        )}
+        <ApplicationRow>
+          <ApplicationCol className="col-12">
+            <ApplicationLabel>T-Shirt Size (Unisex)</ApplicationLabel>
+            <ApplicationTShirtPicker />
+          </ApplicationCol>
+        </ApplicationRow>
 
-        {customQuestions && FormFields.createRow(
-          this.renderCustomQuestions(customQuestions,
-            QuestionType.QUESTION_LONG))}
+        {customQuestions && <ApplicationRow>
+          {this.renderCustomQuestions(customQuestions,
+            QuestionType.QUESTION_LONG)}
+          </ApplicationRow>}
 
-        {options.requireClassRequirement && FormFields.createRow(
-          FormFields.createColumn('col-lg-12',
-            FormFields.createLabel('Have you taken an Advanced Data Structures ' +
-              '(CSE 100) or equivalent class?'),
-            FormFields.createRadio('classRequirement', true, 'Yes'),
-            FormFields.createRadio('classRequirement', false, 'No')
-          )
-        )}
+        {options.requireClassRequirement &&
+          <ApplicationRow>
+            <ApplicationCol className="col-lg-12">
+              <ApplicationLabel>
+                Have you taken an Advanced Data Structures (CSE 100) or equivalent class?
+              </ApplicationLabel>
+              <ApplicationRadio name="classRequirement" value={true} label="Yes" />
+              <ApplicationRadio name="classRequirement" value={false} label="No" />
+            </ApplicationCol>
+          </ApplicationRow>
+        }
 
-        {customQuestions && FormFields.createRow(
-          this.renderCustomQuestions(customQuestions,
-            QuestionType.QUESTION_SHORT))}
+        {customQuestions &&
+          <ApplicationRow>
+            {this.renderCustomQuestions(customQuestions,
+              QuestionType.QUESTION_SHORT)}
+          </ApplicationRow>}
 
-        {customQuestions && FormFields.createRow(
-          this.renderCustomQuestions(customQuestions,
-            QuestionType.QUESTION_CHECKBOX))}
+        {customQuestions &&
+          <ApplicationRow>
+            {this.renderCustomQuestions(customQuestions,
+              QuestionType.QUESTION_CHECKBOX)}
+          </ApplicationRow>}
 
         {options.allowTeammates && this.renderTeamOptions(this.state.teamState)}
 
-        {FormFields.createRow(
-          FormFields.createColumn('col-sm-12 col-md-4 text-center',
+        <ApplicationRow>
+          <ApplicationCol className="col-sm-12 col-md-4 text-center">
             <button
               className="btn rounded-button rounded-button--secondary"
               type="button"
@@ -245,8 +277,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
             >
               Go Back
             </button>
-          ),
-          FormFields.createColumn('col-sm-12 col-md-8 text-right',
+          </ApplicationCol>
+          <ApplicationCol className="col-sm-12 col-md-8 text-right">
             <button
               className="btn sd-form__nav-button rounded-button success button"
               type="submit"
@@ -254,8 +286,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
             >
               Next!
             </button>
-          )
-        )}
+          </ApplicationCol>
+        </ApplicationRow>
       </form>
     );
   }

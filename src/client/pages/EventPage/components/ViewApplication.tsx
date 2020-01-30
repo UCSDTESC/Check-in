@@ -1,18 +1,18 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
 import { TESCEvent } from '@Shared/ModelTypes';
-import { UncontrolledTooltip } from 'reactstrap/lib/Uncontrolled';
+import React from 'react';
 import FA from 'react-fontawesome';
+import { Link } from 'react-router-dom';
+import { UncontrolledTooltip } from 'reactstrap/lib/Uncontrolled';
 
 type ViewApplicationProps = {
-  event: TESCEvent
-}
+  event: TESCEvent;
+};
 
 class ViewApplication extends React.Component<ViewApplicationProps, {}> {
 
   render() {
     const {event} = this.props;
-    const isEventClosed = new Date(event.closeTime) < new Date
+    const isEventClosed = new Date(event.closeTime) < new Date;
     return (
       <>
         {isEventClosed && <Link

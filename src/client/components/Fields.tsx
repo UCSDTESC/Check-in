@@ -1,5 +1,5 @@
 import { UserDiversityOptions, UserYearOptions, UserGenderOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
-import React from 'react';
+import React, { FunctionComponent } from 'react';
 import { Field, WrappedFieldProps } from 'redux-form';
 import majors from '~/static/Majors.json';
 
@@ -10,6 +10,44 @@ export type CustomFieldProps = WrappedFieldProps & {
   label?: string;
   defaultVal?: string;
   maxLength?: number;
+};
+
+type ApplicationColProps = {
+  className?: string;
+};
+
+type ApplicationLabelProps = {
+  required?: boolean;
+  className?: string;
+  forTag?: string;
+  // hack?
+  children?: string | JSX.Element[] | JSX.Element;
+};
+
+export type ApplicationInputProps = {
+  className?: string;
+  name?: string;
+  placeholder?: string;
+  type?: string;
+  normalize?: (value: any, previousValue: any) => void;
+};
+
+export type ApplicationTextAreaProps = {
+  name?: string;
+  placeholder?: string;
+  maxLength?: number;
+  className?: string;
+};
+
+type ApplicationRadioProps = {
+  name?: string;
+  value?: any;
+  label?: string;
+  className?: string;
+};
+
+type ApplicationMonthPickerProps = {
+  name?: string;
 };
 
 /**
@@ -26,6 +64,18 @@ export function createRow(...content: any[]) {
   );
 }
 
+export const ApplicationRow: FunctionComponent = (props) => (
+  <div className="row sd-form__row">
+    {props.children}
+  </div>
+);
+
+export const ApplicationCol: FunctionComponent<ApplicationColProps> = (props) => (
+  <div className={props.className}>
+    {props.children}
+  </div>
+);
+
 export function createColumn(size: string, ...content: any[]) {
   return (
     <div className={size}>
@@ -34,21 +84,21 @@ export function createColumn(size: string, ...content: any[]) {
   );
 }
 
-export function createError(text: string) {
+export const ApplicationError: FunctionComponent<{}> = (props) => {
   return (
     <div className="sd-form__error">
       <strong><i className="fa fa-exclamation-triangle" /> </strong>
-      {text}
+      {props.children}
     </div>
   );
-}
+};
 
 export function errorClass(className: string, touched: boolean, error: boolean) {
   return className + (touched && error ? ' ' + 'sd-form__input--error' : '');
 }
 
-export const errorTextInput: React.StatelessComponent<CustomFieldProps> = ({ input, className, placeholder, type,
-  meta: { touched, error } }) => {
+export const errorTextInput: FunctionComponent<CustomFieldProps> = ({ input, className, placeholder, type,
+                                                                      meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   return (
     <div>
@@ -58,12 +108,12 @@ export const errorTextInput: React.StatelessComponent<CustomFieldProps> = ({ inp
         placeholder={placeholder}
         type={type}
       />
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
 
-export const errorRadio: React.StatelessComponent<CustomFieldProps> = ({ input, className, label, defaultVal }) => {
+export const errorRadio: FunctionComponent<CustomFieldProps> = ({ input, className, label, defaultVal }) => {
   return (
     <div className="form-check form-check-inline">
       <label className="form-check-label">
@@ -80,8 +130,8 @@ export const errorRadio: React.StatelessComponent<CustomFieldProps> = ({ input, 
   );
 };
 
-export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({ input, className, placeholder, maxLength,
-  meta: { touched, error } }) => {
+export const errorTextArea: FunctionComponent<CustomFieldProps> = ({ input, className, placeholder, maxLength,
+                                                                     meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   return (
     <div>
@@ -91,13 +141,13 @@ export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({ inpu
         placeholder={placeholder}
         maxLength={maxLength}
       />
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
 
-export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className,
-  meta: { touched, error } }) => {
+export const errorMonthPicker: FunctionComponent<CustomFieldProps> = ({ input, className,
+                                                                        meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   const months = [
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
@@ -117,13 +167,13 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ i
           </option>),
         )}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
 
-export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+export const errorTShirtSizePicker: FunctionComponent<CustomFieldProps> = ({ input, className, type,
+                                                                             meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   const sizes = Object.values(UserShirtSizeOptions);
   const values = Object.keys(UserShirtSizeOptions);
@@ -138,13 +188,13 @@ export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> =
         {sizes.map((size, i) =>
           <option key={i} value={values[i]}>{size}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
 
-export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+export const errorGenderPicker: FunctionComponent<CustomFieldProps> = ({ input, className, type,
+                                                                         meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -157,13 +207,13 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ 
         {UserGenderOptions.map((gender, i) =>
           <option key={i} value={gender}>{gender}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
 
-export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+export const errorDiversityOptions: FunctionComponent<CustomFieldProps> = ({ input, className, type,
+                                                                             meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -176,13 +226,13 @@ export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> =
         {UserDiversityOptions.map((opt, i) =>
           <option key={i} value={opt}>{opt}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
 
-export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+export const errorYearPicker: FunctionComponent<CustomFieldProps> = ({ input, className, type,
+                                                                       meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -195,13 +245,13 @@ export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({ in
         {UserYearOptions.map((year, i) =>
           <option key={i} value={year}>{year}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
 
-export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+export const errorMajorPicker: FunctionComponent<CustomFieldProps> = ({ input, className, type,
+                                                                        meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -214,10 +264,20 @@ export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({ i
         {majors.map((major, i) =>
           <option key={i} value={major}>{major}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
+
+export const ApplicationLabel: FunctionComponent<ApplicationLabelProps> =
+  ({required = true, className = '', forTag = '', children}) => (
+    <label
+      className={'sd-form__label ' + (required ? 'sd-form__required ' + className : className)}
+      htmlFor={forTag}
+    >
+      <>{children}</>
+    </label>
+);
 
 export function createLabel(text: string, required: boolean = true, className: string = '',
   forTag: string = '') {
@@ -230,6 +290,23 @@ export function createLabel(text: string, required: boolean = true, className: s
     </label>
   );
 }
+
+export const ApplicationInput: FunctionComponent<ApplicationInputProps> = ({
+  className = 'sd-form__input-text' ,
+  name,
+  type = 'text',
+  normalize,
+  placeholder,
+}) => (
+  <Field
+    className={className}
+    name={name}
+    component={errorTextInput}
+    type={type}
+    normalize={normalize}
+    placeholder={placeholder}
+  />
+);
 
 export function createInput(name: string, placeholder: string, type: string = 'text',
   className: string = 'sd-form__input-text',
@@ -246,9 +323,8 @@ export function createInput(name: string, placeholder: string, type: string = 't
   );
 }
 
-export function createTextArea(name: string, placeholder: string,
-  maxLength: number = null, className: string = 'sd-form__input-textarea') {
-  return (
+export const ApplicationTextArea: React.FunctionComponent<ApplicationTextAreaProps> =
+  ({className = 'sd-form__input-textarea', name, maxLength = null, placeholder}) => (
     <Field
       className={className}
       name={name}
@@ -256,9 +332,9 @@ export function createTextArea(name: string, placeholder: string,
       component={errorTextArea}
       placeholder={placeholder}
     />
-  );
-}
+);
 
+// TODO: delete after migrating NewEventForm to new Fields API
 export function createMonthPicker(name: string = null) {
   return (
     <Field
@@ -269,17 +345,24 @@ export function createMonthPicker(name: string = null) {
   );
 }
 
-export function createGenderPicker() {
-  return (
+export const ApplicationMonthPicker: FunctionComponent<ApplicationMonthPickerProps> =
+  ({name = null}: ApplicationMonthPickerProps) => (
     <Field
-      component={errorGenderPicker}
-      className="sd-form__input-select"
-      name="gender"
+      component={errorMonthPicker}
+      className="sd-form__input-select mb-1 mb-md-0"
+      name={`${name || 'birthdateMonth'}`}
     />
   );
-}
 
-export function createDiversityOptions() {
+export const ApplicationGenderPicker: FunctionComponent = () => (
+  <Field
+    component={errorGenderPicker}
+    className="sd-form__input-select"
+    name="gender"
+  />
+);
+
+export const ApplicationDiversityOptions: FunctionComponent = () => {
   return (
     <Field
       component={errorDiversityOptions}
@@ -287,41 +370,34 @@ export function createDiversityOptions() {
       name="race"
     />
   );
-}
+};
 
-export function createTShirtSizePicker() {
-  return (
-    <Field
-      component={errorTShirtSizePicker}
-      className="sd-form__input-select"
-      name="shirtSize"
-    />
-  );
-}
+export const ApplicationTShirtPicker: FunctionComponent = () => (
+  <Field
+    component={errorTShirtSizePicker}
+    className="sd-form__input-select"
+    name="shirtSize"
+  />
+);
 
-export function createYearPicker() {
-  return (
-    <Field
-      component={errorYearPicker}
-      className="sd-form__input-select"
-      name="year"
-    />
-  );
-}
+export const ApplicationYearPicker: FunctionComponent = () => (
+  <Field
+    component={errorYearPicker}
+    className="sd-form__input-select"
+    name="year"
+  />
+);
 
-export function createMajorPicker() {
-  return (
-    <Field
-      component={errorMajorPicker}
-      className="sd-form__input-select"
-      name="major"
-    />
-  );
-}
+export const ApplicationMajorPicker: FunctionComponent = () => (
+  <Field
+    component={errorMajorPicker}
+    className="sd-form__input-select"
+    name="major"
+  />
+);
 
-export function createRadio(name: string, value: any, label: string,
-  className: string = 'sd-form__input-radio') {
-  return (
+export const ApplicationRadio: FunctionComponent<ApplicationRadioProps> =
+  ({className = 'sd-form__input-radio', name, value, label}) => (
     <Field
       component={errorRadio}
       className={className}
@@ -329,5 +405,4 @@ export function createRadio(name: string, value: any, label: string,
       defaultVal={String(value)}
       label={label}
     />
-  );
-}
+);

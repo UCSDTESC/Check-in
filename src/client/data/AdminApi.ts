@@ -224,7 +224,7 @@ export const downloadResumes = (applicants: string[]): SuperAgentRequest =>
       .post('/resumes')
       .send({ applicants } as DownloadResumesRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(adminApiPrefix)
+      .use(adminApiPrefix);
 
 /**
  * Requests the status of an ongoing download.

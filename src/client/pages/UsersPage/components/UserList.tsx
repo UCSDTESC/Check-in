@@ -36,7 +36,7 @@ class UserList extends React.Component<UserListProps> {
         data={this.props.users}
         column={{
           ...ReactTableDefaults.column,
-          Cell: ({value}) => value ? String(value): value
+          Cell: ({value}) => value ? String(value): value,
         }}
         columns={this.props.columns}
         defaultPageSize={10}
