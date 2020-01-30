@@ -80,15 +80,6 @@ export function createColumn(size: string, ...content: any[]) {
   );
 }
 
-export function createError(text: string) {
-  return (
-    <div className="sd-form__error">
-      <strong><i className="fa fa-exclamation-triangle" /> </strong>
-      {text}
-    </div>
-  );
-}
-
 export const ApplicationError: FunctionComponent<{}> = (props) => {
   return (
     <div className="sd-form__error">
@@ -113,7 +104,7 @@ export const errorTextInput: React.StatelessComponent<CustomFieldProps> = ({ inp
         placeholder={placeholder}
         type={type}
       />
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
@@ -146,7 +137,7 @@ export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({ inpu
         placeholder={placeholder}
         maxLength={maxLength}
       />
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
@@ -172,7 +163,7 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ i
           </option>),
         )}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
@@ -193,7 +184,7 @@ export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> =
         {sizes.map((size, i) =>
           <option key={i} value={values[i]}>{size}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
@@ -212,7 +203,7 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ 
         {UserGenderOptions.map((gender, i) =>
           <option key={i} value={gender}>{gender}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
@@ -231,7 +222,7 @@ export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> =
         {UserDiversityOptions.map((opt, i) =>
           <option key={i} value={opt}>{opt}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
@@ -250,7 +241,7 @@ export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({ in
         {UserYearOptions.map((year, i) =>
           <option key={i} value={year}>{year}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
@@ -269,7 +260,7 @@ export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({ i
         {majors.map((major, i) =>
           <option key={i} value={major}>{major}</option>)}
       </select>
-      {touched && error && createError(error)}
+      {touched && error && <ApplicationError>{error}</ApplicationError>}
     </div>
   );
 };
