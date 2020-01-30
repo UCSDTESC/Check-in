@@ -1,7 +1,7 @@
 import React from 'react';
 import { WrappedFieldProps } from 'redux-form';
 import AutoSuggest from '~/components/AutoSuggest';
-import {ApplicationError} from '~/components/Fields';
+import { ApplicationError } from '~/components/Fields';
 import { getSuggestions } from '~/static/Universities';
 
 interface UniversityFieldProps {

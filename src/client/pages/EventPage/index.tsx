@@ -21,12 +21,12 @@ import {
 } from './actions';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
+import ViewApplication from './components/ViewApplication';
 import ActionsTab from './tabs/ActionsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
 import TeamsTab from './tabs/TeamsTab';
-import ViewApplication from './components/ViewApplication';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;

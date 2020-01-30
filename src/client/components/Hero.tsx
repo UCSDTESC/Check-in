@@ -22,8 +22,8 @@ export default class Hero extends React.Component<HeroProps> {
     }
 
     return (
-      <div className={heroClass} style={heroStyle}>
-      </div>
+
+      <div className={heroClass} style={heroStyle}/>
     );
   }
 }

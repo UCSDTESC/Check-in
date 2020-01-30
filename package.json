@@ -20,7 +20,8 @@
     "migrate": "./node_modules/.bin/mm migrate",
     "rollback": "./node_modules/.bin/mm down",
     "heroku-postbuild": "npm run migrate && ./node_modules/.bin/gulp prod --production",
-    "test-server": "tsc -P ./src/server/tsconfig.json --outDir /tmp"
+    "test-server": "tsc -P ./src/server/tsconfig.json --outDir /tmp",
+    "lint": "npx tslint --project ."
   },
   "homepage": "https://github.com/UCSDTESC/Check-in#readme",
   "dependencies": {

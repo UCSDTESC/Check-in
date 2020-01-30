@@ -3,8 +3,17 @@ import { QuestionType } from '@Shared/Questions';
 import { RegisterUserResponseSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Fields, reduxForm, Field, WrappedFieldProps } from 'redux-form';
-import * as FormFields from '~/components/Fields';
-import { ApplicationRow, ApplicationCol, ApplicationLabel, ApplicationInput, ApplicationTextArea, ApplicationRadio, ApplicationTextAreaProps, ApplicationInputProps, ApplicationError } from '~/components/Fields';
+import {
+  ApplicationRow,
+  ApplicationCol,
+  ApplicationLabel,
+  ApplicationInput,
+  ApplicationTextArea,
+  ApplicationRadio,
+  ApplicationTextAreaProps,
+  ApplicationInputProps,
+  ApplicationError,
+  ApplicationTShirtPicker } from '~/components/Fields';
 import { createTeamCode } from '~/data/UserApi';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
@@ -201,8 +210,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           <ApplicationRow>
             <ApplicationCol className="col-lg-12">
               <ApplicationLabel>I will be travelling from outside the San Diego county</ApplicationLabel>
-              <ApplicationRadio name='outOfState' value={true} label='Yes' />
-              <ApplicationRadio name='outOfState' value={false} label='No' />
+              <ApplicationRadio name="outOfState" value={true} label="Yes" />
+              <ApplicationRadio name="outOfState" value={false} label="No" />
             </ApplicationCol>
           </ApplicationRow>
         }
@@ -224,7 +233,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
         <ApplicationRow>
           <ApplicationCol className="col-12">
             <ApplicationLabel>T-Shirt Size (Unisex)</ApplicationLabel>
-            {FormFields.createTShirtSizePicker()}
+            <ApplicationTShirtPicker />
           </ApplicationCol>
         </ApplicationRow>
 
@@ -239,8 +248,8 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
               <ApplicationLabel>
                 Have you taken an Advanced Data Structures (CSE 100) or equivalent class?
               </ApplicationLabel>
-              <ApplicationRadio name='classRequirement' value={true} label='Yes' />
-              <ApplicationRadio name='classRequirement' value={false} label='No' />
+              <ApplicationRadio name="classRequirement" value={true} label="Yes" />
+              <ApplicationRadio name="classRequirement" value={false} label="No" />
             </ApplicationCol>
           </ApplicationRow>
         }

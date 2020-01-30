@@ -1,6 +1,7 @@
 import React from 'react';
-import ApplyPage from '../../ApplyPage';
 import { Alert } from 'reactstrap';
+
+import ApplyPage from '../../ApplyPage';
 
 class PreviewApplication extends React.Component {
 

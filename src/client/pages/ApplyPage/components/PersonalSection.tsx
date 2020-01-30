@@ -2,14 +2,18 @@ import { TESCEvent } from '@Shared/ModelTypes';
 import { RegisterUserPersonalSectionRequest } from '@Shared/api/Requests';
 import React from 'react';
 import { Field, Fields, reduxForm } from 'redux-form';
-import * as FormFields from '~/components/Fields';
-import { 
-  ApplicationRow, 
-  ApplicationCol, 
-  ApplicationLabel, 
-  ApplicationInput, 
+import {
+  ApplicationRow,
+  ApplicationCol,
+  ApplicationLabel,
+  ApplicationInput,
   ApplicationDiversityOptions,
-  ApplicationError } from '~/components/Fields';
+  ApplicationError,
+  ApplicationMajorPicker,
+  ApplicationYearPicker,
+  ApplicationMonthPicker,
+  ApplicationGenderPicker,
+  errorTextInput } from '~/components/Fields';
 import FileField from '~/components/FileField';
 
 import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
@@ -40,7 +44,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       <Field
         className={'sd-form__input-email'}
         name={'email'}
-        component={FormFields.errorTextInput}
+        component={errorTextInput}
         placeholder={'email@university.edu'}
         type={'email'}
         onBlur={(e: React.FormEvent<HTMLInputElement>) => this.props.onEmailChange(e.currentTarget.value)}
@@ -197,11 +201,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
       <ApplicationRow>
         <ApplicationCol className="col-lg-6">
           <ApplicationLabel>Major</ApplicationLabel>
-          {FormFields.createMajorPicker()}
+          <ApplicationMajorPicker />
         </ApplicationCol>
         <ApplicationCol className="col-lg-6">
           <ApplicationLabel>Year in School</ApplicationLabel>
-          {FormFields.createYearPicker()}
+          <ApplicationYearPicker />
         </ApplicationCol>
       </ApplicationRow>
     );
@@ -315,7 +319,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
             <ApplicationLabel>Birthdate</ApplicationLabel>
             <div className="row">
               <ApplicationCol className="col-sm-4">
-                {FormFields.createMonthPicker()}
+                <ApplicationMonthPicker />
               </ApplicationCol>
               <ApplicationCol className="col-sm-4">
                 <ApplicationInput name="birthdateDay" placeholder="Day"
@@ -332,7 +336,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <ApplicationRow>
           <ApplicationCol className="col-md-6">
             <ApplicationLabel>Gender</ApplicationLabel>
-            {FormFields.createGenderPicker()}
+            <ApplicationGenderPicker />
           </ApplicationCol>
           <ApplicationCol className="col-md-6">
             <ApplicationLabel>Phone Number</ApplicationLabel>
