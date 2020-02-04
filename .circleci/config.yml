@@ -57,7 +57,7 @@ jobs:
           name: Build Server Documentation
           command: npm run gen-server-docs
       - persist_to_workspace:
-          root: ~/docs/server
+          root: ~/
           paths: ./docs/server
 
   docs-deploy:
