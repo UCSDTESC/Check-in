@@ -59,6 +59,9 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths: ./project/docs/server
+      - run:
+          name: Flag that site is not Jekyll
+          command: touch docs/.nojekyll
 
   docs-deploy:
     docker:
@@ -71,13 +74,8 @@ jobs:
           name: Install and configure deps
           command: |
             npm install gh-pages@2.0.1
-            git config user.email "ci-build@tesc.ucsd.edu"
-            git config user.name "ci-build"
-      - run:
-          name: debug
-          command: |
-            ls
-            echo $HOME $(pwd)
+            git config user.email "ci@tesc.ucsd.edu"
+            git config user.name "ci"
       - run:
           name: Deploy docs to gh-pages branch
           command: npx gh-pages --dist docs
