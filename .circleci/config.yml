@@ -80,7 +80,7 @@ jobs:
             echo $HOME $(pwd)
       - run:
           name: Deploy docs to gh-pages branch
-          command: npx gh-pages --dist $(pwd)/docs
+          command: npx gh-pages --dist docs
     
 workflows:
   version: 2
