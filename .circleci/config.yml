@@ -70,12 +70,12 @@ jobs:
       - run:
           name: Install and configure deps
           command: |
-            npm install -g gh-pages@2.0.1
+            npm install gh-pages@2.0.1
             git config user.email "ci-build@tesc.ucsd.edu"
             git config user.name "ci-build"
       - run:
           name: Deploy docs to gh-pages branch
-          command: gh-pages --dist ~/docs
+          command: npx gh-pages --dist ~/docs
     
 workflows:
   version: 2
