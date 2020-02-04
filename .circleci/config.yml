@@ -97,4 +97,6 @@ workflows:
       - docs-deploy:
           filters:
             branches:
-              only: master
+              only: 
+                - master
+                - server-docs
