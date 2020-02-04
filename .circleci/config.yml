@@ -57,7 +57,7 @@ jobs:
           name: Build Server Documentation
           command: npm run gen-server-docs
       - persist_to_workspace:
-          root: /docs/server
+          root: ~/docs/server
           paths: ./docs/server
 
   docs-deploy:
@@ -75,7 +75,7 @@ jobs:
             git config user.name "ci-build"
       - run:
           name: Deploy docs to gh-pages branch
-          command: gh-pages --dist /docs
+          command: gh-pages --dist ~/docs
     
 workflows:
   version: 2
