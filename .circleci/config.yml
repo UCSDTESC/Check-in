@@ -58,7 +58,7 @@ jobs:
           command: npm run gen-server-docs
       - persist_to_workspace:
           root: ~/
-          paths: ./docs/server
+          paths: /home/circleci/project/docs/server
 
   docs-deploy:
     docker:
