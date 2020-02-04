@@ -74,10 +74,10 @@ jobs:
             git config user.email "ci-build@tesc.ucsd.edu"
             git config user.name "ci-build"
       - run:
-        name: debug
-        command: |
-          ls
-          echo $HOME $(pwd)
+          name: debug
+          command: |
+            ls
+            echo $HOME $(pwd)
       - run:
           name: Deploy docs to gh-pages branch
           command: npx gh-pages --dist ~/docs
