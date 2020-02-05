@@ -75,7 +75,7 @@ jobs:
           command: |
             npm install gh-pages@2.0.1
             git config user.email "ci@tesc.ucsd.edu"
-            git config user.name "ci"
+            git config user.name "TESC CI Bot"
       - run:
           name: Deploy docs to gh-pages branch
           command: npx gh-pages --dist docs
