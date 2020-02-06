@@ -11,7 +11,7 @@ import { print } from 'util';
 import { generateQRCodeURL } from '@Shared/QRCodes';
 
 export type UserDocument = TESCUser & Document & {
-  csvFlatten: (isSponsor? : boolean) => any;
+  csvFlatten: (isSponsor? : boolean, emailsOnly? : boolean) => any;
   attach: (name: string, options: any) => Promise<UserDocument>;
 };
 export type UserModel = Model<UserDocument>;
@@ -280,7 +280,7 @@ UserSchema.plugin(crate, {
   },
 });
 
-UserSchema.method('csvFlatten', function (isSponsor = false) {
+UserSchema.method('csvFlatten', function (isSponsor = false, emailsOnly = false) {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
   let autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
@@ -293,26 +293,32 @@ UserSchema.method('csvFlatten', function (isSponsor = false) {
       'university', 'major', 'year', 'github', 'website', 'gpa', 'majorGPA'];
   }
 
+  if (emailsOnly) {
+    autoFill = ['firstName', 'lastName', 'email'];
+  }
+
   let autoFilled: any = autoFill.reduce((acc, val) => {
     return Object.assign(acc, { [val]: user[val] });
   }, {});
 
-  autoFilled.outOfState = user.travel.outOfState;
-  autoFilled.city = user.travel.city;
-  autoFilled.resume = user.resume ? user.resume.url : '';
-
   autoFilled.email = user.account ? user.account.email : '';
 
-  if (!isSponsor) {
-    autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
-    
-    if (user.customQuestionResponses) {
-      autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
+  if (!emailsOnly) {
+    autoFilled.outOfState = user.travel.outOfState;
+    autoFilled.city = user.travel.city;
+    autoFilled.resume = user.resume ? user.resume.url : '';
+  
+    if (!isSponsor) {
+      autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
+      
+      if (user.customQuestionResponses) {
+        autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
+      }
+  
+      autoFilled.team = user.team ? user.team.code : '';
+  
+      autoFilled.qrCode = generateQRCodeURL(user);
     }
-
-    autoFilled.team = user.team ? user.team.code : '';
-
-    autoFilled.qrCode = generateQRCodeURL(user);
   }
 
   return autoFilled;
