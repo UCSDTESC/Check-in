@@ -243,7 +243,7 @@ class UserProfile extends React.Component<Props> {
         user-profile__diet`}
         placeholder="No Soylent"
       />
-      <div className="row mt-3">
+      <div className="row mt-3 align-items-end">
         <div className="col-lg-4 mb-3">
           <h5>Gender:</h5>
           <Field
@@ -253,7 +253,7 @@ class UserProfile extends React.Component<Props> {
           />
         </div>
         <div className="col-lg-4 mb-3">
-          <h5>Pronoun:</h5>
+          <h5>Pronouns:</h5>
           <Field
             component={this.pronounSelect}
             name="pronoun"
