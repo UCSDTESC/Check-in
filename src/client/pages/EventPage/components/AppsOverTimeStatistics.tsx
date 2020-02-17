@@ -23,7 +23,7 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
 
     const axisStyles = {
       tickLabels: { fontSize: 5, padding: 5 },
-      ticks: { size: 2 },
+      ticks: { size: 2, stroke: '#90A4AE'},
       grid: { opacity: 0 },
       axisLabel: { fontSize: 8, padding: 20 },
     };
