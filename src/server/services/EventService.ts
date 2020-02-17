@@ -333,6 +333,7 @@ export default class EventService {
         throw new Error(ErrorMessage.DATABASE_ERROR());
       }
     }
+    await event.save();
   }
 
   /**

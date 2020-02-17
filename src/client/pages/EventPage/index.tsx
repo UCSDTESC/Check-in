@@ -27,7 +27,6 @@ import TeamsTab from './tabs/TeamsTab';
 import ViewApplication from './components/ViewApplication';
 import EventForm, { EventFormData } from '../../components/EventForm';
 import createValidator from '../NewEventPage/validate';
-import { UncontrolledAlert } from 'reactstrap/lib/Uncontrolled';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -65,7 +64,6 @@ export type Props = RouteProps & ReturnType<typeof mapStateToProps> &
 
 interface EventPageState extends TabularPageState {
   teams: TESCTeam[];
-  err?: string;
 }
 
 class EventPage extends TabularPage<Props, EventPageState> {
@@ -229,26 +227,21 @@ class EventPage extends TabularPage<Props, EventPageState> {
       closeTimeDay: eventDate.getDay(),
       closeTimeMonth: eventDate.getMonth() + 1,
       closeTimeYear: eventDate.getFullYear(),
-      logo: undefined, // TODO: Figure out logo
+      logo: undefined,
     }
 
     const editEvent = async (eventData: EventFormData) => {
       try {
-        const event = await editExistingEvent(this.props.event._id, eventData);
-        this.setState({ err: null });
-        this.props.addEventSuccessAlert(event.alias, `Successfully edited ${event.name}`, 'Edit Event');
+        await editExistingEvent(this.props.event._id, eventData);
+        this.props.loadAllAdminEvents();
+        this.props.addEventSuccessAlert(eventData.alias, `Successfully edited ${eventData.name}`, 'Edit Event');
       } catch (e) {
-        this.setState({ err: e.message });
+        this.props.addEventDangerAlert(eventData.alias, e.message, 'Edit Event');
       }
     }
 
     return (
           <div className="sd-form">
-            {this.state.err && (
-              <UncontrolledAlert color="danger">
-                {this.state.err}
-              </UncontrolledAlert>
-            )}
             <EventForm
               editing
               validate={validator}

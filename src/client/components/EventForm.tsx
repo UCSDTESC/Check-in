@@ -122,7 +122,7 @@ class EventForm extends React.Component<Props> {
             type="submit"
             disabled={pristine || submitting}
           >
-              {this.props.editing ? 'Edit Event!' : 'Create Event!'}
+              {this.props.editing ? 'Edit Event' : 'Create Event!'}
           </button>
         )}
       </form>

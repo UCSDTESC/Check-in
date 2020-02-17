@@ -210,7 +210,7 @@ export const editExistingEvent = (id: string, event: Partial<EventFormData>) => 
       promiseReq.attach('logo', logo[0])
     }
 
-    return promisify<TESCEvent>(promiseReq);
+    return promisify<void>(promiseReq);
 }
 
 /**
