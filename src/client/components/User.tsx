@@ -449,7 +449,6 @@ class User extends React.Component<Props> {
 }
 
 export default reduxForm<UserFormData, UserProps>({
-  form: UUID.v4(),
   destroyOnUnmount: true,
   enableReinitialize: true,
 })(connect(mapStateToProps)(User));
