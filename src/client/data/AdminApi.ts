@@ -170,7 +170,7 @@ export const registerNewEvent = (event: EventFormData) => {
   const { logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields } = event;
   const closeTime: string = moment(new Date(
     closeTimeYear,
-    closeTimeMonth - 1,
+    closeTimeMonth,
     closeTimeDay
   )).toISOString(true);
   return promisify<TESCEvent>(
@@ -191,7 +191,7 @@ export const editExistingEvent = (id: string, event: Partial<EventFormData>) => 
   const { logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields } = event;
   const closeTime: string = moment(new Date(
     closeTimeYear,
-    closeTimeMonth - 1,
+    closeTimeMonth,
     closeTimeDay
   )).toISOString(true);
 

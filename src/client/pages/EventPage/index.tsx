@@ -224,8 +224,8 @@ class EventPage extends TabularPage<Props, EventPageState> {
     const eventDate = new Date(this.props.event.closeTime);
     const initialValues: Partial<EventFormData> = {
       ...this.props.event,
-      closeTimeDay: eventDate.getDay(),
-      closeTimeMonth: eventDate.getMonth() + 1,
+      closeTimeDay: eventDate.getDate(),
+      closeTimeMonth: eventDate.getMonth(),
       closeTimeYear: eventDate.getFullYear(),
       logo: undefined,
     }

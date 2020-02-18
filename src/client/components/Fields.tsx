@@ -111,7 +111,7 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ i
       >
         <option key={-1}>Month</option>
         {months.map((month, i) => (
-          <option key={i} value={i + 1}>
+          <option key={i} value={i}>
             {month}
           </option>),
         )}

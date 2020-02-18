@@ -15,8 +15,8 @@ const createValidator = () => (values: any) => {
     errors.closeTimeDay = 'Invalid Day';
   }
 
-  if (values.closeTimeMonth === 'Month' || values.closeTimeMonth < 1 ||
-    values.closeTimeMonth > 12) {
+  if (values.closeTimeMonth === 'Month' || values.closeTimeMonth < 0 ||
+    values.closeTimeMonth > 11) {
     errors.closeTimeMonth = 'Invalid Month';
   }
 
