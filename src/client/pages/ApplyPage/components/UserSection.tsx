@@ -8,6 +8,7 @@ interface UserSectionProps extends ApplyPageSectionProps {
   emailExists: boolean;
   submitError: Error;
   isSubmitting: boolean;
+  previewMode: boolean;
 }
 
 export interface UserSectionFormData {
@@ -100,7 +101,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
   }
 
   render() {
-    const { goToPreviousPage, handleSubmit, pristine, isSubmitting, submitError, emailExists } = this.props;
+    const { goToPreviousPage, handleSubmit, pristine, isSubmitting, submitError, emailExists, previewMode } = this.props;
     const options = this.props.event.options;
 
     return (
@@ -150,7 +151,7 @@ class UserSection extends ApplyPageSection<UserSectionFormData, UserSectionProps
             <button
               className="btn sd-form__nav-button rounded-button success button"
               type="submit"
-              disabled={pristine || isSubmitting}
+              disabled={previewMode || pristine || isSubmitting}
             >
               Apply!
             </button>

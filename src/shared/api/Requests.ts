@@ -48,6 +48,7 @@ export interface DownloadResumesRequest {
 
 export interface ExportUsersRequest {
   alias: string;
+  emailsOnly: boolean;
 }
 
 export interface ForgotPasswordRequest {

@@ -24,6 +24,7 @@ class UserList extends React.Component<UserListProps> {
         user={row}
         event={this.props.event}
         initialValues={row}
+        form={row._id}
         onSubmit={this.props.onUserUpdate}
         createAlert={this.props.createAlert}
       />

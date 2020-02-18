@@ -44,6 +44,41 @@ jobs:
           name: Deploy Master to Heroku
           command: |
             git push --force git@heroku.com:$HEROKU_APP_NAME.git HEAD:refs/heads/master
+  
+  docs-build:
+    docker:
+      - image: circleci/node:11.4
+    steps:
+      - checkout
+      - run: 
+          name: Install NPM
+          command: npm install
+      - run:
+          name: Build Server Documentation
+          command: npm run gen-server-docs
+      - persist_to_workspace:
+          root: ~/
+          paths: ./project/docs/server
+      - run:
+          name: Flag that site is not Jekyll
+          command: touch docs/.nojekyll
+
+  docs-deploy:
+    docker:
+      - image: circleci/node:8.9
+    steps:
+      - checkout 
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Install and configure deps
+          command: |
+            npm install gh-pages@2.0.1
+            git config user.email "ci@tesc.ucsd.edu"
+            git config user.name "TESC CI Bot"
+      - run:
+          name: Deploy docs to gh-pages branch
+          command: npx gh-pages --dist docs
     
 workflows:
   version: 2
@@ -56,3 +91,14 @@ workflows:
           filters:
             branches:
               only: master
+  docs:
+    jobs:
+      - docs-build
+      - docs-deploy:
+          requires:
+            - docs-build
+          filters:
+            branches:
+              only: 
+                - master
+                - server-docs
