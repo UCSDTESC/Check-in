@@ -66,7 +66,7 @@ export const UserSchema = new Schema({
   // Declares the user's pronoun
   pronoun: {
     type: String,
-    displayName: 'Pronoun',
+    displayName: 'Pronouns',
     public: true,
     editable: true,
   },

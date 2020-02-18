@@ -312,7 +312,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
             FormFields.createGenderPicker()
           ),
           FormFields.createColumn('col-md-4',
-            FormFields.createLabel('Pronoun'),
+            FormFields.createLabel('Pronouns'),
             FormFields.createPronounPicker()
           ),
           FormFields.createColumn('col-md-4',

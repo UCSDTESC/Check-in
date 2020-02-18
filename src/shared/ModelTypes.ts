@@ -121,7 +121,7 @@ export interface TESCUser {
   lastName: string;
   birthdate: string;
   gender: string;
-  pronoun?: string;
+  pronouns?: string;
   phone: string;
   university?: string;
   highSchool?: string;
