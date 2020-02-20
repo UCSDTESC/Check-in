@@ -6,7 +6,7 @@ import EventStatisticsComponent from './EventStatisticsComponent';
 export default class AppsOverTimeStatistics extends EventStatisticsComponent {
   render() {
     const { statistics } = this.props;
-
+    
     // Create the data array needed to make the line chart
     const appsTimeData: Array<{ date: string; appCount: number }> = [];
 
@@ -19,7 +19,8 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
     }
 
     // Lastest applicants vs time data
-    const latest = appsTimeData[appsTimeData.length - 1];
+    // Fallback if no data
+    const latest = appsTimeData[appsTimeData.length - 1] || { date: '', appCount: 0 };
 
     const axisStyles = {
       tickLabels: { fontSize: 5, padding: 5 },
