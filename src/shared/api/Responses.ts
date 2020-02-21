@@ -12,6 +12,9 @@ export interface EventStatistics {
     [StatusType: string]: number;
   };
   resumes: number;
+  appsOverTime: {
+    [Date: string]: number;
+  }
 }
 
 export type EventUserCounts = {
