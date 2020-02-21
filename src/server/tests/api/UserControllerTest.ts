@@ -14,6 +14,7 @@ import { BadRequestError } from 'routing-controllers';
 import { Request } from 'express-serve-static-core';
 import { TeamModel } from '@Models/Team';
 import * as path from 'path';
+import setIsNew from '../utils';
 
 describe('UserController', () => {
 
@@ -28,9 +29,25 @@ describe('UserController', () => {
   const accountModel = Container.get<AccountModel>('AccountModel');
   const teamModel = Container.get<TeamModel>('TeamModel');
 
+  let fakeAccount = generateFakeAccountDocument();
+  let fakeEvent = generateFakeEventDocument({
+    closeTime: new Date(
+      new Date().getTime()+(5*24*60*60*1000)).toString()
+  });
+  let fakeUser = generateFakeUserDocument({
+    account: fakeAccount.toObject(),
+    event: fakeEvent.toObject()
+  });
+
   beforeAll(async () => await dbConnection.connect());
 
-  afterEach(async () => await dbConnection.clearDatabase());
+  afterEach(async () => {
+    setIsNew(fakeAccount, true);
+    setIsNew(fakeEvent, true);
+    setIsNew(fakeUser, true);
+
+    await dbConnection.clearDatabase()
+  });
 
   afterAll(async () => await dbConnection.closeDatabase());
 
@@ -43,8 +60,6 @@ describe('UserController', () => {
 
   describe('get', () => {
     describe('for user with no application', () => {
-      const fakeAccount = generateFakeAccountDocument();
-      const fakeEvent = generateFakeEventDocument();
       beforeAll(async () => {
         // Nothing in userModel i.e. no application in the system.
         await fakeAccount.save();
@@ -60,13 +75,7 @@ describe('UserController', () => {
       });
     });
 
-    describe('for user with application', () => {
-      const fakeAccount = generateFakeAccountDocument();
-      const fakeEvent = generateFakeEventDocument();
-      const fakeUser = generateFakeUserDocument({
-        account: fakeAccount.toObject(),
-        event: fakeEvent.toObject()
-      });
+    describe('for user with application', () => { 
       beforeAll(async () => {
         await fakeAccount.save();
         await fakeEvent.save();
@@ -84,13 +93,6 @@ describe('UserController', () => {
   });
 
   describe('registerNewUser', () => {
-    const fakeEvent = generateFakeEventDocument();
-    const fakeAccount = generateFakeAccountDocument();
-    const fakeUser = generateFakeUserDocument({
-      account: fakeAccount.toObject(),
-      event: fakeEvent.toObject()
-    });
-
     const fakeApplication = generateFakeApplication({
       alias: fakeEvent.alias,
       user: {
@@ -127,7 +129,7 @@ describe('UserController', () => {
     });
 
     describe('for user with existing tesc.events account', () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         await fakeAccount.save()
       });
 
@@ -142,14 +144,28 @@ describe('UserController', () => {
             await userController.registerNewUser({} as Express.Multer.File, 
               fakeApplication, {} as Request);
           } catch (error) {
-            expect(error).toEqual(new BadRequestError(ErrorMessage.CANNOT_REGISTER()));
+            expect(error).toEqual(new BadRequestError(ErrorMessage.USER_ALREADY_REGISTERED()));
           }         
+        });
+      });
+
+      describe('for user that has not applied to event', () => {
+        beforeAll(async () => {
+          await fakeEvent.save();
+        })
+
+        test('creates application', async () => {
+          await userController.registerNewUser({
+            path: path.join(__dirname, '../test-resume.pdf')
+          } as Express.Multer.File, fakeApplication, {} as Request); 
+
+          const users = await userModel.find({});
+          expect(users).toHaveLength(1);
         });
       });
     });
 
     describe('teams', () => {
-
       describe('for event without team option set', () => {
         const noTeamsEvent = generateFakeEventDocument({
           closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
@@ -158,7 +174,6 @@ describe('UserController', () => {
             allowTeammates: false
           }
         });
-        const fakeAccount = generateFakeAccountDocument();
 
         beforeEach(async () => {
           await fakeAccount.save();
@@ -191,8 +206,6 @@ describe('UserController', () => {
               allowTeammates: true
             }
           });
-
-          const fakeAccount = generateFakeAccountDocument();
   
           beforeEach(async () => {
             await fakeAccount.save();
@@ -213,6 +226,8 @@ describe('UserController', () => {
   
             // No Teams in DB before, there should be one now.
             expect((await teamModel.find({})).length).toBe(1);
+            const users = await userModel.find({});
+            expect(users).toHaveLength(1);
           })
         });
 
@@ -229,11 +244,12 @@ describe('UserController', () => {
             event: fakeEvent.toObject()
           });
 
-          beforeAll(async () => {
+          beforeEach(async () => {
             await fakeAccount.save();
             await fakeEvent.save();
             await fakeTeam.save();
           });
+          
           describe('for existent team', () => {
             test('joins team', async () => {
               await userController.registerNewUser({
@@ -249,10 +265,19 @@ describe('UserController', () => {
     
               const teamBeingJoined = await teamModel.findOne({code: fakeTeam.code});
               expect(teamBeingJoined.members.length).toBe(fakeTeam.members.length + 1);
+              const users = await userModel.find({});
+              expect(users).toHaveLength(1);
             });
           });
 
           describe('for non existent team', () => {
+            const fakeEvent = generateFakeEventDocument({
+              closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
+              options: {
+                ...generateFakeEvent().options,
+                allowTeammates: true
+              }
+            });
             beforeAll(async () => {
               await fakeEvent.save();
               await teamModel.deleteMany({});

@@ -38,7 +38,6 @@ export class UserController {
   @UseBefore(UserAuthorisation)
   async get(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount): Promise<TESCUser[]> {
     const application = await this.UserService.getUserApplication(account, event, true);
-    console.log(application)
     if (!application) {
       throw new Error(ErrorMessage.USER_NOT_REGISTERED());
     }
