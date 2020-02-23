@@ -173,8 +173,8 @@ export const errorPronounPicker: React.StatelessComponent<CustomFieldProps> = ({
         className={errorClassName}
       >
         <option key={-1} />
-        {UserPronounOptions.map((pronoun, i) =>
-          <option key={i} value={pronoun}>{pronoun}</option>)}
+        {UserPronounOptions.map((pronouns, i) =>
+          <option key={i} value={pronouns}>{pronouns}</option>)}
       </select>
       {touched && error && createError(error)}
     </div>
@@ -303,7 +303,7 @@ export function createPronounPicker() {
     <Field
       component={errorPronounPicker}
       className="sd-form__input-select"
-      name="pronoun"
+      name="pronouns"
     />
   );
 }

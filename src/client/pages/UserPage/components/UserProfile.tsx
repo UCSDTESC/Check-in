@@ -7,7 +7,7 @@ import FileField from '~/components/FileField';
 
 export interface UserProfileFormData {
   gender: string;
-  pronoun: string;
+  pronouns: string;
   newResume: File[];
   shareResume: boolean;
   majorGPA: string;
@@ -50,8 +50,8 @@ class UserProfile extends React.Component<Props> {
 
     return (
       <select {...input} className={className}>
-        {pronouns.map((pronoun, i) =>
-          <option key={i} value={pronoun}>{pronoun}</option>)}
+        {pronouns.map((pronouns, i) =>
+          <option key={i} value={pronouns}>{pronouns}</option>)}
       </select>
     );
   };
@@ -256,7 +256,7 @@ class UserProfile extends React.Component<Props> {
           <h5>Pronouns:</h5>
           <Field
             component={this.pronounSelect}
-            name="pronoun"
+            name="pronouns"
             className="sd-form__input-select user-profile__select"
           />
         </div>
