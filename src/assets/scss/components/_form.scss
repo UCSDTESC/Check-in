@@ -108,13 +108,13 @@
   }
 
   &__suggestions-suggestion {
-    padding: 0.25rem 1rem 0.25rem 0;
     background-color: transparent;
   }
 
   &__suggestions-link {
     cursor: pointer;
     width: 100%;
+    padding: 0.25rem 1rem 0.25rem 0;
   }
 
   &__progress__bar {
