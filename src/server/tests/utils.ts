@@ -1,4 +1,4 @@
-export default function setIsNew(doc, val) {
+export function setIsNew(doc, val) {
   doc.isNew = val;
   doc.emit('isNew', val);
   doc.constructor.emit('isNew', val);

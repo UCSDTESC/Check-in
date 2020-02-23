@@ -3,18 +3,18 @@ import EventService from '@Services/EventService';
 import EmailService from '@Services/EmailService';
 import TeamService from '@Services/TeamService';
 import { AccountModel } from '@Models/Account';
-import { UserController } from '../../api/controllers/user/UserController';
+import { UserController } from '../../../api/controllers/user/UserController';
 import { Container } from 'typedi';
-import { ErrorMessage } from '../../utils/Errors';
-import { generateFakeApplication, generateFakeEventDocument, generateFakeEvent, generateFakeAccount, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../fake';
-import TestDatabaseConnection from '../TestDatabaseConnection';
+import { ErrorMessage } from '../../../utils/Errors';
+import { generateFakeApplication, generateFakeEventDocument, generateFakeEvent, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../../fake';
+import TestDatabaseConnection from '../../TestDatabaseConnection';
 import { EventModel } from '@Models/Event';
 import { UserModel, PUBLIC_USER_FIELDS } from '@Models/User';
 import { BadRequestError } from 'routing-controllers';
 import { Request } from 'express-serve-static-core';
 import { TeamModel } from '@Models/Team';
 import * as path from 'path';
-import setIsNew from '../utils';
+import {setIsNew} from '../../utils';
 
 describe('UserController', () => {
 
@@ -156,7 +156,7 @@ describe('UserController', () => {
 
         test('creates application', async () => {
           await userController.registerNewUser({
-            path: path.join(__dirname, '../test-resume.pdf')
+            path: path.join(__dirname, '../../test-resume.pdf')
           } as Express.Multer.File, fakeApplication, {} as Request); 
 
           const users = await userModel.find({});
@@ -185,9 +185,8 @@ describe('UserController', () => {
           const createNewTeamSpy = jest.spyOn(teamService, 'createNewTeam');
   
           await userController.registerNewUser({
-            path: path.join(__dirname, '../test-resume.pdf')
+            path: path.join(__dirname, '../../test-resume.pdf')
           } as Express.Multer.File, fakeApplication, {} as Request);
-
   
           expect(getTeamByCodeSpy).toHaveBeenCalledTimes(0);
           expect(createNewTeamSpy).toHaveBeenCalledTimes(0);
@@ -214,7 +213,7 @@ describe('UserController', () => {
 
           test('creates team entity', async () => {
             await userController.registerNewUser({
-              path: path.join(__dirname, '../test-resume.pdf')
+              path: path.join(__dirname, '../../test-resume.pdf')
             } as Express.Multer.File, generateFakeApplication({
               alias: fakeEvent.alias,
               user: {
@@ -253,7 +252,7 @@ describe('UserController', () => {
           describe('for existent team', () => {
             test('joins team', async () => {
               await userController.registerNewUser({
-                path: path.join(__dirname, '../test-resume.pdf')
+                path: path.join(__dirname, '../../test-resume.pdf')
               } as Express.Multer.File, generateFakeApplication({
                 alias: fakeEvent.alias,
                 user: {
@@ -286,7 +285,7 @@ describe('UserController', () => {
             test('throws error', async () => {
               try {
                 await userController.registerNewUser({
-                  path: path.join(__dirname, '../test-resume.pdf')
+                  path: path.join(__dirname, '../../test-resume.pdf')
                 } as Express.Multer.File, generateFakeApplication({
                   alias: fakeEvent.alias,
                   user: {

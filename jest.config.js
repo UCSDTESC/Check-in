@@ -25,5 +25,5 @@ module.exports = {
   globalSetup: '<rootDir>/node_modules/@shelf/jest-mongodb/setup.js',
   globalTeardown: '<rootDir>/node_modules/@shelf/jest-mongodb/teardown.js',
   testEnvironment: '<rootDir>/node_modules/@shelf/jest-mongodb/environment.js',
-  testMatch: ['<rootDir>/src/**/tests/api/*.ts'],
+  testMatch: ['<rootDir>/src/**/tests/api/**/*.ts'],
 }
