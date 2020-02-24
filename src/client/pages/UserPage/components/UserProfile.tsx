@@ -32,8 +32,8 @@ class UserProfile extends React.Component<Props> {
   genderSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
     return (
       <select {...input} className={className}>
-        {UserGenderOptions.map((UserGenderOptions, i) =>
-          <option key={i} value={UserGenderOptions}>{UserGenderOptions}</option>)}
+        {UserGenderOptions.map((gender, i) =>
+          <option key={i} value={gender}>{gender}</option>)}
       </select>
     );
   };
@@ -41,8 +41,8 @@ class UserProfile extends React.Component<Props> {
   pronounSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
     return (
       <select {...input} className={className}>
-        {UserPronounOptions.map((UserPronounOptions, i) =>
-          <option key={i} value={UserPronounOptions}>{UserPronounOptions}</option>)}
+        {UserPronounOptions.map((pronouns, i) =>
+          <option key={i} value={pronouns}>{pronouns}</option>)}
       </select>
     );
   };
