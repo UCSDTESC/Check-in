@@ -20,29 +20,43 @@ export default class StatisticsService {
    * @param event The event to gather statistics for.
    */
   getEventStatistics(event: EventDocument): Promise<EventStatistics> {
-    return Promise.all(
-      [this.UserModel.countDocuments({event: event}),
-        this.UserModel.find({
-          event: event._id,
-        }).distinct('university').exec(),
-        this.UserModel.aggregate([
-          {
-            $match: {event: event._id},
-          },
-          {
-            $group: {_id: '$gender', count: {$sum: 1}},
-          },
-        ]).exec(),
-        this.UserModel.countDocuments({event: event, checkedIn: true}),
-        this.UserModel.aggregate([
-          {
-            $match: {event: event._id},
-          },
-          {
-            $group : {_id: '$status', count: {$sum: 1}},
-          }]).exec(),
-        this.UserModel.countDocuments(getResumeConditions(event)),
+    return Promise.all([
+      this.UserModel.countDocuments({ event: event }),
+      this.UserModel.find({
+        event: event._id
+      })
+        .distinct('university')
+        .exec(),
+      this.UserModel.aggregate([
+        {
+          $match: { event: event._id }
+        },
+        {
+          $group: { _id: '$gender', count: { $sum: 1 } }
+        }
+      ]).exec(),
+      this.UserModel.countDocuments({ event: event, checkedIn: true }),
+      this.UserModel.aggregate([
+        {
+          $match: { event: event._id }
+        },
+        {
+          $group: { _id: '$status', count: { $sum: 1 } }
+        }
+      ]).exec(),
+      this.UserModel.countDocuments(getResumeConditions(event)),
+      this.UserModel.aggregate([
+        {
+          $match: { event: event._id }
+        },
+        {
+          $group: { _id: { date: { $dateToString: { format: '%m-%d', date: '$createdAt' } } }, count: { $sum: 1 }}
+        },
+        {
+          $sort: { '_id.date': 1 }
+        }
       ])
+    ])
       .catch(err => {
         throw new DatabaseError(ErrorMessage.DATABASE_ERROR());
       })
@@ -57,6 +71,15 @@ export default class StatisticsService {
           return ret;
         }, {});
 
+        // Create cumulative applicant count each day
+        let csum = 0;
+        const appsOverTime = values[6].reduce((ret, day) => {
+          csum += day.count;
+          ret[day._id.date] = csum;
+
+          return ret;
+        }, {});
+
         return {
           count: values[0],
           universities: values[1].length,
@@ -64,6 +87,7 @@ export default class StatisticsService {
           checkedIn: values[3],
           status,
           resumes: values[5],
+          appsOverTime
         } as EventStatistics;
       });
   }
