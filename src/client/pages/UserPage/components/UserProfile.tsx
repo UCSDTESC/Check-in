@@ -30,23 +30,19 @@ type Props = InjectedFormProps<UserProfileFormData, UserProfileProps> & UserProf
 
 class UserProfile extends React.Component<Props> {
   genderSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
-    const genders = UserGenderOptions;
-
     return (
       <select {...input} className={className}>
-        {genders.map((gender, i) =>
-          <option key={i} value={gender}>{gender}</option>)}
+        {UserGenderOptions.map((UserGenderOptions, i) =>
+          <option key={i} value={UserGenderOptions}>{UserGenderOptions}</option>)}
       </select>
     );
   };
 
   pronounSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
-    const pronouns = UserPronounOptions;
-
     return (
       <select {...input} className={className}>
-        {pronouns.map((pronouns, i) =>
-          <option key={i} value={pronouns}>{pronouns}</option>)}
+        {UserPronounOptions.map((UserPronounOptions, i) =>
+          <option key={i} value={UserPronounOptions}>{UserPronounOptions}</option>)}
       </select>
     );
   };
