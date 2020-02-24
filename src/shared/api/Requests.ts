@@ -87,6 +87,7 @@ export interface RegisterUserPersonalSectionRequest {
   lastName: string;
   birthdate: string;
   gender: string;
+  pronouns?: string;
   phone: string;
   major?: string;
   year?: string;

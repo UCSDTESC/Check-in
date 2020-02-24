@@ -13,6 +13,11 @@ export const UserGenderOptions: string[] = [
   'I prefer not to say', 'Other',
 ];
 
+export const UserPronounOptions: string[] = [
+  'She/Her/Hers', 'He/Him/His', 'They/Them/Theirs',
+  'I prefer not to say', 'Other',
+];
+
 export const UserShirtSizeOptions = {
   XS: 'X-Small',
   S: 'Small',

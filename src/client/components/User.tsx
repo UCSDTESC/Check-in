@@ -355,6 +355,7 @@ class User extends React.Component<Props> {
                 {this.renderFormField('First Name', 'firstName', 'col-sm-4')}
                 {this.renderFormField('Last Name', 'lastName', 'col-sm-4')}
                 {this.renderFormField('Gender', 'gender', 'col-sm-4')}
+                {this.renderFormField('Pronouns', 'pronouns', 'col-sm-4')}
                 {this.renderFormField('Birthdate', 'birthdate', 'col-sm-4')}
                 {this.renderFormField('Year', 'year', 'col-sm-4')}
                 {this.renderFormField('Phone', 'phone', 'col-sm-4', 'tel')}
