@@ -1,5 +1,6 @@
 import { TESCUser, TESCEvent, TESCTeam } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
+import { UserGenderOptions, UserPronounOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
 import { CustomFieldProps } from '~/components/Fields';
@@ -29,40 +30,26 @@ type Props = InjectedFormProps<UserProfileFormData, UserProfileProps> & UserProf
 
 class UserProfile extends React.Component<Props> {
   genderSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
-    const genders = [
-      'Male', 'Female', 'Non-Binary', 'Transgender',
-      'I prefer not to say', 'Other',
-    ];
-
     return (
       <select {...input} className={className}>
-        {genders.map((gender, i) =>
+        {UserGenderOptions.map((gender, i) =>
           <option key={i} value={gender}>{gender}</option>)}
       </select>
     );
   };
 
   pronounSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
-    const pronouns = [
-      'He/Him/His', 'She/Her/Hers', 'They/Them/Theirs',
-      'I prefer not to say', 'Other',
-    ];
-
     return (
       <select {...input} className={className}>
-        {pronouns.map((pronouns, i) =>
+        {UserPronounOptions.map((pronouns, i) =>
           <option key={i} value={pronouns}>{pronouns}</option>)}
       </select>
     );
   };
 
   shirtSizeSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
-    const sizes = [
-      'Small', 'Medium', 'Large', 'X-Large', 'XX-Large',
-    ];
-    const values = [
-      'S', 'M', 'L', 'XL', 'XXL',
-    ];
+    const sizes = Object.values(UserShirtSizeOptions);
+    const values = Object.keys(UserShirtSizeOptions);
 
     return (
       <select {...input} className={className}>
