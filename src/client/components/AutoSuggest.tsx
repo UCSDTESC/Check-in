@@ -61,13 +61,13 @@ export default class AutoSuggest extends React.Component<AutoSuggestProps, AutoS
 
   renderSuggestion = (suggestion: string) => {
     return (
-      <a
+      <div
         tabIndex={-1}
         onClick={() => this.props.onSuggestionSelected(suggestion)}
         className="sd-form__suggestions-link"
       >
         {suggestion}
-      </a>
+      </div>
     );
   }
 

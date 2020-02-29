@@ -47,7 +47,9 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
     const {columns} = this.state;
 
     const adminToBeRendered = {...admin, 
-      lastAccessed: moment(admin.lastAccessed).fromNow()
+      lastAccessed: admin.lastAccessed 
+        ? moment(admin.lastAccessed).fromNow() 
+        : 'Never Logged In'
     }
     return Object.keys(columns).map(column => (
       <td key={column} className="admin-list__value">

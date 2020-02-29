@@ -8,9 +8,10 @@ import * as mongooseDelete from 'mongoose-delete';
 import * as mongooseSanitizer from 'mongoose-sanitizer';
 import { Container } from 'typedi';
 import { print } from 'util';
+import { generateQRCodeURL } from '@Shared/QRCodes';
 
 export type UserDocument = TESCUser & Document & {
-  csvFlatten: () => any;
+  csvFlatten: (isSponsor? : boolean, emailsOnly? : boolean) => any;
   attach: (name: string, options: any) => Promise<UserDocument>;
 };
 export type UserModel = Model<UserDocument>;
@@ -59,6 +60,13 @@ export const UserSchema = new Schema({
     type: String,
     required: [true, 'You must have a gender'],
     displayName: 'Gender',
+    public: true,
+    editable: true,
+  },
+  // Declares the user's pronoun
+  pronouns: {
+    type: String,
+    displayName: 'Pronouns',
     public: true,
     editable: true,
   },
@@ -272,30 +280,46 @@ UserSchema.plugin(crate, {
   },
 });
 
-UserSchema.method('csvFlatten', function () {
+UserSchema.method('csvFlatten', function (isSponsor = false, emailsOnly = false) {
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
-  const autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
+  let autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
     'gender', 'phone', 'university', 'pid', 'major', 'year', 'github',
     'website', 'shareResume', 'food', 'diet', 'shirtSize', 'availableBus',
     'bussing', 'teammates', 'status', 'checkedIn', 'createdAt', 'updatedAt'];
+
+  if (isSponsor) {
+    autoFill =  ['firstName', 'lastName', 'email', 'phone', 
+      'university', 'major', 'year', 'github', 'website', 'gpa', 'majorGPA'];
+  }
+
+  if (emailsOnly) {
+    autoFill = ['firstName', 'lastName', 'email'];
+  }
 
   let autoFilled: any = autoFill.reduce((acc, val) => {
     return Object.assign(acc, { [val]: user[val] });
   }, {});
 
-  autoFilled.outOfState = user.travel.outOfState;
-  autoFilled.city = user.travel.city;
-  autoFilled.resume = user.resume ? user.resume.url : '';
-
   autoFilled.email = user.account ? user.account.email : '';
 
-  autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
-  if (user.customQuestionResponses) {
-    autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
+  if (!emailsOnly) {
+    autoFilled.outOfState = user.travel.outOfState;
+    autoFilled.city = user.travel.city;
+    autoFilled.resume = user.resume ? user.resume.url : '';
+  
+    if (!isSponsor) {
+      autoFilled.whyEvent = user.whyEventResponse ? user.whyEventResponse : '';
+      
+      if (user.customQuestionResponses) {
+        autoFilled = {...autoFilled, ...user.customQuestionResponses.toJSON()};
+      }
+  
+      autoFilled.team = user.team ? user.team.code : '';
+  
+      autoFilled.qrCode = generateQRCodeURL(user);
+    }
   }
-
-  autoFilled.team = user.team ? user.team.code : '';
 
   return autoFilled;
 });

@@ -1,5 +1,6 @@
 import { TESCUser, TESCEvent, TESCTeam } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
+import { UserGenderOptions, UserPronounOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
 import React from 'react';
 import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
 import { CustomFieldProps } from '~/components/Fields';
@@ -7,6 +8,7 @@ import FileField from '~/components/FileField';
 
 export interface UserProfileFormData {
   gender: string;
+  pronouns: string;
   newResume: File[];
   shareResume: boolean;
   majorGPA: string;
@@ -28,26 +30,26 @@ type Props = InjectedFormProps<UserProfileFormData, UserProfileProps> & UserProf
 
 class UserProfile extends React.Component<Props> {
   genderSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
-    const genders = [
-      'Male', 'Female', 'Non-Binary', 'Transgender',
-      'I prefer not to say', 'Other',
-    ];
-
     return (
       <select {...input} className={className}>
-        {genders.map((gender, i) =>
+        {UserGenderOptions.map((gender, i) =>
           <option key={i} value={gender}>{gender}</option>)}
       </select>
     );
   };
 
+  pronounSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
+    return (
+      <select {...input} className={className}>
+        {UserPronounOptions.map((pronouns, i) =>
+          <option key={i} value={pronouns}>{pronouns}</option>)}
+      </select>
+    );
+  };
+
   shirtSizeSelect: React.StatelessComponent<CustomFieldProps> = ({ input, className }) => {
-    const sizes = [
-      'Small', 'Medium', 'Large', 'X-Large', 'XX-Large',
-    ];
-    const values = [
-      'S', 'M', 'L', 'XL', 'XXL',
-    ];
+    const sizes = Object.values(UserShirtSizeOptions);
+    const values = Object.keys(UserShirtSizeOptions);
 
     return (
       <select {...input} className={className}>
@@ -228,8 +230,8 @@ class UserProfile extends React.Component<Props> {
         user-profile__diet`}
         placeholder="No Soylent"
       />
-      <div className="row mt-3">
-        <div className="col-lg-6 mb-3">
+      <div className="row mt-3 align-items-end">
+        <div className="col-lg-4 mb-3">
           <h5>Gender:</h5>
           <Field
             component={this.genderSelect}
@@ -237,7 +239,15 @@ class UserProfile extends React.Component<Props> {
             className="sd-form__input-select user-profile__select"
           />
         </div>
-        <div className="col-lg-6 mb-3">
+        <div className="col-lg-4 mb-3">
+          <h5>Pronouns:</h5>
+          <Field
+            component={this.pronounSelect}
+            name="pronouns"
+            className="sd-form__input-select user-profile__select"
+          />
+        </div>
+        <div className="col-lg-4 mb-3">
           <h5>T-Shirt Size (Unisex):</h5>
           <Field
             component={this.shirtSizeSelect}

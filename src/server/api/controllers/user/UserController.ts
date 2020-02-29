@@ -99,7 +99,7 @@ export class UserController {
       await this.UserService.updateUserResume(newUser, resume);
     }
 
-    if (event.options.allowTeammates && !existingTeam) {
+    if(event.options.allowTeammates && !existingTeam) {
       if (user.createTeam) {
         existingTeam = await this.TeamService.createNewTeam(event, user.teamCode);
       } else {

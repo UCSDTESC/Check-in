@@ -1,7 +1,7 @@
 import { TESCUser, TESCEvent, Question } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { getRoleRank, Role } from '@Shared/Roles';
-import { isAcceptableStatus, isRejectableStatus, isWaitlistableStatus } from '@Shared/UserStatus';
+import { isAcceptableStatus, isRejectableStatus, isWaitlistableStatus, UserStatus } from '@Shared/UserStatus';
 import UUID from 'node-uuid';
 import React from 'react';
 import FA from 'react-fontawesome';
@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 import { sendAcceptanceEmail, sendRejectionEmail, sendWaitlistEmail } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
-import { generateQRCodeURL } from '~/utils/QRCodes'
+import { generateQRCodeURL } from '@Shared/QRCodes'
 
 import { AlertType } from '../pages/AlertPage';
 
@@ -100,6 +100,23 @@ class User extends React.Component<Props> {
             component="input"
             type={fieldType}
           />
+        </div>
+      )];
+  }
+
+  renderFormDropdown(label: string, value: string, options: string[], fieldSize: string = 'col-sm-4',
+    fieldType: string = 'text', labelSize: string = 'col-sm-2') {
+      return [<label key="0" className={labelSize + ' col-form-label'}>{label}</label>,
+      (
+        <div key="1" className={fieldSize}>
+          <Field
+            name={value}
+            className="form-control"
+            component="select"
+            type={fieldType}>
+              <option></option>
+              {options.map((o, i) => <option key={`opt-${i}`}>{o}</option>)}
+          </Field>
         </div>
       )];
   }
@@ -326,7 +343,8 @@ class User extends React.Component<Props> {
                     {this.renderFormCheckbox('Bussing', 'bussing', 'col-sm-4')}
                     {this.renderFormCheckbox('Sanitized', 'sanitized',
                       'col-sm-4')}
-                    {this.renderFormField('Status', 'status', 'col-sm-4')}
+                    {this.renderFormDropdown('Status', 'status', 
+                      Object.values(UserStatus), 'col-sm-4')}
                   </div>
                 </span>
               }
@@ -337,6 +355,7 @@ class User extends React.Component<Props> {
                 {this.renderFormField('First Name', 'firstName', 'col-sm-4')}
                 {this.renderFormField('Last Name', 'lastName', 'col-sm-4')}
                 {this.renderFormField('Gender', 'gender', 'col-sm-4')}
+                {this.renderFormField('Pronouns', 'pronouns', 'col-sm-4')}
                 {this.renderFormField('Birthdate', 'birthdate', 'col-sm-4')}
                 {this.renderFormField('Year', 'year', 'col-sm-4')}
                 {this.renderFormField('Phone', 'phone', 'col-sm-4', 'tel')}
@@ -430,7 +449,6 @@ class User extends React.Component<Props> {
 }
 
 export default reduxForm<UserFormData, UserProps>({
-  form: UUID.v4(),
   destroyOnUnmount: true,
   enableReinitialize: true,
 })(connect(mapStateToProps)(User));

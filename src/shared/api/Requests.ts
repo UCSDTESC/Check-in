@@ -48,6 +48,7 @@ export interface DownloadResumesRequest {
 
 export interface ExportUsersRequest {
   alias: string;
+  emailsOnly: boolean;
 }
 
 export interface ForgotPasswordRequest {
@@ -86,6 +87,7 @@ export interface RegisterUserPersonalSectionRequest {
   lastName: string;
   birthdate: string;
   gender: string;
+  pronouns?: string;
   phone: string;
   major?: string;
   year?: string;

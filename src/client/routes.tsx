@@ -23,6 +23,7 @@ import UserLogout from './auth/user/Logout';
 import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
 import AdminLayout from './layouts/admin';
 import SponsorLayout from './layouts/sponsor';
+import PublicLayout from './layouts/public';
 import UserLayout from './layouts/user';
 import AdminsPage from './pages/AdminsPage';
 import ApplyPage from './pages/ApplyPage';
@@ -38,6 +39,7 @@ import ResetPage from './pages/ResetPage';
 import ResumesPage from './pages/ResumesPage';
 import UserPage from './pages/UserPage';
 import UsersPage from './pages/UsersPage';
+import PreviewApplication from './pages/EventPage/components/PreviewApplication';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   authoriseAdmin,
@@ -147,17 +149,26 @@ class Routes extends React.Component<Props> {
       );
   }
 
+  renderPublic = (RenderComponent: any) => {
+    return (props: RouteComponentProps) => 
+      (
+        <PublicLayout>
+          <RenderComponent match={props.match} />
+        </PublicLayout>
+      );
+  }
+
   routes() {
     return (
       <Switch>
         <Route
           exact={true}
           path="/"
-          component={HomePage}
+          component={this.renderPublic(HomePage)}
         />
         <Route
           path="/register/:eventAlias"
-          component={ApplyPage}
+          component={this.renderPublic(ApplyPage)}
         />
         <Route
           exact={true}
@@ -180,7 +191,13 @@ class Routes extends React.Component<Props> {
         {/* Event Specific Routes */}
         <PrivateRoute
           path="/admin/events/:eventAlias"
+          exact={true}
           component={this.renderAdmin(EventPage)}
+        />
+        <PrivateRoute
+          path="/admin/events/:eventAlias/preview"
+          exact={true}
+          component={this.renderAdmin(PreviewApplication)}
         />
         <PrivateRoute
           path="/admin/users/:eventAlias"

@@ -11,7 +11,23 @@ interface ActionsTabProps {
 export default class ActionsTab extends EventPageTab<ActionsTabProps> {
   exportUsers = () => {
     const eventAlias = this.props.event.alias;
-    exportUsers(eventAlias)
+    exportUsers(eventAlias, false)
+      .end((err, res) => {
+        // Download as file
+        const blob = new Blob([res.text], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${eventAlias}-${Date.now()}.csv`);
+        document.body.appendChild(link);
+
+        link.click();
+      });
+  }
+
+  exportEmails = () => {
+    const eventAlias = this.props.event.alias;
+    exportUsers(eventAlias, true)
       .end((err, res) => {
         // Download as file
         const blob = new Blob([res.text], { type: 'text/csv;charset=utf-8;' });
@@ -55,6 +71,15 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
             >
               Export All Users
             </a>
+
+            <a
+              className="btn event-page__btn rounded-button rounded-button--small ml-0 mt-2"
+              onClick={this.exportEmails}
+              href="#"
+            >
+              Export User Emails
+            </a>
+            
           </div>
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />
