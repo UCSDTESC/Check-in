@@ -1,11 +1,10 @@
-import UserService from '@Services/UserService';
 import EventService from '@Services/EventService';
-import EmailService from '@Services/EmailService';
 import TeamService from '@Services/TeamService';
+import { TEAM_CODE_LENGTH } from '@Shared/ModelTypes';
 import { AccountModel } from '@Models/Account';
-import { UserModel, PUBLIC_USER_FIELDS } from '@Models/User';
+import { UserModel } from '@Models/User';
 import TestDatabaseConnection from '../../TestDatabaseConnection';
-import { generateFakeApplication, generateFakeEventDocument, generateFakeEvent, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../../fake';
+import { generateFakeEventDocument, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../../fake';
 import { TeamModel } from '@Models/Team';
 import { EventModel } from '@Models/Event';
 import { Container } from 'typedi';
@@ -31,6 +30,10 @@ describe('EventsController', () => {
     account: fakeAccount.toObject(),
     event: fakeEvent.toObject()
   });
+  let fakeTeam = generateFakeTeamDocument({
+    code: 'L33T',
+    event: fakeEvent
+  });
 
   beforeAll(async () => await dbConnection.connect());
 
@@ -38,6 +41,7 @@ describe('EventsController', () => {
     setIsNew(fakeAccount, true);
     setIsNew(fakeEvent, true);
     setIsNew(fakeUser, true);
+    setIsNew(fakeTeam, true);
 
     await dbConnection.clearDatabase()
   });
@@ -81,7 +85,7 @@ describe('EventsController', () => {
       })
     })
 
-    describe('for selected event', async () => {
+    describe('for selected event', () => {
       beforeEach(async () => {
         await fakeEvent.save();
       });
@@ -91,6 +95,25 @@ describe('EventsController', () => {
         expect(events).toHaveLength(1);
         expect(events[0].alias).toEqual(fakeEvent.alias);
       });
-    })
+
+      test('returns undefined for no registered users', async () => {
+        const {userCounts} = await eventsController.get(fakeEvent);
+
+        expect(userCounts[fakeEvent._id]).toBe(undefined);
+      });
+    });
+  });
+
+  describe('getTeamCode', () => {
+    test('generates team code of length 4', async () => {
+      const teamCode = await eventsController.getTeamCode();
+
+      expect(teamCode.length).toBe(TEAM_CODE_LENGTH);
+    });
+
+    describe.skip('for team code that already exists', () => {
+      // not sure how to test this, you'd have to somehow inject 
+      // behavior into Math.random
+    });
   });
 });
