@@ -21,7 +21,7 @@
     "rollback": "./node_modules/.bin/mm down",
     "heroku-postbuild": "npm run migrate && ./node_modules/.bin/gulp prod --production",
     "test-server": "tsc -P ./src/server/tsconfig.json --outDir /tmp",
-    "test-server:unit": "./node_modules/.bin/jest --runInBand --detectOpenHandles",
+    "test-server:unit": "./node_modules/.bin/jest --runInBand --detectOpenHandles --coverage",
     "gen-server-docs": "npx typedoc --out docs/server src/server/ --tsconfig src/server/tsconfig.json --mode file"
   },
   "homepage": "https://github.com/UCSDTESC/Check-in#readme",

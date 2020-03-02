@@ -9,7 +9,7 @@ import { ErrorMessage } from '../../../utils/Errors';
 import { generateFakeApplication, generateFakeEventDocument, generateFakeEvent, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../../fake';
 import TestDatabaseConnection from '../../TestDatabaseConnection';
 import { EventModel } from '@Models/Event';
-import { UserModel, PUBLIC_USER_FIELDS } from '@Models/User';
+import { UserModel } from '@Models/User';
 import { BadRequestError } from 'routing-controllers';
 import { Request } from 'express-serve-static-core';
 import { TeamModel } from '@Models/Team';
@@ -301,6 +301,13 @@ describe('UserController', () => {
           });
         });
       });
+    });
+  });
+
+  describe('updateUser', () => {
+    beforeEach(async () => {
+      await fakeAccount.save();
+      
     });
   });
 });

@@ -1,12 +1,8 @@
 import EventService from '@Services/EventService';
 import TeamService from '@Services/TeamService';
 import { TEAM_CODE_LENGTH } from '@Shared/ModelTypes';
-import { AccountModel } from '@Models/Account';
-import { UserModel } from '@Models/User';
 import TestDatabaseConnection from '../../TestDatabaseConnection';
 import { generateFakeEventDocument, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../../fake';
-import { TeamModel } from '@Models/Team';
-import { EventModel } from '@Models/Event';
 import { Container } from 'typedi';
 import { setIsNew } from '../../utils';
 import { EventsController } from '../../../api/controllers/user/EventsController';
@@ -15,11 +11,6 @@ describe('EventsController', () => {
   const dbConnection = new TestDatabaseConnection();
   const eventService = Container.get(EventService);
   const teamService = Container.get(TeamService);
-
-  const userModel = Container.get<UserModel>('UserModel');
-  const eventModel = Container.get<EventModel>('EventModel');
-  const accountModel = Container.get<AccountModel>('AccountModel');
-  const teamModel = Container.get<TeamModel>('TeamModel');
 
   let fakeAccount = generateFakeAccountDocument();
   let fakeEvent = generateFakeEventDocument({
