@@ -1,4 +1,5 @@
-export function setIsNew(doc, val) {
+// Copied from Mongoose Source code
+export function setIsNew(doc, val: boolean) {
   doc.isNew = val;
   doc.emit('isNew', val);
   doc.constructor.emit('isNew', val);

@@ -307,7 +307,8 @@ describe('UserController', () => {
   describe('updateUser', () => {
     beforeEach(async () => {
       await fakeAccount.save();
-      
     });
+
+    
   });
 });

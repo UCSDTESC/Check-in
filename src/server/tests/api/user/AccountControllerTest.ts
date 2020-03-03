@@ -75,7 +75,7 @@ describe('AccountController', () => {
       });
     });
 
-    describe('for existing account', async () => {
+    describe('for existing account', () => {
       beforeEach(async () => {
         await fakeEvent.save();
         await fakeAccount.save();
