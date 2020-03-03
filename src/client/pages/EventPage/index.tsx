@@ -3,7 +3,7 @@ import React from 'react';
 import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { UncontrolledTooltip } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch, loadAvailableColumns } from '~/actions';
@@ -220,7 +220,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
    * @returns {Component} The edit tab
    */
   renderEditForm() {
-    const validator = createValidator();
+    const validator = createValidator(false);
     const eventDate = new Date(this.props.event.closeTime);
     const initialValues: Partial<EventFormData> = {
       ...this.props.event,
@@ -233,22 +233,25 @@ class EventPage extends TabularPage<Props, EventPageState> {
     const editEvent = async (eventData: EventFormData) => {
       try {
         await editExistingEvent(this.props.event._id, eventData);
-        this.props.loadAllAdminEvents();
         this.props.addEventSuccessAlert(eventData.alias, `Successfully edited ${eventData.name}`, 'Edit Event');
+        await this.props.loadAllAdminEvents();
+        if (eventData.alias !== this.props.match.params.eventAlias) {
+          this.props.history.replace(`/admin/events/${eventData.alias}#edit`);
+        }
       } catch (e) {
         this.props.addEventDangerAlert(eventData.alias, e.message, 'Edit Event');
       }
     }
 
     return (
-          <div className="sd-form">
-            <EventForm
-              editing
-              validate={validator}
-              onSubmit={editEvent}
-              initialValues={initialValues}
-            />
-          </div>
+        <div className="sd-form event-page__edit-form">
+          <EventForm
+            editing
+            validate={validator}
+            onSubmit={editEvent}
+            initialValues={initialValues}
+          />
+        </div>
     );
   }
 
@@ -332,4 +335,6 @@ class EventPage extends TabularPage<Props, EventPageState> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventPage);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(EventPage)
+);
