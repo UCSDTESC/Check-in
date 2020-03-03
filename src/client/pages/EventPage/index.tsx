@@ -1,16 +1,14 @@
-import { TESCTeam, TESCEvent } from '@Shared/ModelTypes';
-import { UserStatus } from '@Shared/UserStatus';
-import { ObjectID } from 'bson';
+import { TESCTeam } from '@Shared/ModelTypes';
 import React from 'react';
 import FA from 'react-fontawesome';
 import { connect } from 'react-redux';
 import { showLoading, hideLoading } from 'react-redux-loading-bar';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import { UncontrolledTooltip } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { loadAllAdminEvents, ApplicationDispatch, loadAvailableColumns } from '~/actions';
 import Loading from '~/components/Loading';
-import { loadEventStatistics, loadAllTeams } from '~/data/AdminApi';
+import { loadEventStatistics, loadAllTeams, editExistingEvent } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
@@ -27,6 +25,8 @@ import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
 import TeamsTab from './tabs/TeamsTab';
 import ViewApplication from './components/ViewApplication';
+import EventForm, { EventFormData } from '../../components/EventForm';
+import createValidator from '../NewEventPage/validate';
 
 type RouteProps = RouteComponentProps<{
   eventAlias: string;
@@ -93,6 +93,12 @@ class EventPage extends TabularPage<Props, EventPageState> {
       name: 'Administrators',
       anchor: 'administrators',
       render: this.renderAdministrators.bind(this),
+    } as TabPage,
+    {
+      icon: 'edit',
+      name: 'Edit',
+      anchor: 'edit',
+      render: this.renderEditForm.bind(this),
     } as TabPage,
     {
       icon: 'cog',
@@ -209,6 +215,46 @@ class EventPage extends TabularPage<Props, EventPageState> {
     return (<SettingsTab {...this.props} />);
   }
 
+  /**
+   * Renders the event tab for editing the ebemt.
+   * @returns {Component} The edit tab
+   */
+  renderEditForm() {
+    const validator = createValidator(false);
+    const eventDate = new Date(this.props.event.closeTime);
+    const initialValues: Partial<EventFormData> = {
+      ...this.props.event,
+      closeTimeDay: eventDate.getDate(),
+      closeTimeMonth: eventDate.getMonth(),
+      closeTimeYear: eventDate.getFullYear(),
+      logo: undefined,
+    }
+
+    const editEvent = async (eventData: EventFormData) => {
+      try {
+        await editExistingEvent(this.props.event._id, eventData);
+        this.props.addEventSuccessAlert(eventData.alias, `Successfully edited ${eventData.name}`, 'Edit Event');
+        await this.props.loadAllAdminEvents();
+        if (eventData.alias !== this.props.match.params.eventAlias) {
+          this.props.history.replace(`/admin/events/${eventData.alias}#edit`);
+        }
+      } catch (e) {
+        this.props.addEventDangerAlert(eventData.alias, e.message, 'Edit Event');
+      }
+    }
+
+    return (
+        <div className="sd-form event-page__edit-form">
+          <EventForm
+            editing
+            validate={validator}
+            onSubmit={editEvent}
+            initialValues={initialValues}
+          />
+        </div>
+    );
+  }
+
   render() {
     const { event, statistics, alerts } = this.props;
     const { activeTab } = this.state;
@@ -289,4 +335,6 @@ class EventPage extends TabularPage<Props, EventPageState> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventPage);
+export default withRouter(
+  connect(mapStateToProps, mapDispatchToProps)(EventPage)
+);

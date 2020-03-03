@@ -1,10 +1,13 @@
-const createValidator = () => (values: any) => {
+const createValidator = (requireLogo = true) => (values: any) => {
+  console.log(values)
   const errors: any = {};
 
   const required = ['name', 'alias', 'closeTimeMonth', 'closeTimeDay',
-    'closeTimeYear', 'email', 'homepage', 'description', 'logo'];
+    'closeTimeYear', 'email', 'homepage', 'description'];
 
-  const notValid = required.filter(name => !(name in values));
+  requireLogo && required.push('logo')
+
+  const notValid = required.filter(name => !(name in values) || !values[name]);
   notValid.forEach(name => errors[name] = 'Required');
 
   if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
@@ -15,8 +18,8 @@ const createValidator = () => (values: any) => {
     errors.closeTimeDay = 'Invalid Day';
   }
 
-  if (values.closeTimeMonth === 'Month' || values.closeTimeMonth < 1 ||
-    values.closeTimeMonth > 12) {
+  if (values.closeTimeMonth === 'Month' || values.closeTimeMonth < 0 ||
+    values.closeTimeMonth > 11) {
     errors.closeTimeMonth = 'Invalid Month';
   }
 

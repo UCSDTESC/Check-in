@@ -3,7 +3,7 @@ import { Field, Fields, reduxForm, InjectedFormProps, WrappedFieldsProps } from 
 import * as FormFields from '~/components/Fields';
 import FileField from '~/components/FileField';
 
-export interface NewEventFormData {
+export interface EventFormData {
   name: string;
   alias: string;
   closeTimeDay: number;
@@ -17,13 +17,13 @@ export interface NewEventFormData {
   logo: File[];
 }
 
-interface NewEventFormProps {
-
+interface EventFormProps {
+  editing?: boolean;
 }
 
-type Props = InjectedFormProps<NewEventFormData, NewEventFormProps> & NewEventFormProps;
+type Props = InjectedFormProps<EventFormData, EventFormProps> & EventFormProps;
 
-class NewEventForm extends React.Component<Props> {
+class EventForm extends React.Component<Props> {
 
   createLogoUpload() {
     return (
@@ -122,7 +122,7 @@ class NewEventForm extends React.Component<Props> {
             type="submit"
             disabled={pristine || submitting}
           >
-              Create Event!
+              {this.props.editing ? 'Edit Event' : 'Create Event'}
           </button>
         )}
       </form>
@@ -130,7 +130,7 @@ class NewEventForm extends React.Component<Props> {
   }
 }
 
-export default reduxForm<NewEventFormData, NewEventFormProps>({
-  form: 'newEvent',
+export default reduxForm<EventFormData, EventFormProps>({
+  form: 'event',
   destroyOnUnmount: true,
-})(NewEventForm);
+})(EventForm);

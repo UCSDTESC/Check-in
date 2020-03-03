@@ -75,6 +75,17 @@ export class EventsController {
     return newEvent;
   }
 
+  @Post('/edit/:eventId')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  async editExistingEvent(
+    @Param('eventId') id: string,
+    @BodyParam('event') event: RegisterEventRequest,
+    @UploadedFile('logo', { options: Uploads, required: false }) logo?: Express.Multer.File,
+  ) {
+    await this.EventService.editExistingEvent(id, event, logo ? logo.path : undefined);
+    return SuccessResponse.Positive;
+  }
+
   @Put('/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   async updateEventOptions(@Body() body: UpdateEventOptionsRequest) {
