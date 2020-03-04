@@ -1,4 +1,4 @@
-const createValidator = (requireLogo = true) => (values: any) => {
+const createValidator = (requireLogo = true, allowPastDates = false) => (values: any) => {
   console.log(values)
   const errors: any = {};
 
@@ -23,7 +23,7 @@ const createValidator = (requireLogo = true) => (values: any) => {
     errors.closeTimeMonth = 'Invalid Month';
   }
 
-  if (values.closeTimeYear < new Date().getFullYear()) {
+  if (values.closeTimeYear < 1990 || (!allowPastDates && values.closeTimeYear < new Date().getFullYear())) {
     errors.closeTimeYear = 'Invalid Year';
   }
 
