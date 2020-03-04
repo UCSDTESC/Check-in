@@ -216,11 +216,11 @@ class EventPage extends TabularPage<Props, EventPageState> {
   }
 
   /**
-   * Renders the event tab for editing the ebemt.
+   * Renders the event tab for editing the event.
    * @returns {Component} The edit tab
    */
   renderEditForm() {
-    const validator = createValidator(false);
+    const validator = createValidator(false, true);
     const eventDate = new Date(this.props.event.closeTime);
     const initialValues: Partial<EventFormData> = {
       ...this.props.event,
