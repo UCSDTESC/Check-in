@@ -24,7 +24,7 @@ import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import Cookies from 'universal-cookie';
 import { NewAdminModalFormData } from '~/components/NewAdminModal';
-import { NewEventFormData } from '~/pages/NewEventPage/components/NewEventForm';
+import { EventFormData } from '~/components/EventForm';
 import CookieTypes from '~/static/Cookies';
 
 import { promisify } from './helpers';
@@ -166,11 +166,11 @@ export const checkinUser = (id: string, eventId: string) =>
       .use(adminApiPrefix)
   );
 
-export const registerNewEvent = (event: NewEventFormData) => {
+export const registerNewEvent = (event: EventFormData) => {
   const { logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields } = event;
   const closeTime: string = moment(new Date(
     closeTimeYear,
-    closeTimeMonth - 1,
+    closeTimeMonth,
     closeTimeDay
   )).toISOString(true);
   return promisify<TESCEvent>(
@@ -186,6 +186,32 @@ export const registerNewEvent = (event: NewEventFormData) => {
       .use(nocache)
   );
 };
+
+export const editExistingEvent = (id: string, event: Partial<EventFormData>) => {
+  const { logo, closeTimeDay, closeTimeMonth, closeTimeYear, ...eventWithoutFields } = event;
+  const closeTime: string = moment(new Date(
+    closeTimeYear,
+    closeTimeMonth,
+    closeTimeDay
+  )).toISOString(true);
+
+  
+  const promiseReq = request
+    .post(`/events/edit/${id}`)
+    .set('Authorization', cookies.get(CookieTypes.admin.token))
+    .field('event', JSON.stringify({
+      ...eventWithoutFields,
+      closeTime,
+    } as RegisterEventRequest))
+    .use(adminApiPrefix)
+    .use(nocache)
+
+    if (logo) {
+      promiseReq.attach('logo', logo[0])
+    }
+
+    return promisify<void>(promiseReq);
+}
 
 /**
  * Request to register a new admin.
