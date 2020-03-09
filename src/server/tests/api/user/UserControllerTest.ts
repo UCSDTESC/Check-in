@@ -2,19 +2,28 @@ import UserService from '@Services/UserService';
 import EventService from '@Services/EventService';
 import EmailService from '@Services/EmailService';
 import TeamService from '@Services/TeamService';
-import { AccountModel } from '@Models/Account';
+import { AccountModel, AccountDocument } from '@Models/Account';
 import { UserController } from '../../../api/controllers/user/UserController';
 import { Container } from 'typedi';
 import { ErrorMessage } from '../../../utils/Errors';
-import { generateFakeApplication, generateFakeEventDocument, generateFakeEvent, generateFakeAccountDocument, generateFakeUserDocument, generateFakeTeamDocument } from '../../fake';
+import { 
+  generateFakeApplication, 
+  generateFakeEventDocument, 
+  generateFakeEvent, 
+  generateFakeAccountDocument, 
+  generateFakeUserDocument, 
+  generateFakeTeamDocument } from '../../fake';
 import TestDatabaseConnection from '../../TestDatabaseConnection';
 import { EventModel } from '@Models/Event';
-import { UserModel } from '@Models/User';
+import { UserModel, UserDocument } from '@Models/User';
 import { BadRequestError } from 'routing-controllers';
 import { Request } from 'express-serve-static-core';
 import { TeamModel } from '@Models/Team';
 import * as path from 'path';
-import {setIsNew} from '../../utils';
+import { setIsNew } from '../../utils';
+import { UserGenderOptions, UserPronounOptions } from '@Shared/UserEnums';
+import { TESCUser } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
 
 describe('UserController', () => {
 
@@ -309,6 +318,181 @@ describe('UserController', () => {
       await fakeAccount.save();
     });
 
+    describe('for user that does not exist in database', () => {
+      test('throws error', async () => {
+        try {
+          await userController.updateUser(fakeAccount, {} as Express.Multer.File, {});
+        } catch (error) {
+          expect(error).toEqual(new BadRequestError(ErrorMessage.NO_USER_EXISTS()));
+        }
+      });
+    });
     
+    describe('for user in the database', () => {
+      beforeEach(async () => {
+        await fakeUser.save();
+      });
+
+      test('cannot update uneditable fields', async () => {
+        // Using `checkedIn` as a test for an uneditable field
+        // TODO: make test better
+
+        const updatedUser = await userController.updateUser(fakeAccount, {
+          path: path.join(__dirname, '../../test-resume.pdf') 
+        } as Express.Multer.File, {checkedIn: true});
+
+        expect(updatedUser.checkedIn).toBeFalsy();
+      });
+
+      test('updates editable fields', async () => {
+        const updatableDelta: Partial<TESCUser> = {
+          gender: UserGenderOptions[2],
+          pronouns: UserPronounOptions[2],
+          website: 'tesc.ucsd.edu',
+          food: 'Soylent Only'
+        }
+        const updatedUser = await userController.updateUser(fakeAccount, {
+          path: path.join(__dirname, '../../test-resume.pdf') 
+        } as Express.Multer.File, updatableDelta);
+
+        for (const [key, value] of Object.entries(updatableDelta)) {
+          expect(updatedUser[key]).toBe(value)
+        }
+      });
+    });
+  });
+
+  describe('userRSVP', () => {
+    beforeEach(async () => {
+      await fakeAccount.save();
+    });
+
+    describe('for user that does not match logged in user', () => {
+      let user: UserDocument, account: AccountDocument;
+      beforeEach(async () => {
+        account = generateFakeAccountDocument({email: 'tech@tesc.ucsd.edu'});
+        await account.save();
+        user = generateFakeUserDocument({
+          account: account.toObject(), 
+          event: fakeEvent.toObject()
+        });
+        await user.save();
+      });
+      test('throws error', async () => {
+        try {
+          await userController.userRSVP(user, fakeAccount, {status: true, bussing: false});
+        } catch (error) {
+          expect(error).toEqual(new BadRequestError(ErrorMessage.NO_USER_EXISTS()));
+        }
+      });
+    });
+
+    describe('for valid user', () => {
+      beforeEach(async () => {
+        await fakeAccount.save();
+        await fakeEvent.save();
+        await fakeUser.save();
+      });
+
+      describe('for user that has not been accepted', () => {
+        test('throws error', async () => {
+          try {
+            await userController.userRSVP(fakeUser, fakeAccount, {status: true, bussing: false});
+          } catch (error) {
+            expect(error).toEqual(new BadRequestError(ErrorMessage.PERMISSION_ERROR()));
+          }
+        }) 
+      });
+
+      describe('for user that has been accepted', () => {
+        let user: UserDocument;
+        beforeEach(async () => {
+
+          // making the new user under the same account, so we
+          // should remove the default
+          await userModel.remove({_id: fakeUser._id});
+          user = generateFakeUserDocument({
+            account: fakeAccount.toObject(),
+            event: fakeEvent.toObject(),
+            firstName: 'User With Unconfirmed Status',
+            status: UserStatus.Unconfirmed
+          });
+        });
+
+        test('sets rsvp to true', async () => {
+          const newUser = await userController.userRSVP(user, fakeAccount, {status: true, bussing: false});
+          expect(newUser.status).toBe(UserStatus.Confirmed);
+        });
+  
+        test('sets rsvp to false', async () => {
+          const newUser = await userController.userRSVP(user, fakeAccount, {status: false, bussing: false});
+          expect(newUser.status).toBe(UserStatus.Declined);
+        });
+
+        test('does not set bussing to true for event without bussing enabled', async () => {
+          const newUser = await userController.userRSVP(user, fakeAccount, {status: true, bussing: true});
+          expect(newUser.bussing).toBe(false);
+        });
+
+        describe('for event with bussing enabled', () => {
+          beforeEach(async () => {
+            await userModel.remove({_id: fakeUser._id});
+            await fakeEvent.update({bussing: true});
+            user = generateFakeUserDocument({
+              account: fakeAccount.toObject(),
+              event: fakeEvent.toObject(),
+              firstName: 'User With Unconfirmed Status',
+              status: UserStatus.Unconfirmed,
+              availableBus: 'UCLA'
+            });
+            await user.save();
+          });
+
+          test('sets bussing to true', async () => {
+            const newUser = await userController.userRSVP(user, fakeAccount, {status: true, bussing: true});
+            expect(newUser.bussing).toBe(true);
+          });
+        });
+      });
+
+    });
+  });
+
+  describe('getTeam', () => {
+    beforeEach(async () => {
+      await fakeEvent.save();
+      await fakeAccount.save();
+      await fakeUser.save();
+    });
+
+    describe('for user that does not match logged in user', () => {
+      let user: UserDocument, account: AccountDocument;
+      beforeEach(async () => {
+        account = generateFakeAccountDocument({email: 'tech@tesc.ucsd.edu'});
+        await account.save();
+        user = generateFakeUserDocument({
+          account: account.toObject(), 
+          event: fakeEvent.toObject()
+        });
+        await user.save();
+      });
+      test('throws error', async () => {
+        try {
+          await userController.getTeam(user, fakeAccount);
+        } catch (error) {
+          expect(error).toEqual(new BadRequestError(ErrorMessage.NO_USER_EXISTS()));
+        }
+      });
+    });
+
+    describe('for user with no team', () => {
+      test('throws error', async () => {
+        try {
+          await userController.getTeam(fakeUser, fakeAccount);
+        } catch (error) {
+          expect(error).toEqual(new Error(ErrorMessage.USER_HAS_NO_TEAM()));
+        }
+      })
+    });
   });
 });

@@ -121,6 +121,6 @@ export const generateFakeEventDocument = (p?: Partial<TESCEvent>) => new Event(g
 
 export const generateFakeUserDocument = (p?: Partial<TESCUser>) => new User(generateFakeUser(p))
 
-export const generateFakeAccountDocument = (p?: Partial<TESCUser>) => new Account(generateFakeAccount(p))
+export const generateFakeAccountDocument = (p?: Partial<TESCAccount>) => new Account(generateFakeAccount(p))
 
 export const generateFakeTeamDocument = (p?: Partial<TESCTeam>) => new Team(generateFakeTeam(p));

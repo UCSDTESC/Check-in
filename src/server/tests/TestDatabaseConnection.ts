@@ -60,6 +60,10 @@ class TestDatabaseConnection {
       await model.deleteMany({})
     }
   }
+
+  public async clearUserModel() {
+    await Container.get<UserModel>('UserModel').deleteMany({});
+  }
 }
 
 export default TestDatabaseConnection;
