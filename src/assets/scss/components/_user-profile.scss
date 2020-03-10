@@ -134,6 +134,7 @@
     text-align: left;
     font-family: $header-font-family;
     font-size: 1.2rem;
+    display: inline-block;
 
     @include media-breakpoint-up(md) {
       text-align: right;
@@ -141,6 +142,8 @@
   }
 
   &__status {
+    margin-right: 1rem;
+
     &--confirmed {
       color: $default-green;
     }
