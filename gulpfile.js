@@ -98,4 +98,9 @@ gulp.task('default', ['css', 'browser-sync'], function () {
   gulp.watch('src/assets/scss/**/*.scss', ['css']);
 });
 
+/**
+ * DISCLAIMER: If running this on a development machine, be sure to remove frontend 
+ * build artifacts from `src/assets/public/js` - your last production build will override 
+ * your future development builds if this directory is not deleted.
+ */
 gulp.task('prod', ['webpack', 'css']);
