@@ -5,6 +5,8 @@ import React from 'react';
 import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
 import { CustomFieldProps } from '~/components/Fields';
 import FileField from '~/components/FileField';
+import { generateQRCodeURL } from '@Shared/QRCodes';
+import FA from 'react-fontawesome';
 
 export interface UserProfileFormData {
   gender: string;
@@ -109,6 +111,24 @@ class UserProfile extends React.Component<Props> {
         {button}
       </span>
     );
+  }
+
+  /**
+   * Renders the QR code for the user if their status is "Confirmed".
+   * @param {Object} user The user to render for.
+   * @returns {Component}
+   */
+  renderUserQRCode = (user: TESCUser) => {
+    if (user.status !== UserStatus.Confirmed) {
+      return <span />;
+    }
+
+    return <a className={`btn px-2 mx-1 w-auto rounded-button rounded-button--small`}
+              href={generateQRCodeURL(user)}
+              target="_blank" >
+              <FA name="qrcode" className="mr-2" />
+              QR Code
+            </a>;
   }
 
   /**
@@ -349,15 +369,8 @@ class UserProfile extends React.Component<Props> {
       <form className="user-profile" onSubmit={handleSubmit}>
         <div className="user-profile__header">
           <div className="user-profile__hello row">
-            <div
-              className={`order-1 order-md-2 col-md-12 col-lg-4
-              user-profile__status-box`}
-            >
-              {this.renderUserBussing(user)}
-              {this.renderUserStatus(user.status)}
-            </div>
 
-            <div className="order-2 order-md-1 col-md-12 col-lg-8">
+            <div className="order-1 order-md-1 col-md-12 col-lg-6">
               <h1>Your {' '}
                 <a
                   href={user.event.homepage}
@@ -369,6 +382,15 @@ class UserProfile extends React.Component<Props> {
                 </a>
                 {' '} Application</h1>
               <h5 className={`pt-3 ${tPT ? 'd-block' : 'd-none'}`}>{tPT}</h5>
+            </div>
+
+            <div
+              className={`order-2 order-md-2 col-md-12 col-lg-6
+              user-profile__status-box`}
+            >
+              {this.renderUserBussing(user)}
+              {this.renderUserStatus(user.status)}
+              {this.renderUserQRCode(user)}
             </div>
           </div>
         </div>
