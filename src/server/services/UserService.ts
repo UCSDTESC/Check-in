@@ -1,16 +1,18 @@
-import { AccountModel, AccountDocument } from '@Models/Account';
+import { AccountDocument, AccountModel } from '@Models/Account';
 import { AccountResetModel } from '@Models/AccountReset';
-import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
-import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument, EDITABLE_USER_FIELDS } from '@Models/User';
-import { TESCEvent, TESCAccount, TESCUser, AccountPasswordReset } from '@Shared/ModelTypes';
-import { UserStatus } from '@Shared/UserStatus';
-import { RegisterUserRequest, RegisterUserFields } from '@Shared/api/Requests';
+import { EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/Event';
+import { TeamDocument, TeamModel } from '@Models/Team';
+import { EDITABLE_USER_FIELDS, PUBLIC_USER_FIELDS, UserDocument, UserModel, UserSchema } from '@Models/User';
+import { RegisterUserFields } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
+import { AccountPasswordReset, MAX_TEAM_SIZE, TESCAccount, TESCEvent, TESCUser } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
 import { generate } from 'generate-password';
 import * as moment from 'moment';
-import { Service, Inject } from 'typedi';
-
+import { Inject, Service } from 'typedi';
 import { ErrorMessage } from '../utils/Errors';
+import { ForbiddenError } from 'routing-controllers';
+
 
 @Service()
 export default class UserService {
@@ -22,6 +24,9 @@ export default class UserService {
 
   @Inject('UserModel')
   private UserModel: UserModel;
+
+  @Inject('TeamModel')
+  private TeamModel: TeamModel;
 
   /**
    * Create a JWT token for a given user account.
@@ -196,6 +201,50 @@ export default class UserService {
   }
 
   /**
+   * Get a user by the associated account email.
+   * @param email The email associated with the account.
+   */
+  async getUserByEventAndEmail(email: string, event: EventDocument, caseSensitive: boolean = false) {
+    const account = await this.getAccountByEmail(email, caseSensitive);
+    return this.UserModel
+      .findOne({
+        account,
+        event,
+      })
+      .populate('team')
+      .exec();
+  }
+
+  /**
+   * Moves a user to another team
+   * @param user The user to move
+   * @param newTeam The team to move to
+   */
+  async changeUserTeam(user: UserDocument, newTeam?: TeamDocument) {
+    if (newTeam) {
+      // Make sure team won't be full
+      if (newTeam.members.length + 1 > MAX_TEAM_SIZE) throw new Error(ErrorMessage.TEAM_FULL(newTeam.code));
+      newTeam.members.push(user);
+      await newTeam.save();
+    }
+
+    if (user.team) {
+      const oldTeam = await this.TeamModel.findById(user.team._id).populate('members').exec();
+      const oldTeamMembers = oldTeam.members.filter(member => member._id != user.id);
+
+      if (oldTeamMembers.length === 0) {
+        await oldTeam.remove();
+      } else {
+        oldTeam.members = oldTeamMembers;
+        await oldTeam.save();
+      }
+    }
+
+    user.team = newTeam;
+    await user.save();
+  }
+
+  /**
    * Creates a new account with the given information.
    * @param email The email to associate with the new account.
    * @param password The password to associate with the new account.
@@ -283,7 +332,7 @@ export default class UserService {
    */
   async RSVPUser(user: UserDocument, accept: boolean, acceptBus: boolean = false) {
     if (user.status !== UserStatus.Unconfirmed) {
-      throw new Error(ErrorMessage.PERMISSION_ERROR());
+      throw new ForbiddenError(ErrorMessage.PERMISSION_ERROR());
     }
 
     user.status = accept ? UserStatus.Confirmed : UserStatus.Declined;

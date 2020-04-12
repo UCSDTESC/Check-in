@@ -1,25 +1,20 @@
 import Uploads from '@Config/Uploads';
 import { AdminDocument } from '@Models/Admin';
 import { EventDocument } from '@Models/Event';
+import { TeamDocument } from '@Models/Team';
 import AdminService from '@Services/AdminService';
 import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
 import TeamService from '@Services/TeamService';
 import UserService from '@Services/UserService';
-import { TESCEvent, Admin, TESCUser, TESCTeam } from '@Shared/ModelTypes';
-import { Role, hasRankEqual, hasRankAtLeast } from '@Shared/Roles';
-import {
-  RegisterEventRequest, UpdateEventOptionsRequest, AddSponsorRequest, AddOrganiserRequest,
-  CheckinUserRequest
-} from '@Shared/api/Requests';
-import { EventsWithStatisticsResponse, SuccessResponse } from '@Shared/api/Responses';
-import {
-  Get, JsonController, UseBefore, Param, QueryParam, Post, UploadedFile,
-  BodyParam, Put, Body, BadRequestError
-} from 'routing-controllers';
-
+import { AddOrganiserRequest, AddSponsorRequest, AddTeamMembersRequest, CheckinUserRequest, RegisterEventRequest, UpdateEventOptionsRequest, UpdateTeamRequest, RemoveTeamMembersRequest } from '@Shared/api/Requests';
+import { SuccessResponse } from '@Shared/api/Responses';
+import { Admin, MAX_TEAM_SIZE, TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import { hasRankAtLeast, hasRankEqual, Role } from '@Shared/Roles';
+import { BadRequestError, Body, BodyParam, Get, JsonController, Param, Patch, Post, Put, UploadedFile, UseBefore, ForbiddenError } from 'routing-controllers';
 import { ErrorMessage } from '../../../utils/Errors';
 import { SelectedEventID } from '../..//decorators/SelectedEventID';
+import { SelectedTeamID } from '../..//decorators/SelectedTeamID';
 import { ValidateEventID } from '../..//middleware/ValidateEventID';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
@@ -131,7 +126,7 @@ export class EventsController {
     } else if (isSponsor) {
       users = await this.SponsorService.getSponsorApplicantsByEvent(event);
     } else {
-      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+      throw new ForbiddenError(ErrorMessage.PERMISSION_ERROR());
     }
 
     return users;
@@ -143,10 +138,100 @@ export class EventsController {
   async getTeams(@AuthorisedAdmin() admin: Admin, @SelectedEventID() event: EventDocument): Promise<TESCTeam[]> {
     const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
     if (!isOrganiser) {
+      throw new ForbiddenError(ErrorMessage.PERMISSION_ERROR());
+    }
+
+    const teams = await this.TeamService.getTeamsByEvent(event);
+    return Promise.all(teams.map(this.TeamService.populateTeammatesAdminFields))
+  }
+
+  @Patch('/:eventId/teams')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventID)
+  async updateTeam(
+    @AuthorisedAdmin() admin: Admin,
+    @SelectedEventID() event: EventDocument,
+    @Body() req: UpdateTeamRequest
+  ) {
+    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
+    if (!isOrganiser) {
       throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
     }
 
-    return this.TeamService.getTeamsByEvent(event);
+    const teamId = req._id
+    if (!teamId) throw new BadRequestError('The team ID must be included in the request')
+    
+    const team: TESCTeam = await this.TeamService.getTeamById(teamId)
+    if (!team) throw new BadRequestError(`No team with ID ${teamId} found`);
+
+    await this.TeamService.updateTeamById(teamId, Object.assign(team, req));
+    return SuccessResponse.Positive;
+  }
+
+
+  @Post('/:eventId/teams/:teamId/add-members')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventID)
+  async addTeamMembers(
+    @AuthorisedAdmin() admin: Admin,
+    @SelectedEventID() event: EventDocument,
+    @SelectedTeamID() team: TeamDocument,
+    @Body() req: AddTeamMembersRequest
+  ) {
+    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
+    if (!isOrganiser) {
+      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+    }
+
+    const currentUserAccounts = team.members;
+    const newUserAccounts = await Promise.all(
+      req.emails.map(async email => {
+        const user = await this.UserService.getUserByEventAndEmail(email, event);
+        if (!user) throw new BadRequestError(ErrorMessage.NO_ACCOUNT_EXISTS());
+        if (user.team && user.team._id.equals(team._id)) throw new BadRequestError(ErrorMessage.USER_ON_TEAM());
+
+        return user;
+      })
+    );
+
+    if (newUserAccounts.length + currentUserAccounts.length > MAX_TEAM_SIZE) throw new BadRequestError(ErrorMessage.TEAM_FULL(team.code, MAX_TEAM_SIZE))
+    
+    await Promise.all(
+      newUserAccounts.map(user => this.UserService.changeUserTeam(user, team))
+    );
+
+    return SuccessResponse.Positive;
+  }
+
+  @Post('/:eventId/teams/:teamId/remove-members')
+  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
+  @UseBefore(ValidateEventID)
+  async removeTeamMembers(
+    @AuthorisedAdmin() admin: Admin,
+    @SelectedEventID() event: EventDocument,
+    @SelectedTeamID() team: TeamDocument,
+    @Body() req: RemoveTeamMembersRequest
+  ) {
+    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
+    if (!isOrganiser) {
+      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+    }
+
+    const removedUserAccounts = await Promise.all(
+      req.emails.map(async email => {
+        const user = await this.UserService.getUserByEventAndEmail(email, event);
+        if (!user) throw new BadRequestError(ErrorMessage.NO_ACCOUNT_EXISTS());
+        if (!user.team || !user.team._id.equals(team._id)) throw new BadRequestError(ErrorMessage.USER_NOT_ON_TEAM());
+
+        return user;
+      })
+    );
+    
+    await Promise.all(
+      removedUserAccounts.map(user => this.UserService.changeUserTeam(user, undefined))
+    );
+
+    return SuccessResponse.Positive;
   }
 
   @Get('/:eventId/sponsor-users')
@@ -159,7 +244,7 @@ export class EventsController {
       return await this.SponsorService.getSponsorApplicantsByEvent(event);
     }
 
-    throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+    throw new ForbiddenError(ErrorMessage.PERMISSION_ERROR());
   }
 
   @Post('/:eventId/checkin')
@@ -169,7 +254,7 @@ export class EventsController {
     @Body() request: CheckinUserRequest): Promise<SuccessResponse> {
     const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
     if (!isOrganiser) {
-      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+      throw new ForbiddenError(ErrorMessage.PERMISSION_ERROR());
     }
 
     await this.UserService.checkinUserById(request.id);
