@@ -15,5 +15,5 @@ describe('AuthController', () => {
 
   afterAll(async () => await dbConnection.closeDatabase());
 
-  test.skip('TODO: AuthController Tests');
+  test.skip('TODO: AuthController Tests', () => {});
 });
