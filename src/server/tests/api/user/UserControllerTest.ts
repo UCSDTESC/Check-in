@@ -14,7 +14,7 @@ import {
   generateFakeUserDocument, 
   generateFakeTeamDocument } from '../../fake';
 import TestDatabaseConnection from '../../TestDatabaseConnection';
-import { EventModel } from '@Models/Event';
+import { EventModel, EventDocument } from '@Models/Event';
 import { UserModel, UserDocument } from '@Models/User';
 import { BadRequestError } from 'routing-controllers';
 import { Request } from 'express-serve-static-core';
@@ -22,7 +22,7 @@ import { TeamModel } from '@Models/Team';
 import * as path from 'path';
 import { setIsNew } from '../../utils';
 import { UserGenderOptions, UserPronounOptions } from '@Shared/UserEnums';
-import { TESCUser } from '@Shared/ModelTypes';
+import { TESCUser, MAX_TEAM_SIZE } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 
 describe('UserController', () => {
@@ -55,7 +55,7 @@ describe('UserController', () => {
     setIsNew(fakeEvent, true);
     setIsNew(fakeUser, true);
 
-    await dbConnection.clearDatabase()
+    await dbConnection.clearDatabase();
   });
 
   afterAll(async () => await dbConnection.closeDatabase());
@@ -69,7 +69,7 @@ describe('UserController', () => {
 
   describe('get', () => {
     describe('for user with no application', () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         // Nothing in userModel i.e. no application in the system.
         await fakeAccount.save();
         await fakeEvent.save();
@@ -85,7 +85,7 @@ describe('UserController', () => {
     });
 
     describe('for user with application', () => { 
-      beforeAll(async () => {
+      beforeEach(async () => {
         await fakeAccount.save();
         await fakeEvent.save();
         await fakeUser.save(); 
@@ -119,7 +119,7 @@ describe('UserController', () => {
     });
           
     describe('for closed event', () => {
-      beforeAll(async () => {
+      beforeEach(async () => {
         // Create new event that has closed already and save it
         const closedEvent = generateFakeEventDocument({
           closeTime: new Date(1995, 11, 17).toString()
@@ -143,7 +143,7 @@ describe('UserController', () => {
       });
 
       describe('for user that has already applied to event', () => {
-        beforeAll(async () => {
+        beforeEach(async () => {
           await fakeEvent.save();
           await fakeUser.save();
         })
@@ -159,14 +159,16 @@ describe('UserController', () => {
       });
 
       describe('for user that has not applied to event', () => {
-        beforeAll(async () => {
+        beforeEach(async () => {
           await fakeEvent.save();
         })
 
         test('creates application', async () => {
           await userController.registerNewUser({
             path: path.join(__dirname, '../../test-resume.pdf')
-          } as Express.Multer.File, fakeApplication, {} as Request); 
+          } as Express.Multer.File, fakeApplication, {
+            get: (a: string) => 'fake-get'
+          } as Request); 
 
           const users = await userModel.find({});
           expect(users).toHaveLength(1);
@@ -174,28 +176,60 @@ describe('UserController', () => {
       });
     });
 
+    describe('for user without existing tesc.events account', () => {
+      const newApplication = generateFakeApplication({
+        alias: fakeEvent.alias,
+      })
+      beforeEach(async () => {
+        await fakeEvent.save();
+      });
+      
+      test('creates application and sends create application email', async () => {
+        const sendAccountConfirmEmailSpy = jest.spyOn(emailService, 'sendAccountConfirmEmail');
+        
+        await userController.registerNewUser({
+          path: path.join(__dirname, '../../test-resume.pdf')
+        } as Express.Multer.File, newApplication, {
+          get: (a: string) => 'fake-get'
+        } as Request); 
+
+        const users = await userModel.find({});
+        const accounts = await accountModel.find({});
+
+        expect(users).toHaveLength(1);
+        expect(accounts).toHaveLength(1);
+        expect(sendAccountConfirmEmailSpy).toHaveBeenCalled();
+      });
+    })
+
     describe('teams', () => {
       describe('for event without team option set', () => {
-        const noTeamsEvent = generateFakeEventDocument({
-          closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
-          options: {
-            ...generateFakeEvent().options,
-            allowTeammates: false
-          }
-        });
-
+        let noTeamsEvent: EventDocument;
         beforeEach(async () => {
+          noTeamsEvent = generateFakeEventDocument({
+            closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
+            options: {
+              ...generateFakeEvent().options,
+              allowTeammates: false
+            }
+          });
+
           await fakeAccount.save();
           await noTeamsEvent.save();
         });
 
         test('no team service methods are called', async () => {
+          const newApplication = generateFakeApplication({
+            alias: noTeamsEvent.alias,
+          });
+
           const getTeamByCodeSpy = jest.spyOn(teamService, 'getTeamByCode');
           const createNewTeamSpy = jest.spyOn(teamService, 'createNewTeam');
-  
           await userController.registerNewUser({
             path: path.join(__dirname, '../../test-resume.pdf')
-          } as Express.Multer.File, fakeApplication, {} as Request);
+          } as Express.Multer.File, newApplication, {
+            get: (a: string) => 'fake-get'
+          } as Request);
   
           expect(getTeamByCodeSpy).toHaveBeenCalledTimes(0);
           expect(createNewTeamSpy).toHaveBeenCalledTimes(0);
@@ -241,7 +275,7 @@ describe('UserController', () => {
 
 
         describe('for user joining team', () => {
-          const fakeEvent = generateFakeEventDocument({
+          const teamsEvent = generateFakeEventDocument({
             closeTime: new Date(new Date().getTime()+(5*24*60*60*1000)).toString(),
             options: {
               ...generateFakeEvent().options,
@@ -249,12 +283,12 @@ describe('UserController', () => {
             }
           });
           const fakeTeam = generateFakeTeamDocument({
-            event: fakeEvent.toObject()
+            event: teamsEvent.toObject()
           });
 
           beforeEach(async () => {
             await fakeAccount.save();
-            await fakeEvent.save();
+            await teamsEvent.save();
             await fakeTeam.save();
           });
           
@@ -263,7 +297,7 @@ describe('UserController', () => {
               await userController.registerNewUser({
                 path: path.join(__dirname, '../../test-resume.pdf')
               } as Express.Multer.File, generateFakeApplication({
-                alias: fakeEvent.alias,
+                alias: teamsEvent.alias,
                 user: {
                   ...fakeApplication.user,
                   createTeam: false,
@@ -276,6 +310,59 @@ describe('UserController', () => {
               const users = await userModel.find({});
               expect(users).toHaveLength(1);
             });
+
+            describe('for full team', () => {
+              beforeEach(async () => {
+                // rip hack
+                setIsNew(teamsEvent, true);
+                setIsNew(fakeTeam, true);
+
+                await teamsEvent.save();
+                await fakeTeam.save();
+
+                for (let i = 0; i < MAX_TEAM_SIZE; i++) {
+                  await userController.registerNewUser({
+                    path: path.join(__dirname, '../../test-resume.pdf')
+                  } as Express.Multer.File, generateFakeApplication({
+                    alias: teamsEvent.alias,
+                    user: {
+                      ...generateFakeUserDocument({
+                        account: generateFakeAccountDocument({
+                          email: `fake-${i}@tesc.ucsd.edu`
+                        }),
+                        event: teamsEvent.toObject()
+                      }).toObject(),
+                      createTeam: false,
+                      teamCode: 'L33T'
+                    }
+                  }), {} as Request);
+                }
+              });
+
+              test('throws error on joining', async () => {
+
+                try {
+                  await userController.registerNewUser({
+                    path: path.join(__dirname, '../../test-resume.pdf')
+                  } as Express.Multer.File, generateFakeApplication({
+                    alias: teamsEvent.alias,
+                    user: {
+                      ...generateFakeUserDocument({
+                        account: generateFakeAccountDocument({
+                          email: `fake-5@tesc.ucsd.edu`
+                        }),
+                        event: teamsEvent.toObject()
+                      }).toObject(),
+                      createTeam: false,
+                      teamCode: 'L33T'
+                    }
+                  }), {} as Request);
+                } catch(e) {
+                  expect(e).toEqual(new BadRequestError(ErrorMessage.TEAM_FULL('L33T', MAX_TEAM_SIZE)));
+                }
+
+              })
+            })
           });
 
           describe('for non existent team', () => {
@@ -286,9 +373,8 @@ describe('UserController', () => {
                 allowTeammates: true
               }
             });
-            beforeAll(async () => {
+            beforeEach(async () => {
               await fakeEvent.save();
-              await teamModel.deleteMany({});
             });
 
             test('throws error', async () => {
