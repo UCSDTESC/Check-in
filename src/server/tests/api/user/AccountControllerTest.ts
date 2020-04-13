@@ -37,6 +37,8 @@ describe('AccountController', () => {
     await dbConnection.clearDatabase()
   });
 
+  afterAll(async () => await dbConnection.closeDatabase());
+
   describe('confirmEmail', () => {
     describe('for account that does not exist', () => {
       test('error is thrown', async () => {
