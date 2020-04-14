@@ -8,7 +8,7 @@ import { Role } from '@Shared/Roles';
 import moment = require('moment');
 import { generate } from 'generate-password';
 import { Service, Inject } from 'typedi';
-import { getResumeConditions, RESUME_FIELDS } from 'utils/Resumes';
+import { getResumeConditions, RESUME_FIELDS } from '../utils/Resumes';
 
 import ResumeService from './ResumeService';
 
