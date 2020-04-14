@@ -10,6 +10,7 @@ import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
+import { ErrorMessage } from '../../../utils/Errors';
 
 /**
  * Handles all of the logic for fetching event registration information.
@@ -25,7 +26,10 @@ export class StatisticsController {
   @Get('/')
   @UseBefore(RoleAuth(Role.ROLE_ADMIN))
   async get(@AuthorisedAdmin() admin: Admin, @SelectedEventAlias() event: EventDocument): Promise<EventStatistics> {
-    await this.EventService.isAdminOrganiser(event.alias, admin);
-    return this.StatisticsService.getEventStatistics(event);
+    if (await this.EventService.isAdminOrganiser(event.alias, admin)) {
+      return this.StatisticsService.getEventStatistics(event);
+    } else {
+      throw new Error(ErrorMessage.NOT_ORGANISER());
+    }
   }
 }
