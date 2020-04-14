@@ -11,6 +11,7 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "types": [
+      "jest",
       "node"
     ],
     "paths": {
@@ -29,10 +30,11 @@
     },
     "lib": [
       "es6"
-    ],
+    ]
   },
   "include": [
     "./**/*.ts",
-    "../shared/**/*.ts"
+    "../shared/**/*.ts", 
+    "./setupTests.ts"
   ]
 }

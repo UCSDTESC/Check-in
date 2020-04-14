@@ -1,20 +1,15 @@
 import { USER_JWT_TIMEOUT } from '@Config/Passport';
-import { EventDocument } from '@Models/Event';
 import EmailService from '@Services/EmailService';
 import UserService from '@Services/UserService';
-import { TESCAccount } from '@Shared/ModelTypes';
 import { ForgotPasswordRequest, ResetPasswordRequest } from '@Shared/api/Requests';
 import { JWTUserAuthToken, JWTUserAuth, SuccessResponse } from '@Shared/api/Responses';
 import { Response, Request } from 'express';
 import * as jwt from 'jsonwebtoken';
 import { Get, JsonController, UseBefore, Res, Req, Post, Body } from 'routing-controllers';
-import { ErrorMessage } from 'utils/Errors';
+import { ErrorMessage } from '../../../utils/Errors';
 
-import { AuthorisedUser } from '../../decorators/AuthorisedUser';
-import { SelectedEventAlias } from '../../decorators/SelectedEventAlias';
 import { UserAuthorisation } from '../../middleware/UserAuthorisation';
 import { UserLogin } from '../../middleware/UserLogin';
-import { ValidateEventAlias } from '../../middleware/ValidateEventAlias';
 
 @JsonController()
 export class AuthController {

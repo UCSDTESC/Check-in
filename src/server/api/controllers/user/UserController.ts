@@ -38,7 +38,6 @@ export class UserController {
   @UseBefore(UserAuthorisation)
   async get(@SelectedEventAlias() event: EventDocument, @AuthorisedUser() account: TESCAccount): Promise<TESCUser[]> {
     const application = await this.UserService.getUserApplication(account, event, true);
-
     if (!application) {
       throw new Error(ErrorMessage.USER_NOT_REGISTERED());
     }
@@ -53,11 +52,10 @@ export class UserController {
     @Req() request: Request
   ): Promise<RegisterUserResponse> {
     Logger.info(`Registration attempted by '${body.user.email}' for '${body.alias}'`);
-
     const event = await this.EventService.getEventByAlias(body.alias);
     const user = body.user;
     if (!event) {
-      throw new BadRequestError(ErrorMessage.NO_ALIAS_EXISTS(event));
+      throw new BadRequestError(ErrorMessage.NO_ALIAS_EXISTS(body.alias));
     }
 
     const isOpen = await this.EventService.isRegistrationOpen(event);

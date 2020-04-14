@@ -53,7 +53,7 @@ export default class TeamService {
    * @param code Optional. Provide a 4-digit team code to associate with the team.
    */
   async createNewTeam(event: EventDocument, code?: string) {
-    if (code.length !== TEAM_CODE_LENGTH) {
+    if (code && code.length !== TEAM_CODE_LENGTH) {
       throw new Error(`Code must be exactly ${TEAM_CODE_LENGTH} digits.`);
     }
 
