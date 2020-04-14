@@ -1,5 +1,5 @@
 {
-  "name": "checkin",
+  "name": "tesc.events",
   "version": "2.0.0",
   "description": "TESC's own check-in system for all TESC orgs and events",
   "main": "index.js",

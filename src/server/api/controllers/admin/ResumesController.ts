@@ -6,7 +6,7 @@ import { DownloadResumesRequest } from '@Shared/api/Requests';
 import { Response } from 'express-serve-static-core';
 import moment = require('moment');
 import { Get, Res, JsonController, UseBefore, Post, Body, Param } from 'routing-controllers';
-import { ErrorMessage } from 'utils/Errors';
+import { ErrorMessage } from '../../../utils/Errors';
 
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';

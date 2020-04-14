@@ -2,17 +2,25 @@ import { Inject, Container } from 'typedi';
 import { EventModel, EventDocument } from '@Models/Event';
 import { UserModel } from '@Models/User';
 import { AccountModel } from '@Models/Account';
-import { TESCEvent, TESCAccount, TESCUser, TESCTeam, Admin as TESCAdmin } from '@Shared/ModelTypes';
+import { 
+  TESCEvent, 
+  TESCAccount, 
+  TESCUser, 
+  TESCTeam, 
+  Admin as TESCAdmin, 
+  Download as TESCDownload } from '@Shared/ModelTypes';
 import { RegisterUserRequest } from '@Shared/api/Requests';
 import { TeamModel } from '@Models/Team';
 import { AdminModel } from '@Models/Admin';
 import { Role } from '@Shared/Roles';
+import { DownloadModel } from '@Models/Download';
 
 const Event = Container.get<EventModel>('EventModel');
 const User = Container.get<UserModel>('UserModel');
 const Account = Container.get<AccountModel>('AccountModel');
 const Team = Container.get<TeamModel>('TeamModel');
 const Admin = Container.get<AdminModel>('AdminModel');
+const Download = Container.get<DownloadModel>('DownloadModel');
 
 const baseTESCEvent = (): TESCEvent => ({
   name: 'TESC Event',
@@ -73,13 +81,22 @@ const baseTESCUser = (): TESCUser => ({
   shareResume: false,
   event: baseTESCEvent(),
   account: baseTESCAccount(),
+});
+
+const baseTESCDownload = (): TESCDownload => ({
+  fileCount: 42,
+  admin: null,
+  accessUrl: 'something.aws.com',
+  error: false,
+  fulfilled: false,
+  deleted: false
 })
 
 const baseTESCTeam = (): TESCTeam => ({
   event: baseTESCEvent(),
   code: 'L33T',
   members: []
-})
+});
 
 const baseApplication = (): RegisterUserRequest => ({
   alias: 'some-event-alias',
@@ -99,6 +116,13 @@ const baseApplication = (): RegisterUserRequest => ({
     accept: false
   }
 })
+
+export const generateFakeDownload = (p?: Partial<TESCDownload>): TESCDownload => {
+  return {
+    ...baseTESCDownload(),
+    ...p
+  }
+}
 
 export const generateFakeApplication = (p?: Partial<RegisterUserRequest>): RegisterUserRequest => {
   return {
@@ -151,3 +175,5 @@ export const generateFakeAccountDocument = (p?: Partial<TESCAccount>) => new Acc
 export const generateFakeTeamDocument = (p?: Partial<TESCTeam>) => new Team(generateFakeTeam(p));
 
 export const generateFakeAdminDocument = (p?: Partial<TESCAdmin>) => new Admin(generateFakeAdmin(p));
+
+export const generateFakeDownloadDocument = (p?: Partial<TESCDownload>) => new Download(generateFakeDownload(p));
