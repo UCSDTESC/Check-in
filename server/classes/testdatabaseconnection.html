@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>StatisticsService | checkin</title>
+	<title>TestDatabaseConnection | checkin</title>
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -56,10 +56,10 @@
 					<a href="../globals.html">Globals</a>
 				</li>
 				<li>
-					<a href="statisticsservice.html">StatisticsService</a>
+					<a href="testdatabaseconnection.html">TestDatabaseConnection</a>
 				</li>
 			</ul>
-			<h1>Class StatisticsService</h1>
+			<h1>Class TestDatabaseConnection</h1>
 		</div>
 	</div>
 </header>
@@ -70,7 +70,7 @@
 				<h3>Hierarchy</h3>
 				<ul class="tsd-hierarchy">
 					<li>
-						<span class="target">StatisticsService</span>
+						<span class="target">TestDatabaseConnection</span>
 					</li>
 				</ul>
 			</section>
@@ -78,41 +78,59 @@
 				<h2>Index</h2>
 				<section class="tsd-panel tsd-index-panel">
 					<div class="tsd-index-content">
-						<section class="tsd-index-section tsd-is-private tsd-is-private-protected">
+						<section class="tsd-index-section ">
+							<h3>Constructors</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-constructor tsd-parent-kind-class"><a href="testdatabaseconnection.html#constructor" class="tsd-kind-icon">constructor</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="statisticsservice.html#eventmodel" class="tsd-kind-icon">Event<wbr>Model</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="statisticsservice.html#usermodel" class="tsd-kind-icon">User<wbr>Model</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="testdatabaseconnection.html#mongod" class="tsd-kind-icon">mongod</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="statisticsservice.html#geteventstatistics" class="tsd-kind-icon">get<wbr>Event<wbr>Statistics</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="testdatabaseconnection.html#cleardatabase" class="tsd-kind-icon">clear<wbr>Database</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="testdatabaseconnection.html#clearusermodel" class="tsd-kind-icon">clear<wbr>User<wbr>Model</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="testdatabaseconnection.html#closedatabase" class="tsd-kind-icon">close<wbr>Database</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="testdatabaseconnection.html#connect" class="tsd-kind-icon">connect</a></li>
 							</ul>
 						</section>
 					</div>
 				</section>
 			</section>
-			<section class="tsd-panel-group tsd-member-group tsd-is-private tsd-is-private-protected">
-				<h2>Properties</h2>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="eventmodel" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> Event<wbr>Model</h3>
-					<div class="tsd-signature tsd-kind-icon">Event<wbr>Model<span class="tsd-signature-symbol">:</span> <a href="statisticsservice.html#eventmodel" class="tsd-signature-type">EventModel</a></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/services/StatisticsService.ts#L12">src/server/services/StatisticsService.ts:12</a></li>
-						</ul>
-					</aside>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Constructors</h2>
+				<section class="tsd-panel tsd-member tsd-kind-constructor tsd-parent-kind-class">
+					<a name="constructor" class="tsd-anchor"></a>
+					<h3>constructor</h3>
+					<ul class="tsd-signatures tsd-kind-constructor tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">new <wbr>Test<wbr>Database<wbr>Connection<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="testdatabaseconnection.html" class="tsd-signature-type">TestDatabaseConnection</a></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/tests/TestDatabaseConnection.ts#L11">src/server/tests/TestDatabaseConnection.ts:11</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <a href="testdatabaseconnection.html" class="tsd-signature-type">TestDatabaseConnection</a></h4>
+						</li>
+					</ul>
 				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="usermodel" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> User<wbr>Model</h3>
-					<div class="tsd-signature tsd-kind-icon">User<wbr>Model<span class="tsd-signature-symbol">:</span> <a href="statisticsservice.html#usermodel" class="tsd-signature-type">UserModel</a></div>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Properties</h2>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="mongod" class="tsd-anchor"></a>
+					<h3>mongod</h3>
+					<div class="tsd-signature tsd-kind-icon">mongod<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">MongoMemoryServer</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/services/StatisticsService.ts#L15">src/server/services/StatisticsService.ts:15</a></li>
+							<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/tests/TestDatabaseConnection.ts#L11">src/server/tests/TestDatabaseConnection.ts:11</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -120,34 +138,70 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Methods</h2>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="geteventstatistics" class="tsd-anchor"></a>
-					<h3>get<wbr>Event<wbr>Statistics</h3>
+					<a name="cleardatabase" class="tsd-anchor"></a>
+					<h3>clear<wbr>Database</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Event<wbr>Statistics<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><a href="../globals.html#eventdocument" class="tsd-signature-type">EventDocument</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/eventstatistics.html" class="tsd-signature-type">EventStatistics</a><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>Database<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/services/StatisticsService.ts#L22">src/server/services/StatisticsService.ts:22</a></li>
+									<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/tests/TestDatabaseConnection.ts#L50">src/server/tests/TestDatabaseConnection.ts:50</a></li>
 								</ul>
 							</aside>
-							<div class="tsd-comment tsd-typography">
-								<div class="lead">
-									<p>Aggregate a list of statistics about user count and diversity for a given
-									event.</p>
-								</div>
-							</div>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>event: <a href="../globals.html#eventdocument" class="tsd-signature-type">EventDocument</a></h5>
-									<div class="tsd-comment tsd-typography">
-										<p>The event to gather statistics for.</p>
-									</div>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/eventstatistics.html" class="tsd-signature-type">EventStatistics</a><span class="tsd-signature-symbol">&gt;</span></h4>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="clearusermodel" class="tsd-anchor"></a>
+					<h3>clear<wbr>User<wbr>Model</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">clear<wbr>User<wbr>Model<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/tests/TestDatabaseConnection.ts#L64">src/server/tests/TestDatabaseConnection.ts:64</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="closedatabase" class="tsd-anchor"></a>
+					<h3>close<wbr>Database</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">close<wbr>Database<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/tests/TestDatabaseConnection.ts#L44">src/server/tests/TestDatabaseConnection.ts:44</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="connect" class="tsd-anchor"></a>
+					<h3>connect</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">connect<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/UCSDTESC/Check-in/blob/f468443/src/server/tests/TestDatabaseConnection.ts#L19">src/server/tests/TestDatabaseConnection.ts:19</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Promise</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">&gt;</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -166,16 +220,25 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-class">
-						<a href="statisticsservice.html" class="tsd-kind-icon">Statistics<wbr>Service</a>
+						<a href="testdatabaseconnection.html" class="tsd-kind-icon">Test<wbr>Database<wbr>Connection</a>
 						<ul>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="statisticsservice.html#eventmodel" class="tsd-kind-icon">Event<wbr>Model</a>
+							<li class=" tsd-kind-constructor tsd-parent-kind-class">
+								<a href="testdatabaseconnection.html#constructor" class="tsd-kind-icon">constructor</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="statisticsservice.html#usermodel" class="tsd-kind-icon">User<wbr>Model</a>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="testdatabaseconnection.html#mongod" class="tsd-kind-icon">mongod</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="statisticsservice.html#geteventstatistics" class="tsd-kind-icon">get<wbr>Event<wbr>Statistics</a>
+								<a href="testdatabaseconnection.html#cleardatabase" class="tsd-kind-icon">clear<wbr>Database</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="testdatabaseconnection.html#clearusermodel" class="tsd-kind-icon">clear<wbr>User<wbr>Model</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="testdatabaseconnection.html#closedatabase" class="tsd-kind-icon">close<wbr>Database</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="testdatabaseconnection.html#connect" class="tsd-kind-icon">connect</a>
 							</li>
 						</ul>
 					</li>
