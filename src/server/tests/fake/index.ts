@@ -2,14 +2,17 @@ import { Inject, Container } from 'typedi';
 import { EventModel, EventDocument } from '@Models/Event';
 import { UserModel } from '@Models/User';
 import { AccountModel } from '@Models/Account';
-import { TESCEvent, TESCAccount, TESCUser, TESCTeam } from '@Shared/ModelTypes';
+import { TESCEvent, TESCAccount, TESCUser, TESCTeam, Admin as TESCAdmin } from '@Shared/ModelTypes';
 import { RegisterUserRequest } from '@Shared/api/Requests';
 import { TeamModel } from '@Models/Team';
+import { AdminModel } from '@Models/Admin';
+import { Role } from '@Shared/Roles';
 
 const Event = Container.get<EventModel>('EventModel');
 const User = Container.get<UserModel>('UserModel');
 const Account = Container.get<AccountModel>('AccountModel');
 const Team = Container.get<TeamModel>('TeamModel');
+const Admin = Container.get<AdminModel>('AdminModel');
 
 const baseTESCEvent = (): TESCEvent => ({
   name: 'TESC Event',
@@ -49,6 +52,15 @@ const baseTESCAccount = (): TESCAccount => ({
   email: 'hello@tesc.ucsd.edu',
   password: 'abcde',
   confirmed: false,
+  deleted: false
+});
+
+const baseTESCAdmin = (): TESCAdmin => ({
+  username: 'fake-admin',
+  password: 'hunter2',
+  role: Role.ROLE_ADMIN,
+  checkin: false,
+  lastAccessed: new Date(),
   deleted: false
 })
 
@@ -123,6 +135,13 @@ export const generateFakeTeam = (p?: Partial<TESCTeam>): TESCTeam => {
   }
 }
 
+export const generateFakeAdmin = (p?: Partial<TESCAdmin>): TESCAdmin => {
+  return {
+    ...baseTESCAdmin(),
+    ...p
+  }
+}
+
 export const generateFakeEventDocument = (p?: Partial<TESCEvent>) => new Event(generateFakeEvent(p))
 
 export const generateFakeUserDocument = (p?: Partial<TESCUser>) => new User(generateFakeUser(p))
@@ -130,3 +149,5 @@ export const generateFakeUserDocument = (p?: Partial<TESCUser>) => new User(gene
 export const generateFakeAccountDocument = (p?: Partial<TESCAccount>) => new Account(generateFakeAccount(p))
 
 export const generateFakeTeamDocument = (p?: Partial<TESCTeam>) => new Team(generateFakeTeam(p));
+
+export const generateFakeAdminDocument = (p?: Partial<TESCAdmin>) => new Admin(generateFakeAdmin(p));

@@ -9,6 +9,7 @@ import { JsonController, UseBefore, Post, Body, Patch } from 'routing-controller
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
+import { ErrorMessage } from '../../../utils/Errors';
 
 /**
  * Handles all of the logic for updating user information.
@@ -23,9 +24,12 @@ export class UsersController {
 
   @Post('/')
   async updateUser(@AuthorisedAdmin() admin: Admin, @Body() body: TESCUser) {
-    await this.EventService.isAdminOrganiser(body.event.alias, admin);
-    await this.UserService.updateUser(body);
-    return SuccessResponse.Positive;
+    if (await this.EventService.isAdminOrganiser(body.event.alias, admin)) {
+      await this.UserService.updateUser(body);
+      return SuccessResponse.Positive;
+    } else {
+      throw new Error(ErrorMessage.NOT_ORGANISER());
+    }
   }
 
   @Patch('/')

@@ -6,6 +6,7 @@ import { EventModel } from '@Models/Event';
 import { AccountModel } from '@Models/Account';
 import { AccountResetModel } from '@Models/AccountReset';
 import { UserModel } from '@Models/User';
+import { AdminModel } from '@Models/Admin';
 
 class TestDatabaseConnection {
   mongod: MongoMemoryServer;
@@ -53,7 +54,8 @@ class TestDatabaseConnection {
       Container.get<EventModel>('EventModel'),
       Container.get<AccountModel>('AccountModel'),
       Container.get<AccountResetModel>('AccountResetModel'),
-      Container.get<UserModel>('UserModel')
+      Container.get<UserModel>('UserModel'),
+      Container.get<AdminModel>('AdminModel')
     ]
 
     for (const model of collections) {

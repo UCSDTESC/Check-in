@@ -19,6 +19,10 @@ The system allows organisers of events to create, update and manage their events
 6. Run ```npm run migrate``` to migrate and seed the database
 7. If you ever need to "restart" with new data, run ```npm run rollback``` to remove data and migrate again
 
+## Testing (WIP)
+0. Run server-side tests with `npx run test-server:unit`
+1. See code coverage with `npx run test-server:unit -- --coverage`
+
 ## Development
 #### All pushes should be made to a feature branch
 0. Run ```npm start```
