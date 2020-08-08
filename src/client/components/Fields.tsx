@@ -1,4 +1,8 @@
-import { UserDiversityOptions, UserYearOptions, UserGenderOptions, UserPronounOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
+import { UserDiversityOptions,
+  UserYearOptions,
+  UserGenderOptions,
+  UserPronounOptions,
+  UserShirtSizeOptions } from '@Shared/UserEnums';
 import React from 'react';
 import { Field, WrappedFieldProps } from 'redux-form';
 import majors from '~/static/Majors.json';

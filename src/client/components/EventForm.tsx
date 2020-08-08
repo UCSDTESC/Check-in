@@ -21,7 +21,7 @@ interface EventFormProps {
   editing?: boolean;
 }
 
-// the props of this component are the props returned by the redux-form HOC and it's native props
+// The props of this component are the props returned by the redux-form HOC and it's native props
 type Props = InjectedFormProps<EventFormData, EventFormProps> & EventFormProps;
 
 /**
