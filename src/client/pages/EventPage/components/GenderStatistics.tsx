@@ -13,8 +13,8 @@ const PIE_CHART_COLOURS =
 export default class GenderStatistics extends EventStatisticsComponent {
 
   /**
-   * Render the gender breakdown in text form 
-   * 
+   * Render the gender breakdown in text form
+   *
    * @param {EventStatistics} statistics The statistics of the event
    */
   renderStats(statistics: EventStatistics) {

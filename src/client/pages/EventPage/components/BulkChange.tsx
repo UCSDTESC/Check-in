@@ -4,10 +4,10 @@ import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 
 export interface BulkChangeFormData {
 
-  // new line separated 
+  // new line separated
   users: string;
 
-  //new status to be set
+  // new status to be set
   status: string;
 }
 
@@ -15,7 +15,7 @@ interface BulkChangeProps {
 
 }
 
-//Use a union of BulkChangeProps and Redux Form's Props
+// Use a union of BulkChangeProps and Redux Form's Props
 type Props = InjectedFormProps<BulkChangeFormData, BulkChangeProps> & BulkChangeProps;
 
 /**

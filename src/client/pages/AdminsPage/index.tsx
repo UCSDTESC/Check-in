@@ -25,11 +25,11 @@ interface AdminsPageProps {
 }
 
 /**
- * This component receives props in 3 ways - 
+ * This component receives props in 3 ways -
  * 1) The explicit props provied to it by AdminsPageProps
  * 2) The redux state provided to it by mapStateToProps
  * 3) The dispatch functions provided to it by mapDispatchToProps
- * 
+ *
  * So, the props of this component is the union of the return types of mapStateToProps,
  * mapDispatchToProps and AdminsPageProps
  */
@@ -37,7 +37,7 @@ type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchT
 
 interface AdminsPageState {
 
-  //tracks whether the New Admin Modal is open or not
+  // tracks whether the New Admin Modal is open or not
   isRegisterModalOpen: boolean;
 }
 
@@ -61,7 +61,7 @@ class AdminsPage extends React.Component<Props, AdminsPageState> {
   componentDidMount() {
     this.props.showLoading();
 
-    //Hide loading state after the API returns the admins  
+    // Hide loading state after the API returns the admins
     this.loadAdmins()
       .then(() => this.props.hideLoading());
   }

@@ -5,12 +5,12 @@ import EventList from './EventList';
 
 interface SponsorDashboardProps {
 
-  //events that this sponsor is allowed to see
+  // events that this sponsor is allowed to see
   events: TESCEvent[];
 }
 
 /**
- * This is the sponsor's event list. It uses EventList's resumeLink prop to 
+ * This is the sponsor's event list. It uses EventList's resumeLink prop to
  * enforce a link to the sponsor portal on clicking the card.
  */
 export default class SponsorDashboard extends React.Component<SponsorDashboardProps> {

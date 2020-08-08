@@ -8,22 +8,22 @@ import OrganiserSelect from '~/components/OrganiserSelect';
 
 interface OrganiserListProps {
 
-  //list of organisers for the event
+  // list of organisers for the event
   organisers: Admin[];
 
-  //callback function to show a modal to add a new organiser to the event
+  // callback function to show a modal to add a new organiser to the event
   addNewOrganiser: (toAdd: AdminSelectType) => void;
 
-  //callback to add the organiser to the event
+  // callback to add the organiser to the event
   registerNewOrganiser: (newOrganiser: NewAdminModalFormData) => void;
 }
 
 interface OrganiserListState {
 
-  //the new organiser to be added to the event
+  // the new organiser to be added to the event
   newOrganiser: AdminSelectType;
 
-  //boolean to track if the new organiser modal is open or not
+  // boolean to track if the new organiser modal is open or not
   isRegisterModalOpen: boolean;
 }
 
@@ -36,10 +36,9 @@ export default class OrganiserList extends React.Component<OrganiserListProps, O
     isRegisterModalOpen: false,
   };
 
-
   /**
    * Update the components newOrganiser state to the new data
-   * 
+   *
    * @param {AdminSelectType} newOrganiser the new organiser to be set
    */
   changeNewOrganiser = (newOrganiser: AdminSelectType) =>
@@ -60,7 +59,7 @@ export default class OrganiserList extends React.Component<OrganiserListProps, O
 
   /**
    * Create a new organiser in the system and and close the modal.
-   * 
+   *
    * @param {NewAdminModalFormData} values the new admin to be created in the system
    */
   onRegisterModalSubmit = (values: NewAdminModalFormData) => {

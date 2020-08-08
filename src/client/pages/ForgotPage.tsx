@@ -19,7 +19,7 @@ class ForgotPage extends React.Component<InjectedFormProps, ForgotPageState> {
 
   /**
    * Send the Forgot Password Email
-   * 
+   *
    * @param {ForgotFormData} values the forgot form data
    */
   sendForgotPassword = (values: ForgotFormData) => {

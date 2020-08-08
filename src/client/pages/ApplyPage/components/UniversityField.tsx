@@ -15,7 +15,7 @@ type Props = WrappedFieldProps & UniversityFieldProps;
  * This component creates the university picker. It is used in ./PersonalSection.tsx
  */
 export default class UniversityField extends React.Component<Props> {
-  
+
   /**
    * Function that is called when the user selects a suggestion from the AutoSuggest
    * TODO: better documentation

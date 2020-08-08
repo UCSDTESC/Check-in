@@ -10,10 +10,10 @@ import UniversityField from './UniversityField';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
 
-  //function to be called when the email changes, to check if the user exists in the database
+  // function to be called when the email changes, to check if the user exists in the database
   onEmailChange: (newEmail: string) => void;
 
-  //the current event being applied to
+  // the current event being applied to
   event: TESCEvent;
 }
 
@@ -42,7 +42,7 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
   /**
    * Create the email component of the application.
    * Use onBlur to check if the email exists when the user takes their focus off this field.
-   * @returns {Component} 
+   * @returns {Component}
    */
   createEmailField() {
     return (

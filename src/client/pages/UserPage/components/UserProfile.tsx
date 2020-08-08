@@ -1,13 +1,13 @@
 import { TESCUser, TESCEvent, TESCTeam } from '@Shared/ModelTypes';
-import { UserStatus } from '@Shared/UserStatus';
+import { generateQRCodeURL } from '@Shared/QRCodes';
 import { UserGenderOptions, UserPronounOptions, UserShirtSizeOptions } from '@Shared/UserEnums';
+import { UserStatus } from '@Shared/UserStatus';
+import { JSXElement } from 'babel-types';
 import React from 'react';
+import FA from 'react-fontawesome';
 import { Field, reduxForm, InjectedFormProps, WrappedFieldProps } from 'redux-form';
 import { CustomFieldProps } from '~/components/Fields';
 import FileField from '~/components/FileField';
-import { generateQRCodeURL } from '@Shared/QRCodes';
-import FA from 'react-fontawesome';
-import { JSXElement } from 'babel-types';
 
 export interface UserProfileFormData {
   gender: string;
@@ -24,14 +24,14 @@ export interface UserProfileFormData {
 }
 
 interface UserProfileProps {
-  
-  //the user for which the profile is rendered
+
+  // the user for which the profile is rendered
   user: TESCUser;
 
-  //the event for which the application is on
+  // the event for which the application is on
   event: TESCEvent;
 
-  //callback function to toggle RSVP status
+  // callback function to toggle RSVP status
   toggleRSVP: () => void;
 }
 
@@ -39,13 +39,13 @@ type Props = InjectedFormProps<UserProfileFormData, UserProfileProps> & UserProf
 
 /**
  * This is the component that shows the user their data on the application page
- * 
+ *
  * It also provides functionality to edit their application
  */
 class UserProfile extends React.Component<Props> {
   /**
    * Render the gender selection.
-   * 
+   *
    * @param {Object} _ an object with an input and className field
    * @returns {React.StatelessComponent}
    */
@@ -57,10 +57,10 @@ class UserProfile extends React.Component<Props> {
       </select>
     );
   };
-  
+
   /**
    * Render the T-Shirt size selection.
-   * 
+   *
    * @param {Object} _ an object with an input and className field
    * @returns {React.StatelessComponent}
    */
@@ -188,9 +188,9 @@ class UserProfile extends React.Component<Props> {
 
   /**
    * Render the phone number and santitize it
-   * 
+   *
    * @param {String} phone the phone number string
-   * @returns {String} 
+   * @returns {String}
    */
   renderPhoneNumber = (phone: string) => (
     phone.replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3')
@@ -198,7 +198,7 @@ class UserProfile extends React.Component<Props> {
 
   /**
    * Render the Applicant's info
-   * 
+   *
    * @param {TESCUser} user the info of the applicant
    * @returns {JSXElement}
    */
@@ -267,7 +267,7 @@ class UserProfile extends React.Component<Props> {
 
   /**
    * Render a user's preference section.
-   * 
+   *
    * @param {TESCUser} user the user's data
    * @returns {JSXElement}
    */

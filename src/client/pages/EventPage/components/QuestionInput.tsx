@@ -27,7 +27,7 @@ export default class QuestionInput extends React.Component<QuestionInputProps, Q
   addQuestion = () => {
     this.props.onAddQuestion(this.state);
 
-    //reset the component state
+    // reset the component state
     this.setState({
       question: '',
       isRequired: false,
