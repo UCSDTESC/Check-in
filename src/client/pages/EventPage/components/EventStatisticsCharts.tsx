@@ -8,13 +8,13 @@ const PIE_CHART_COLOURS =
   ['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC'];
 
 /**
- * This is a status breakdown piechart of the statistics tab 
+ * This is a status breakdown piechart of the statistics tab
  */
 export default class EventStatisticsCharts extends EventStatisticsComponent {
 
   /**
    * Rendering the breakdown in text form.
-   * 
+   *
    * @param {EventStatistics} statistics the statistics to be rendered
    */
   renderStats(statistics: EventStatistics) {

@@ -48,7 +48,7 @@ export function errorClass(className: string, touched: boolean, error: boolean) 
 }
 
 export const errorTextInput: React.StatelessComponent<CustomFieldProps> = ({ input, className, placeholder, type,
-  meta: { touched, error } }) => {
+                                                                             meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   return (
     <div>
@@ -81,7 +81,7 @@ export const errorRadio: React.StatelessComponent<CustomFieldProps> = ({ input, 
 };
 
 export const errorTextArea: React.StatelessComponent<CustomFieldProps> = ({ input, className, placeholder, maxLength,
-  meta: { touched, error } }) => {
+                                                                            meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   return (
     <div>
@@ -122,7 +122,7 @@ export const errorMonthPicker: React.StatelessComponent<CustomFieldProps> = ({ i
 };
 
 export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+                                                                                    meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
   const sizes = Object.values(UserShirtSizeOptions);
   const values = Object.keys(UserShirtSizeOptions);
@@ -143,7 +143,7 @@ export const errorTShirtSizePicker: React.StatelessComponent<CustomFieldProps> =
 };
 
 export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+                                                                                meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -162,7 +162,7 @@ export const errorGenderPicker: React.StatelessComponent<CustomFieldProps> = ({ 
 };
 
 export const errorPronounPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+                                                                                 meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -181,7 +181,7 @@ export const errorPronounPicker: React.StatelessComponent<CustomFieldProps> = ({
 };
 
 export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+                                                                                    meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -200,7 +200,7 @@ export const errorDiversityOptions: React.StatelessComponent<CustomFieldProps> =
 };
 
 export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+                                                                              meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (
@@ -219,7 +219,7 @@ export const errorYearPicker: React.StatelessComponent<CustomFieldProps> = ({ in
 };
 
 export const errorMajorPicker: React.StatelessComponent<CustomFieldProps> = ({ input, className, type,
-  meta: { touched, error } }) => {
+                                                                               meta: { touched, error } }) => {
   const errorClassName = errorClass(className, touched, error);
 
   return (

@@ -44,7 +44,7 @@ type RouteProps = RouteComponentProps<{
   eventAlias: string;
 }>;
 
-//the props of this page is the union of the react-router, redux and explicit props
+// the props of this page is the union of the react-router, redux and explicit props
 type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & UsersPageProps;
 
 interface UsersPageState extends AlertPageState {
@@ -132,7 +132,7 @@ class UsersPage extends AlertPage<Props, UsersPageState> {
 
   /**
    * Handles an update to a user in the list.
-   * 
+   *
    * @param {TESCUser} user the user to be updated
    */
   onUserUpdate = (user: TESCUser) => {

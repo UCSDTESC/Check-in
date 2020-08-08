@@ -23,8 +23,8 @@ import request, { SuperAgentRequest } from 'superagent';
 import nocache from 'superagent-no-cache';
 import pref from 'superagent-prefix';
 import Cookies from 'universal-cookie';
-import { NewAdminModalFormData } from '~/components/NewAdminModal';
 import { EventFormData } from '~/components/EventForm';
+import { NewAdminModalFormData } from '~/components/NewAdminModal';
 import CookieTypes from '~/static/Cookies';
 
 import { promisify } from './helpers';
@@ -195,7 +195,6 @@ export const editExistingEvent = (id: string, event: Partial<EventFormData>) => 
     closeTimeDay
   )).toISOString(true);
 
-  
   const promiseReq = request
     .post(`/events/edit/${id}`)
     .set('Authorization', cookies.get(CookieTypes.admin.token))
@@ -204,14 +203,14 @@ export const editExistingEvent = (id: string, event: Partial<EventFormData>) => 
       closeTime,
     } as RegisterEventRequest))
     .use(adminApiPrefix)
-    .use(nocache)
+    .use(nocache);
 
-    if (logo) {
-      promiseReq.attach('logo', logo[0])
+  if (logo) {
+      promiseReq.attach('logo', logo[0]);
     }
 
-    return promisify<void>(promiseReq);
-}
+  return promisify<void>(promiseReq);
+};
 
 /**
  * Request to register a new admin.
@@ -250,7 +249,7 @@ export const downloadResumes = (applicants: string[]): SuperAgentRequest =>
       .post('/resumes')
       .send({ applicants } as DownloadResumesRequest)
       .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(adminApiPrefix)
+      .use(adminApiPrefix);
 
 /**
  * Requests the status of an ongoing download.

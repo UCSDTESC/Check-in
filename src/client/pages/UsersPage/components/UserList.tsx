@@ -11,7 +11,7 @@ const styles = require('react-table/react-table.css');
 
 interface UserListProps {
 
-  //users that have applied to an event
+  // users that have applied to an event
   users: TESCUser[];
   columns: AutofillColumn[];
   event: TESCEvent;
@@ -26,7 +26,7 @@ class UserList extends React.Component<UserListProps> {
 
   /**
    * Render the User component, used by react-table's SubComponent
-   * 
+   *
    * @param {TESCUser} row the user to be rendered
    * @returns {JSXElement}
    */
@@ -49,7 +49,7 @@ class UserList extends React.Component<UserListProps> {
         data={this.props.users}
         column={{
           ...ReactTableDefaults.column,
-          Cell: ({value}) => value ? String(value): value
+          Cell: ({value}) => value ? String(value): value,
         }}
         columns={this.props.columns}
         defaultPageSize={10}

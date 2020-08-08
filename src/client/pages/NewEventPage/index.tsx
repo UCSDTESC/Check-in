@@ -6,11 +6,11 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import { UncontrolledAlert } from 'reactstrap';
 import { bindActionCreators } from 'redux';
 import { ApplicationDispatch } from '~/actions';
+import EventForm, { EventFormData } from '~/components/EventForm';
 import { registerNewEvent } from '~/data/AdminApi';
 
 import { addEventSuccessAlert } from '../EventPage/actions';
 
-import EventForm, { EventFormData } from '~/components/EventForm';
 import createValidator from './validate';
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
@@ -38,12 +38,12 @@ class NewEventPage extends React.Component<Props, NewEventPageState> {
 
   /**
    * Create a new event in the system
-   * 
+   *
    * @param {NewEventFormData} event the event to be created
    */
   createNewEvent = (event: EventFormData) => {
 
-    //send event to API
+    // send event to API
     registerNewEvent(event)
       .then((res: TESCEvent) => {
         this.setState({ err: null });

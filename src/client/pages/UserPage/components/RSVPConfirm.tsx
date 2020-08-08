@@ -25,7 +25,7 @@ export default class RSVPConfirm extends React.Component<RSVPConfirmProps, RSVPC
     status: undefined,
   };
 
-  //set React state to move to next step of the workflow
+  // set React state to move to next step of the workflow
   nextPage = () => this.setState({page: this.state.page + 1});
 
   onChooseStatus = (status: boolean) => {
@@ -48,7 +48,7 @@ export default class RSVPConfirm extends React.Component<RSVPConfirmProps, RSVPC
 
   /**
    * Callback function for when the bus is chosen
-   * 
+   *
    * @param {Boolean} bussing the bussing status
    */
   onChooseBus = (bussing: boolean) => {

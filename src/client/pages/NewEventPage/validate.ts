@@ -7,7 +7,7 @@ const createValidator = (requireLogo = true, allowPastDates = false) => (values:
   const required = ['name', 'alias', 'closeTimeMonth', 'closeTimeDay',
     'closeTimeYear', 'email', 'homepage', 'description'];
 
-  requireLogo && required.push('logo')
+  requireLogo && required.push('logo');
 
   const notValid = required.filter(name => !(name in values) || !values[name]);
   notValid.forEach(name => errors[name] = 'Required');

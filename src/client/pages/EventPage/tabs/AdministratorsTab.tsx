@@ -13,16 +13,16 @@ interface AdministratorsTabProps {
 
 interface AdminReference {
 
-  //the database ID of an admin
+  // the database ID of an admin
   _id: string;
 
-  //the username of an admin
+  // the username of an admin
   username: string;
 }
 
 /**
  * View Administrators in this event
- * 
+ *
  * This tab currently has:
  *  - View current organizers
  *  - View current sponsors

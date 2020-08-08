@@ -90,7 +90,7 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
         const blob = new Blob([res.text], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
         const link = document.createElement('a');
-        
+
         link.href = url;
         link.setAttribute('download', `${this.props.user.username}-${Date.now()}.csv`);
         document.body.appendChild(link);
@@ -98,7 +98,7 @@ class SponsorLayout extends React.Component<Props, SponsorLayoutState> {
 
         hideLoading();
         this.setState({
-          isDownloading: false
+          isDownloading: false,
         });
       })
       .catch(console.error);

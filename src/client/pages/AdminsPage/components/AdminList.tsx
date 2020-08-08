@@ -5,13 +5,13 @@ import { Button } from 'reactstrap';
 
 interface AdminListProps {
 
-  //the admins in the system
+  // the admins in the system
   admins: Admin[];
 
-  //function to be called when the delete button is pressed
+  // function to be called when the delete button is pressed
   onDeleteAdmin: (adminId: string) => void;
 
-  //is the admin in editing mode?
+  // is the admin in editing mode?
   // TODO: remove - legacy feature
   editing: boolean;
 }
@@ -34,7 +34,7 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
     columns: {
       username: 'Username',
       role: 'Role',
-      lastAccessed: 'Last Accessed'
+      lastAccessed: 'Last Accessed',
     },
   };
 
@@ -56,11 +56,11 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
   renderAdmin = (admin: Admin) => {
     const {columns} = this.state;
 
-    const adminToBeRendered = {...admin, 
-      lastAccessed: admin.lastAccessed 
-        ? moment(admin.lastAccessed).fromNow() 
-        : 'Never Logged In'
-    }
+    const adminToBeRendered = {...admin,
+                               lastAccessed: admin.lastAccessed
+        ? moment(admin.lastAccessed).fromNow()
+        : 'Never Logged In',
+    };
     return Object.keys(columns).map(column => (
       <td key={column} className="admin-list__value">
         {/*
@@ -68,7 +68,7 @@ export default class AdminList extends React.Component<AdminListProps, AdminList
         // @ts-ignore */}
         {adminToBeRendered[column]}
       </td>)
-    )
+    );
   }
 
   render() {

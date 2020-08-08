@@ -6,7 +6,7 @@ import EventStatisticsComponent from './EventStatisticsComponent';
 export default class AppsOverTimeStatistics extends EventStatisticsComponent {
   render() {
     const { statistics } = this.props;
-    
+
     // Create the data array needed to make the line chart
     const appsTimeData: Array<{ date: string; appCount: number }> = [];
 
@@ -60,12 +60,12 @@ export default class AppsOverTimeStatistics extends EventStatisticsComponent {
                 y="appCount"
                 animate={{
                   duration: 1000,
-                  easing: "cubic"
+                  easing: 'cubic',
                 }}
                 style={{
                   data: {
                     strokeWidth: 2,
-                    strokeLinecap: "round"
+                    strokeLinecap: 'round',
                   },
                 }}
               />

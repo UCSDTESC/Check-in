@@ -8,22 +8,22 @@ import SponsorSelect from '~/components/SponsorSelect';
 
 interface SponsorListProps {
 
-  //the sponsors for this event
+  // the sponsors for this event
   sponsors: Admin[];
 
-  //callback function to add an existing sponsor to the event
+  // callback function to add an existing sponsor to the event
   addNewSponsor: (toAdd: AdminSelectType) => void;
 
-  //function called to create a new sponsor in the system
+  // function called to create a new sponsor in the system
   registerNewSponsor: (newSponsor: NewAdminModalFormData) => void;
 }
 
 interface SponsorListState {
-  
-  //the new sponsor to be added
+
+  // the new sponsor to be added
   newSponsor: AdminSelectType;
 
-  //boolean to track if the create sponsor modal is open or not.
+  // boolean to track if the create sponsor modal is open or not.
   isRegisterModalOpen: boolean;
 }
 
@@ -38,7 +38,7 @@ export default class SponsorList extends React.Component<SponsorListProps, Spons
 
   /**
    * Update the components newSponsor state to the new data
-   * 
+   *
    * @param {AdminSelectType} newOrganiser the new sponsor to be set
    */
   changeNewSponsor = (newSponsor: AdminSelectType) =>
@@ -59,7 +59,7 @@ export default class SponsorList extends React.Component<SponsorListProps, Spons
 
   /**
    * Create a new sponsor in the system and and close the modal.
-   * 
+   *
    * @param {NewAdminModalFormData} values the new sponsor to be created in the system
    */
   onRegisterModalSubmit = (values: NewAdminModalFormData) => {

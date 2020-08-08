@@ -19,29 +19,29 @@ interface ApplyPageProps {
 }
 
 type Props = ApplyPageProps & RouteComponentProps<{
-  //eventAlias for the event this application is for
+  // eventAlias for the event this application is for
   eventAlias: string;
 }>;
 
 interface ApplyPageState {
 
-  //tracks which application page the user is on
+  // tracks which application page the user is on
   page: number;
 
-  //tracks application error
+  // tracks application error
   error: Error;
 
-  //tracks if the user has yet to submit the application
+  // tracks if the user has yet to submit the application
   isSubmitting: boolean;
 
-  //the event this application is for
+  // the event this application is for
   event: TESCEvent;
 
-  //does the user have an exisiting tesc.events account?
+  // does the user have an exisiting tesc.events account?
   emailExists: boolean;
 }
 
-//The complete application is the union of data from its 3 pages
+// The complete application is the union of data from its 3 pages
 export type ApplyPageFormData = PersonalSectionFormData & ResponseSectionFormData & UserSectionFormData;
 
 /**
@@ -109,7 +109,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
    */
   sanitiseValues(values: ApplyPageFormData) {
 
-    //parse date numbers into a datestring
+    // parse date numbers into a datestring
     values.birthdate = new Date(
       values.birthdateYear,
       values.birthdateMonth - 1,
@@ -151,7 +151,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
       return;
     }
 
-    //checks if user exists with an API call
+    // checks if user exists with an API call
     checkUserExists(email)
       .then((ret) => {
         this.setState({
@@ -174,7 +174,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
       isSubmitting: true,
     });
 
-    //Send Application to backend
+    // Send Application to backend
     registerUser(this.props.match.params.eventAlias, values)
       .then(() => {
         // Log successful application with Google Analytics
@@ -183,7 +183,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
           action: 'Successful',
         });
 
-        //Show success page
+        // Show success page
         this.nextPage();
       })
       .catch((err) => {

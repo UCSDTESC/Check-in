@@ -14,14 +14,14 @@ import EventPageTab from './EventPageTab';
 interface SettingsTabProps {
 }
 
-//TODO: not sure why this exists as opposed to a boolean?
+// TODO: not sure why this exists as opposed to a boolean?
 interface SettingsTabState {
   customQuestionsRequests: number;
 }
 
 /**
  * This is the settings tag for an event. This tab currently has:
- * 
+ *
  * - Toggling event options
  * - Add custom question
  * - Update custom question
@@ -51,7 +51,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
   };
 
   /**
-   * Set React state to show a loader when waiting for server response 
+   * Set React state to show a loader when waiting for server response
    * after a custom questions action.
    */
   startCustomQuestionsLoading = () => {
@@ -71,7 +71,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
 
   /**
    * Handles the CustomQuestions callback for when custom questions should be added.
-   * 
+   *
    * @param {QuestionType} type The type of question being added
    * @param {Question} question The new question to send to the server.
    */
@@ -89,10 +89,9 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
       .finally(this.stopCustomQuestionsLoading);
   };
 
-
   /**
    * Handles the CustomQuestion callback for when questions should be updated.
-   * 
+   *
    * @param {QuestionType} type The type of question being updated
    * @param {Question} question The new question to send to the server.
    */
@@ -112,7 +111,7 @@ export default class SettingsTab extends EventPageTab<SettingsTabProps, Settings
 
   /**
    * Handles the CustomQuestion callback for when questions should be deleted.
-   * 
+   *
    * @param {QuestionType} type The type of question being deleted
    * @param {Question} question The new question to send to the server.
    */
