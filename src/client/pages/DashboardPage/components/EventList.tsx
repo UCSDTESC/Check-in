@@ -6,13 +6,13 @@ import EventCard from '~/components/EventCard';
 
 interface EventListProps {
 
-  //events to be rendered in the list
+  // events to be rendered in the list
   events: TESCEvent[];
-  
-  //track if we need a direct link to the resume page
+
+  // track if we need a direct link to the resume page
   resumeLink?: boolean;
 
-  //can this user create an event?
+  // can this user create an event?
   canCreate?: boolean;
 }
 

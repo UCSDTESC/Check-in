@@ -14,7 +14,7 @@ export interface EventStatistics {
   resumes: number;
   appsOverTime: {
     [Date: string]: number;
-  }
+  };
 }
 
 export type EventUserCounts = {

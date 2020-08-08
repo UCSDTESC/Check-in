@@ -4,10 +4,10 @@ import { InjectedFormProps } from 'redux-form';
 
 export interface ApplyPageSectionProps {
 
-  //The event this application is for
+  // The event this application is for
   event: TESCEvent;
 
-  //function to be called when the back button is pressed
+  // function to be called when the back button is pressed
   goToPreviousPage?: () => void;
 }
 

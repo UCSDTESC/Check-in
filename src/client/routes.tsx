@@ -13,34 +13,24 @@ import { authorised as AdminAuthorised } from '~/data/AdminApi';
 import { authorised as UserAuthorised } from '~/data/UserApi';
 import CookieTypes from '~/static/Cookies';
 
-/*
-  PrivateRoute.tsx and PrivateUserRoute.tsx are wrapper components around
-  react-router-dom's Route component to handle authentication state.
-*/
 import PrivateRoute from './PrivateRoute';
 import PrivateUserRoute from './PrivateUserRoute';
-
-//Authentication Components & Actions
-//TODO: Document better
 import { ApplicationDispatch } from './actions';
 import AdminLogout from './auth/admin/Logout';
 import { finishAuthorisation, authoriseAdmin, logoutAdmin } from './auth/admin/actions';
 import ConfirmPage from './auth/user/Confirm';
 import UserLogout from './auth/user/Logout';
 import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
-
-//Importing the different layouts (page structures) for the application
 import AdminLayout from './layouts/admin';
-import SponsorLayout from './layouts/sponsor';
 import PublicLayout from './layouts/public';
+import SponsorLayout from './layouts/sponsor';
 import UserLayout from './layouts/user';
-
-//Importing all the pages for the app, used later when setting up routes.
 import AdminsPage from './pages/AdminsPage';
 import ApplyPage from './pages/ApplyPage';
 import CheckinPage from './pages/CheckinPage';
 import Dashboard from './pages/DashboardPage';
 import EventPage from './pages/EventPage';
+import PreviewApplication from './pages/EventPage/components/PreviewApplication';
 import ForgotPage from './pages/ForgotPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -50,7 +40,18 @@ import ResetPage from './pages/ResetPage';
 import ResumesPage from './pages/ResumesPage';
 import UserPage from './pages/UserPage';
 import UsersPage from './pages/UsersPage';
-import PreviewApplication from './pages/EventPage/components/PreviewApplication';
+
+/*
+  PrivateRoute.tsx and PrivateUserRoute.tsx are wrapper components around
+  react-router-dom's Route component to handle authentication state.
+*/
+
+// Authentication Components & Actions
+// TODO: Document better
+
+// Importing the different layouts (page structures) for the application
+
+// Importing all the pages for the app, used later when setting up routes.
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   authoriseAdmin,
@@ -167,7 +168,7 @@ class Routes extends React.Component<Props> {
   }
 
   renderPublic = (RenderComponent: any) => {
-    return (props: RouteComponentProps) => 
+    return (props: RouteComponentProps) =>
       (
         <PublicLayout>
           <RenderComponent match={props.match} />

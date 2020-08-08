@@ -5,17 +5,17 @@ import { UncontrolledTooltip } from 'reactstrap';
 import ToggleSwitch from '~/components/ToggleSwitch';
 
 interface EventOptionsProps {
-  //initial options of the event
+  // initial options of the event
   options: TESCEventOptions;
 
-  //calback function for when the update button is clicked
+  // calback function for when the update button is clicked
   onOptionsUpdate: (newOptions: TESCEventOptions) => void;
 
-  //the event these options are for
+  // the event these options are for
   event: TESCEvent;
 }
 
-//the current, edited state of the options
+// the current, edited state of the options
 interface EventOptionsState {
   options: TESCEventOptions;
 }
@@ -33,8 +33,8 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
   }
 
   /**
-   * This is a callback function that is called when a ToggleSwitch is clicked for an option. 
-   * 
+   * This is a callback function that is called when a ToggleSwitch is clicked for an option.
+   *
    * @param {String} optionName the name of the option
    */
   toggleOption = (optionName: string) => () => {
@@ -47,7 +47,7 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
 
   /**
    * This renders a tooltip for an option, intended as a QOL feature for event admins.
-   * 
+   *
    * @param {String} optionName the option which the tootip is for
    * @param {String} description the description for the option
    */
@@ -64,7 +64,7 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
     const { onOptionsUpdate, event } = this.props;
     const { options } = this.state;
 
-    //Long Form Display Names for options
+    // Long Form Display Names for options
     const optionNames = {
       allowHighSchool: 'Allow High School Students',
       mlhProvisions: 'Add MLH Provisions',
@@ -81,7 +81,7 @@ export default class EventOptionsEdit extends React.Component<EventOptionsProps,
       requireWhyThisEvent: `Require 'Why ${event.name}?' In Application`,
     };
 
-    //tooltip descriptions
+    // tooltip descriptions
     const optionDescriptions = {
       mlhProvisions: 'Add the MLH provisions section as a requirement to apply',
       foodOption: 'Give the applicant the option to let you know their ' +

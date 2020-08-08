@@ -21,7 +21,7 @@ interface EventFormProps {
   editing?: boolean;
 }
 
-//the props of this component are the props returned by the redux-form HOC and it's native props
+// the props of this component are the props returned by the redux-form HOC and it's native props
 type Props = InjectedFormProps<EventFormData, EventFormProps> & EventFormProps;
 
 /**
@@ -31,7 +31,7 @@ class EventForm extends React.Component<Props> {
 
   /**
    * Create a file droppable field for the event logo
-   * 
+   *
    * @returns {Component}
    */
   createLogoUpload() {
@@ -47,7 +47,7 @@ class EventForm extends React.Component<Props> {
 
   /**
    * Show an alert that flags the event as a non-TESC hosted event.
-   * 
+   *
    * @returns {React.StatelessComponent}
    */
   showThirdPartyText: React.StatelessComponent<WrappedFieldsProps> = ({values}) => {

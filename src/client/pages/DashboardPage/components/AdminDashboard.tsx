@@ -7,10 +7,10 @@ import EventList from './EventList';
 
 interface AdminDashboardProps {
 
-  //events that the admin is permitted to see
+  // events that the admin is permitted to see
   events: TESCEvent[];
 
-  //The current user (aka admin) requesting the page
+  // The current user (aka admin) requesting the page
   user: JWTAdminAuthToken;
 }
 

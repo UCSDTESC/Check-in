@@ -4,13 +4,13 @@ import ToggleSwitch from '~/components/ToggleSwitch';
 
 interface ResumeListProps {
 
-  //callback for when the compact state toggle is clicked
+  // callback for when the compact state toggle is clicked
   onCompactChange: () => void;
 
-  //the compacted state
+  // the compacted state
   isCompacted: boolean;
 
-  //the users to render
+  // the users to render
   applicants: TESCUser[];
 }
 
@@ -20,7 +20,7 @@ interface ColumnMap {
 
 interface ResumeListState {
 
-  //columns shown on screen
+  // columns shown on screen
   columns: ColumnMap;
   smallColumns: string[];
   mediumColumns: string[];
