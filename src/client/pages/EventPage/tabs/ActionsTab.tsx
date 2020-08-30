@@ -40,6 +40,25 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
   }
 
   /**
+   * This function is called when the user clicks the 'Export All Emails' button.
+   */
+  exportEmails = () => {
+    const eventAlias = this.props.event.alias;
+    exportUsers(eventAlias, true)
+      .end((err, res) => {
+        // Download as file
+        const blob = new Blob([res.text], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `${eventAlias}-${Date.now()}.csv`);
+        document.body.appendChild(link);
+
+        link.click();
+      });
+  }
+
+  /**
    * This function is called when the Bulk Change button is clicked on the form.
    * @param {BulkChangeFormData} values the values of the Bulk Change Form
    */
