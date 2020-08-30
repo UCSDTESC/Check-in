@@ -45,6 +45,11 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
   exportEmails = () => {
     const eventAlias = this.props.event.alias;
     exportUsers(eventAlias, true)
+
+    // call API's exportUsers.
+    // surprisingly, this is okay syntax because exportUsers and this.exportUsers are different
+    // TODO: name API call better
+    exportUsers(eventAlias, false)
       .end((err, res) => {
         // Download as file
         const blob = new Blob([res.text], { type: 'text/csv;charset=utf-8;' });
