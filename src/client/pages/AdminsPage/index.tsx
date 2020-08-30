@@ -37,7 +37,7 @@ type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchT
 
 interface AdminsPageState {
 
-  // tracks whether the New Admin Modal is open or not
+  // Tracks whether the New Admin Modal is open or not
   isRegisterModalOpen: boolean;
 }
 

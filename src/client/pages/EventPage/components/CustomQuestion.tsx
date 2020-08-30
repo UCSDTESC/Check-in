@@ -5,13 +5,13 @@ import ToggleSwitch from '~/components/ToggleSwitch';
 
 interface CustomQuestionProps {
 
-  // the question this component describes
+  // The question this component describes
   question: Question;
 
-  // callback for the delete question button
+  // Callback for the delete question button
   onDelete: () => void;
 
-  // callback for the questions' required switch toggle
+  // Callback for the questions' required switch toggle
   onChangeRequired: (newRequired: boolean) => void;
 }
 

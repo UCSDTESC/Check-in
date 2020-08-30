@@ -5,7 +5,7 @@ import EventList from './EventList';
 
 interface SponsorDashboardProps {
 
-  // events that this sponsor is allowed to see
+  // Events that this sponsor is allowed to see
   events: TESCEvent[];
 }
 

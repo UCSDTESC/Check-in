@@ -7,7 +7,7 @@ import EventList from './EventList';
 
 interface AdminDashboardProps {
 
-  // events that the admin is permitted to see
+  // Events that the admin is permitted to see
   events: TESCEvent[];
 
   // The current user (aka admin) requesting the page

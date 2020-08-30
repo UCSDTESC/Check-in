@@ -38,7 +38,7 @@
  interface ResumesPageProps {
 }
 
-// the props of this event are the union of the react-router data, redux actions and dispatch, and the
+// The props of this event are the union of the react-router data, redux actions and dispatch, and the
 // regular props of the component
  type Props = RouteComponentProps<{
   eventAlias: string;
@@ -46,7 +46,7 @@
 
  interface ResumesPageState {
 
-  // boolean to track compact state
+  // Boolean to track compact state
   isCompacted: boolean;
 }
 

@@ -5,17 +5,17 @@ import { UncontrolledTooltip } from 'reactstrap';
 import ToggleSwitch from '~/components/ToggleSwitch';
 
 interface EventOptionsProps {
-  // initial options of the event
+  // Initial options of the event
   options: TESCEventOptions;
 
-  // calback function for when the update button is clicked
+  // Callback function for when the update button is clicked
   onOptionsUpdate: (newOptions: TESCEventOptions) => void;
 
-  // the event these options are for
+  // The event these options are for
   event: TESCEvent;
 }
 
-// the current, edited state of the options
+// The current, edited state of the options
 interface EventOptionsState {
   options: TESCEventOptions;
 }

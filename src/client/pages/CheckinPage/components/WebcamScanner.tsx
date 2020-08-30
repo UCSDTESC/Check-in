@@ -5,7 +5,16 @@ import { USER_ID_LENGTH } from '..';
 
 import Scanner from './Scanner';
 
+/**
+ * Renders a QR Code Scanner and reads the user ID.
+ */
 export default class WebcamScanner extends Scanner {
+
+  /**
+   * The callback to be called with the scanned data from the QR code.
+   * 
+   * @param {String} data The data scanned from the QR code.
+   */
   onScan = (data: string) => {
     if (data === null || data.length !== USER_ID_LENGTH) {
       return;

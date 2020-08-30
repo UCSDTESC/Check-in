@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 interface UserEventsProps {
 
-  // the events that the user has applied to
+  // The events that the user has applied to
   events: TESCEvent[];
 }
 

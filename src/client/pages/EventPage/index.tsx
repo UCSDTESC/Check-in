@@ -30,7 +30,7 @@ import TeamsTab from './tabs/TeamsTab';
 
 type RouteProps = RouteComponentProps<{
 
-  // the eventAlias for the event we want to render the dashboard for
+  // The eventAlias for the event we want to render the dashboard for
   eventAlias: string;
 }>;
 

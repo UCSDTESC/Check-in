@@ -8,11 +8,20 @@ interface KeyboardScannerState {
   currentCode: string;
 }
 
+/**
+ * React Component to render an input where an organizer can scan in a user ID 
+ * through a QR scanner.
+ */
 export default class KeyboardScanner extends Scanner<{}, KeyboardScannerState> {
   state: Readonly<KeyboardScannerState> = {
     currentCode: '',
   };
 
+  /**
+   * Callback to be made after the user ID is scanned.
+   * 
+   * @param {React.FormEvent} event the input event being responded to.
+   */
   onChangeInput = (event: React.FormEvent<HTMLInputElement>) => {
     const newValue = event.currentTarget.value;
 

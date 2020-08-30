@@ -25,13 +25,13 @@ export interface UserProfileFormData {
 
 interface UserProfileProps {
 
-  // the user for which the profile is rendered
+  // The user for which the profile is rendered
   user: TESCUser;
 
-  // the event for which the application is on
+  // The event for which the application is on
   event: TESCEvent;
 
-  // callback function to toggle RSVP status
+  // Callback function to toggle RSVP status
   toggleRSVP: () => void;
 }
 

@@ -3,13 +3,13 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 interface BussingModalProps {
 
-  // boolean to track if the modal is open
+  // Boolean to track if the modal is open
   isOpen: boolean;
 
-  // is a bus available for this school?
+  // Is a bus available for this school?
   availableBus?: string;
 
-  // callback for when the bus is clicked
+  // Callback for when the bus is clicked
   onChooseBus: (choice: boolean) => void;
 }
 

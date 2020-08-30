@@ -25,19 +25,19 @@ type Props = ApplyPageProps & RouteComponentProps<{
 
 interface ApplyPageState {
 
-  // tracks which application page the user is on
+  // Tracks which application page the user is on
   page: number;
 
-  // tracks application error
+  // Application error
   error: Error;
 
-  // tracks if the user has yet to submit the application
+  // Tracks if the user has yet to submit the application
   isSubmitting: boolean;
 
-  // the event this application is for
+  // The event this application is for
   event: TESCEvent;
 
-  // does the user have an exisiting tesc.events account?
+  // Does the user have an exisiting tesc.events account?
   emailExists: boolean;
 }
 

@@ -44,7 +44,7 @@ class DashboardPage extends React.Component<Props> {
   componentDidMount() {
     this.props.showLoading();
 
-    // hide the loading state at the end of this promise
+    // Hide the loading state at the end of this promise
     this.props.loadAllAdminEvents()
       .catch(console.error)
       .finally(this.props.hideLoading);

@@ -8,22 +8,22 @@ import OrganiserSelect from '~/components/OrganiserSelect';
 
 interface OrganiserListProps {
 
-  // list of organisers for the event
+  // List of organisers for the event
   organisers: Admin[];
 
-  // callback function to show a modal to add a new organiser to the event
+  // Callback function to show a modal to add a new organiser to the event
   addNewOrganiser: (toAdd: AdminSelectType) => void;
 
-  // callback to add the organiser to the event
+  // Callback to add the organiser to the event
   registerNewOrganiser: (newOrganiser: NewAdminModalFormData) => void;
 }
 
 interface OrganiserListState {
 
-  // the new organiser to be added to the event
+  // The new organiser to be added to the event
   newOrganiser: AdminSelectType;
 
-  // boolean to track if the new organiser modal is open or not
+  // Boolean to track if the new organiser modal is open or not
   isRegisterModalOpen: boolean;
 }
 

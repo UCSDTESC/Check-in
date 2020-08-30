@@ -3,6 +3,9 @@ import { Alert } from 'reactstrap';
 
 import ApplyPage from '../../ApplyPage';
 
+/**
+ * Renders application in preview mode.
+ */
 class PreviewApplication extends React.Component {
 
   render() {

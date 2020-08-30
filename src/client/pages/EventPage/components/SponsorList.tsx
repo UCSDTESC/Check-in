@@ -8,22 +8,22 @@ import SponsorSelect from '~/components/SponsorSelect';
 
 interface SponsorListProps {
 
-  // the sponsors for this event
+  // The sponsors for this event
   sponsors: Admin[];
 
-  // callback function to add an existing sponsor to the event
+  // Callback function to add an existing sponsor to the event
   addNewSponsor: (toAdd: AdminSelectType) => void;
 
-  // function called to create a new sponsor in the system
+  // Function called to create a new sponsor in the system
   registerNewSponsor: (newSponsor: NewAdminModalFormData) => void;
 }
 
 interface SponsorListState {
 
-  // the new sponsor to be added
+  // The new sponsor to be added
   newSponsor: AdminSelectType;
 
-  // boolean to track if the create sponsor modal is open or not.
+  // Boolean to track if the create sponsor modal is open or not.
   isRegisterModalOpen: boolean;
 }
 

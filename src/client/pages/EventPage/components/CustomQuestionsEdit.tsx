@@ -6,23 +6,44 @@ import CustomQuestion from './CustomQuestion';
 import QuestionInput from './QuestionInput';
 
 interface CustomQuestionsProps {
+
+  // Custom questions for this event.
   customQuestions: CustomQuestions;
+
+  // State for if the custom question edit has completed on the backend
   isLoading?: boolean;
+
+  // Callbacks for CUD operations for custom questions.
   onAddCustomQuestion: (type: QuestionType, ...opts: any[]) => void;
   onUpdateCustomQuestion: (toUpdate: Question) => void;
   onDeleteCustomQuestion: (type: QuestionType, toDelete: Question) => void;
 }
 
+/**
+ * Custom Qestions editor.
+ */
 export default class CustomQuestionsEdit extends React.Component<CustomQuestionsProps> {
+
+  /**
+   * Callback for when the required state is toggled for a given question.
+   * 
+   * @param {Question} question The question to be edited
+   */
   onChangeRequired = (question: Question) => {
     const {onUpdateCustomQuestion} = this.props;
 
+    // Call function sent in props.
     onUpdateCustomQuestion({
       ...question,
       isRequired: !question.isRequired,
     });
   };
 
+  /**
+   * Render the list of questions for a given type of question
+   * 
+   * @param {QuestionType} type The type of the question to be rendered.
+   */
   renderQuestions = (type: QuestionType) => {
     const {onDeleteCustomQuestion} = this.props;
     const {[type]: questions} = this.props.customQuestions;

@@ -5,13 +5,13 @@ import { Button } from 'reactstrap';
 
 interface AdminListProps {
 
-  // the admins in the system
+  // The admins in the system
   admins: Admin[];
 
-  // function to be called when the delete button is pressed
+  // Function to be called when the delete button is pressed
   onDeleteAdmin: (adminId: string) => void;
 
-  // is the admin in editing mode?
+  // Is the admin in editing mode
   // TODO: remove - legacy feature
   editing: boolean;
 }

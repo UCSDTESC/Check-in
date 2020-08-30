@@ -33,7 +33,7 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
 interface UserPageProps {
 }
 
-// the props of this event are the union of the react-router data, redux actions and dispatch, and the
+// The props of this event are the union of the react-router data, redux actions and dispatch, and the
 // regular props of the component
 type Props = RouteComponentProps<{
   eventAlias: string;

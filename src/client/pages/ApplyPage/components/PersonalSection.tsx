@@ -9,11 +9,9 @@ import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
-
-  // function to be called when the email changes, to check if the user exists in the database
+  // Function to be called when the email changes, to check if the user exists in the database
   onEmailChange: (newEmail: string) => void;
-
-  // the current event being applied to
+  // The current event being applied to
   event: TESCEvent;
 }
 
@@ -191,6 +189,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     ));
   }
 
+  /**
+   * Create the input field for major and year information of the applicant.
+   * @param info redux-form object of the institution the applicatnt is from
+   * @returns {Component}
+   */
   showMajorYearBoxes(info: any) {
     const institution: InstitutionType = info.institution.input.value;
 
@@ -212,6 +215,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     );
   }
 
+  /**
+   * Create the input field for aqpplicant GPAs.
+   * @param info redux-form object of the institution the applicatnt is from
+   * @returns {Component}
+   */
   createGPAFields(enableGPA: boolean, requireGPA: boolean, requireMajorGPA: boolean) {
     const gpaFields = [];
 

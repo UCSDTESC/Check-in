@@ -4,16 +4,16 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 interface RSVPModalProps {
 
-  // toggle function for the model
+  // Toggle function for the model
   toggle: () => void;
 
-  // variable to track open or close state of the modal
+  // Variable to track open or close state of the modal
   isOpen: boolean;
 
-  // callback function for when the status is chosen
+  // Callback function for when the status is chosen
   onChooseStatus: (statusChoice: boolean) => void;
 
-  // the event for which the current application is on
+  // The event for which the current application is on
   event: TESCEvent;
 }
 
