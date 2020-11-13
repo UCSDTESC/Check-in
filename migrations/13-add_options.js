@@ -10,6 +10,7 @@ module.exports.up = function (done) {
     mlhProvisions: true,
     allowOutOfState: false,
     foodOption: false,
+    dietaryRestrictions: true,
     requireResume: true,
     allowTeammates: true,
     requireDiversityOption: true,
