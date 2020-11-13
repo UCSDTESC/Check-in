@@ -172,7 +172,7 @@ class ResponseSection extends ApplyPageSection<ResponseSectionFormData, Response
           )
         )}
 
-        {FormFields.createRow(
+        {options.dietaryRestrictions && FormFields.createRow(
           FormFields.createColumn('col-sm-12',
             FormFields.createLabel('Dietary Restrictions', false),
             FormFields.createTextArea('diet', 'Dietary Restrictions')

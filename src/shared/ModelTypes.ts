@@ -73,6 +73,7 @@ export interface TESCEventOptions {
   mlhProvisions: boolean;
   allowOutOfState: boolean;
   foodOption: boolean;
+  dietaryRestrictions: boolean;
   requireResume: boolean;
   allowTeammates: boolean;
   requireDiversityOption: boolean;
