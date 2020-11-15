@@ -49,6 +49,7 @@ export default class CSVService {
         gender: user.gender,
         status: user.status,
         website: user.website,
+        linkedin: user.linkedin,
         github: user.github,
         resumeFile: user.resume.name,
         resumeLink: user.resume.url,

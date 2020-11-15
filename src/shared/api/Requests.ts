@@ -92,6 +92,7 @@ export interface RegisterUserPersonalSectionRequest {
   major?: string;
   year?: string;
   github?: string;
+  linkedin?: string;
   website?: string;
   shareResume: boolean;
   university?: string;

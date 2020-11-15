@@ -15,8 +15,9 @@ export interface UserProfileFormData {
   shareResume: boolean;
   majorGPA: string;
   gpa: string;
-  website: string;
   github: string;
+  linkedin: string;
+  website: string;
   shirtSize: string;
   diet: string;
   food: string;
@@ -275,7 +276,7 @@ class UserProfile extends React.Component<Props> {
             className="sd-form__input-select user-profile__select"
           />
         </div>
-        <div className="col-lg-6 mb-3">
+        <div className="col-lg-4 mb-3">
           <h5>Github Username:</h5>
           <Field
             component="input"
@@ -286,7 +287,18 @@ class UserProfile extends React.Component<Props> {
             placeholder="GithubUser"
           />
         </div>
-        <div className="col-lg-6 mb-3">
+        <div className="col-lg-4 mb-3">
+          <h5>LinkedIn:</h5>
+          <Field
+            component="input"
+            name="linkedin"
+            type="text"
+            className={`sd-form__input-text user-profile__input
+            user-profile__linkedin`}
+            placeholder="https://linkedin.com/"
+          />
+        </div>
+        <div className="col-lg-4 mb-3">
           <h5>Personal Website:</h5>
           <Field
             component="input"

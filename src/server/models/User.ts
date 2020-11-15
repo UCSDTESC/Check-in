@@ -120,6 +120,15 @@ export const UserSchema = new Schema({
     public: true,
     editable: true,
   },
+  // Declares the user's LinkedIn URL
+  linkedin: {
+    type: String,
+    trim: true,
+    required: false,
+    displayName: 'LinkedIn',
+    public: true,
+    editable: true,
+  },
   // Declares the user's personal website link
   website: {
     type: String,
@@ -284,13 +293,13 @@ UserSchema.method('csvFlatten', function (isSponsor = false, emailsOnly = false)
   // tslint:disable-next-line:no-invalid-this no-this-assignment
   const user = this;
   let autoFill = ['_id', 'firstName', 'lastName', 'email', 'birthdate',
-    'gender', 'phone', 'university', 'pid', 'major', 'year', 'github',
+    'gender', 'phone', 'university', 'pid', 'major', 'year', 'github', 'linkedin',
     'website', 'shareResume', 'food', 'diet', 'shirtSize', 'availableBus',
     'bussing', 'teammates', 'status', 'checkedIn', 'createdAt', 'updatedAt'];
 
   if (isSponsor) {
     autoFill =  ['firstName', 'lastName', 'email', 'phone', 
-      'university', 'major', 'year', 'github', 'website', 'gpa', 'majorGPA'];
+      'university', 'major', 'year', 'github', 'website', 'linkedin', 'gpa', 'majorGPA'];
   }
 
   if (emailsOnly) {

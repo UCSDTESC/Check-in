@@ -332,8 +332,8 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
             FormFields.createInput('github', 'Github')
           ),
           FormFields.createColumn('col-lg-4',
-            FormFields.createLabel('LinkedIn URL', false),
-            FormFields.createInput('linkedin', 'LinkedIn')
+            FormFields.createLabel('LinkedIn', false),
+            FormFields.createInput('linkedin', 'http://linkedin.com/')
           ),
           FormFields.createColumn('col-lg-4',
             FormFields.createLabel('Personal Website', false),

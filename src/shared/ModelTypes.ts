@@ -130,6 +130,7 @@ export interface TESCUser {
   major?: string;
   year?: string;
   github?: string;
+  linkedin?: string;
   website?: string;
   shareResume: boolean;
   food?: string;
