@@ -327,14 +327,18 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
         <Fields names={['institution']} component={this.showMajorYearBoxes} />
 
         {FormFields.createRow(
-          FormFields.createColumn('col-lg-6',
+          FormFields.createColumn('col-lg-4',
             FormFields.createLabel('Github Username', false),
             FormFields.createInput('github', 'Github')
           ),
-          FormFields.createColumn('col-lg-6',
+          FormFields.createColumn('col-lg-4',
+            FormFields.createLabel('LinkedIn URL', false),
+            FormFields.createInput('linkedin', 'LinkedIn')
+          ),
+          FormFields.createColumn('col-lg-4',
             FormFields.createLabel('Personal Website', false),
             FormFields.createInput('website', 'http://example.com/')
-          )
+          ),
         )}
 
         {this.createGPAFields(options.enableGPA, options.requireGPA, options.requireMajorGPA)}
