@@ -73,6 +73,7 @@ export interface TESCEventOptions {
   mlhProvisions: boolean;
   allowOutOfState: boolean;
   foodOption: boolean;
+  dietaryRestrictions: boolean;
   requireResume: boolean;
   allowTeammates: boolean;
   requireDiversityOption: boolean;
@@ -129,6 +130,7 @@ export interface TESCUser {
   major?: string;
   year?: string;
   github?: string;
+  linkedin?: string;
   website?: string;
   shareResume: boolean;
   food?: string;

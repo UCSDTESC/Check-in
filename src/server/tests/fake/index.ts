@@ -33,6 +33,7 @@ const baseTESCEvent = (): TESCEvent => ({
     mlhProvisions: false,
     allowOutOfState: false,
     foodOption: false,
+    dietaryRestrictions: true,
     requireResume: false,
     allowTeammates: false,
     requireDiversityOption: false,

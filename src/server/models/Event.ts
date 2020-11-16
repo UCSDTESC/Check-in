@@ -90,6 +90,10 @@ export const EventSchema = new Schema({
       type: Boolean,
       default: false,
     },
+    dietaryRestrictions: {
+      type: Boolean,
+      default: false,
+    },
     requireResume: {
       type: Boolean,
       default: true,

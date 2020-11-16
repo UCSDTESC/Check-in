@@ -102,23 +102,39 @@ const createValidator = (options: TESCEventOptions, customQuestions: CustomQuest
       errors.phone = 'Must be 10 digits';
     }
 
+    const currentDate = new Date();
+    const eighteenOrOlder = (currentDate.getFullYear() - 18 > values.birthdateYear) ||
+                            (currentDate.getFullYear() - 18 == values.birthdateYear && 
+                            currentDate.getMonth() > values.birthdateMonth) ||
+                            (currentDate.getFullYear() - 18 == values.birthdateYear && 
+                            currentDate.getMonth() == values.birthdateMonth &&
+                            currentDate.getDate() >= values.birthdateDay);
+
     if (values.birthdateDay < 1 || values.birthdateDay > 31) {
       errors.birthdateDay = 'Invalid Day';
     }
-    if (values.birthdateMonth === 'Month' || values.birthdateMonth < 1 ||
-      values.birthdateMonth > 12) {
+
+    // birthdateMonth is zero-indexed. January = 0, February = 1, ...
+    if (values.birthdateMonth === 'Month' || values.birthdateMonth < 0 ||
+      values.birthdateMonth >= 12) {
       errors.birthdateMonth = 'Invalid Month';
     }
-    if (values.birthdateYear < 1900) {
+    if (values.birthdateYear < 1900 || values.birthdateYear > currentDate.getFullYear()) {
       errors.birthdateYear = 'Invalid Year';
     }
 
-    if (values.birthdateYear > 2001) {
-      if (!values.university ||
-        values.university.indexOf('The University of California') === -1) {
-        errors.birthdateYear = 'Invalid Year';
-      }
-    }
+    /* Commenting this out for now since we will allow people under 18
+    for SD Hacks 2021 and we are only allowing people at universities apply.
+    Definitely need to add some sort of toggle to toggle allowing under 18 applicants
+    from outside the UC's, but for now we will allow all people under 18 apply for SD Hacks 2021 */
+    // If person is not eighteen years old or older and does not attend a university,
+    // they cannot apply.
+    // if (!eighteenOrOlder) {
+    //   if (!values.university ||
+    //     values.university.indexOf('The University of California') === -1) {
+    //     errors.birthdateYear = 'Invalid Year';
+    //   }
+    // }
 
     if (values.institution === 'uni' && !values.university) {
       errors.university = 'Required';

@@ -315,6 +315,7 @@ class User extends React.Component<Props> {
               <h5>Portfolio</h5>
               <div className="form-group row mb-2">
                 {this.renderFormField('Github', 'github')}
+                {this.renderFormField('LinkedIn', 'linkedin')}
                 {this.renderFormField('Website', 'website')}
               </div>
               {user.resume &&
