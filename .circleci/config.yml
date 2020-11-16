@@ -5,7 +5,7 @@ jobs:
       - image: circleci/node:8.9
       - image: circleci/mongo:3.4-ram
     environment:
-      - MONGODB_URI: "mongodb://localhost:27017/checkin"
+      - MONGODB_URI: "mongodb://localhost:27017/check-in"
     steps:
       - checkout
       - restore_cache:
