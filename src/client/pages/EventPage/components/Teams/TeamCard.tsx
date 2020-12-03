@@ -1,5 +1,6 @@
 import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
 import React, { MouseEvent } from 'react';
+import FA from 'react-fontawesome';
 import { getTeamStatus, getStatusIndicatorText, TeamStatusDisplayText } from '~/static/Teams';
 
 interface TeamCardProps {
@@ -27,8 +28,10 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
     return `${user.firstName[0]}${user.lastName[0]}`;
   }
 
-  onClickMembers = (e: MouseEvent) => {
-    e.stopPropagation();
+  /**
+   * Handles the user clicking the edit button.
+   */
+  onEditMembers = () => {
     this.props.onEdit(this.props.team);
   }
 
@@ -60,24 +63,27 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
             </div>
           </h2>
         </div>
-        <div className="card-body team__card" onClick={this.onClickMembers}>
+        <div className="card-body team__card">
           <h6 className="team__subtitle card-subtitle mb-2 text-muted">
             Leader: {this.getUserFullName(teamLeader)}
           </h6>
-          <div className="team__members">
-            {
-              team.members.map(user => (
-                <div
-                  className={`team__member team__member--${user.status.toLowerCase()}`}
-                  data-toggle="tooltip"
-                  data-placement="bottom"
-                  title={this.getUserFullName(user)}
-                  key={user._id}
-                >
-                  {this.getUserInitials(user)}
-                </div>
-              ))
-            }
+          <div className="team__icons">
+            <div className="team__edit" onClick={() => this.onEditMembers()}><FA name="pencil"></FA></div>
+            <div className="team__members">
+              {
+                team.members.map(user => (
+                  <div
+                    className={`team__member team__member--${user.status.toLowerCase()}`}
+                    data-toggle="tooltip"
+                    data-placement="bottom"
+                    title={this.getUserFullName(user)}
+                    key={user._id}
+                  >
+                    {this.getUserInitials(user)}
+                  </div>
+                ))
+              }
+            </div>
           </div>
         </div>
       </div>
