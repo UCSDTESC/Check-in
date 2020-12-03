@@ -1,14 +1,13 @@
 import React, { FC } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import { reduxForm, InjectedFormProps, Field, formValues, formValueSelector } from 'redux-form';
-import { UpdateTeamRequest } from '@Shared/api/Requests';
+import { reduxForm, InjectedFormProps, Field, formValueSelector } from 'redux-form';
 import FA from 'react-fontawesome';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '~/reducers';
-import { TESCUser } from '@Shared/ModelTypes';
+import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
 
-type FormData = UpdateTeamRequest;
+type FormData = Partial<TESCTeam>;
 interface Props {
     open: boolean;
     members?: TESCUser[];
@@ -40,7 +39,7 @@ const EditTeamModal: FC<Props & InjectedFormProps<FormData, Props>> = props => {
                                             className="list-group-item d-flex justify-content-between align-items-center"
                                             key={i}
                                         >
-                                            {member.firstName || '???'} {member.lastName || '???'} ({member.account.email})
+                                            {member.lastName}, {member.firstName} ({member.account.email})
                                             <Button
                                                 // @ts-ignore
                                                 size="sm"

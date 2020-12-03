@@ -216,35 +216,6 @@ export default class UserService {
   }
 
   /**
-   * Moves a user to another team
-   * @param user The user to move
-   * @param newTeam The team to move to
-   */
-  async changeUserTeam(user: UserDocument, newTeam?: TeamDocument) {
-    if (newTeam) {
-      // Make sure team won't be full
-      if (newTeam.members.length + 1 > MAX_TEAM_SIZE) throw new Error(ErrorMessage.TEAM_FULL(newTeam.code));
-      newTeam.members.push(user);
-      await newTeam.save();
-    }
-
-    if (user.team) {
-      const oldTeam = await this.TeamModel.findById(user.team._id).populate('members').exec();
-      const oldTeamMembers = oldTeam.members.filter(member => member._id != user.id);
-
-      if (oldTeamMembers.length === 0) {
-        await oldTeam.remove();
-      } else {
-        oldTeam.members = oldTeamMembers;
-        await oldTeam.save();
-      }
-    }
-
-    user.team = newTeam;
-    await user.save();
-  }
-
-  /**
    * Creates a new account with the given information.
    * @param email The email to associate with the new account.
    * @param password The password to associate with the new account.

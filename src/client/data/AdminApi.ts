@@ -15,8 +15,7 @@ import {
   RegisterEventRequest,
   StatusEmailRequest,
   ExportUsersRequest,
-  AddTeamMembersRequest,
-  RemoveTeamMembersRequest
+  UpdateTeamRequest,
 } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse, JWTAdminAuth } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
@@ -215,23 +214,23 @@ export const editExistingEvent = (id: string, event: Partial<EventFormData>) => 
   return promisify<void>(promiseReq);
 }
 
-export const addUsersToTeam = (emails: string[], eventId: string, teamId: string) =>
-  promisify(request
-    .post(`/events/${eventId}/teams/${teamId}/add-members`)
-    .send({ emails } as AddTeamMembersRequest)
-    .set('Authorization', cookies.get(CookieTypes.admin.token))
-    .use(adminApiPrefix)
-    .use(nocache)
-  )
-
-export const removeUsersFromTeam = (emails: string[], eventId: string, teamId: string) =>
-  promisify(request
-    .post(`/events/${eventId}/teams/${teamId}/remove-members`)
-    .send({ emails } as RemoveTeamMembersRequest)
-    .set('Authorization', cookies.get(CookieTypes.admin.token))
-    .use(adminApiPrefix)
-    .use(nocache)
-  )
+/**
+ * Request an update for a given team.
+ * @param  {Object} team The new team object to save.
+ * @returns {Promise} A promise of the request.
+ */
+export const updateTeam = (eventId: string, team: Partial<TESCTeam>, addMembers?: string[], removeMembers?: string[]) =>
+  promisify<SuccessResponse>(
+    request
+      .patch(`/events/${eventId}/teams`)
+      .send({
+        addMembers,
+        removeMembers,
+        team,
+      } as UpdateTeamRequest)
+      .set('Authorization', cookies.get(CookieTypes.admin.token))
+      .use(adminApiPrefix)
+  );
 
 /**
  * Request to register a new admin.

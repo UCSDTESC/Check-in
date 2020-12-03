@@ -7,14 +7,13 @@ import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
 import TeamService from '@Services/TeamService';
 import UserService from '@Services/UserService';
-import { AddOrganiserRequest, AddSponsorRequest, AddTeamMembersRequest, CheckinUserRequest, RegisterEventRequest, UpdateEventOptionsRequest, UpdateTeamRequest, RemoveTeamMembersRequest } from '@Shared/api/Requests';
+import { AddOrganiserRequest, AddSponsorRequest, CheckinUserRequest, RegisterEventRequest, UpdateEventOptionsRequest, UpdateTeamRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
-import { Admin, MAX_TEAM_SIZE, TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import { Admin, TESCTeam, TESCUser } from '@Shared/ModelTypes';
 import { hasRankAtLeast, hasRankEqual, Role } from '@Shared/Roles';
 import { BadRequestError, Body, BodyParam, Get, JsonController, Param, Patch, Post, Put, UploadedFile, UseBefore, ForbiddenError } from 'routing-controllers';
 import { ErrorMessage } from '../../../utils/Errors';
 import { SelectedEventID } from '../..//decorators/SelectedEventID';
-import { SelectedTeamID } from '../..//decorators/SelectedTeamID';
 import { ValidateEventID } from '../..//middleware/ValidateEventID';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
@@ -158,78 +157,41 @@ export class EventsController {
       throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
     }
 
-    const teamId = req._id
-    if (!teamId) throw new BadRequestError('The team ID must be included in the request')
+    const teamId = req.team._id;
+    if (!teamId) throw new BadRequestError('The team ID must be included in the request');
     
-    const team: TESCTeam = await this.TeamService.getTeamById(teamId)
+    let team: TeamDocument = await this.TeamService.getTeamById(teamId);
     if (!team) throw new BadRequestError(`No team with ID ${teamId} found`);
 
-    await this.TeamService.updateTeamById(teamId, Object.assign(team, req));
-    return SuccessResponse.Positive;
-  }
+    // Add/Remove users based on patch body
+    const fetchUserByEmail = async email => {
+      const user = await this.UserService.getUserByEventAndEmail(email, event);
+      if (!user) throw new BadRequestError(ErrorMessage.NO_ACCOUNT_EXISTS());
 
+      return user;
+    };
 
-  @Post('/:eventId/teams/:teamId/add-members')
-  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
-  @UseBefore(ValidateEventID)
-  async addTeamMembers(
-    @AuthorisedAdmin() admin: Admin,
-    @SelectedEventID() event: EventDocument,
-    @SelectedTeamID() team: TeamDocument,
-    @Body() req: AddTeamMembersRequest
-  ) {
-    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
-    if (!isOrganiser) {
-      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
+    const addUserAccounts = !!req.addMembers ? await Promise.all(req.addMembers.map(fetchUserByEmail)) : false;
+    const removeUserAccounts = !!req.removeMembers ? await Promise.all(req.removeMembers.map(fetchUserByEmail)) : false;
+
+    if (addUserAccounts) {
+      try {
+        await this.TeamService.addMembersToTeam(team, addUserAccounts);
+      } catch (e) {
+        throw new BadRequestError(e.message);
+      }
+    }
+    if (removeUserAccounts) {
+      try {
+        await this.TeamService.removeMembersToTeam(team, removeUserAccounts);
+      } catch (e) {
+        throw new BadRequestError(e.message);
+      }
     }
 
-    const currentUserAccounts = team.members;
-    const newUserAccounts = await Promise.all(
-      req.emails.map(async email => {
-        const user = await this.UserService.getUserByEventAndEmail(email, event);
-        if (!user) throw new BadRequestError(ErrorMessage.NO_ACCOUNT_EXISTS());
-        if (user.team && user.team._id.equals(team._id)) throw new BadRequestError(ErrorMessage.USER_ON_TEAM());
-
-        return user;
-      })
-    );
-
-    if (newUserAccounts.length + currentUserAccounts.length > MAX_TEAM_SIZE) throw new BadRequestError(ErrorMessage.TEAM_FULL(team.code, MAX_TEAM_SIZE))
-    
-    await Promise.all(
-      newUserAccounts.map(user => this.UserService.changeUserTeam(user, team))
-    );
-
-    return SuccessResponse.Positive;
-  }
-
-  @Post('/:eventId/teams/:teamId/remove-members')
-  @UseBefore(RoleAuth(Role.ROLE_ADMIN))
-  @UseBefore(ValidateEventID)
-  async removeTeamMembers(
-    @AuthorisedAdmin() admin: Admin,
-    @SelectedEventID() event: EventDocument,
-    @SelectedTeamID() team: TeamDocument,
-    @Body() req: RemoveTeamMembersRequest
-  ) {
-    const isOrganiser = await this.EventService.isAdminOrganiser(event.alias, admin);
-    if (!isOrganiser) {
-      throw new BadRequestError(ErrorMessage.PERMISSION_ERROR());
-    }
-
-    const removedUserAccounts = await Promise.all(
-      req.emails.map(async email => {
-        const user = await this.UserService.getUserByEventAndEmail(email, event);
-        if (!user) throw new BadRequestError(ErrorMessage.NO_ACCOUNT_EXISTS());
-        if (!user.team || !user.team._id.equals(team._id)) throw new BadRequestError(ErrorMessage.USER_NOT_ON_TEAM());
-
-        return user;
-      })
-    );
-    
-    await Promise.all(
-      removedUserAccounts.map(user => this.UserService.changeUserTeam(user, undefined))
-    );
+    // Ensure we aren't override members when updating team
+    delete req.team.members;
+    await this.TeamService.updateTeamById(teamId, Object.assign(team, req.team));
 
     return SuccessResponse.Positive;
   }

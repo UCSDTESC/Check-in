@@ -42,11 +42,6 @@ export interface AddOrganiserRequest {
   organiserId: string;
 }
 
-export interface AddTeamMembersRequest {
-  emails: string[];
-}
-export type RemoveTeamMembersRequest = AddTeamMembersRequest;
-
 export interface DownloadResumesRequest {
   applicants: string[];
 }
@@ -139,7 +134,11 @@ export type RegisterUserRequest = {
 };
 
 export type UpdateUserRequest = Partial<TESCUser>;
-export type UpdateTeamRequest = Partial<TESCTeam>;
+export type UpdateTeamRequest = {
+  team: Partial<TESCTeam>;
+  addMembers?: string[];
+  removeMembers?: string[];
+};
 
 export interface RSVPUserRequest {
   status: boolean;

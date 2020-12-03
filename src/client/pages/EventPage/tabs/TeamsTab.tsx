@@ -1,10 +1,10 @@
-import { TESCTeam, TESCUser, TESCEvent } from '@Shared/ModelTypes';
+import { TESCTeam, TESCUser, TESCEvent, MAX_TEAM_SIZE } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 import classnames from 'classnames';
 import React from 'react';
 import FA from 'react-fontawesome';
 import Loading from '~/components/Loading';
-import { bulkChange, addUsersToTeam, removeUsersFromTeam } from '~/data/AdminApi';
+import { bulkChange, updateTeam } from '~/data/AdminApi';
 
 import { addEventSuccessAlert, addEventDangerAlert } from '../actions';
 import ConfirmActionModal from '../components/Teams/ConfirmActionModal';
@@ -243,6 +243,10 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       });
   }
 
+  /**
+   * Handles the event of a team being edited.
+   * @param team The team being edited.
+   */
   onTeamEdit = (team: TESCTeam) => {
     this.setState({
       editModalState: {
@@ -252,26 +256,19 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
     })
   }
 
-  handleTeamEditSubmit = async (newTeam: TESCTeam) => {
+  /**
+   * Updates a team with new or removed members.
+   * @param event The event for the team to be edited.
+   * @param newTeam The updated version of the team.
+   */
+  handleTeamEditSubmit = async (event: TESCEvent, newTeam: Partial<TESCTeam>) => {
     const oldTeam = this.state.editModalState.team;
-    const deletedMembersEmails = oldTeam.members.filter(user => !newTeam.members.includes(user)).map(user => user.account!.email!)
+    const removedMembersEmails = oldTeam.members.filter(user => !newTeam.members.includes(user)).map(user => user.account!.email!)
     const addedMembersEmails = newTeam.members.filter(user => !oldTeam.members.includes(user)).map(user => user.account!.email!)
 
-    const removedAllOldMembers = deletedMembersEmails.length === oldTeam.members.length;
-    if (removedAllOldMembers && addedMembersEmails.length > 0) {
-      if (oldTeam.members.length === 4) {
-        // Can't add a new member when the team is full
-        const deletedUser = deletedMembersEmails.pop();
-        await removeUsersFromTeam([deletedUser], this.props.event._id!, oldTeam._id!)
-      }
-
-      // We need to add one member before removing everyone else, so that we don't delete the team due to no members
-      const newUser = addedMembersEmails.pop();
-      await addUsersToTeam([newUser], this.props.event._id!, newTeam._id!)
-    }
-
-    deletedMembersEmails.length > 0 && await removeUsersFromTeam(deletedMembersEmails, this.props.event._id!, oldTeam._id!)
-    addedMembersEmails.length > 0 && await addUsersToTeam(addedMembersEmails, this.props.event._id!, oldTeam._id!)
+    console.log(removedMembersEmails, addedMembersEmails);
+    await updateTeam(event._id, newTeam, addedMembersEmails, removedMembersEmails);
+    
     this.onTeamModalToggle();
     this.props.onTeamsUpdate();
   }
@@ -356,7 +353,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   }
 
   render() {
-    const { teams, columns } = this.props;
+    const { teams, columns, event } = this.props;
     const { filteredTeams, selectedTeams, selectedUsers, confirmModalState, editModalState } = this.state;
 
     if (filteredTeams.size === 0 && teams.length === 0) {
@@ -375,7 +372,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
           open={editModalState.isOpen}
           toggle={this.onTeamModalToggle}
           initialValues={editModalState.team}
-          onSubmit={this.handleTeamEditSubmit}
+          onSubmit={(team) => this.handleTeamEditSubmit(event, team)}
         />
         <TeamsFilters
           teams={teams}

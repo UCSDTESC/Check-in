@@ -1,9 +1,10 @@
 import { Logger } from '@Config/Logging';
 import { EventDocument } from '@Models/Event';
 import { TeamDocument, TeamModel } from '@Models/Team';
-import { UserModel } from '@Models/User';
-import { TEAM_CODE_LENGTH, TESCTeam } from '@Shared/ModelTypes';
+import { UserDocument, UserModel } from '@Models/User';
+import { MAX_TEAM_SIZE, TEAM_CODE_LENGTH, TESCTeam, TESCUser } from '@Shared/ModelTypes';
 import { Inject, Service } from 'typedi';
+import { ErrorMessage } from 'utils/Errors';
 
 @Service()
 export default class TeamService {
@@ -102,6 +103,46 @@ export default class TeamService {
       .findById(teamId)
       .populate('members')
       .exec();
+  }
+
+  /**
+   * Adds existing users to a given team.
+   * @param team The existing team in which to add members.
+   * @param newMembers The new members (populated with team information).
+   */
+  async addMembersToTeam(team: TeamDocument, newMembers: UserDocument[]) {
+    // Ensure each of the users is not already associated with a team
+    if (newMembers.some((member) => !!member.team)) {
+      throw new Error(ErrorMessage.USER_ON_TEAM());
+    }
+
+    // Ensure we don't exceed team maximums
+    if (newMembers.length + team.members.length > MAX_TEAM_SIZE) throw new Error(ErrorMessage.TEAM_FULL(team.code, MAX_TEAM_SIZE))
+
+    team.members.push(...newMembers);
+    await team.save();
+
+    return newMembers.forEach(member => {
+      member.team = team;
+      member.save();
+    });
+  }
+
+  /**
+   * Removes existing users to a given team.
+   * @param team The existing team in which to remove members.
+   * @param removeMembers The members to be removed from the team.
+   */
+  async removeMembersToTeam(team: TeamDocument, removeMembers: UserDocument[]) {
+    const removeIds = removeMembers.map(member => member._id.toHexString());
+    // Filter by IDs
+    team.members = team.members.filter(member => !removeIds.includes(member._id.toHexString()));
+    await team.save();
+
+    return removeMembers.forEach(member => {
+      member.team = undefined;
+      member.save();
+    });
   }
 
   /**
