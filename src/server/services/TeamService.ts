@@ -3,6 +3,7 @@ import { EventDocument } from '@Models/Event';
 import { TeamDocument, TeamModel } from '@Models/Team';
 import { UserDocument, UserModel } from '@Models/User';
 import { MAX_TEAM_SIZE, TEAM_CODE_LENGTH, TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import { ClientSession } from 'mongoose';
 import { Inject, Service } from 'typedi';
 import { ErrorMessage } from 'utils/Errors';
 
@@ -97,12 +98,14 @@ export default class TeamService {
   /**
    * Gets the team associated with a given ID.
    * @param teamId The ID associated with the team.
+   * @param session A session under which to fetch the user.
    */
-  async getTeamById(teamId: string) {
-    return this.TeamModel
+  async getTeamById(teamId: string, session?: ClientSession) {
+    let teamQuery = this.TeamModel
       .findById(teamId)
-      .populate('members')
-      .exec();
+      .populate('members');
+    if (session) teamQuery = teamQuery.session(session);
+    return teamQuery.exec();
   }
 
   /**

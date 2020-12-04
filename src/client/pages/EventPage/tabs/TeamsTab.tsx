@@ -28,6 +28,7 @@ interface ConfirmModalState {
 interface EditModalState {
   isOpen: boolean;
   team?: TESCTeam;
+  error: string;
 }
 
 interface TeamsTabProps {
@@ -59,6 +60,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       },
       editModalState: {
         isOpen: false,
+        error: ""
       },
     };
   }
@@ -252,8 +254,35 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       editModalState: {
         isOpen: true,
         team,
+        error: ""
       }
     })
+  }
+
+  /**
+   * Close the team editing modal.
+   */
+  onTeamModalClose = () => {
+    this.setState({
+      editModalState: {
+        isOpen: false,
+        team: null,
+        error: ""
+      }
+    });
+  }
+
+  /**
+   * Sets the edit team modal error message.
+   * @param message The error message to display.
+   */
+  setTeamModalError = (message: string) => {
+    this.setState({
+      editModalState: {
+        ...this.state.editModalState,
+        error: message,
+      }
+    });
   }
 
   /**
@@ -262,24 +291,21 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
    * @param newTeam The updated version of the team.
    */
   handleTeamEditSubmit = async (event: TESCEvent, newTeam: Partial<TESCTeam>) => {
+    // Clear error before attempting submission
+    this.setTeamModalError("");
+
     const oldTeam = this.state.editModalState.team;
     const removedMembersEmails = oldTeam.members.filter(user => !newTeam.members.includes(user)).map(user => user.account!.email!)
     const addedMembersEmails = newTeam.members.filter(user => !oldTeam.members.includes(user)).map(user => user.account!.email!)
 
-    console.log(removedMembersEmails, addedMembersEmails);
-    await updateTeam(event._id, newTeam, addedMembersEmails, removedMembersEmails);
-    
-    this.onTeamModalToggle();
-    this.props.onTeamsUpdate();
-  }
-
-  onTeamModalToggle = () => {
-    this.setState({
-      editModalState: {
-        isOpen: false,
-        team: null,
-      }
-    });
+    try {
+      await updateTeam(event._id, newTeam, addedMembersEmails, removedMembersEmails);
+      this.props.onTeamsUpdate();
+      this.onTeamModalClose();
+    } catch (e) {
+      const err = e as Error;
+      this.setTeamModalError(err.message);
+    }
   }
 
   /**
@@ -368,12 +394,14 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
           actionType={confirmModalState.actionType}
           onConfirmChoice={this.onConfirmModalClosed}
         />
-        <EditTeamModal
+        {editModalState.team && <EditTeamModal
           open={editModalState.isOpen}
-          toggle={this.onTeamModalToggle}
+          toggle={this.onTeamModalClose}
+          errorMessage={editModalState.error}
           initialValues={editModalState.team}
-          onSubmit={(team) => this.handleTeamEditSubmit(event, team)}
-        />
+          form={editModalState.team ? editModalState.team.code : "editTeamModal"}
+          onSubmit={(team: Partial<TESCTeam>) => this.handleTeamEditSubmit(event, team)}
+        />}
         <TeamsFilters
           teams={teams}
           onFilteredChanged={this.onFilteredChange}

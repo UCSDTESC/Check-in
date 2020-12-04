@@ -12,6 +12,7 @@ import * as moment from 'moment';
 import { Inject, Service } from 'typedi';
 import { ErrorMessage } from '../utils/Errors';
 import { ForbiddenError } from 'routing-controllers';
+import { ClientSession, Query } from 'mongoose';
 
 
 @Service()
@@ -174,21 +175,24 @@ export default class UserService {
    * Get an account by the registered email.
    * @param email The email associated with the account.
    * @param caseSensitive Determines whether the search is case sensitive.
+   * @param session A session under which to fetch the user.
    */
-  async getAccountByEmail(email: string, caseSensitive: boolean = false) {
+  async getAccountByEmail(email: string, caseSensitive: boolean = false, session?: ClientSession) {
+    let accountFind: Query<AccountDocument> = undefined;
     if (caseSensitive) {
-      return this.AccountModel
-        .findOne({ email: email })
-        .exec();
+      accountFind = this.AccountModel
+        .findOne({ email: email });
+    } else {
+      accountFind = this.AccountModel
+        .findOne({
+          email: {
+            $regex: new RegExp(email, 'i'),
+          },
+        });
     }
 
-    return this.AccountModel
-      .findOne({
-        email: {
-          $regex: new RegExp(email, 'i'),
-        },
-      })
-      .exec();
+    if (session) accountFind = accountFind.session(session);
+    return accountFind.exec();
   }
 
   /**
@@ -203,16 +207,21 @@ export default class UserService {
   /**
    * Get a user by the associated account email.
    * @param email The email associated with the account.
+   * @param event The event for which the user belongs.
+   * @param caseSensitive True if the email search should be case sensitive.
+   * @param session A session under which to fetch the user.
    */
-  async getUserByEventAndEmail(email: string, event: EventDocument, caseSensitive: boolean = false) {
-    const account = await this.getAccountByEmail(email, caseSensitive);
-    return this.UserModel
+  async getUserByEventAndEmail(email: string, event: EventDocument, caseSensitive: boolean = false, session?: ClientSession) {
+    const account = await this.getAccountByEmail(email, caseSensitive, session);
+    let userFind = this.UserModel
       .findOne({
         account,
         event,
       })
-      .populate('team')
-      .exec();
+      .populate('team');
+
+    if (session) userFind = userFind.session(session);
+    return userFind.exec();
   }
 
   /**

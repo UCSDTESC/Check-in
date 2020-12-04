@@ -1,3 +1,4 @@
+import { Config } from '../../../config';
 import Uploads from '@Config/Uploads';
 import { AdminDocument } from '@Models/Admin';
 import { EventDocument } from '@Models/Event';
@@ -6,6 +7,7 @@ import AdminService from '@Services/AdminService';
 import EventService from '@Services/EventService';
 import SponsorService from '@Services/SponsorService';
 import TeamService from '@Services/TeamService';
+import { TransactionService, MockTransactionService, TransactionServiceInterface } from '@Services/TransactionService';
 import UserService from '@Services/UserService';
 import { AddOrganiserRequest, AddSponsorRequest, CheckinUserRequest, RegisterEventRequest, UpdateEventOptionsRequest, UpdateTeamRequest } from '@Shared/api/Requests';
 import { SuccessResponse } from '@Shared/api/Responses';
@@ -18,6 +20,7 @@ import { ValidateEventID } from '../..//middleware/ValidateEventID';
 import { AuthorisedAdmin } from '../../decorators/AuthorisedAdmin';
 import { AdminAuthorisation } from '../../middleware/AdminAuthorisation';
 import { RoleAuth } from '../../middleware/RoleAuth';
+import Container from 'typedi';
 
 /**
  * Handles all of the logic for fetching and modifying information about particular events
@@ -32,7 +35,16 @@ export class EventsController {
     private SponsorService: SponsorService,
     private TeamService: TeamService,
     private UserService: UserService,
-  ) { }
+  ) {
+    // Optionally enable transactions service depending on configuration
+    if (Config.EnableTransactions) {
+      this.TransactionService = Container.get(TransactionService);
+    } else {
+      this.TransactionService = Container.get(MockTransactionService);
+    }
+  }
+
+  private TransactionService: TransactionServiceInterface;
 
   @Get('/')
   @UseBefore(RoleAuth(Role.ROLE_SPONSOR))
@@ -160,12 +172,15 @@ export class EventsController {
     const teamId = req.team._id;
     if (!teamId) throw new BadRequestError('The team ID must be included in the request');
     
-    let team: TeamDocument = await this.TeamService.getTeamById(teamId);
+    // Start a transaction since we are accessing many different documents
+    const transactionSession = await this.TransactionService.startTransaction();
+
+    let team: TeamDocument = await this.TeamService.getTeamById(teamId, transactionSession);
     if (!team) throw new BadRequestError(`No team with ID ${teamId} found`);
 
     // Add/Remove users based on patch body
     const fetchUserByEmail = async email => {
-      const user = await this.UserService.getUserByEventAndEmail(email, event);
+      const user = await this.UserService.getUserByEventAndEmail(email, event, false, transactionSession);
       if (!user) throw new BadRequestError(ErrorMessage.NO_ACCOUNT_EXISTS());
 
       return user;
@@ -174,17 +189,20 @@ export class EventsController {
     const addUserAccounts = !!req.addMembers ? await Promise.all(req.addMembers.map(fetchUserByEmail)) : false;
     const removeUserAccounts = !!req.removeMembers ? await Promise.all(req.removeMembers.map(fetchUserByEmail)) : false;
 
-    if (addUserAccounts) {
-      try {
-        await this.TeamService.addMembersToTeam(team, addUserAccounts);
-      } catch (e) {
-        throw new BadRequestError(e.message);
-      }
-    }
+    // Remove first, to ensure we don't hit team limits
     if (removeUserAccounts) {
       try {
         await this.TeamService.removeMembersToTeam(team, removeUserAccounts);
       } catch (e) {
+        await this.TransactionService.abortTransaction(transactionSession);
+        throw new BadRequestError(e.message);
+      }
+    }
+    if (addUserAccounts) {
+      try {
+        await this.TeamService.addMembersToTeam(team, addUserAccounts);
+      } catch (e) {
+        await this.TransactionService.abortTransaction(transactionSession);
         throw new BadRequestError(e.message);
       }
     }
@@ -192,6 +210,9 @@ export class EventsController {
     // Ensure we aren't override members when updating team
     delete req.team.members;
     await this.TeamService.updateTeamById(teamId, Object.assign(team, req.team));
+
+    // Finish the transaction
+    await this.TransactionService.commitTransaction(transactionSession);
 
     return SuccessResponse.Positive;
   }

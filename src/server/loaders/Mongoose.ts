@@ -2,6 +2,7 @@ import { Config } from '@Config/index';
 import { RegisterModels } from '@Models/index';
 import * as express from 'express';
 import * as mongoose from 'mongoose';
+import { Container } from 'typedi';
 
 import Loader from './Loader';
 
@@ -11,8 +12,12 @@ export default class MongooseLoader extends Loader {
       useNewUrlParser: true,
       useCreateIndex: true,
     })
-    .then(() => {
+    .then((mongoose) => {
+      Container.set('Mongoose', mongoose);
+      
       RegisterModels();
+
+      return mongoose;
     });
   }
 }

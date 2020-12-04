@@ -1,22 +1,29 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { reduxForm, InjectedFormProps, Field, formValueSelector } from 'redux-form';
 import FA from 'react-fontawesome';
 import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { ApplicationState } from '~/reducers';
-import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import { MAX_TEAM_SIZE, TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import classnames from 'classnames';
 
 type FormData = Partial<TESCTeam>;
 interface Props {
     open: boolean;
     members?: TESCUser[];
-    newEmail?: string;
+    form: string;
+    errorMessage: string;
     toggle: () => void;
 }
 
 const EditTeamModal: FC<Props & InjectedFormProps<FormData, Props>> = props => {
+    const [newMembers, setNewMembers] = useState([]);
+    const [newEmail, setNewEmail] = useState("");
+
     const validEmail = (email: string) => /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)
+
+    const { errorMessage } = props;
 
     return (
         <Modal
@@ -34,41 +41,49 @@ const EditTeamModal: FC<Props & InjectedFormProps<FormData, Props>> = props => {
                             <div className="col-12">
                                 <h2>Members</h2>
                                 <ul>
-                                    {props.members.map((member, i) => (
-                                        <li
-                                            className="list-group-item d-flex justify-content-between align-items-center"
-                                            key={i}
-                                        >
-                                            {member.lastName}, {member.firstName} ({member.account.email})
-                                            <Button
-                                                // @ts-ignore
-                                                size="sm"
-                                                onClick={() => props.array.remove('members', i)}
+                                    {props.members.map((member, i) => {
+                                        const newMember = newMembers.includes(member.account.email);
+                                        return (
+                                            <li
+                                                className={classnames("list-group-item d-flex justify-content-between align-items-center", {
+                                                    "list-group-item-success": newMember
+                                                })}
+                                                key={i}
                                             >
-                                                <FA name="minus" />
-                                            </Button>
-                                        </li>
-                                    ))}
+                                                {!newMember && <>{member.lastName}, {member.firstName} ({member.account.email})</>}
+                                                {newMember && <>{member.account.email}</>}
+                                                <Button
+                                                    // @ts-ignore
+                                                    size="sm"
+                                                    onClick={() => props.array.remove('members', i)}
+                                                >
+                                                    <FA name="minus" />
+                                                </Button>
+                                            </li>
+                                        )
+                                        })}
 
-                                    {props.members.length < 4 && (
+                                    {props.members.length < MAX_TEAM_SIZE && (
                                         <div className="list-group-item d-flex justify-content-between align-items-center">
                                             <label htmlFor="newEmail" className="sd-form__label">Add a Teammate</label>
-                                            <Field
+                                            <input
                                                 name="newEmail"
                                                 className="sd-form__input-text"
                                                 type="email"
                                                 placeholder="triton@ucsd.edu"
-                                                component="input"
+                                                value={newEmail}
+                                                onChange={event => setNewEmail(event.target.value)}
                                             />
                                             <Button
                                                 // @ts-ignore
                                                 size="sm"
                                                 style={{ marginLeft: 20 }}
                                                 onClick={() => {
-                                                    props.array.push('members', { account: { email: props.newEmail } })
-                                                    props.change('newEmail', '')
+                                                    props.array.push('members', { account: { email: newEmail } });
+                                                    setNewMembers([...newMembers, newEmail]);
+                                                    setNewEmail("");
                                                 }}
-                                                disabled={!validEmail(props.newEmail) || props.members.some(user => props.newEmail === user.account.email)}
+                                                disabled={!validEmail(newEmail) || props.members.some(user => newEmail === user.account.email)}
                                             >
                                                 <FA name="plus" />
                                             </Button>
@@ -77,13 +92,16 @@ const EditTeamModal: FC<Props & InjectedFormProps<FormData, Props>> = props => {
                                 </ul>
                             </div>
                         </div>
+                        {!!errorMessage && <div className="alert alert-danger" role="alert">
+                            {errorMessage}
+                        </div>}
                     </div>
                 </ModalBody>
                 <ModalFooter>
                     <button
                         type="submit"
                         className="rounded-button rounded-button--short rounded-button--small"
-                        disabled={props.pristine || props.submitting || !!props.newEmail}
+                        disabled={props.pristine || props.submitting || !!newEmail}
                     >
                         Save
                     </button>
@@ -101,17 +119,16 @@ const EditTeamModal: FC<Props & InjectedFormProps<FormData, Props>> = props => {
 }
 
 const mapStateToProps = (state: ApplicationState, ownProps: Props) => {
+    console.log(ownProps.form);
     return {
-        members: formValueSelector('newAdmin')(state, 'members') || [],
-        newEmail: formValueSelector('newAdmin')(state, 'newEmail') || '',
+        members: formValueSelector(ownProps.form)(state, 'members') || [],
+        form: ownProps.form,
     } as Partial<Props>;
 };
 
-export default compose(
+export default connect(mapStateToProps)((
     reduxForm<FormData, Props>({
-        form: 'newAdmin',
         destroyOnUnmount: true,
         enableReinitialize: true,
-    }),
-    connect(mapStateToProps)
-)(EditTeamModal);
+    })
+)(EditTeamModal));
