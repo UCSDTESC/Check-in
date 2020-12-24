@@ -1,18 +1,23 @@
-import { Logger } from '@Config/Logging';
-import { EventDocument } from '@Models/Event';
-import { TeamDocument, TeamModel } from '@Models/Team';
-import { UserDocument, UserModel } from '@Models/User';
-import { MAX_TEAM_SIZE, TEAM_CODE_LENGTH, TESCTeam, TESCUser } from '@Shared/ModelTypes';
-import { ClientSession } from 'mongoose';
-import { Inject, Service } from 'typedi';
-import { ErrorMessage } from 'utils/Errors';
+import { Logger } from "@Config/Logging";
+import { EventDocument } from "@Models/Event";
+import { TeamDocument, TeamModel } from "@Models/Team";
+import { UserDocument, UserModel } from "@Models/User";
+import {
+  MAX_TEAM_SIZE,
+  TEAM_CODE_LENGTH,
+  TESCTeam,
+  TESCUser,
+} from "@Shared/ModelTypes";
+import { ClientSession } from "mongoose";
+import { Inject, Service } from "typedi";
+import { ErrorMessage } from "utils/Errors";
 
 @Service()
 export default class TeamService {
-  @Inject('TeamModel')
+  @Inject("TeamModel")
   private TeamModel: TeamModel;
 
-  @Inject('UserModel')
+  @Inject("UserModel")
   private UserModel: UserModel;
 
   /**
@@ -23,11 +28,14 @@ export default class TeamService {
     let newCode: string;
 
     do {
-      newCode = Math.random().toString(36).substr(2, TEAM_CODE_LENGTH).toUpperCase();
+      newCode = Math.random()
+        .toString(36)
+        .substr(2, TEAM_CODE_LENGTH)
+        .toUpperCase();
       Logger.debug(`Attempting to create team code '${newCode}'`);
 
       const numDocs = await this.TeamModel.countDocuments({ code: newCode });
-      isUnique = (numDocs === 0);
+      isUnique = numDocs === 0;
     } while (!isUnique);
 
     return newCode;
@@ -38,14 +46,13 @@ export default class TeamService {
    * @param code The code associated with the team.
    */
   async getTeamByCode(code: string): Promise<TeamDocument> {
-    return this.TeamModel
-      .findOne({
-        code: {
-          $regex: new RegExp(code, 'i'),
-        },
-      })
-      .populate('members')
-      .populate('event')
+    return this.TeamModel.findOne({
+      code: {
+        $regex: new RegExp(code, "i"),
+      },
+    })
+      .populate("members")
+      .populate("event")
       .exec();
   }
 
@@ -77,11 +84,10 @@ export default class TeamService {
    * @param event The event associated with all the teams.
    */
   async getTeamsByEvent(event: EventDocument) {
-    return this.TeamModel
-      .find({
-        event: event,
-      })
-      .populate('members')
+    return this.TeamModel.find({
+      event: event,
+    })
+      .populate("members")
       .exec();
   }
 
@@ -90,9 +96,7 @@ export default class TeamService {
    * @param teamId The ID associated with the team.
    */
   async updateTeamById(teamId: string, update: TESCTeam) {
-    this.TeamModel
-      .findByIdAndUpdate(teamId, update)
-      .exec();
+    this.TeamModel.findByIdAndUpdate(teamId, update).exec();
   }
 
   /**
@@ -101,9 +105,7 @@ export default class TeamService {
    * @param session A session under which to fetch the user.
    */
   async getTeamById(teamId: string, session?: ClientSession) {
-    let teamQuery = this.TeamModel
-      .findById(teamId)
-      .populate('members');
+    let teamQuery = this.TeamModel.findById(teamId).populate("members");
     if (session) teamQuery = teamQuery.session(session);
     return teamQuery.exec();
   }
@@ -120,12 +122,13 @@ export default class TeamService {
     }
 
     // Ensure we don't exceed team maximums
-    if (newMembers.length + team.members.length > MAX_TEAM_SIZE) throw new Error(ErrorMessage.TEAM_FULL(team.code, MAX_TEAM_SIZE))
+    if (newMembers.length + team.members.length > MAX_TEAM_SIZE)
+      throw new Error(ErrorMessage.TEAM_FULL(team.code, MAX_TEAM_SIZE));
 
     team.members.push(...newMembers);
     await team.save();
 
-    return newMembers.forEach(member => {
+    return newMembers.forEach((member) => {
       member.team = team;
       member.save();
     });
@@ -137,15 +140,21 @@ export default class TeamService {
    * @param removeMembers The members to be removed from the team.
    */
   async removeMembersToTeam(team: TeamDocument, removeMembers: UserDocument[]) {
-    const removeIds = removeMembers.map(member => member._id.toHexString());
+    const removeIds = removeMembers.map((member) => member._id.toHexString());
     // Filter by IDs
-    team.members = team.members.filter(member => !removeIds.includes(member._id.toHexString()));
+    team.members = team.members.filter(
+      (member) => !removeIds.includes(member._id.toHexString())
+    );
     await team.save();
 
-    return removeMembers.forEach(member => {
+    removeMembers.forEach((member) => {
       member.team = undefined;
       member.save();
     });
+
+    if (team.members.length === 0) {
+      return this.TeamModel.findByIdAndDelete(team._id).exec();
+    }
   }
 
   /**
@@ -154,7 +163,7 @@ export default class TeamService {
    */
   async populateTeammatesAdminFields(team: TeamDocument) {
     return team
-      .populate({ path: 'members', populate: { path: 'account' }})
+      .populate({ path: "members", populate: { path: "account" } })
       .execPopulate();
   }
 
@@ -165,11 +174,11 @@ export default class TeamService {
   async populateTeammatesPublicFields(team: TeamDocument) {
     return team
       .populate({
-        path: 'members',
-        select: 'firstName lastName',
+        path: "members",
+        select: "firstName lastName",
         populate: {
-          path: 'account',
-          select: 'email',
+          path: "account",
+          select: "email",
         },
       })
       .execPopulate();
