@@ -1,16 +1,19 @@
-import { AccountModel, AccountDocument } from '@Models/Account';
+import { AccountDocument, AccountModel } from '@Models/Account';
 import { AccountResetModel } from '@Models/AccountReset';
-import { PUBLIC_EVENT_FIELDS, EventDocument } from '@Models/Event';
-import { UserModel, UserSchema, PUBLIC_USER_FIELDS, UserDocument, EDITABLE_USER_FIELDS } from '@Models/User';
-import { TESCEvent, TESCAccount, TESCUser, AccountPasswordReset } from '@Shared/ModelTypes';
-import { UserStatus } from '@Shared/UserStatus';
-import { RegisterUserRequest, RegisterUserFields } from '@Shared/api/Requests';
+import { EventDocument, PUBLIC_EVENT_FIELDS } from '@Models/Event';
+import { TeamDocument, TeamModel } from '@Models/Team';
+import { EDITABLE_USER_FIELDS, PUBLIC_USER_FIELDS, UserDocument, UserModel, UserSchema } from '@Models/User';
+import { RegisterUserFields } from '@Shared/api/Requests';
 import { ColumnResponse, JWTUserAuthToken } from '@Shared/api/Responses';
+import { AccountPasswordReset, MAX_TEAM_SIZE, TESCAccount, TESCEvent, TESCUser } from '@Shared/ModelTypes';
+import { UserStatus } from '@Shared/UserStatus';
 import { generate } from 'generate-password';
 import * as moment from 'moment';
-import { Service, Inject } from 'typedi';
-
+import { Inject, Service } from 'typedi';
 import { ErrorMessage } from '../utils/Errors';
+import { ForbiddenError } from 'routing-controllers';
+import { ClientSession, Query } from 'mongoose';
+
 
 @Service()
 export default class UserService {
@@ -22,6 +25,9 @@ export default class UserService {
 
   @Inject('UserModel')
   private UserModel: UserModel;
+
+  @Inject('TeamModel')
+  private TeamModel: TeamModel;
 
   /**
    * Create a JWT token for a given user account.
@@ -169,21 +175,24 @@ export default class UserService {
    * Get an account by the registered email.
    * @param email The email associated with the account.
    * @param caseSensitive Determines whether the search is case sensitive.
+   * @param session A session under which to fetch the user.
    */
-  async getAccountByEmail(email: string, caseSensitive: boolean = false) {
+  async getAccountByEmail(email: string, caseSensitive: boolean = false, session?: ClientSession) {
+    let accountFind: Query<AccountDocument> = undefined;
     if (caseSensitive) {
-      return this.AccountModel
-        .findOne({ email: email })
-        .exec();
+      accountFind = this.AccountModel
+        .findOne({ email: email });
+    } else {
+      accountFind = this.AccountModel
+        .findOne({
+          email: {
+            $regex: new RegExp(email, 'i'),
+          },
+        });
     }
 
-    return this.AccountModel
-      .findOne({
-        email: {
-          $regex: new RegExp(email, 'i'),
-        },
-      })
-      .exec();
+    if (session) accountFind = accountFind.session(session);
+    return accountFind.exec();
   }
 
   /**
@@ -193,6 +202,26 @@ export default class UserService {
   async getUserById(userId: string) {
     return this.UserModel
       .findById(userId);
+  }
+
+  /**
+   * Get a user by the associated account email.
+   * @param email The email associated with the account.
+   * @param event The event for which the user belongs.
+   * @param caseSensitive True if the email search should be case sensitive.
+   * @param session A session under which to fetch the user.
+   */
+  async getUserByEventAndEmail(email: string, event: EventDocument, caseSensitive: boolean = false, session?: ClientSession) {
+    const account = await this.getAccountByEmail(email, caseSensitive, session);
+    let userFind = this.UserModel
+      .findOne({
+        account,
+        event,
+      })
+      .populate('team');
+
+    if (session) userFind = userFind.session(session);
+    return userFind.exec();
   }
 
   /**
@@ -283,7 +312,7 @@ export default class UserService {
    */
   async RSVPUser(user: UserDocument, accept: boolean, acceptBus: boolean = false) {
     if (user.status !== UserStatus.Unconfirmed) {
-      throw new Error(ErrorMessage.PERMISSION_ERROR());
+      throw new ForbiddenError(ErrorMessage.PERMISSION_ERROR());
     }
 
     user.status = accept ? UserStatus.Confirmed : UserStatus.Declined;

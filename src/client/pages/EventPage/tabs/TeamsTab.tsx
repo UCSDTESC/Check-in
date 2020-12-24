@@ -1,10 +1,10 @@
-import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import { TESCTeam, TESCUser, TESCEvent, MAX_TEAM_SIZE } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 import classnames from 'classnames';
 import React from 'react';
 import FA from 'react-fontawesome';
 import Loading from '~/components/Loading';
-import { bulkChange } from '~/data/AdminApi';
+import { bulkChange, updateTeam } from '~/data/AdminApi';
 
 import { addEventSuccessAlert, addEventDangerAlert } from '../actions';
 import ConfirmActionModal from '../components/Teams/ConfirmActionModal';
@@ -13,6 +13,7 @@ import TeamCard from '../components/Teams/TeamCard';
 import TeamsFilters from '../components/Teams/TeamsFilters';
 
 import EventPageTab from './EventPageTab';
+import EditTeamModal from '~/components/EditTeamModal';
 
 enum UserAction {
   Admit = 'Admit',
@@ -24,8 +25,14 @@ interface ConfirmModalState {
   isOpen: boolean;
   actionType: UserAction;
 }
+interface EditModalState {
+  isOpen: boolean;
+  team?: TESCTeam;
+  error: string;
+}
 
 interface TeamsTabProps {
+  event: TESCEvent;
   teams: TESCTeam[];
   onTeamsUpdate: () => void;
 }
@@ -36,11 +43,12 @@ interface TeamsTabState {
   filteredTeams: Set<string>;
 
   confirmModalState: ConfirmModalState;
+  editModalState: EditModalState;
 }
 
 export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState> {
-  constructor(props: TeamsTabProps & any) {
-    super(props);
+  constructor(props: TeamsTabProps) {
+    super(props as any);
 
     this.state = {
       selectedTeams: new Set<string>(),
@@ -49,6 +57,10 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       confirmModalState: {
         isOpen: false,
         actionType: UserAction.Admit,
+      },
+      editModalState: {
+        isOpen: false,
+        error: ""
       },
     };
   }
@@ -234,6 +246,69 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   }
 
   /**
+   * Handles the event of a team being edited.
+   * @param team The team being edited.
+   */
+  onTeamEdit = (team: TESCTeam) => {
+    this.setState({
+      editModalState: {
+        isOpen: true,
+        team,
+        error: ""
+      }
+    })
+  }
+
+  /**
+   * Close the team editing modal.
+   */
+  onTeamModalClose = () => {
+    this.setState({
+      editModalState: {
+        isOpen: false,
+        team: null,
+        error: ""
+      }
+    });
+  }
+
+  /**
+   * Sets the edit team modal error message.
+   * @param message The error message to display.
+   */
+  setTeamModalError = (message: string) => {
+    this.setState({
+      editModalState: {
+        ...this.state.editModalState,
+        error: message,
+      }
+    });
+  }
+
+  /**
+   * Updates a team with new or removed members.
+   * @param event The event for the team to be edited.
+   * @param newTeam The updated version of the team.
+   */
+  handleTeamEditSubmit = async (event: TESCEvent, newTeam: Partial<TESCTeam>) => {
+    // Clear error before attempting submission
+    this.setTeamModalError("");
+
+    const oldTeam = this.state.editModalState.team;
+    const removedMembersEmails = oldTeam.members.filter(user => !newTeam.members.includes(user)).map(user => user.account!.email!)
+    const addedMembersEmails = newTeam.members.filter(user => !oldTeam.members.includes(user)).map(user => user.account!.email!)
+
+    try {
+      await updateTeam(event._id, newTeam, addedMembersEmails, removedMembersEmails);
+      this.props.onTeamsUpdate();
+      this.onTeamModalClose();
+    } catch (e) {
+      const err = e as Error;
+      this.setTeamModalError(err.message);
+    }
+  }
+
+  /**
    * Renders the buttons which modifies the selected users
    */
   renderModifyButtons() {
@@ -304,8 +379,8 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
   }
 
   render() {
-    const { teams, columns } = this.props;
-    const { filteredTeams, selectedTeams, selectedUsers, confirmModalState } = this.state;
+    const { teams, columns, event } = this.props;
+    const { filteredTeams, selectedTeams, selectedUsers, confirmModalState, editModalState } = this.state;
 
     if (filteredTeams.size === 0 && teams.length === 0) {
       return <Loading title="Teams" />;
@@ -319,6 +394,14 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
           actionType={confirmModalState.actionType}
           onConfirmChoice={this.onConfirmModalClosed}
         />
+        {editModalState.team && <EditTeamModal
+          open={editModalState.isOpen}
+          toggle={this.onTeamModalClose}
+          errorMessage={editModalState.error}
+          initialValues={editModalState.team}
+          form={editModalState.team ? editModalState.team.code : "editTeamModal"}
+          onSubmit={(team: Partial<TESCTeam>) => this.handleTeamEditSubmit(event, team)}
+        />}
         <TeamsFilters
           teams={teams}
           onFilteredChanged={this.onFilteredChange}
@@ -346,6 +429,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
                 team={team}
                 isSelected={this.isTeamSelected(team)}
                 onSelect={this.onTeamSelect}
+                onEdit={this.onTeamEdit}
               />
             )}
         </div>

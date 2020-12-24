@@ -1,4 +1,4 @@
-import { Question, TESCEventOptions, TESCUser, TESCEvent } from '@Shared/ModelTypes';
+import { Question, TESCEventOptions, TESCUser, TESCTeam } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role } from '@Shared/Roles';
 import { UserStatus } from '@Shared/UserStatus';
@@ -135,6 +135,11 @@ export type RegisterUserRequest = {
 };
 
 export type UpdateUserRequest = Partial<TESCUser>;
+export type UpdateTeamRequest = {
+  team: Partial<TESCTeam>;
+  addMembers?: string[];
+  removeMembers?: string[];
+};
 
 export interface RSVPUserRequest {
   status: boolean;

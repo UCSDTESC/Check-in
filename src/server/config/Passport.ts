@@ -69,7 +69,7 @@ export class PassportStrategy {
   public getJWTAdminLogin() {
     return new JwtStrategy(jwtOptions, (payload, done) => {
       this.AdminModel.findById(payload._id, (err, user) => {
-        if (err || user.deleted) {
+        if (err || (user && user.deleted)) {
           return done(err, false);
         }
 
