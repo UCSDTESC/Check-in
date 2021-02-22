@@ -76,7 +76,7 @@
     "moment": "^2.19.3",
     "mongodb-migrations": "github:emirotin/mongodb-migrations#run-custom-sets",
     "mongoose": "^5.3.4",
-    "mongoose-crate": "^1.1.0",
+    "mongoose-crate": "github:UCSDTESC/mongoose-crate#resume-delete-patch",
     "mongoose-crate-s3": "^1.2.0",
     "mongoose-delete": "^0.4.0",
     "mongoose-sanitizer": "^1.0.0",
