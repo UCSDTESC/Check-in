@@ -1,10 +1,10 @@
-import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
+import { TESCTeam, TESCUser, TESCEvent } from '@Shared/ModelTypes';
 import { UserStatus } from '@Shared/UserStatus';
 import classnames from 'classnames';
 import React from 'react';
 import FA from 'react-fontawesome';
 import Loading from '~/components/Loading';
-import { bulkChange } from '~/data/AdminApi';
+import { bulkChange, addUsersToTeam, removeUsersFromTeam } from '~/data/AdminApi';
 
 import { addEventSuccessAlert, addEventDangerAlert } from '../actions';
 import ConfirmActionModal from '../components/Teams/ConfirmActionModal';
@@ -13,6 +13,7 @@ import TeamCard from '../components/Teams/TeamCard';
 import TeamsFilters from '../components/Teams/TeamsFilters';
 
 import EventPageTab from './EventPageTab';
+import EditTeamModal from '~/components/EditTeamModal';
 
 enum UserAction {
   Admit = 'Admit',
@@ -24,8 +25,13 @@ interface ConfirmModalState {
   isOpen: boolean;
   actionType: UserAction;
 }
+interface EditModalState {
+  isOpen: boolean;
+  team?: TESCTeam;
+}
 
 interface TeamsTabProps {
+  event: TESCEvent;
   teams: TESCTeam[];
   onTeamsUpdate: () => void;
 }
@@ -36,11 +42,12 @@ interface TeamsTabState {
   filteredTeams: Set<string>;
 
   confirmModalState: ConfirmModalState;
+  editModalState: EditModalState;
 }
 
 export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState> {
-  constructor(props: TeamsTabProps & any) {
-    super(props);
+  constructor(props: TeamsTabProps) {
+    super(props as any);
 
     this.state = {
       selectedTeams: new Set<string>(),
@@ -49,6 +56,9 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       confirmModalState: {
         isOpen: false,
         actionType: UserAction.Admit,
+      },
+      editModalState: {
+        isOpen: false,
       },
     };
   }
@@ -233,6 +243,48 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
       });
   }
 
+  onTeamEdit = (team: TESCTeam) => {
+    this.setState({
+      editModalState: {
+        isOpen: true,
+        team,
+      }
+    })
+  }
+
+  handleTeamEditSubmit = async (newTeam: TESCTeam) => {
+    const oldTeam = this.state.editModalState.team;
+    const deletedMembersEmails = oldTeam.members.filter(user => !newTeam.members.includes(user)).map(user => user.account!.email!)
+    const addedMembersEmails = newTeam.members.filter(user => !oldTeam.members.includes(user)).map(user => user.account!.email!)
+
+    const removedAllOldMembers = deletedMembersEmails.length === oldTeam.members.length;
+    if (removedAllOldMembers && addedMembersEmails.length > 0) {
+      if (oldTeam.members.length === 4) {
+        // Can't add a new member when the team is full
+        const deletedUser = deletedMembersEmails.pop();
+        await removeUsersFromTeam([deletedUser], this.props.event._id!, oldTeam._id!)
+      }
+
+      // We need to add one member before removing everyone else, so that we don't delete the team due to no members
+      const newUser = addedMembersEmails.pop();
+      await addUsersToTeam([newUser], this.props.event._id!, newTeam._id!)
+    }
+
+    deletedMembersEmails.length > 0 && await removeUsersFromTeam(deletedMembersEmails, this.props.event._id!, oldTeam._id!)
+    addedMembersEmails.length > 0 && await addUsersToTeam(addedMembersEmails, this.props.event._id!, oldTeam._id!)
+    this.onTeamModalToggle();
+    this.props.onTeamsUpdate();
+  }
+
+  onTeamModalToggle = () => {
+    this.setState({
+      editModalState: {
+        isOpen: false,
+        team: null,
+      }
+    });
+  }
+
   /**
    * Renders the buttons which modifies the selected users
    */
@@ -305,7 +357,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
 
   render() {
     const { teams, columns } = this.props;
-    const { filteredTeams, selectedTeams, selectedUsers, confirmModalState } = this.state;
+    const { filteredTeams, selectedTeams, selectedUsers, confirmModalState, editModalState } = this.state;
 
     if (filteredTeams.size === 0 && teams.length === 0) {
       return <Loading title="Teams" />;
@@ -318,6 +370,12 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
           selectedUsers={selectedUsers.size}
           actionType={confirmModalState.actionType}
           onConfirmChoice={this.onConfirmModalClosed}
+        />
+        <EditTeamModal
+          open={editModalState.isOpen}
+          toggle={this.onTeamModalToggle}
+          initialValues={editModalState.team}
+          onSubmit={this.handleTeamEditSubmit}
         />
         <TeamsFilters
           teams={teams}
@@ -346,6 +404,7 @@ export default class TeamsTab extends EventPageTab<TeamsTabProps, TeamsTabState>
                 team={team}
                 isSelected={this.isTeamSelected(team)}
                 onSelect={this.onTeamSelect}
+                onEdit={this.onTeamEdit}
               />
             )}
         </div>

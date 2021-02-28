@@ -16,7 +16,7 @@ import {
 import TestDatabaseConnection from '../../TestDatabaseConnection';
 import { EventModel, EventDocument } from '@Models/Event';
 import { UserModel, UserDocument } from '@Models/User';
-import { BadRequestError } from 'routing-controllers';
+import { BadRequestError, ForbiddenError } from 'routing-controllers';
 import { Request } from 'express-serve-static-core';
 import { TeamModel } from '@Models/Team';
 import * as path from 'path';
@@ -485,7 +485,7 @@ describe('UserController', () => {
           try {
             await userController.userRSVP(fakeUser, fakeAccount, {status: true, bussing: false});
           } catch (error) {
-            expect(error).toEqual(new BadRequestError(ErrorMessage.PERMISSION_ERROR()));
+            expect(error).toEqual(new ForbiddenError(ErrorMessage.PERMISSION_ERROR()));
           }
         }) 
       });

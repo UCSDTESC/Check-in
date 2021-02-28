@@ -1,4 +1,4 @@
-import { Question, TESCEventOptions, TESCUser, TESCEvent } from '@Shared/ModelTypes';
+import { Question, TESCEventOptions, TESCUser, TESCTeam } from '@Shared/ModelTypes';
 import { QuestionType } from '@Shared/Questions';
 import { Role } from '@Shared/Roles';
 import { UserStatus } from '@Shared/UserStatus';
@@ -41,6 +41,11 @@ export interface AddSponsorRequest {
 export interface AddOrganiserRequest {
   organiserId: string;
 }
+
+export interface AddTeamMembersRequest {
+  emails: string[];
+}
+export type RemoveTeamMembersRequest = AddTeamMembersRequest;
 
 export interface DownloadResumesRequest {
   applicants: string[];
@@ -135,6 +140,7 @@ export type RegisterUserRequest = {
 };
 
 export type UpdateUserRequest = Partial<TESCUser>;
+export type UpdateTeamRequest = Partial<TESCTeam>;
 
 export interface RSVPUserRequest {
   status: boolean;

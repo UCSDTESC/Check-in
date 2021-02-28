@@ -1,11 +1,12 @@
 import { TESCTeam, TESCUser } from '@Shared/ModelTypes';
-import React from 'react';
+import React, { MouseEvent } from 'react';
 import { getTeamStatus, getStatusIndicatorText, TeamStatusDisplayText } from '~/static/Teams';
 
 interface TeamCardProps {
   team: TESCTeam;
   isSelected: boolean;
   onSelect: (team: TESCTeam) => void;
+  onEdit: (team: TESCTeam) => void;
 }
 
 interface TeamCardState {
@@ -24,6 +25,11 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
    */
   getUserInitials = (user: TESCUser) => {
     return `${user.firstName[0]}${user.lastName[0]}`;
+  }
+
+  onClickMembers = (e: MouseEvent) => {
+    e.stopPropagation();
+    this.props.onEdit(this.props.team);
   }
 
   render() {
@@ -54,7 +60,7 @@ export default class TeamCard extends React.Component<TeamCardProps, TeamCardSta
             </div>
           </h2>
         </div>
-        <div className="card-body team__card">
+        <div className="card-body team__card" onClick={this.onClickMembers}>
           <h6 className="team__subtitle card-subtitle mb-2 text-muted">
             Leader: {this.getUserFullName(teamLeader)}
           </h6>

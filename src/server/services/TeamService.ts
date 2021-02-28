@@ -1,9 +1,9 @@
 import { Logger } from '@Config/Logging';
 import { EventDocument } from '@Models/Event';
-import { TeamModel, TeamDocument } from '@Models/Team';
+import { TeamDocument, TeamModel } from '@Models/Team';
 import { UserModel } from '@Models/User';
-import { TESCTeam, TEAM_CODE_LENGTH } from '@Shared/ModelTypes';
-import { Service, Inject } from 'typedi';
+import { TEAM_CODE_LENGTH, TESCTeam } from '@Shared/ModelTypes';
+import { Inject, Service } from 'typedi';
 
 @Service()
 export default class TeamService {
@@ -84,12 +84,34 @@ export default class TeamService {
   }
 
   /**
+   * Edits the team associated with a given ID.
+   * @param teamId The ID associated with the team.
+   */
+  async updateTeamById(teamId: string, update: TESCTeam) {
+    this.TeamModel
+      .findByIdAndUpdate(teamId, update)
+      .exec();
+  }
+
+  /**
    * Gets the team associated with a given ID.
    * @param teamId The ID associated with the team.
    */
   async getTeamById(teamId: string) {
     return this.TeamModel
-      .findById(teamId);
+      .findById(teamId)
+      .populate('members')
+      .exec();
+  }
+
+  /**
+   * Populates the fields that are avaiable to admins
+   * @param team The team to populate
+   */
+  async populateTeammatesAdminFields(team: TeamDocument) {
+    return team
+      .populate({ path: 'members', populate: { path: 'account' }})
+      .execPopulate();
   }
 
   /**

@@ -14,7 +14,9 @@ import {
   CheckinUserRequest,
   RegisterEventRequest,
   StatusEmailRequest,
-  ExportUsersRequest
+  ExportUsersRequest,
+  AddTeamMembersRequest,
+  RemoveTeamMembersRequest
 } from '@Shared/api/Requests';
 import { SuccessResponse, ColumnResponse, JWTAdminAuth } from '@Shared/api/Responses';
 import { EventStatistics, GetSponsorsResponse, EventsWithStatisticsResponse } from '@Shared/api/Responses';
@@ -195,9 +197,9 @@ export const editExistingEvent = (id: string, event: Partial<EventFormData>) => 
     closeTimeDay
   )).toISOString(true);
 
-  
+
   const promiseReq = request
-    .post(`/events/edit/${id}`)
+    .patch(`/events/${id}`)
     .set('Authorization', cookies.get(CookieTypes.admin.token))
     .field('event', JSON.stringify({
       ...eventWithoutFields,
@@ -206,12 +208,30 @@ export const editExistingEvent = (id: string, event: Partial<EventFormData>) => 
     .use(adminApiPrefix)
     .use(nocache)
 
-    if (logo) {
-      promiseReq.attach('logo', logo[0])
-    }
+  if (logo) {
+    promiseReq.attach('logo', logo[0])
+  }
 
-    return promisify<void>(promiseReq);
+  return promisify<void>(promiseReq);
 }
+
+export const addUsersToTeam = (emails: string[], eventId: string, teamId: string) =>
+  promisify(request
+    .post(`/events/${eventId}/teams/${teamId}/add-members`)
+    .send({ emails } as AddTeamMembersRequest)
+    .set('Authorization', cookies.get(CookieTypes.admin.token))
+    .use(adminApiPrefix)
+    .use(nocache)
+  )
+
+export const removeUsersFromTeam = (emails: string[], eventId: string, teamId: string) =>
+  promisify(request
+    .post(`/events/${eventId}/teams/${teamId}/remove-members`)
+    .send({ emails } as RemoveTeamMembersRequest)
+    .set('Authorization', cookies.get(CookieTypes.admin.token))
+    .use(adminApiPrefix)
+    .use(nocache)
+  )
 
 /**
  * Request to register a new admin.
@@ -246,11 +266,11 @@ export const deleteAdmin = (adminId: string) =>
  * @returns {Promise} A promise of the request.
  */
 export const downloadResumes = (applicants: string[]): SuperAgentRequest =>
-    request
-      .post('/resumes')
-      .send({ applicants } as DownloadResumesRequest)
-      .set('Authorization', cookies.get(CookieTypes.admin.token))
-      .use(adminApiPrefix)
+  request
+    .post('/resumes')
+    .send({ applicants } as DownloadResumesRequest)
+    .set('Authorization', cookies.get(CookieTypes.admin.token))
+    .use(adminApiPrefix)
 
 /**
  * Requests the status of an ongoing download.
@@ -275,7 +295,7 @@ export const pollDownload = (downloadId: string) =>
 export const exportUsers = (eventAlias: string, emailsOnly: boolean): SuperAgentRequest =>
   request
     .post(`/export/`)
-    .send({alias: eventAlias, emailsOnly: emailsOnly} as ExportUsersRequest)
+    .send({ alias: eventAlias, emailsOnly: emailsOnly } as ExportUsersRequest)
     .set('Authorization', cookies.get(CookieTypes.admin.token))
     .use(adminApiPrefix);
 
