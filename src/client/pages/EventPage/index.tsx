@@ -11,6 +11,8 @@ import Loading from '~/components/Loading';
 import { loadEventStatistics, loadAllTeams, editExistingEvent } from '~/data/AdminApi';
 import { ApplicationState } from '~/reducers';
 
+import EventForm, { EventFormData } from '../../components/EventForm';
+import createValidator from '../NewEventPage/validate';
 import TabularPage, { TabularPageState, TabularPageProps, TabPage, TabularPageNav } from '../TabularPage';
 
 import {
@@ -19,16 +21,16 @@ import {
 } from './actions';
 import CheckinStatistics from './components/CheckinStatistics';
 import ResumeStatistics from './components/ResumeStatistics';
+import ViewApplication from './components/ViewApplication';
 import ActionsTab from './tabs/ActionsTab';
 import AdministratorsTab from './tabs/AdministratorsTab';
 import SettingsTab from './tabs/SettingsTab';
 import StatisticsTab from './tabs/StatisticsTab';
 import TeamsTab from './tabs/TeamsTab';
-import ViewApplication from './components/ViewApplication';
-import EventForm, { EventFormData } from '../../components/EventForm';
-import createValidator from '../NewEventPage/validate';
 
 type RouteProps = RouteComponentProps<{
+
+  // The eventAlias for the event we want to render the dashboard for
   eventAlias: string;
 }>;
 
@@ -59,6 +61,15 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
 interface EventPageProps extends TabularPageProps {
 }
 
+/**
+ * This component receives props in 3 ways -
+ * 1) The explicit props provied to it by EventPageProps
+ * 2) The redux state provided to it by mapStateToProps
+ * 3) The dispatch functions provided to it by mapDispatchToProps
+ *
+ * So, the props of this component is the union of the return types of mapStateToProps,
+ * mapDispatchToProps and EventPageProps
+ */
 export type Props = RouteProps & ReturnType<typeof mapStateToProps> &
   ReturnType<typeof mapDispatchToProps> & EventPageProps;
 
@@ -66,6 +77,12 @@ interface EventPageState extends TabularPageState {
   teams: TESCTeam[];
 }
 
+/**
+ * This page renders the main page for an event.
+ * It has tabs and links to the other pages related to this event.
+ *
+ * This component is extending from TabularPage, which has the tabbing functionality abstracted away
+ */
 class EventPage extends TabularPage<Props, EventPageState> {
   tabPages: Readonly<TabPage[]> = [
     {
@@ -228,7 +245,7 @@ class EventPage extends TabularPage<Props, EventPageState> {
       closeTimeMonth: eventDate.getMonth(),
       closeTimeYear: eventDate.getFullYear(),
       logo: undefined,
-    }
+    };
 
     const editEvent = async (eventData: EventFormData) => {
       try {
@@ -241,12 +258,12 @@ class EventPage extends TabularPage<Props, EventPageState> {
       } catch (e) {
         this.props.addEventDangerAlert(eventData.alias, e.message, 'Edit Event');
       }
-    }
+    };
 
     return (
         <div className="sd-form event-page__edit-form">
           <EventForm
-            editing
+            editing={true}
             validate={validator}
             onSubmit={editEvent}
             initialValues={initialValues}

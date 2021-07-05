@@ -108,11 +108,19 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     }
   }
 
+  /**
+   * Show error when checkin fails
+   * 
+   * @param {String} error the error message to show.
+   */
   onCheckinError = (error: string) => {
     this.clearAlerts();
     this.createAlert(error, AlertType.Danger);
   };
 
+  /**
+   * Show success message when checkin is successful
+   */
   onCheckinSuccessful = () => {
     const { lastUser } = this.state;
 
@@ -131,6 +139,11 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
       .then(addUsers);
   }
 
+  /**
+   * Logic flow to determine whether the user should be allowed into the event.
+   * 
+   * @param {TESCUser} user The user being checked.
+   */
   validateUser = (user: TESCUser) =>
     new Promise((resolve, reject) => {
       // Ensure they're eligible
@@ -154,6 +167,11 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
       return resolve(user);
     })
 
+  /**
+   * Make network request to check in the user.
+   * 
+   * @param {TESCUser} user the user to be checked in.
+   */
   checkinUser = (user: TESCUser): Promise<TESCUser> =>
     new Promise((resolve, reject) => {
       const { event } = this.props;
@@ -166,6 +184,11 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
         .catch(reject);
     });
 
+  /**
+   * Callback to prep the component for validating the user.
+   * 
+   * @param {String} userId the userId scanned from the QR code.
+   */
   onScan = (userId: string) => {
     const { lastUser } = this.state;
 
@@ -196,11 +219,17 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     this.toggleModal();
   }
 
+  /**
+   * Toggle liability waiver modal visibility state.
+   */
   toggleModal = () =>
     this.setState({
       isLiabilityShowing: !this.state.isLiabilityShowing,
     });
 
+  /**
+   * Higher level flow for the checkin process.
+   */
   callCheckin = () => {
     this.setState({
       isLiabilityShowing: false,
@@ -221,6 +250,10 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
       });
   }
 
+  /**
+   * Render tab where the user can use a scanner to scan in a user id from a QR code.
+   * @param props {Props} Not used in this function.
+   */
   renderKeyboardTab(props: Props) {
     return (
       <CheckinTab>
@@ -229,6 +262,10 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     );
   }
 
+  /**
+   * Render tab where the application can scan a QR code.
+   * @param props {Props} Not used in this function.
+   */
   renderWebcamTab(props: Props) {
     return (
       <CheckinTab>
@@ -237,6 +274,10 @@ class CheckinPage extends TabularPage<Props, CheckinPageState> {
     );
   }
 
+  /**
+   * Render tab where the user can type in an email / name to check in a user.
+   * @param props {Props} Not used in this function.
+   */
   renderManualTab() {
     return (
       <CheckinTab>

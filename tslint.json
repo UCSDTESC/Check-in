@@ -15,7 +15,7 @@
     ],
     "comment-format": [
       true,
-      "check-space"
+      "check-space",
     ],
     "forin": false,
     "import-blacklist": [

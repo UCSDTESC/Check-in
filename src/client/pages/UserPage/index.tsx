@@ -33,6 +33,8 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
 interface UserPageProps {
 }
 
+// The props of this event are the union of the react-router data, redux actions and dispatch, and the
+// regular props of the component
 type Props = RouteComponentProps<{
   eventAlias: string;
 }> & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & UserPageProps;
@@ -41,6 +43,9 @@ interface UserPageState extends AlertPageState {
   showRSVP: boolean;
 }
 
+/**
+ * This is the page that shows a user their application
+ */
 class UserPage extends AlertPage<Props, UserPageState> {
   state: Readonly<UserPageState> = {
     alerts: [],
@@ -91,7 +96,10 @@ class UserPage extends AlertPage<Props, UserPageState> {
       });
   }
 
-  toggleRSVP = () => this.setState({ showRSVP: !this.state.showRSVP });
+  /**
+   * Toggle React state to show the RSVP modal
+   */
+  toggleRSVP = () => this.setState({showRSVP: !this.state.showRSVP});
 
   /**
    * Requests that the server RSVP the current user with the given values.

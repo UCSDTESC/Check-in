@@ -9,7 +9,9 @@ import ApplyPageSection, { ApplyPageSectionProps } from './ApplyPageSection';
 import UniversityField from './UniversityField';
 
 interface PersonalSectionProps extends ApplyPageSectionProps {
+  // Function to be called when the email changes, to check if the user exists in the database
   onEmailChange: (newEmail: string) => void;
+  // The current event being applied to
   event: TESCEvent;
 }
 
@@ -19,6 +21,9 @@ export enum InstitutionType {
   HighSchool = 'hs',
 }
 
+/**
+ * Override defined form data to track the data in the way the UI shows it.
+ */
 export interface PersonalSectionFormData extends RegisterUserPersonalSectionRequest {
   birthdateMonth: number;
   birthdateDay: number;
@@ -27,7 +32,16 @@ export interface PersonalSectionFormData extends RegisterUserPersonalSectionRequ
   resume?: File[];
 }
 
+/**
+ * This is the first page of the event application. This handles the user's personal details.
+ */
 class PersonalSection extends ApplyPageSection<PersonalSectionFormData, PersonalSectionProps> {
+
+  /**
+   * Create the email component of the application.
+   * Use onBlur to check if the email exists when the user takes their focus off this field.
+   * @returns {Component}
+   */
   createEmailField() {
     return (
       <Field
@@ -175,6 +189,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     ));
   }
 
+  /**
+   * Create the input field for major and year information of the applicant.
+   * @param info redux-form object of the institution the applicatnt is from
+   * @returns {Component}
+   */
   showMajorYearBoxes(info: any) {
     const institution: InstitutionType = info.institution.input.value;
 
@@ -196,6 +215,11 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     );
   }
 
+  /**
+   * Create the input field for aqpplicant GPAs.
+   * @param info redux-form object of the institution the applicatnt is from
+   * @returns {Component}
+   */
   createGPAFields(enableGPA: boolean, requireGPA: boolean, requireMajorGPA: boolean) {
     const gpaFields = [];
 
@@ -256,6 +280,10 @@ class PersonalSection extends ApplyPageSection<PersonalSectionFormData, Personal
     );
   }
 
+  /**
+   * Creates the dropdown for a user to declare their race / ethnicity.
+   * @returns {Component}
+   */
   createDiversityOptions() {
     return (FormFields.createRow(
       FormFields.createColumn('col-md-6',

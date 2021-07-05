@@ -9,6 +9,9 @@ interface ResumeStatisticsProps {
   className: string;
 }
 
+/**
+ * Event header link to show the number of resumes in the system
+ */
 export default class ResumeStatistics extends EventStatisticsComponent<ResumeStatisticsProps> {
   /**
    * Renders the tooltip that explains how to approve resumes.

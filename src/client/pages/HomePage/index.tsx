@@ -31,7 +31,12 @@ interface HomePageProps {
 
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & HomePageProps;
 
+/**
+ * This is the main tesc.event homepage. If the user requesting it is authenticated, it will show
+ * the user their existing applications. If the user is not authenticated, it will show all open applications
+ */
 class HomePage extends React.Component<Props> {
+
   componentDidMount() {
     this.props.showLoading();
 
@@ -53,6 +58,11 @@ class HomePage extends React.Component<Props> {
     return true;
   }
 
+  /**
+   * Renders the user's existing applications
+   *
+   * @param {TESCEvent[]} events the events that this user has applied to
+   */
   userEvents(events: TESCEvent[]) {
     return (
       <div className="col-md-4">
@@ -61,6 +71,12 @@ class HomePage extends React.Component<Props> {
     );
   }
 
+  /**
+   * Renders the current events that are open for applications
+   *
+   * @param {TESCEvent[]} events the events to be rendered
+   * @param {Boolean} small display mode for the event cards
+   */
   currentEvents(events: TESCEvent[], small: boolean = false) {
     return (
       <div className={small ? 'col-md-8' : 'col-12'}>
@@ -72,6 +88,7 @@ class HomePage extends React.Component<Props> {
   render() {
     const { events, userEvents } = this.props;
 
+    // show the sidebar if the authenticated user has any applications
     const showSidebar = Object.values(userEvents).length > 0;
 
     let currentEvents: TESCEvent[] = [];

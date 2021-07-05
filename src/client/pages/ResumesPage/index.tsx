@@ -1,23 +1,23 @@
-import { TESCUser } from '@Shared/ModelTypes';
-import { UserStatus } from '@Shared/UserStatus';
-import React from 'react';
-import { connect } from 'react-redux';
-import { showLoading, hideLoading } from 'react-redux-loading-bar';
-import { RouteComponentProps } from 'react-router';
-import { bindActionCreators } from 'redux';
-import { ApplicationDispatch, loadAllAdminEvents } from '~/actions';
-import { loadAllSponsorUsers } from '~/data/AdminApi';
-import { ApplicationState } from '~/reducers';
-import { applyResumeFilter } from '~/static/Resumes';
+ import { TESCUser } from '@Shared/ModelTypes';
+ import { UserStatus } from '@Shared/UserStatus';
+ import React from 'react';
+ import { connect } from 'react-redux';
+ import { showLoading, hideLoading } from 'react-redux-loading-bar';
+ import { RouteComponentProps } from 'react-router';
+ import { bindActionCreators } from 'redux';
+ import { ApplicationDispatch, loadAllAdminEvents } from '~/actions';
+ import { loadAllSponsorUsers } from '~/data/AdminApi';
+ import { ApplicationState } from '~/reducers';
+ import { applyResumeFilter } from '~/static/Resumes';
 
-import { replaceApplicants, replaceFiltered } from './actions';
-import ResumeList from './components/ResumeList';
+ import { replaceApplicants, replaceFiltered } from './actions';
+ import ResumeList from './components/ResumeList';
 
-type RouteProps = RouteComponentProps<{
+ type RouteProps = RouteComponentProps<{
   eventAlias: string;
 }>;
 
-const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
+ const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
   const eventAlias = ownProps.match.params.eventAlias;
   return {
     event: state.admin.events[eventAlias],
@@ -27,7 +27,7 @@ const mapStateToProps = (state: ApplicationState, ownProps: RouteProps) => {
   };
 };
 
-const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
+ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   replaceApplicants,
   showLoading,
   hideLoading,
@@ -35,21 +35,33 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
   loadAllAdminEvents,
 }, dispatch);
 
-interface ResumesPageProps {
+ interface ResumesPageProps {
 }
 
-type Props = RouteProps & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & ResumesPageProps;
+// The props of this event are the union of the react-router data, redux actions and dispatch, and the
+// regular props of the component
+ type Props = RouteComponentProps<{
+  eventAlias: string;
+}> & ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & ResumesPageProps;
 
-interface ResumesPageState {
+ interface ResumesPageState {
+
+  // Boolean to track compact state
   isCompacted: boolean;
 }
 
-class ResumesPage extends React.Component<Props, ResumesPageState> {
+/**
+ * This is the sponsor tool that shows a list of applicants to an event and their resumes
+ */
+ class ResumesPage extends React.Component<Props, ResumesPageState> {
   state: Readonly<ResumesPageState> = {
     isCompacted: false,
   };
 
-  toggleCompacted = () => this.setState({ isCompacted: !this.state.isCompacted });
+  /**
+   * Toggle to compact react state
+   */
+  toggleCompacted = () => this.setState({isCompacted: !this.state.isCompacted});
 
   componentDidMount() {
     const { showLoading, hideLoading } = this.props;
@@ -100,4 +112,4 @@ class ResumesPage extends React.Component<Props, ResumesPageState> {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ResumesPage);
+ export default connect(mapStateToProps, mapDispatchToProps)(ResumesPage);

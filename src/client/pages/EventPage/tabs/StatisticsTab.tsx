@@ -2,9 +2,9 @@ import { EventStatistics } from '@Shared/api/Responses';
 import React from 'react';
 import Loading from '~/components/Loading';
 
+import AppsOverTimeStatistics from '../components/AppsOverTimeStatistics';
 import EventStatisticsCharts from '../components/EventStatisticsCharts';
 import GenderStatistics from '../components/GenderStatistics';
-import AppsOverTimeStatistics from '../components/AppsOverTimeStatistics';
 
 import EventPageTab from './EventPageTab';
 
@@ -12,6 +12,12 @@ interface StatisticsTabProps {
   statistics: EventStatistics | null;
 }
 
+/**
+ * This is the tab that shows the user statistics for an event. This tab currently has:
+ *
+ * - Status Breakdown Piechart
+ * - Gender Breakdown Piechart
+ */
 export default class StatisticsTab extends EventPageTab<StatisticsTabProps> {
 
   render() {

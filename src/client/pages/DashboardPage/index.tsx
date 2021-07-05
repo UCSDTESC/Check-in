@@ -24,12 +24,27 @@ const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators
 interface DashboardPageProps {
 }
 
+/**
+ * This component receives props in 3 ways -
+ * 1) The explicit props provied to it by DashboardPageProps
+ * 2) The redux state provided to it by mapStateToProps
+ * 3) The dispatch functions provided to it by mapDispatchToProps
+ *
+ * So, the props of this component is the union of the return types of mapStateToProps,
+ * mapDispatchToProps and DashboardPageProps
+ */
 type Props = ReturnType<typeof mapStateToProps> & ReturnType<typeof mapDispatchToProps> & DashboardPageProps;
 
+/**
+ * This is the page that an admin sees when they first log into tesc.events.
+ * It shows the list of events that admin is permitted to see
+ */
 class DashboardPage extends React.Component<Props> {
+
   componentDidMount() {
     this.props.showLoading();
 
+    // Hide the loading state at the end of this promise
     this.props.loadAllAdminEvents()
       .catch(console.error)
       .finally(this.props.hideLoading);

@@ -3,9 +3,14 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 interface UserEventsProps {
+
+  // The events that the user has applied to
   events: TESCEvent[];
 }
 
+/**
+ * This component shows all existing applications for the user.
+ */
 export default class UserEvents extends React.Component<UserEventsProps> {
   render() {
     const { events } = this.props;

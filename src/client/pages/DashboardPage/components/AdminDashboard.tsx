@@ -6,10 +6,17 @@ import React from 'react';
 import EventList from './EventList';
 
 interface AdminDashboardProps {
+
+  // Events that the admin is permitted to see
   events: TESCEvent[];
+
+  // The current user (aka admin) requesting the page
   user: JWTAdminAuthToken;
 }
 
+/**
+ * This is the admin dashboard. It is primarily a wrapper around EventList for now.
+ */
 export default class AdminDashboard extends React.Component<AdminDashboardProps> {
 
   render() {

@@ -16,12 +16,16 @@ interface RSVPConfirmState {
   status: boolean;
 }
 
+/**
+ * This is the component that renders the RSVP workflow by showing RSVPModal and BussingModal
+ */
 export default class RSVPConfirm extends React.Component<RSVPConfirmProps, RSVPConfirmState> {
   state: Readonly<RSVPConfirmState> = {
     page: 0,
     status: undefined,
   };
 
+  // set React state to move to next step of the workflow
   nextPage = () => this.setState({page: this.state.page + 1});
 
   onChooseStatus = (status: boolean) => {
@@ -42,6 +46,11 @@ export default class RSVPConfirm extends React.Component<RSVPConfirmProps, RSVPC
     onClose();
   }
 
+  /**
+   * Callback function for when the bus is chosen
+   *
+   * @param {Boolean} bussing the bussing status
+   */
   onChooseBus = (bussing: boolean) => {
     const {onUpdate, onClose} = this.props;
 

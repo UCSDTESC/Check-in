@@ -3,7 +3,11 @@ import React from 'react';
 import { Field, reduxForm, InjectedFormProps } from 'redux-form';
 
 export interface BulkChangeFormData {
+
+  // New line separated
   users: string;
+
+  // New status to be set
   status: string;
 }
 
@@ -11,8 +15,12 @@ interface BulkChangeProps {
 
 }
 
+// Use a union of BulkChangeProps and Redux Form's Props
 type Props = InjectedFormProps<BulkChangeFormData, BulkChangeProps> & BulkChangeProps;
 
+/**
+ * This component implements a feature to update multiple users' statuses by their user IDs
+ */
 class BulkChange extends React.Component<Props> {
   render() {
     const {handleSubmit, pristine, submitting} = this.props;

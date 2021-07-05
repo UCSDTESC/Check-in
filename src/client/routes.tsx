@@ -22,14 +22,15 @@ import ConfirmPage from './auth/user/Confirm';
 import UserLogout from './auth/user/Logout';
 import { authoriseUser, finishAuthorisation as finishUserAuth, logoutUser } from './auth/user/actions';
 import AdminLayout from './layouts/admin';
-import SponsorLayout from './layouts/sponsor';
 import PublicLayout from './layouts/public';
+import SponsorLayout from './layouts/sponsor';
 import UserLayout from './layouts/user';
 import AdminsPage from './pages/AdminsPage';
 import ApplyPage from './pages/ApplyPage';
 import CheckinPage from './pages/CheckinPage';
 import Dashboard from './pages/DashboardPage';
 import EventPage from './pages/EventPage';
+import PreviewApplication from './pages/EventPage/components/PreviewApplication';
 import ForgotPage from './pages/ForgotPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
@@ -39,7 +40,18 @@ import ResetPage from './pages/ResetPage';
 import ResumesPage from './pages/ResumesPage';
 import UserPage from './pages/UserPage';
 import UsersPage from './pages/UsersPage';
-import PreviewApplication from './pages/EventPage/components/PreviewApplication';
+
+/*
+  PrivateRoute.tsx and PrivateUserRoute.tsx are wrapper components around
+  react-router-dom's Route component to handle authentication state.
+*/
+
+// Authentication Components & Actions
+// TODO: Document better
+
+// Importing the different layouts (page structures) for the application
+
+// Importing all the pages for the app, used later when setting up routes.
 
 const mapDispatchToProps = (dispatch: ApplicationDispatch) => bindActionCreators({
   authoriseAdmin,
@@ -140,6 +152,12 @@ class Routes extends React.Component<Props> {
       );
   }
 
+  /**
+   * Render a route with the User layout.
+   * @param {JSX.IntrinsicElements} component The child component to render within the
+   * layout.
+   * @returns {Component}
+   */
   renderUser = (RenderComponent: any) => {
     return (props: RouteComponentProps) =>
       (
@@ -150,7 +168,7 @@ class Routes extends React.Component<Props> {
   }
 
   renderPublic = (RenderComponent: any) => {
-    return (props: RouteComponentProps) => 
+    return (props: RouteComponentProps) =>
       (
         <PublicLayout>
           <RenderComponent match={props.match} />
@@ -213,7 +231,6 @@ class Routes extends React.Component<Props> {
         />
 
         {/* User Routes */}
-
         <Route
           exact={true}
           path="/login"

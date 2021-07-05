@@ -28,6 +28,9 @@ interface LoginPageState extends AlertPageState {
   redirectToReferrer: boolean;
 }
 
+/**
+ * Page for users to login to their accounts.
+ */
 class LoginPage extends AlertPage<Props, LoginPageState> {
   state: Readonly<LoginPageState> = {
     alerts: [],
@@ -56,6 +59,11 @@ class LoginPage extends AlertPage<Props, LoginPageState> {
     }
   }
 
+  /**
+   * Make API call for the user trying to log in.
+   * 
+   * @param {LoginFormData} formProps The data in the form.
+   */
   loginUser = (formProps: LoginFormData) => {
     const {loginUser, history} = this.props;
     return loginUser(formProps)

@@ -7,27 +7,48 @@ import NewAdminModal, { NewAdminModalFormData } from '~/components/NewAdminModal
 import SponsorSelect from '~/components/SponsorSelect';
 
 interface SponsorListProps {
+
+  // The sponsors for this event
   sponsors: Admin[];
+
+  // Callback function to add an existing sponsor to the event
   addNewSponsor: (toAdd: AdminSelectType) => void;
+
+  // Function called to create a new sponsor in the system
   registerNewSponsor: (newSponsor: NewAdminModalFormData) => void;
 }
 
 interface SponsorListState {
+
+  // The new sponsor to be added
   newSponsor: AdminSelectType;
+
+  // Boolean to track if the create sponsor modal is open or not.
   isRegisterModalOpen: boolean;
 }
 
+/**
+ * This component renders a sponsor list on the administrators tab of an event
+ */
 export default class SponsorList extends React.Component<SponsorListProps, SponsorListState> {
   state: Readonly<SponsorListState> = {
     newSponsor: null,
     isRegisterModalOpen: false,
   };
 
+  /**
+   * Update the components newSponsor state to the new data
+   *
+   * @param {AdminSelectType} newOrganiser the new sponsor to be set
+   */
   changeNewSponsor = (newSponsor: AdminSelectType) =>
     this.setState({
       newSponsor,
     });
 
+  /**
+   * Add an (existing sponsor) to the system from the dropdown
+   */
   onAddNewSponsor = () => {
     const {newSponsor} = this.state;
 
@@ -36,12 +57,20 @@ export default class SponsorList extends React.Component<SponsorListProps, Spons
     this.changeNewSponsor(null);
   };
 
+  /**
+   * Create a new sponsor in the system and and close the modal.
+   *
+   * @param {NewAdminModalFormData} values the new sponsor to be created in the system
+   */
   onRegisterModalSubmit = (values: NewAdminModalFormData) => {
     this.props.registerNewSponsor(values);
 
     this.toggleRegisterModal();
   };
 
+  /**
+   * Toggle the react state to show the modal or not.
+   */
   toggleRegisterModal = () => this.setState({
     isRegisterModalOpen: !this.state.isRegisterModalOpen,
   });

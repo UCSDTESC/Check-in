@@ -19,19 +19,34 @@ interface ApplyPageProps {
 }
 
 type Props = ApplyPageProps & RouteComponentProps<{
+  // eventAlias for the event this application is for
   eventAlias: string;
 }>;
 
 interface ApplyPageState {
+
+  // Tracks which application page the user is on
   page: number;
+
+  // Application error
   error: Error;
+
+  // Tracks if the user has yet to submit the application
   isSubmitting: boolean;
+
+  // The event this application is for
   event: TESCEvent;
+
+  // Does the user have an exisiting tesc.events account?
   emailExists: boolean;
 }
 
+// The complete application is the union of data from its 3 pages
 export type ApplyPageFormData = PersonalSectionFormData & ResponseSectionFormData & UserSectionFormData;
 
+/**
+ * This page is the application for an event. It implements a multi page application form.
+ */
 class ApplyPage extends React.Component<Props, ApplyPageState> {
   state: Readonly<ApplyPageState> = {
     page: 1,
@@ -88,7 +103,13 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
     this.loadPageFromHash();
   }
 
+  /**
+   * Sanitise user input, used before the final submit.
+   * @param {ApplyPageFormData} values the user's application
+   */
   sanitiseValues(values: ApplyPageFormData) {
+
+    // parse date numbers into a datestring
     values.birthdate = new Date(
       values.birthdateYear,
       values.birthdateMonth - 1,
@@ -130,6 +151,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
       return;
     }
 
+    // checks if user exists with an API call
     checkUserExists(email)
       .then((ret) => {
         this.setState({
@@ -152,6 +174,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
       isSubmitting: true,
     });
 
+    // Send Application to backend
     registerUser(this.props.match.params.eventAlias, values)
       .then(() => {
         // Log successful application with Google Analytics
@@ -160,6 +183,7 @@ class ApplyPage extends React.Component<Props, ApplyPageState> {
           action: 'Successful',
         });
 
+        // Show success page
         this.nextPage();
       })
       .catch((err) => {

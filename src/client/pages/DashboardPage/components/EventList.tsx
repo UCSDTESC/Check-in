@@ -5,11 +5,21 @@ import { Link } from 'react-router-dom';
 import EventCard from '~/components/EventCard';
 
 interface EventListProps {
+
+  // events to be rendered in the list
   events: TESCEvent[];
+
+  // track if we need a direct link to the resume page
   resumeLink?: boolean;
+
+  // can this user create an event?
   canCreate?: boolean;
 }
 
+/**
+ * This component renders the cards for events on DashboardPage.
+ * It also has an "Add Event" button if the user is capable of user creation.
+ */
 export default class EventList extends React.Component<EventListProps> {
   render() {
     const { events, resumeLink, canCreate } = this.props;

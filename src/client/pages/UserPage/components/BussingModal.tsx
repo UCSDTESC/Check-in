@@ -2,12 +2,27 @@ import React from 'react';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 interface BussingModalProps {
+
+  // Boolean to track if the modal is open
   isOpen: boolean;
+
+  // Is a bus available for this school?
   availableBus?: string;
+
+  // Callback for when the bus is clicked
   onChooseBus: (choice: boolean) => void;
 }
 
+/**
+ * This is the modal that a user can use to show that they will be getting a bus.
+ */
 export default class BussingModal extends React.Component<BussingModalProps> {
+
+  /**
+   * Callback for the bus choose button
+   *
+   * @param {Boolean} bussing boolean to track bussing status
+   */
   onChooseBus = (bussing: boolean) => () =>
     this.props.onChooseBus(bussing);
 

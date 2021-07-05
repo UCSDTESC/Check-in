@@ -22,6 +22,7 @@ const store = createStore(reducer,
     applyMiddleware(reduxThunk as ThunkMiddleware<ApplicationState, AnyAction>)
   ));
 
+// Configuring the application for routing, cookies, and redux.
 render(
   (
   <CookiesProvider>

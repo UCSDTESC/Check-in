@@ -7,7 +7,16 @@ import EventStatisticsComponent from './EventStatisticsComponent';
 const PIE_CHART_COLOURS =
   ['#8E44AD', '#43D2F0', '#AEF9D6', '#EF767A', '#7D7ABC'];
 
+/**
+ * This component renders a statistics pie chart for the gender breakdown of an event
+ */
 export default class GenderStatistics extends EventStatisticsComponent {
+
+  /**
+   * Render the gender breakdown in text form
+   *
+   * @param {EventStatistics} statistics The statistics of the event
+   */
   renderStats(statistics: EventStatistics) {
     return [
       <dt key="genderTag" className="col-12">Gender Distribution</dt>,

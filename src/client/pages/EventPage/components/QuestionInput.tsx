@@ -12,14 +12,22 @@ interface QuestionInputState {
   isRequired: boolean;
 }
 
+/**
+ * This component creates an input field to create a custom question.
+ */
 export default class QuestionInput extends React.Component<QuestionInputProps, QuestionInputState> {
   state: Readonly<QuestionInputState> = {
     question: '',
     isRequired: false,
   };
 
+  /**
+   * Callback function called when the add button is pressed to add this question to the system
+   */
   addQuestion = () => {
     this.props.onAddQuestion(this.state);
+
+    // reset the component state
     this.setState({
       question: '',
       isRequired: false,

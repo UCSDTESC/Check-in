@@ -8,9 +8,23 @@ import EventPageTab from './EventPageTab';
 interface ActionsTabProps {
 }
 
+/**
+ * ActionsTab holds the functionality for actions related to the event
+ * This tab currently has:
+ *  - Export All Users As CSV
+ *  - Bulk Status Change of multiple users by user IDs
+ */
 export default class ActionsTab extends EventPageTab<ActionsTabProps> {
+
+  /**
+   * This function is called when the user clicks the 'Export All Users' button.
+   */
   exportUsers = () => {
     const eventAlias = this.props.event.alias;
+
+    // call API's exportUsers.
+    // surprisingly, this is okay syntax because exportUsers and this.exportUsers are different
+    // TODO: name API call better
     exportUsers(eventAlias, false)
       .end((err, res) => {
         // Download as file
@@ -25,8 +39,13 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
       });
   }
 
+  /**
+   * This function is called when the user clicks the 'Export All Emails' button.
+   */
   exportEmails = () => {
     const eventAlias = this.props.event.alias;
+    exportUsers(eventAlias, true)
+
     exportUsers(eventAlias, true)
       .end((err, res) => {
         // Download as file
@@ -41,6 +60,10 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
       });
   }
 
+  /**
+   * This function is called when the Bulk Change button is clicked on the form.
+   * @param {BulkChangeFormData} values the values of the Bulk Change Form
+   */
   onBulkChange = (values: BulkChangeFormData) => {
     const { event } = this.props;
     const { users, status } = values;
@@ -48,6 +71,7 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
     // Split users into array
     const usersSplit = users.split(/\n/);
 
+    // call API's bulk change
     bulkChange(usersSplit, status)
       .then(() => {
         this.props.addEventSuccessAlert(event.alias, 'Successfully updated users!', 'Bulk Change');
@@ -79,7 +103,7 @@ export default class ActionsTab extends EventPageTab<ActionsTabProps> {
             >
               Export User Emails
             </a>
-            
+
           </div>
           <div className="col-lg-4 col-md-6">
             <BulkChange onSubmit={this.onBulkChange} />

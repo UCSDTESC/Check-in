@@ -8,12 +8,20 @@ interface ForgotPageState {
   success: string;
 }
 
+/**
+ * The Forgot password page
+ */
 class ForgotPage extends React.Component<InjectedFormProps, ForgotPageState> {
   state: Readonly<ForgotPageState> = {
     error: '',
     success: '',
   };
 
+  /**
+   * Send the Forgot Password Email
+   *
+   * @param {ForgotFormData} values the forgot form data
+   */
   sendForgotPassword = (values: ForgotFormData) => {
     if (!values.email) {
       return {

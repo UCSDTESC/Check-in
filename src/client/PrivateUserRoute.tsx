@@ -5,7 +5,12 @@ import { Route, Redirect, RouteProps } from 'react-router-dom';
 import { ApplicationState } from './reducers';
 
 interface StateProps {
+
+  // Is the current user authenticated.
   authenticated: boolean;
+
+  // Is there an authentication process in progress - this is used to prevent
+  // race conditions.
   authFinished: boolean;
 }
 
@@ -16,6 +21,9 @@ interface PrivateUserRouteProps {
 
 type Props = RouteProps & StateProps & PrivateUserRouteProps;
 
+/**
+ * Lock down a view by authentication state.
+ */
 class PrivateUserRoute extends React.Component<Props> {
   render() {
     return (

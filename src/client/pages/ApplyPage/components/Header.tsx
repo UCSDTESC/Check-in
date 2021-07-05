@@ -2,11 +2,20 @@ import { Logo } from '@Shared/ModelTypes';
 import React from 'react';
 
 interface HeaderProps {
+
+  // Name of the event
   name: string;
+
+  // Logo of the event
   logo: Logo;
+
+  // Description of the event
   description: string;
 }
 
+/**
+ * This is the header for the application. It shows the event name, description and logo.
+ */
 export default class Header extends React.Component<HeaderProps> {
   render() {
     const {name, logo, description} = this.props;
